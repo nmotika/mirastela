@@ -1,0 +1,24 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { LOCALES, type Lang } from '../../i18n/config';
+import { t } from '../../i18n';
+
+export function getStaticPaths() {
+  const docs = ['terms', 'privacy', 'cookies'];
+  return LOCALES.flatMap((lang) => docs.map((doc) => ({ params: { lang, doc } })));
+}
+const lang = Astro.params.lang as Lang;
+const doc = Astro.params.doc as 'terms' | 'privacy' | 'cookies';
+const d = t(lang);
+const title = d.footer[doc];
+---
+<Base lang={lang} path={`${doc}/`} title={`${title} · Mirastela`} description={title} noindex>
+  <div class="wrap"><Header lang={lang} path={`${doc}/`} /></div>
+  <main class="wrap" style="max-width:720px;padding-top:32px">
+    <h1 class="sf" style="font-size:36px">{title}</h1>
+    <p class="mu" style="margin-top:16px">[DRAFT · {doc.toUpperCase()} · {lang.toUpperCase()}]</p>
+  </main>
+  <Footer lang={lang} path={`${doc}/`} />
+</Base>

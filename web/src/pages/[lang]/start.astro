@@ -1,0 +1,273 @@
+---
+import Base from '../../layouts/Base.astro';
+import LangSwitcher from '../../components/LangSwitcher.astro';
+import Logo from '../../components/Logo.astro';
+import { LOCALES, PRICE, UPSELL, formatPrice, type Lang } from '../../i18n/config';
+import { t } from '../../i18n';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+const lang = Astro.params.lang as Lang;
+const d = t(lang);
+const Q = d.quiz;
+const O = d.offer;
+const price = formatPrice(lang);
+const cur = PRICE[lang].currency;
+const upPrices = { partner: formatPrice(lang, { amount: UPSELL[lang].partner, currency: cur }), forecast: formatPrice(lang, { amount: UPSELL[lang].forecast, currency: cur }) };
+const C = d.coupon;
+const U = d.upsell;
+const thisYear = new Date().getFullYear();
+const years = Array.from({ length: thisYear - 1929 - 12 }, (_, i) => thisYear - 12 - i);
+const focusKeys = ['love', 'career', 'money', 'growth'] as const;
+const statusKeys = ['relationship', 'single', 'complicated'] as const;
+const chevron = '<path d="M15 18l-6-6 6-6"/>';
+// Only this language's strings go to the browser.
+const clientData = JSON.stringify({ lang, price, upPrices, d: { quiz: Q, offer: O, teaser: d.teaser, astro: d.astro, ui: d.ui, coupon: C, upsell: U } });
+---
+<Base lang={lang} path="start/" title={d.meta.title} description={d.meta.description} noindex>
+  <div class="funnel narrow" id="funnel">
+    <header class="fhead">
+      <button type="button" class="ib" id="back" aria-label={d.ui.back} hidden>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" set:html={chevron} /></button>
+      <a href={`/${lang}/`} class="logo small" id="brand" aria-label={d.ui.home}><Logo size={24} /><span>Mirastela</span></a>
+      <div class="prog" id="prog" hidden>
+        <p class="mu" id="progLabel"></p>
+        <div class="bar"><span id="progBar"></span></div>
+      </div>
+      <LangSwitcher lang={lang} path="start/" />
+    </header>
+
+    <!-- 1 Date -->
+    <section class="step" data-step="date">
+      <h1 class="sf q">{Q.dateQ}</h1>
+      <p class="mu hint">{Q.dateHint}</p>
+      <div class="dsel">
+        <label><span>{Q.day}</span>
+          <select id="dDay" class="inp"><option value="">–</option>{Array.from({ length: 31 }, (_, i) => <option value={i + 1}>{i + 1}</option>)}</select></label>
+        <label><span>{Q.month}</span>
+          <select id="dMonth" class="inp"><option value="">–</option>{Q.months.map((m, i) => <option value={i + 1}>{m}</option>)}</select></label>
+        <label><span>{Q.year}</span>
+          <select id="dYear" class="inp"><option value="">–</option>{years.map((y) => <option value={y}>{y}</option>)}</select></label>
+      </div>
+      <p class="reward" id="sunReward" aria-live="polite" hidden></p>
+      <div class="dock"><button type="button" class="btn" data-next disabled>{d.ui.next}</button></div>
+    </section>
+
+    <!-- 2 Time -->
+    <section class="step" data-step="time" hidden>
+      <h1 class="sf q">{Q.timeQ}</h1>
+      <p class="mu hint">{Q.timeHint}</p>
+      <label class="fld"><span>{Q.timeLabel}</span><input type="time" id="tTime" class="inp big" /></label>
+      <label class="ck"><input type="checkbox" id="tUnknown" /><span>{Q.timeUnknown}</span></label>
+      <p class="mu small" id="tWhy" hidden>{Q.timeWhy}</p>
+      <div class="dock"><button type="button" class="btn" data-next disabled>{d.ui.next}</button></div>
+    </section>
+
+    <!-- 3 Place -->
+    <section class="step" data-step="place" hidden>
+      <h1 class="sf q">{Q.placeQ}</h1>
+      <p class="mu hint">{Q.placeHint}</p>
+      <label class="fld"><span class="vh">{Q.placeQ}</span>
+        <input type="text" id="pInput" class="inp big" placeholder={Q.placePh} autocomplete="off" role="combobox" aria-controls="pList" aria-expanded="false" /></label>
+      <ul id="pList" class="plist" role="listbox"></ul>
+      <p class="mu small" id="pNone" hidden>{Q.placeNone}</p>
+      <div class="dock"><button type="button" class="btn" data-next disabled>{d.ui.next}</button></div>
+    </section>
+
+    <!-- 4 Name -->
+    <section class="step" data-step="name" hidden>
+      <h1 class="sf q">{Q.nameQ}</h1>
+      <p class="mu hint">{Q.nameHint}</p>
+      <label class="fld"><span class="vh">{Q.nameQ}</span><input type="text" id="nInput" class="inp big" placeholder={Q.namePh} autocomplete="given-name" maxlength="40" /></label>
+      <div class="dock"><button type="button" class="btn" data-next disabled>{d.ui.next}</button></div>
+    </section>
+
+    <!-- 5 Focus -->
+    <section class="step" data-step="focus" hidden>
+      <h1 class="sf q">{Q.focusQ}</h1>
+      <p class="mu hint">{Q.focusHint}</p>
+      <fieldset class="cards"><legend class="vh">{Q.focusQ}</legend>
+        {focusKeys.map((k) => <label class="card"><input type="checkbox" name="focus" value={k} /><span>{Q.focus[k]}</span></label>)}
+      </fieldset>
+      <div class="dock"><button type="button" class="btn" data-next disabled>{d.ui.next}</button></div>
+    </section>
+
+    <!-- 6 Status -->
+    <section class="step" data-step="status" hidden>
+      <h1 class="sf q">{Q.statusQ}</h1>
+      <fieldset class="cards"><legend class="vh">{Q.statusQ}</legend>
+        {statusKeys.map((k) => <label class="card"><input type="radio" name="status" value={k} /><span>{Q.status[k]}</span></label>)}
+      </fieldset>
+    </section>
+
+    <!-- 7 Calculating -->
+    <section class="step calc" data-step="calc" hidden>
+      <h1 class="sf q center">{Q.calcTitle}</h1>
+      <p class="mu center small" id="calcWho"></p>
+      <div class="wheelbox" id="calcWheel"></div>
+      <ul class="vals" id="calcVals" aria-live="polite"></ul>
+      <p class="err" id="calcErr" hidden>{d.ui.error}</p>
+    </section>
+
+    <!-- 8 Email -->
+    <section class="step" data-step="email" hidden>
+      <h1 class="sf q">{Q.emailQ}</h1>
+      <p class="mu hint">{Q.emailSub}</p>
+      <form id="eForm" novalidate>
+        <label class="fld"><span class="vh">{Q.emailPh}</span>
+          <input type="email" id="eInput" class="inp big" placeholder={Q.emailPh} autocomplete="email" inputmode="email" required /></label>
+        <p class="err" id="eErr" hidden>{Q.emailErr}</p>
+        <label class="ck"><input type="checkbox" id="eConsent" /><span>{Q.emailConsent}</span></label>
+        <p class="mu small">{Q.emailPrivacy}</p>
+        <div class="dock"><button type="submit" class="btn">{Q.emailCta}</button></div>
+      </form>
+    </section>
+
+    <!-- 9 Offer -->
+    <section class="step offer" data-step="offer" hidden>
+      <p class="ey">{O.eyebrow}</p>
+      <h1 class="sf q">{O.title}</h1>
+      <p class="mu small" id="oWho"></p>
+      <div class="chips" id="oChips"></div>
+      <p class="mu small" id="oNoTime" hidden>{O.noTimeNote}</p>
+      <div class="wheelbox" id="oWheel"></div>
+
+      <article class="paper excerpt">
+        <p class="ey">{O.fragment}</p>
+        <h2 class="sf" id="oTitle"></h2>
+        <p id="oP1"></p>
+        <p id="oP2"></p>
+        <div class="blur" aria-hidden="true"><p id="oP3"></p></div>
+        <div class="fade"><span class="lock">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>{O.lock}</span></div>
+      </article>
+
+      <h2 class="sf h2">{O.incTitle}</h2>
+      <ul class="incl" id="oIncl">
+        {O.inc.map(([a, b]) => <li><strong>{a}</strong><span class="mu">{b}</span></li>)}
+      </ul>
+
+      <div class="pricebox">
+        <p style="font-weight:600">{O.cardTitle}</p>
+        <p class="sf price">{price}</p>
+        <p class="mu small">{O.priceNote}</p>
+      </div>
+      <p class="mu small pay">{O.payMethods}</p>
+      <details class="coupon" id="cBox">
+        <summary>{C.link}</summary>
+        <form id="cForm" class="crow" novalidate>
+          <label class="vh" for="cInput">{C.label}</label>
+          <input id="cInput" class="inp" placeholder={C.ph} autocomplete="off" autocapitalize="characters" />
+          <button type="submit" class="btn ghost">{C.apply}</button>
+        </form>
+        <p class="err" id="cErr" hidden>{C.invalid}</p>
+      </details>
+      <p class="note" id="cOk" role="status" hidden></p>
+      <p class="note" id="oSoon" role="status" hidden>{O.soon}</p>
+      <p class="err" id="oErr" hidden>{d.ui.error}</p>
+      <div class="dock sticky"><button type="button" class="btn" id="oBuy">{O.cta.replace('{price}', price)}</button>
+        <p class="mu tiny">{O.ctaNote}</p></div>
+    </section>
+    <!-- 10 Upsell -->
+    <section class="step" data-step="upsell" hidden>
+      <p class="ey">{U.eyebrow}</p>
+      <div id="uPartner" hidden>
+        <h1 class="sf q">{U.partnerTitle}</h1>
+        <p class="mu hint">{U.partnerSub}</p>
+        <ul class="incl">{U.partnerBullets.map((b) => <li><strong>{b}</strong></li>)}</ul>
+        <div class="pform">
+          <label class="fld"><span>{U.pName}</span><input id="upName" class="inp" maxlength="40" autocomplete="off" /></label>
+          <label class="fld"><span>{U.pDate}</span><input id="upDate" type="date" class="inp" min="1930-01-01" /></label>
+          <label class="fld"><span>{U.pTime}</span><input id="upTime" type="time" class="inp" /></label>
+          <label class="ck"><input type="checkbox" id="upTimeUnknown" /><span>{U.pTimeUnknown}</span></label>
+          <label class="fld"><span>{U.pPlace}</span>
+            <input id="upPlace" class="inp" placeholder={Q.placePh} autocomplete="off" role="combobox" aria-controls="upList" aria-expanded="false" /></label>
+          <ul id="upList" class="plist" role="listbox"></ul>
+        </div>
+      </div>
+      <div id="uForecast" hidden>
+        <h1 class="sf q" id="ufTitle">{U.forecastTitle}</h1>
+        <p class="mu hint">{U.forecastSub}</p>
+        <ul class="incl">{U.forecastBullets.map((b) => <li><strong>{b}</strong></li>)}</ul>
+      </div>
+      <p class="err" id="uErr" hidden>{d.ui.error}</p>
+      <div class="dock">
+        <button type="button" class="btn" id="uAdd"></button>
+        <a class="skip" id="uNo" href="#">{U.no}</a>
+      </div>
+    </section>
+  </div>
+
+  <script type="application/json" id="funnel-data" set:html={clientData} />
+  <script src="../../scripts/funnel.ts"></script>
+</Base>
+
+<style is:global>
+  .funnel { padding: 0 16px 24px; min-height: 100dvh; display: flex; flex-direction: column; }
+  .fhead { display: flex; align-items: center; gap: 8px; height: 64px; }
+  .logo.small span { font-size: 20px; }
+  .prog { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+  .prog p { font-size: 12px; }
+  .bar { height: 4px; border-radius: 4px; background: var(--line); overflow: hidden; }
+  .bar span { display: block; height: 100%; width: 0; background: var(--gold); transition: width .3s; }
+  .ib { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 0; border-radius: 999px; background: transparent; color: var(--ink); cursor: pointer; flex: none; }
+  #brand { flex: 1; }
+  .step { flex: 1; display: flex; flex-direction: column; gap: 16px; padding-top: 16px; }
+  .q { font-size: 32px; line-height: 1.12; text-wrap: balance; }
+  .center { text-align: center; }
+  .hint { font-size: 15px; }
+  .small { font-size: 14px; }
+  .tiny { font-size: 12px; text-align: center; }
+  .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .inp { width: 100%; min-height: 52px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border-strong); background: var(--panel); color: var(--ink); font: 500 17px var(--sans); }
+  .inp.big { min-height: 58px; font-size: 19px; }
+  .inp::placeholder { color: #7C86A6; }
+  .dsel { display: grid; grid-template-columns: 0.8fr 1.5fr 1fr; gap: 10px; }
+  .dsel label, .fld { display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600; }
+  .reward { padding: 14px 16px; border-radius: 14px; background: var(--panel); border: 1px solid var(--border); font-weight: 600; }
+  .ck { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--border); background: var(--panel); cursor: pointer; font-size: 15px; line-height: 1.45; }
+  .ck input { width: 22px; height: 22px; margin: 0; accent-color: var(--gold); flex: none; }
+  .plist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+  .plist button { width: 100%; min-height: 52px; padding: 10px 14px; text-align: left; border-radius: 12px; border: 1px solid var(--border); background: var(--panel); color: var(--ink); font: 600 16px var(--sans); cursor: pointer; display: flex; justify-content: space-between; gap: 8px; }
+  .plist button[aria-selected='true'] { border-color: var(--gold); box-shadow: inset 0 0 0 1px var(--gold); }
+  .plist small { color: var(--muted); font-weight: 500; }
+  .cards { border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .card { display: flex; align-items: center; gap: 14px; min-height: 60px; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--border); background: var(--panel); cursor: pointer; font-weight: 600; font-size: 17px; }
+  .card:has(input:checked) { border-color: var(--gold); box-shadow: inset 0 0 0 1px var(--gold); background: var(--panel-2); }
+  .card input { width: 22px; height: 22px; margin: 0; accent-color: var(--gold); flex: none; }
+  .dock { margin-top: auto; padding-top: 16px; display: flex; flex-direction: column; gap: 6px; }
+  .sticky { position: sticky; bottom: 0; padding: 12px 0 16px; background: var(--bg); border-top: 1px solid var(--line); }
+  .wheelbox { display: flex; justify-content: center; }
+  .vals { list-style: none; margin: 0; padding: 0; }
+  .vals li { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-top: 1px solid var(--line); animation: fi .5s ease-out both; }
+  .vals li .gl { color: var(--gold); width: 22px; text-align: center; }
+  .vals li strong { margin-left: auto; }
+  .err { color: var(--error); font-size: 14px; }
+  .chips { display: flex; gap: 8px; }
+  .chip { flex: 1; display: flex; flex-direction: column; gap: 2px; padding: 12px; border-radius: 14px; background: var(--panel); border: 1px solid var(--line); }
+  .chip .gl, .chip .tag { color: var(--gold); font-size: 13px; font-weight: 700; }
+  .chip span.l { font-size: 12px; color: var(--muted); }
+  .excerpt { position: relative; overflow: hidden; padding: 28px 22px 92px; display: flex; flex-direction: column; gap: 14px; margin: 8px -4px 0; }
+  .excerpt h2 { font-size: 26px; line-height: 1.15; }
+  .excerpt p:not(.ey) { font-family: var(--serif); font-size: 18px; line-height: 1.6; }
+  .blur { filter: blur(5px); user-select: none; opacity: .8; }
+  .fade { position: absolute; inset: auto 0 0 0; height: 170px; background: linear-gradient(to bottom, rgba(246,241,231,0), var(--paper) 62%); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 22px; }
+  .lock { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 999px; background: var(--paper-ink); color: var(--paper); font: 700 14px var(--sans); }
+  .h2 { font-size: 28px; line-height: 1.15; margin-top: 24px; }
+  .incl { list-style: none; margin: 0; padding: 0; }
+  .incl li { display: flex; flex-direction: column; padding: 12px 0 12px 30px; border-top: 1px solid var(--line); position: relative; }
+  .incl li::before { content: ''; position: absolute; left: 4px; top: 18px; width: 12px; height: 7px; border-left: 2px solid var(--gold); border-bottom: 2px solid var(--gold); transform: rotate(-45deg); }
+  .incl li span { font-size: 14px; }
+  .pricebox { margin-top: 12px; padding: 24px 20px; border-radius: 20px; border: 1px solid var(--gold); display: flex; flex-direction: column; gap: 8px; }
+  .price { font-size: 44px; line-height: 1; font-variant-numeric: tabular-nums; }
+  .note { padding: 14px 16px; border-radius: 14px; background: var(--panel); border: 1px solid var(--gold); font-size: 15px; }
+  .coupon summary { display: inline-flex; align-items: center; min-height: 44px; color: var(--gold); cursor: pointer; font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
+  .crow { display: flex; gap: 8px; margin-top: 6px; }
+  .crow .inp { flex: 1; text-transform: uppercase; }
+  .btn.ghost { width: auto; background: transparent; color: var(--gold); border: 1px solid var(--gold); padding: 0 18px; }
+  .btn.ghost:hover { background: var(--panel-2); color: var(--gold); }
+  .pform { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+  .skip { display: flex; align-items: center; justify-content: center; min-height: 52px; color: var(--ink); font-weight: 700; text-underline-offset: 4px; }
+  @keyframes fi { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+</style>

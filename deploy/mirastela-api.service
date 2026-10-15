@@ -1,0 +1,14 @@
+[Unit]
+Description=Mirastela API
+After=network-online.target
+
+[Service]
+User=mirastela
+WorkingDirectory=/opt/mirastela/api
+EnvironmentFile=/etc/mirastela.env
+ExecStart=/opt/mirastela/.venv/bin/uvicorn app:app --host 127.0.0.1 --port 8000 --proxy-headers
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,30 @@
+---
+// Root: send visitors to their language, Polish by default.
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mirastela</title>
+  <meta http-equiv="refresh" content="2; url=/pl/" />
+  <link rel="canonical" href="https://mirastela.com/pl/" />
+  <script is:inline>
+    (function () {
+      var supported = ['pl', 'hr', 'sl', 'ro', 'cs', 'hu', 'en'];
+      var langs = navigator.languages || [navigator.language || 'pl'];
+      for (var i = 0; i < langs.length; i++) {
+        var l = String(langs[i]).toLowerCase().slice(0, 2);
+        if (l === 'sk') l = 'cs';
+        if (l === 'bs' || l === 'sr') l = 'hr';
+        if (supported.indexOf(l) !== -1) { location.replace('/' + l + '/'); return; }
+      }
+      location.replace('/pl/');
+    })();
+  </script>
+  <style>body{background:#0B1020;color:#F3EEE3;font-family:system-ui,sans-serif;padding:24px}a{color:#D9B26A}</style>
+</head>
+<body>
+  <p><a href="/pl/">Polski</a> · <a href="/hr/">Hrvatski</a> · <a href="/sl/">Slovenščina</a> · <a href="/ro/">Română</a> · <a href="/cs/">Čeština</a> · <a href="/hu/">Magyar</a> · <a href="/en/">English</a></p>
+</body>
+</html>

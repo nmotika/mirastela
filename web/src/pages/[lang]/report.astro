@@ -1,0 +1,79 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import { LOCALES, type Lang } from '../../i18n/config';
+import { t } from '../../i18n';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+const lang = Astro.params.lang as Lang;
+const d = t(lang);
+const R = d.report;
+const clientData = JSON.stringify({ lang, d: { report: R, astro: d.astro, ui: d.ui, footer: d.footer } });
+---
+<Base lang={lang} path="report/" title={`${R.title} · Mirastela`} description={R.title} noindex>
+  <div class="wrap noprint"><Header lang={lang} path="report/" /></div>
+  <main class="wrap rep">
+    <div class="rhead">
+      <div>
+        <h1 class="sf">{R.title}</h1>
+        <p class="mu" id="rFor"></p>
+      </div>
+      <button type="button" class="btn ghost noprint" id="rPrint" hidden>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>{R.print}</button>
+    </div>
+    <p class="mu" id="rMsg" role="status"></p>
+    <div class="tabs noprint" role="tablist" id="rTabs"></div>
+    <div id="rPanels"></div>
+    <p class="mu disclaimer">{d.footer.disclaimer}</p>
+  </main>
+  <script type="application/json" id="report-data" set:html={clientData} />
+  <script src="../../scripts/report.ts"></script>
+</Base>
+
+<style is:global>
+  .rep { max-width: 760px; padding-bottom: 48px; }
+  .rhead { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 16px 0 12px; }
+  .rhead h1 { font-size: 38px; line-height: 1.1; }
+  .btn.ghost { width: auto; background: transparent; color: var(--gold); border: 1px solid var(--gold); padding: 0 18px; white-space: nowrap; }
+  .btn.ghost:hover { background: var(--panel-2); color: var(--gold); }
+  .tabs { display: flex; gap: 6px; overflow-x: auto; margin: 12px 0 20px; border-bottom: 1px solid var(--line); }
+  .tabs button { min-height: 48px; padding: 0 16px; border: 0; border-bottom: 2px solid transparent; background: none; color: var(--muted); font: 700 15px var(--sans); cursor: pointer; white-space: nowrap; }
+  .tabs button[aria-selected='true'] { color: var(--ink); border-bottom-color: var(--gold); }
+  .panel { display: flex; flex-direction: column; gap: 20px; }
+  .panel .wheelbox { display: flex; justify-content: center; }
+  .doc { background: var(--paper); color: var(--paper-ink); border-radius: 20px; padding: 32px 24px; }
+  .doc h2 { font: 400 28px/1.2 var(--serif); margin: 28px 0 10px; }
+  .doc h2:first-child { margin-top: 0; }
+  .doc h3 { font: 700 18px/1.3 var(--sans); margin: 20px 0 8px; }
+  .doc p, .doc li { font: 18px/1.65 var(--serif); }
+  .doc p + p { margin-top: 12px; }
+  .doc ul { margin: 8px 0; padding-left: 22px; }
+  .pending { display: flex; align-items: center; gap: 12px; padding: 20px; border-radius: 16px; background: var(--panel); border: 1px solid var(--border); }
+  .spin { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); border-top-color: var(--gold); animation: sp 1s linear infinite; flex: none; }
+  @keyframes sp { to { transform: rotate(360deg); } }
+  .dt h2 { font: 400 24px/1.2 var(--serif); margin-bottom: 10px; }
+  .dt table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  .dt th, .dt td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .dt th { color: var(--muted); font-weight: 600; font-size: 13px; }
+  .dt td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .dt .gl { color: var(--gold); margin-right: 6px; }
+  .tablewrap { overflow-x: auto; }
+  .disclaimer { margin-top: 32px; font-size: 14px; }
+  .err { color: var(--error); }
+  @media print {
+    @page { margin: 16mm; }
+    body { background: #fff; color: #111; }
+    .noprint, .site-head, .tabs { display: none !important; }
+    .panel[hidden] { display: flex !important; }
+    .panel { break-before: page; }
+    .panel:first-child { break-before: auto; }
+    .doc { background: #fff; padding: 0; }
+    .mu, .dt th { color: #555; }
+    .dt th, .dt td { border-color: #ccc; }
+    .wheel .wl, .wheel line { stroke: #8a6a28; }
+    .wheel text { fill: #333; }
+    .wheel .fi, .wheel .dr { animation: none !important; opacity: 1 !important; stroke-dashoffset: 0 !important; }
+  }
+</style>

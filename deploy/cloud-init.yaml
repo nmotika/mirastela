@@ -1,0 +1,39 @@
+#cloud-config
+# Hetzner: paste into "Cloud config" when creating the server.
+# BEFORE PASTING fill in the three values marked FILL_ME below.
+package_update: true
+package_upgrade: true
+packages: [git, python3-venv, python3-dev, build-essential, sqlite3, curl, unattended-upgrades]
+
+write_files:
+  - path: /etc/mirastela.env
+    permissions: '0600'
+    content: |
+      ANTHROPIC_API_KEY=FILL_ME_ANTHROPIC_KEY
+      MIRASTELA_MODEL=claude-sonnet-5-5
+      MIRASTELA_COUPONS=MIRATEST
+      MIRASTELA_PROXY_SECRET=FILL_ME_LONG_RANDOM_SECRET
+      MIRASTELA_DB=/var/lib/mirastela/mirastela.db
+      MIRASTELA_SOURCE_URL=https://github.com/nmotika/mirastela
+  - path: /etc/cron.daily/mirastela-backup
+    permissions: '0755'
+    content: |
+      #!/bin/sh
+      mkdir -p /var/lib/mirastela/backups
+      sqlite3 /var/lib/mirastela/mirastela.db ".backup /var/lib/mirastela/backups/mirastela-$(date +%F).db"
+      find /var/lib/mirastela/backups -name '*.db' -mtime +14 -delete
+
+runcmd:
+  - useradd --system --create-home --home-dir /var/lib/mirastela --shell /usr/sbin/nologin mirastela || true
+  - git clone https://github.com/nmotika/mirastela.git /opt/mirastela
+  - chown -R mirastela:mirastela /opt/mirastela /var/lib/mirastela
+  - sudo -u mirastela python3 -m venv /opt/mirastela/.venv
+  - sudo -u mirastela /opt/mirastela/.venv/bin/pip install -q --upgrade pip setuptools wheel
+  - sudo -u mirastela /opt/mirastela/.venv/bin/pip install -q -r /opt/mirastela/api/requirements.txt
+  - cp /opt/mirastela/deploy/mirastela-api.service /etc/systemd/system/
+  - systemctl daemon-reload && systemctl enable --now mirastela-api
+  # Cloudflare Tunnel (no open ports needed)
+  - curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg -o /usr/share/keyrings/cloudflare-main.gpg
+  - echo 'deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared any main' > /etc/apt/sources.list.d/cloudflared.list
+  - apt-get update && apt-get install -y cloudflared
+  - cloudflared service install FILL_ME_TUNNEL_TOKEN
