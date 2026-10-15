@@ -55,7 +55,7 @@ def _fmt_planets(chart: dict) -> str:
     return "\n".join(rows)
 
 
-def _fmt_aspects(aspects: list[dict], limit: int = 12) -> str:
+def _fmt_aspects(aspects: list[dict], limit: int | None = None) -> str:
     return "\n".join(f"- {x['a']} {x['type']} {x['b']} (orb {x['orb']}°)" for x in aspects[:limit]) or "- none"
 
 
@@ -158,10 +158,18 @@ def generate(prompt: str) -> tuple[str, str]:
         return md, "test"
     import anthropic
     client = anthropic.Anthropic(api_key=key)
-    with client.messages.stream(
-        model=model, max_tokens=12000,
-        system="You are an experienced, careful astrologer and an excellent writer. You write personalised reports for entertainment and self-reflection.",
-        messages=[{"role": "user", "content": prompt}],
-    ) as stream:
-        text = stream.get_final_text()
+    system = "You are an experienced, careful astrologer and an excellent writer. You write personalised reports for entertainment and self-reflection."
+    messages = [{"role": "user", "content": prompt}]
+    text = ""
+    # Long reports in some languages can hit the output limit: continue from where the model stopped.
+    for _ in range(3):
+        with client.messages.stream(model=model, max_tokens=32000, system=system, messages=messages) as stream:
+            msg = stream.get_final_message()
+        part = "".join(b.text for b in msg.content if b.type == "text")
+        text += part if not text or part[:1].isspace() or text[-1:] in "\n " else " " + part
+        if msg.stop_reason != "max_tokens":
+            break
+        text = text.rstrip()
+        messages = [{"role": "user", "content": prompt}, {"role": "assistant", "content": text},
+                    {"role": "user", "content": "Continue exactly where you stopped, mid-sentence if needed. Do not repeat anything and do not add any preface."}]
     return text.strip(), model
