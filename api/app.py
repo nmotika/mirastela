@@ -442,7 +442,7 @@ class FeedbackIn(BaseModel):
 def feedback(body: FeedbackIn, request: Request, tasks: BackgroundTasks):
     """Tester questionnaire. The email comes from Cloudflare Access when present."""
     answers = {k[:40]: (v[:3000] if isinstance(v, str) else v) for k, v in list(body.answers.items())[:40]}
-    email = (request.headers.get("cf-access-authenticated-user-email") or body.email or "").strip().lower()[:200]
+    email = (request.headers.get("x-access-email") or request.headers.get("cf-access-authenticated-user-email") or body.email or "").strip().lower()[:200]
     ua = request.headers.get("user-agent", "")[:300]
     with db() as con:
         con.execute("insert into feedback(created, email, answers, ua) values(?,?,?,?)",

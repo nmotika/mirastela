@@ -22,8 +22,12 @@ for email, product, status in q("select o.email, i.product, i.status from items 
         r[product] = {"ready": "gotovo", "pending": "u izradi", "error": "greška"}.get(status, status)
 for email, freq, status in q("select email, freq, status from subs"):
     row(email)["sub"] = f"{freq}" if status == "active" else status
-for (email,) in q("select distinct email from feedback"):
-    row(email)["upitnik"] = "da"
+anon = 0
+for email, n in q("select lower(trim(email)), count(*) from feedback group by 1"):
+    if email:
+        row(email)["upitnik"] = "da" if n == 1 else f"da ({n}x)"
+    else:
+        anon = n  # sent before the e-mail was recorded with the answers
 
 cols = ["email", "lead", "natal", "partner", "forecast", "sub", "upitnik"]
 head = ["E-mail", "Lead (UTC)", "Karta", "Partner", "Prognoza", "Pretplata", "Upitnik"]
@@ -36,4 +40,5 @@ for r in rows:
 n = len(rows)
 cnt = lambda k: sum(1 for v in people.values() if v[k])
 print(f"\nUkupno: {n} osoba | lead {cnt('lead')} | karta {sum(1 for v in people.values() if v['natal']=='gotovo')} | "
-      f"partner {cnt('partner')} | prognoza {cnt('forecast')} | pretplata {cnt('sub')} | upitnik {cnt('upitnik')}")
+      f"partner {cnt('partner')} | prognoza {cnt('forecast')} | pretplata {cnt('sub')} | upitnik {cnt('upitnik') + anon}"
+      + (f" (od toga {anon} bez e-maila)" if anon else ""))
