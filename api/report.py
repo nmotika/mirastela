@@ -211,6 +211,10 @@ SIGNS_SCHEMA = {"type": "object", "required": ["signs"], "properties": {"signs":
     "properties": {"general": {"type": "string"}, "love": {"type": "string"}, "work": {"type": "string"}}}}}}
 
 
+PARAGRAPHS_SCHEMA = {"type": "object", "required": ["paragraphs"],
+                     "properties": {"paragraphs": {"type": "array", "items": {"type": "string"}}}}
+
+
 def parse_json(text: str):
     """Model JSON output, tolerant of code fences and stray prose around it."""
     t = text.strip()
@@ -226,7 +230,7 @@ def prompt_summary(lang: str, name: str, chart: dict, focus: list[str]) -> str:
 Task: a short free summary of the natal chart for an email, 110 to 150 words, two short paragraphs.
 Paragraph 1: the Sun, the Moon{' and the Ascendant' if chart['timeKnown'] else ''} together, as one picture of the person.
 Paragraph 2: the single tightest aspect and what it adds, then one sentence saying the full report goes deeper into: {', '.join(focus) or 'love, work and personal growth'}.
-Plain text paragraphs only: no headings, no Markdown, no lists, no greeting, no sign-off.
+Save it with the save tool: "paragraphs" is a list of the two paragraphs as plain text (no headings, no Markdown, no lists, no greeting, no sign-off).
 
 Chart facts (tropical zodiac, Placidus houses):
 {_fmt_planets(chart)}

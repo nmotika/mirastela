@@ -176,9 +176,15 @@ def _send_summary(token: str):
     text = ""
     for attempt in range(2):
         try:
-            text, _ = report.generate(report.prompt_summary(lang, name, natal, focus_l), fast=True, max_tokens=1200, fallback=fallback)
-            if text.strip():
+            out, _ = report.generate_json(report.prompt_summary(lang, name, natal, focus_l), report.PARAGRAPHS_SCHEMA,
+                                          max_tokens=2000, fallback={"paragraphs": [fallback]})
+            paras = (out or {}).get("paragraphs")
+            if isinstance(paras, str):
+                paras = [paras]
+            text = "\n".join(p.strip() for p in (paras or []) if isinstance(p, str) and p.strip())
+            if text:
                 break
+            print("summary", token[:6], "empty", attempt, str(out)[:300], flush=True)
         except Exception as e:
             print("summary", token[:6], "error", attempt, repr(e)[:300], flush=True)
     subject, html = emails.summary(lang, name, natal, text, f"{emails.SITE}/{lang}/start/?r={token}")
