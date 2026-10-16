@@ -17,8 +17,9 @@ import sky
 
 
 def pages():
-    """Today's and tomorrow's free sign horoscopes in every language (run shortly after midnight)."""
-    for day in (sky.today(), sky.today() + timedelta(days=1)):
+    """Free sign horoscopes for yesterday, today and tomorrow in every language (run shortly after
+    midnight). Days already in the database are skipped, so normally only tomorrow is generated."""
+    for day in (sky.today() - timedelta(days=1), sky.today(), sky.today() + timedelta(days=1)):
         for lang in report.LANG_NAME:
             try:
                 app.daily_for(lang, day)
