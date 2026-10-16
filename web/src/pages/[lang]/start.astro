@@ -89,6 +89,7 @@ const clientData = JSON.stringify({
         <span class="colon" aria-hidden="true">:</span>
         <div class="wcol tw"><div class="wsc big" id="wMin" tabindex="0" role="listbox" aria-label={Q.timeLabel}>{Array.from({ length: 60 }, (_, i) => <button type="button" role="option" tabindex="-1" data-v={i}>{String(i).padStart(2, '0')}</button>)}</div></div>
       </fieldset>
+      <p class="pick" id="timePick" aria-live="polite"></p>
       <label class="chk"><input type="checkbox" id="tUnknown" /><span>{Q.timeUnknown}</span></label>
       <div class="why">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D9B26A" stroke-width="1.6" aria-hidden="true" set:html={info} />
@@ -408,6 +409,7 @@ const clientData = JSON.stringify({
   .wsc.big button { height: 52px; font-size: 24px; font-variant-numeric: tabular-nums; }
   .wsc.big button[aria-selected='true'] { font-size: 30px; }
   .wsc:focus-visible { box-shadow: inset 0 0 0 2px var(--gold); border-radius: 12px; }
+  .pick { margin-top: -8px; text-align: center; font-size: 15px; font-weight: 600; color: var(--gold); min-height: 1.4em; font-variant-numeric: tabular-nums; }
   .colon { position: relative; font-size: 30px; font-weight: 700; line-height: 52px; margin-top: 104px; }
   .wheels.off { opacity: .35; pointer-events: none; }
   .bgwheel { display: none; }

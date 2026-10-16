@@ -104,12 +104,17 @@ window.addEventListener('popstate', (e) => {
 });
 $('back').addEventListener('click', () => history.back());
 document.querySelectorAll<HTMLButtonElement>('[data-next]').forEach((b) => b.addEventListener('click', () => {
+  commitWheels();
   if (current === 'name' && !validName()) return;
   go(1);
 }));
 
 /* ---------- wheel picker ---------- */
-interface Wheel { set(v: number, smooth?: boolean): void; value(): number; layout(): void }
+interface Wheel { set(v: number, smooth?: boolean): void; value(): number; layout(): void; commit(): void }
+const allWheels: Wheel[] = [];
+/** Takes each visible wheel's position as its value, so a tap on Next while a wheel is still
+ *  gliding (or before the scroll debounce fired) never keeps the old value. */
+function commitWheels() { allWheels.forEach((w) => w.commit()); }
 function wheel(box: HTMLElement, onChange: (v: number) => void): Wheel {
   const items = [...box.querySelectorAll<HTMLButtonElement>('button')];
   let idx = 0, timer = 0;
@@ -140,6 +145,7 @@ function wheel(box: HTMLElement, onChange: (v: number) => void): Wheel {
   box.addEventListener('scroll', () => {
     const i = clamp(Math.round(box.scrollTop / step()));
     mark(i);
+    box.dispatchEvent(new CustomEvent('wheelpreview', { detail: +items[i].dataset.v!, bubbles: true }));
     clearTimeout(timer);
     timer = window.setTimeout(() => { if (i !== idx) { idx = i; onChange(+items[i].dataset.v!); } }, 90);
   }, { passive: true });
@@ -150,11 +156,21 @@ function wheel(box: HTMLElement, onChange: (v: number) => void): Wheel {
     e.preventDefault();
     pick(idx + k, true);
   });
-  return {
+  function commit() {
+    if (sel || !box.offsetParent) return; // dropdown mode, or the step is hidden
+    const i = clamp(Math.round(box.scrollTop / step()));
+    clearTimeout(timer);
+    if (i !== idx) { idx = i; mark(i); onChange(+items[i].dataset.v!); }
+  }
+  box.addEventListener('scrollend', commit);
+  const w: Wheel = {
     set(v, smooth = false) { const i = items.findIndex((b) => +b.dataset.v! === v); if (i >= 0) pick(i, smooth, false); },
     value: () => +items[idx].dataset.v!,
     layout() { box.scrollTop = idx * step(); mark(idx); },
+    commit,
   };
+  allWheels.push(w);
+  return w;
 }
 
 /* ---------- 1 date ---------- */
@@ -192,11 +208,20 @@ function syncDate() {
 const tUnknown = $<HTMLInputElement>('tUnknown');
 const wHour = wheel($('wHour'), () => onTime());
 const wMin = wheel($('wMin'), () => onTime());
+const PICKED: Record<string, string> = { pl: 'Wybrana godzina:', hr: 'Odabrano vrijeme:', sl: 'Izbrani čas:', ro: 'Ora aleasă:', cs: 'Vybraný čas:', hu: 'Kiválasztott idő:', en: 'Selected time:' };
+const two = (n: number) => String(n).padStart(2, '0');
+function showPicked(h: number, m: number) {
+  $('timePick').textContent = tUnknown.checked ? '' : `${PICKED[lang] ?? PICKED.en} ${two(h)}:${two(m)}`;
+}
 function onTime() {
   $('timeWheels').classList.toggle('off', tUnknown.checked);
-  state.time = tUnknown.checked ? null : `${String(wHour.value()).padStart(2, '0')}:${String(wMin.value()).padStart(2, '0')}`;
+  state.time = tUnknown.checked ? null : `${two(wHour.value())}:${two(wMin.value())}`;
+  showPicked(wHour.value(), wMin.value());
   save();
 }
+// While a wheel glides, show the value under the band right away.
+$('wHour').addEventListener('wheelpreview', (e) => showPicked((e as CustomEvent).detail, wMin.value()));
+$('wMin').addEventListener('wheelpreview', (e) => showPicked(wHour.value(), (e as CustomEvent).detail));
 function syncTime() {
   tUnknown.checked = state.time === null;
   const [h, m] = (state.time ?? '12:00').split(':').map(Number);
@@ -548,6 +573,7 @@ upTimeUnknown.addEventListener('change', checkPartner);
 citySearch(upPlace, $('upList'), (c) => { partnerCity = c; checkPartner(); });
 upPlace.addEventListener('input', () => { partnerCity = undefined; checkPartner(); });
 $('pdGo').addEventListener('click', async () => {
+  commitWheels();
   const btn = $<HTMLButtonElement>('pdGo');
   btn.disabled = true; $('pdErr').hidden = true;
   const time = upTimeUnknown.checked ? null : `${String(pwHour.value()).padStart(2, '0')}:${String(pwMin.value()).padStart(2, '0')}`;
