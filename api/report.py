@@ -194,7 +194,7 @@ def parse_json(text: str):
     if t.startswith("```"):
         t = t.split("\n", 1)[1].rsplit("```", 1)[0]
     i, j = min([x for x in (t.find("["), t.find("{")) if x >= 0] or [0]), max(t.rfind("]"), t.rfind("}"))
-    return json.loads(t[i:j + 1])
+    return json.loads(t[i:j + 1], strict=False)  # tolerate raw newlines inside strings
 
 
 # ---------------------------------------------------------------- short texts
@@ -213,16 +213,20 @@ Aspects within orb, tightest first:
 """
 
 
-def prompt_daily_signs(lang: str, day: str, sky_txt: str) -> str:
+SIGNS_EN = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"]
+
+
+def prompt_daily_signs(lang: str, day: str, sky_txt: str, first: int = 0, count: int = 12) -> str:
     v = VOCAB[lang]
-    return f"""Task: today's horoscope for all twelve signs, for a website. Date: {day}.
+    names = ", ".join(SIGNS_EN[first:first + count])
+    return f"""Task: the daily horoscope for {count} zodiac signs ({names}), for a website. Date: {day}.
 Write entirely in {LANG_NAME[lang]}, addressing the reader informally in the second person singular.
 Use exactly this vocabulary for signs: {v['signs']}.
 Base every sign's text on the real sky facts below, especially the planets in that sign's solar houses and the Moon's solar house today. Mention at least one concrete fact (a planet and a sign or house) per sign, in plain words.
 Tendencies, not certainties. No predictions of illness, death, accidents, pregnancy, lottery wins or breakups. No medical, legal or financial advice.
 Do not use em dashes or en dashes as punctuation. Vary sentence openings between signs; no filler.
 
-Output ONLY a JSON array of 12 objects in zodiac order Aries to Pisces, each:
+Output ONLY a JSON array of exactly {count} objects, in this order: {names}. Each object:
 {{"general": "70 to 100 words", "love": "25 to 40 words", "work": "25 to 40 words"}}
 
 Sky facts:

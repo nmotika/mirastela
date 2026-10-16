@@ -390,11 +390,23 @@ def daily_for(lang: str, day: date) -> dict:
         facts = sky.day_sky(day)
         fallback = json.dumps([{"general": f"TEST MODE ({chart.SIGNS[i]}). " + ", ".join(
             f"{p['id']} {p['sign']}" for p in facts["planets"][:5]), "love": "TEST MODE", "work": "TEST MODE"} for i in range(12)])
-        text, model = report.generate(report.prompt_daily_signs(lang, key, sky.sky_text(facts)), fast=True,
-                                      max_tokens=8000, fallback=fallback)
-        signs = report.parse_json(text)
-        if not isinstance(signs, list) or len(signs) != 12:
-            raise HTTPException(503, "generation failed")
+        # Two halves of six signs: shorter outputs, and one bad half is retried without redoing the other.
+        signs, model, txt = [], "test", sky.sky_text(facts)
+        for first in (0, 6):
+            fb = json.dumps(json.loads(fallback)[first:first + 6])
+            for attempt in range(3):
+                try:
+                    text, model = report.generate(report.prompt_daily_signs(lang, key, txt, first, 6), fast=True,
+                                                  max_tokens=6000, fallback=fb)
+                    part = report.parse_json(text)
+                    if isinstance(part, list) and len(part) == 6 and all(isinstance(x, dict) and x.get("general") for x in part):
+                        signs += part
+                        break
+                    print("daily", lang, key, first, "bad shape", attempt, flush=True)
+                except Exception as e:
+                    print("daily", lang, key, first, "error", attempt, repr(e)[:300], flush=True)
+            else:
+                raise HTTPException(503, "generation failed")
         data = {"signs": signs, "sky": {"planets": [{k: p[k] for k in ("id", "signIndex", "deg", "retro")} for p in facts["planets"]],
                                         "moonIngress": facts["moonIngress"]}}
         if model != "test":
