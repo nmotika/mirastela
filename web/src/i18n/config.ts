@@ -36,8 +36,8 @@ export const UPSELL: Record<Lang, { partner: number; forecast: number; bundle: n
 
 /** Weekly personal horoscope subscription: monthly price and yearly price (8 months). Placeholders until tested. */
 export const SUB: Record<Lang, { month: number; year: number }> = {
-  pl: { month: 19.99, year: 159.99 }, hr: { month: 4.99, year: 39.99 }, sl: { month: 4.99, year: 39.99 },
-  ro: { month: 24.99, year: 199.99 }, cs: { month: 119, year: 949 }, hu: { month: 1990, year: 15990 }, en: { month: 4.99, year: 39.99 },
+  pl: { month: 29.99, year: 199 }, hr: { month: 6.99, year: 49.99 }, sl: { month: 6.99, year: 49.99 },
+  ro: { month: 34.99, year: 229.99 }, cs: { month: 179, year: 1190 }, hu: { month: 2790, year: 18990 }, en: { month: 6.99, year: 49.99 },
 };
 
 export function formatPrice(lang: Lang, p = PRICE[lang]): string {

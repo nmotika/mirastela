@@ -1,6 +1,6 @@
 """Scheduled jobs (systemd timers): pages at 00:15, subs at 06:00, Europe/Zagreb.
   python sender.py pages   pre-generate today's free sign horoscopes in every language
-  python sender.py subs    send personal horoscopes (weekly ones on Mondays)
+  python sender.py subs    fill personal calendars, send personal horoscopes (weekly ones on Mondays)
   python sender.py all     both
 """
 from __future__ import annotations
@@ -28,7 +28,20 @@ def pages():
                 print("pages", lang, day, "error", e)
 
 
+def calendars():
+    """Keep two weeks of personal calendar days ready for every active subscriber."""
+    with app.db() as con:
+        rows = con.execute("select token from subs where status='active' and cal is not null").fetchall()
+    for (token,) in rows:
+        try:
+            app.fill_calendar(token)
+            print("calendar", token[:6], "ok")
+        except Exception as e:
+            print("calendar", token[:6], "error", e)
+
+
 def subs():
+    calendars()
     day = sky.today()
     monday = day.weekday() == 0
     with app.db() as con:

@@ -233,9 +233,31 @@ def report_ready(lang: str, name: str, product: str, year: int, url: str) -> tup
     return t["repSubject"].format(product=pname), layout(lang, body)
 
 
-def sub_welcome(lang: str, name: str, freq: str, unsub_url: str) -> tuple[str, str]:
+# Personal calendar block: title, intro, Google button, Apple button, other apps.
+CAL = {'pl': ('Twój osobisty kalendarz astrologiczny', 'Codziennie w Twoim kalendarzu: zielony, niebieski lub pomarańczowy dzień i krótka wskazówka, liczona z Twojego kosmogramu. Dodaj go jednym kliknięciem:', 'Dodaj do Kalendarza Google', 'Dodaj do iPhone’a / Apple', 'Inny kalendarz (Outlook i inne): skopiuj ten adres i dodaj go jako subskrypcję z adresu URL:'),
+       'hr': ('Tvoj osobni astrološki kalendar', 'Svaki dan u tvom kalendaru: zeleni, plavi ili narančasti dan i kratki savjet, izračunat prema tvojoj natalnoj karti. Dodaj ga jednim klikom:', 'Dodaj u Google kalendar', 'Dodaj na iPhone / Apple', 'Drugi kalendar (Outlook i ostali): kopiraj ovu adresu i dodaj je kao pretplatu putem URL-a:'),
+       'sl': ('Tvoj osebni astrološki koledar', 'Vsak dan v tvojem koledarju: zelen, moder ali oranžen dan in kratek nasvet, izračunan po tvoji natalni karti. Dodaj ga z enim klikom:', 'Dodaj v Google Koledar', 'Dodaj na iPhone / Apple', 'Drug koledar (Outlook in drugi): kopiraj ta naslov in ga dodaj kot naročnino prek URL-ja:'),
+       'ro': ('Calendarul tău astrologic personal', 'În fiecare zi, în calendarul tău: o zi verde, albastră sau portocalie și un sfat scurt, calculat după harta ta natală. Adaugă-l cu un clic:', 'Adaugă în Google Calendar', 'Adaugă pe iPhone / Apple', 'Alt calendar (Outlook și altele): copiază această adresă și adaug-o ca abonament prin URL:'),
+       'cs': ('Tvůj osobní astrologický kalendář', 'Každý den v tvém kalendáři: zelený, modrý nebo oranžový den a krátká rada, spočítaná podle tvého natálního horoskopu. Přidej si ho jedním kliknutím:', 'Přidat do Kalendáře Google', 'Přidat do iPhonu / Apple', 'Jiný kalendář (Outlook a další): zkopíruj tuto adresu a přidej ji jako odběr z URL:'),
+       'hu': ('A személyes asztrológiai naptárad', 'Minden nap a naptáradban: zöld, kék vagy narancs nap és egy rövid tanács, a születési képleted alapján. Add hozzá egy kattintással:', 'Hozzáadás a Google Naptárhoz', 'Hozzáadás iPhone-ra / Apple-re', 'Más naptár (Outlook és mások): másold ki ezt a címet, és add hozzá URL-es feliratkozásként:'),
+       'en': ('Your personal astrological calendar', 'Every day in your calendar: a green, blue or orange day and a short tip, calculated from your natal chart. Add it in one click:', 'Add to Google Calendar', 'Add to iPhone / Apple', 'Another calendar (Outlook and others): copy this address and add it as a subscription from URL:')}
+
+
+def cal_links(url: str) -> dict:
+    from urllib.parse import quote
+    webcal = "webcal://" + url.split("://", 1)[1]
+    return {"google": "https://calendar.google.com/calendar/render?cid=" + quote(webcal, safe=""), "apple": webcal, "url": url}
+
+
+def sub_welcome(lang: str, name: str, freq: str, unsub_url: str, cal_url: str | None = None) -> tuple[str, str]:
     t = T[lang]
     body = _p(greeting(lang, name)) + _p(t["subDaily"] if freq == "daily" else t["subWeekly"])
+    if cal_url:
+        title, intro, g, a, other = CAL[lang]
+        links = cal_links(cal_url)
+        body += (f'<h2 style="font:400 22px Georgia,serif;color:#F3EBDD;margin:28px 0 8px">{esc(title)}</h2>' + _p(intro)
+                 + _button(g, links["google"]) + _button(a, links["apple"])
+                 + f'<p style="font:13px/1.5 Arial,sans-serif;color:#A9B0C6">{esc(other)}<br><span style="color:#D9B26A;word-break:break-all">{esc(cal_url)}</span></p>')
     return t["subSubject"], layout(lang, body, unsub_url)
 
 

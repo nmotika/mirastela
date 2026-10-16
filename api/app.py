@@ -6,7 +6,7 @@ import json
 import re
 import secrets
 import sqlite3
-from datetime import date, datetime, time, timezone
+from datetime import date, datetime, time, timedelta, timezone
 
 from fastapi import BackgroundTasks, FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
@@ -25,6 +25,7 @@ def _load_env():
 
 _load_env()
 
+import cal
 import chart
 import cities
 import emails
@@ -71,9 +72,13 @@ def db():
         id integer primary key, created text, email text, answers text, ua text)""")
     con.execute("""create table if not exists daily(
         lang text, day text, data text, model text, created text, primary key(lang, day))""")
+    con.execute("""create table if not exists caldays(
+        sub text, day text, label text, title text, text text, model text, created text, primary key(sub, day))""")
     cols = {r[1] for r in con.execute("pragma table_info(leads)")}
     if "token" not in cols:
         con.execute("alter table leads add column token text")
+    if "cal" not in {r[1] for r in con.execute("pragma table_info(subs)")}:
+        con.execute("alter table subs add column cal text")
     return con
 
 
@@ -339,8 +344,10 @@ def get_order(token: str):
             raise HTTPException(404, "order not found")
         items = con.execute("select product, status, markdown, data, model from items where token=? order by id",
                             (token,)).fetchall()
+        sub = con.execute("select cal from subs where order_token=? and status='active'", (token,)).fetchone()
     lang, name, natal, inp = row
     return {
+        "cal": cal_url(sub[0]) if sub and sub[0] else None,
         "lang": lang, "name": name, "chart": chart.add_cusps(json.loads(natal)), "input": json.loads(inp),
         "forecastYear": forecast_year(),
         "items": [{"product": p, "status": s, "markdown": md or "", "data": json.loads(d) if d else None, "model": m}
@@ -354,8 +361,64 @@ class SubIn(BaseModel):
     freq: str = Field("daily", pattern="^(daily|weekly)$")
 
 
+CAL_AHEAD = 14  # days of calendar entries kept ready ahead of today
+
+
+def cal_url(cal_token: str) -> str:
+    return f"{emails.SITE}/api/cal/{cal_token}.ics"
+
+
+def fill_calendar(sub_token: str, ahead: int = CAL_AHEAD):
+    """Generate missing calendar days from today to today + ahead, in batches of up to 7."""
+    with db() as con:
+        row = con.execute("select lang, name, chart from subs where token=?", (sub_token,)).fetchone()
+        if not row:
+            return
+        have = {r[0] for r in con.execute("select day from caldays where sub=? and day>=?", (sub_token, sky.today().isoformat()))}
+    lang, name, natal = _lang(row[0]), row[1], json.loads(row[2])
+    missing = [sky.today() + timedelta(days=i) for i in range(ahead) if (sky.today() + timedelta(days=i)).isoformat() not in have]
+    while missing:
+        start = missing[0]
+        n = 1
+        while n < 7 and n < len(missing) and missing[n] == start + timedelta(days=n):
+            n += 1
+        entries = cal.generate(lang, name, natal, start, n)
+        now = datetime.now(timezone.utc).isoformat()
+        with db() as con:
+            con.executemany("insert or replace into caldays(sub, day, label, title, text, model, created) values(?,?,?,?,?,?,?)",
+                            [(sub_token, e["day"], e["label"], e["title"], e["text"], e["model"], now) for e in entries])
+        missing = missing[n:]
+
+
+def _fill_calendar_safe(sub_token: str):
+    try:
+        fill_calendar(sub_token)
+    except Exception as e:
+        print("calendar", sub_token[:6], "error", e)
+
+
+@app.get("/api/cal/{name}")
+def calendar_feed(name: str):
+    """ICS feed that calendar apps poll. The token in the URL is the only key, separate from the unsubscribe token."""
+    from fastapi.responses import Response
+    cal_token = name.removesuffix(".ics")
+    with db() as con:
+        row = con.execute("select token, lang, name, status from subs where cal=?", (cal_token,)).fetchone()
+        if not row:
+            raise HTTPException(404, "not found")
+        sub_token, lang, nm, status = row
+        since = (sky.today() - timedelta(days=60)).isoformat()
+        q = "select day, label, title, text from caldays where sub=? and day>=?"
+        if status != "active":  # after cancelling, the calendar keeps past days but gets no new ones
+            q += f" and day<='{sky.today().isoformat()}'"
+        rows = con.execute(q + " order by day", (sub_token, since)).fetchall()
+    body = cal.ics(_lang(lang), nm, cal_token, rows, f"{emails.SITE}/{_lang(lang)}/")
+    return Response(body, media_type="text/calendar; charset=utf-8",
+                    headers={"Content-Disposition": 'inline; filename="mirastela.ics"'})
+
+
 @app.post("/api/subscribe")
-def subscribe(body: SubIn):
+def subscribe(body: SubIn, bg: BackgroundTasks):
     with db() as con:
         row = con.execute("select lang, email, name, chart, coupon from orders where token=?", (body.order,)).fetchone()
         if not row:
@@ -363,16 +426,18 @@ def subscribe(body: SubIn):
         lang, email, name, natal, coupon = row
         if not _coupon_ok(coupon or ""):
             raise HTTPException(402, "payment required")  # Stripe subscriptions come later
-        existing = con.execute("select token from subs where order_token=?", (body.order,)).fetchone()
+        existing = con.execute("select token, cal from subs where order_token=?", (body.order,)).fetchone()
         token = existing[0] if existing else secrets.token_urlsafe(16)
-        con.execute("insert into subs(token, created, email, lang, name, chart, freq, status, order_token, coupon, last_sent)"
-                    " values(?,?,?,?,?,?,?,?,?,?,?) on conflict(token) do update set freq=excluded.freq, status='active'",
+        cal_token = (existing[1] if existing else None) or secrets.token_urlsafe(18)
+        con.execute("insert into subs(token, created, email, lang, name, chart, freq, status, order_token, coupon, last_sent, cal)"
+                    " values(?,?,?,?,?,?,?,?,?,?,?,?) on conflict(token) do update set freq=excluded.freq, status='active', cal=excluded.cal",
                     (token, datetime.now(timezone.utc).isoformat(), email, _lang(lang), name, natal, body.freq,
-                     "active", body.order, coupon, None))
+                     "active", body.order, coupon, None, cal_token))
     unsub = f"{emails.SITE}/api/unsub/{token}"
-    subject, html = emails.sub_welcome(_lang(lang), name, body.freq, unsub)
+    subject, html = emails.sub_welcome(_lang(lang), name, body.freq, unsub, cal_url(cal_token))
     mailer.send(DB_PATH, email, "sub-welcome", subject, html, unsubscribe_url=unsub)
-    return {"ok": True}
+    bg.add_task(_fill_calendar_safe, token)
+    return {"ok": True, "cal": cal_url(cal_token)}
 
 
 @app.api_route("/api/unsub/{token}", methods=["GET", "POST"])

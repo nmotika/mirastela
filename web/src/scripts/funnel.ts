@@ -21,7 +21,7 @@ interface Chart {
 interface State {
   date?: string; time?: string | null; city?: City; name?: string;
   focus: string[]; status?: string; email?: string; chart?: Chart; coupon?: string; token?: string;
-  sub?: string; plan?: 'natal' | 'bundle'; pMode?: 'partner' | 'child';
+  sub?: string; cal?: string; plan?: 'natal' | 'bundle'; pMode?: 'partner' | 'child';
 }
 
 const data = JSON.parse(document.getElementById('funnel-data')!.textContent!);
@@ -661,8 +661,8 @@ $('sAdd').addEventListener('click', async () => {
   const btn = $<HTMLButtonElement>('sAdd');
   btn.disabled = true; $('sErr').hidden = true;
   try {
-    await api('/api/subscribe', { order: state.token, freq: 'weekly' });
-    state.sub = 'weekly'; save();
+    const r = await api<{ cal?: string }>('/api/subscribe', { order: state.token, freq: 'weekly' });
+    state.sub = 'weekly'; state.cal = r.cal; save();
     show('done');
   } catch {
     $('sErr').textContent = D.ui.error; $('sErr').hidden = false;
@@ -677,7 +677,17 @@ function renderDone() {
   $('dDesc').textContent = fill(D.done.desc, { email: state.email ?? '' });
   $('dSub').hidden = !state.sub;
   $<HTMLAnchorElement>('dOpen').href = reportUrl();
+  $('dCal').hidden = !state.cal;
+  if (state.cal) {
+    const webcal = 'webcal://' + state.cal.split('://')[1];
+    $<HTMLAnchorElement>('dCalG').href = 'https://calendar.google.com/calendar/render?cid=' + encodeURIComponent(webcal);
+    $<HTMLAnchorElement>('dCalA').href = webcal;
+  }
 }
+$('dCalC').addEventListener('click', async () => {
+  const b = $<HTMLButtonElement>('dCalC');
+  try { await navigator.clipboard.writeText(state.cal ?? ''); b.textContent = b.dataset.done ?? ''; } catch { /* clipboard blocked */ }
+});
 
 /* ---------- resume from the summary email ---------- */
 async function resume(token: string): Promise<boolean> {
@@ -686,7 +696,7 @@ async function resume(token: string): Promise<boolean> {
       `/api/lead/${encodeURIComponent(token)}`);
     if (!L.city || !L.date) return false;
     Object.assign(state, { email: L.email, name: L.name, date: L.date, time: L.time, city: L.city, focus: L.focus, status: L.status,
-      token: undefined, sub: undefined });
+      token: undefined, sub: undefined, cal: undefined });
     state.chart = await api<Chart>('/api/chart', { date: L.date, time: L.time, cityId: L.city.id });
     save();
     history.replaceState(null, '', `${location.pathname}#offer`);

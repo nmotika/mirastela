@@ -351,12 +351,17 @@ const clientData = JSON.stringify({
 
     <!-- 11 Subscription -->
     <section class="step" data-step="sub" hidden>
-      <div class="qh"><p class="ey">{S.eyebrow}</p><h1 class="sf q ot">{S.title}</h1><p class="mu lead">{S.desc}</p></div>
-      <div class="example">
+      <div class="qh"><p class="ey">{S.eyebrow}</p><h1 class="sf q ot">{SH.calTitle}</h1><p class="mu lead">{SH.calDesc}</p></div>
+      <div class="calex" aria-hidden="true">
         <p class="ek" id="sExLabel"></p>
-        <p class="sf">{S.exTitle}</p>
-        <p class="pm">{S.exText}</p>
+        {SH.calEx.map((t, i) => (
+          <div class:list={['cday', ['c-super', 'c-act', 'c-slow'][i]]}>
+            <span class="cdot"></span>
+            <span class="ctx"><strong>{SH.calLabels[i]}</strong><span>{t}</span></span>
+          </div>
+        ))}
       </div>
+      <div>{SH.calBullets.map((b) => <div class="inc nb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9B26A" stroke-width="2" aria-hidden="true" set:html={tick} /><span>{b}</span></div>)}</div>
       <fieldset class="plans">
         <legend>{S.plan}</legend>
         <label class="plan"><input type="radio" name="plan" value="year" checked /><span class="badge">{S.badge}</span>
@@ -386,6 +391,15 @@ const clientData = JSON.stringify({
       </div>
       <div class="qh"><p class="ey">{Dn.eyebrow}</p><h1 class="sf q">{Dn.title}</h1><p class="lead mu" id="dDesc"></p></div>
       <p class="note" id="dSub" hidden>{Dn.subOn}</p>
+      <div class="calbox" id="dCal" hidden>
+        <p class="sf">{SH.calAddTitle}</p>
+        <p class="mu">{SH.calAddText}</p>
+        <div class="calbtns">
+          <a class="btn2" id="dCalG" href="#" target="_blank" rel="noopener">{SH.calGoogle}</a>
+          <a class="btn2" id="dCalA" href="#">{SH.calApple}</a>
+          <button type="button" class="no" id="dCalC" data-done={SH.calCopied}>{SH.calCopy}</button>
+        </div>
+      </div>
       <div class="dock">
         <a class="btn2" id="dOpen" href="#">{Dn.open}</a>
         <a class="no" href={`/${lang}/`}>{Dn.home}</a>
@@ -576,6 +590,16 @@ const clientData = JSON.stringify({
   .pform { display: flex; flex-direction: column; gap: 16px; }
 
   /* Subscription */
+  .calex { padding: 16px; border-radius: 16px; background: var(--paper); color: var(--paper-ink); display: flex; flex-direction: column; gap: 10px; }
+  .calex .ek { letter-spacing: .12em; }
+  .cday { display: flex; gap: 12px; align-items: center; padding: 10px 12px; border-radius: 12px; background: rgba(0,0,0,.04); border-left: 4px solid var(--c); }
+  .cdot { width: 12px; height: 12px; border-radius: 50%; background: var(--c); flex: none; }
+  .ctx { display: flex; flex-direction: column; font-size: 15px; line-height: 1.35; }
+  .ctx strong { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+  .c-super { --c: #3FA36B; } .c-act { --c: #3E7BD6; } .c-slow { --c: #E08A3C; }
+  .calbox { padding: 18px; border-radius: 16px; background: var(--panel); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px; }
+  .calbox .sf { font-size: 22px; }
+  .calbtns { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
   .example { padding: 18px; border-radius: 16px; background: var(--paper); color: var(--paper-ink); display: flex; flex-direction: column; gap: 8px; }
   .example .ek { letter-spacing: .12em; }
   .example .sf { font-size: 20px; line-height: 1.3; }

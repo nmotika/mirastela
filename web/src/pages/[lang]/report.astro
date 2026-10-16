@@ -29,6 +29,8 @@ const dl = '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>';
     </section>
     <p class="wrap mu" id="rMsg" role="status"></p>
     <div class="addp wrap noprint" id="rAddPartner" hidden><p>{d.shop.addPartnerText}</p><a class="btn2" id="rAddPartnerLink" href="#">{d.shop.addPartner}</a></div>
+    <div class="addp wrap noprint" id="rCal" hidden><p><strong>{d.shop.calAddTitle}</strong><br />{d.shop.calAddText}</p>
+      <span class="calbtns"><a class="btn2" id="rCalG" href="#" target="_blank" rel="noopener">{d.shop.calGoogle}</a><a class="btn2" id="rCalA" href="#">{d.shop.calApple}</a></span></div>
     <div class="ptabs wrap noprint" role="tablist" id="rTabs" hidden></div>
     <div class="rpaper" id="rPanels"></div>
   </main>
@@ -37,6 +39,7 @@ const dl = '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>';
 </Base>
 
 <style is:global>
+  .calbtns { display: flex; flex-wrap: wrap; gap: 10px; }
   .rep { display: flex; flex-direction: column; flex: 1; }
   .small { font-size: 14px; }
   .rhero { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px; padding-top: 20px; padding-bottom: 36px; }

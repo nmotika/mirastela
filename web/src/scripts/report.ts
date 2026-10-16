@@ -13,7 +13,7 @@ interface Chart {
   city?: { name: string; country: string };
 }
 interface Item { product: 'natal' | 'partner' | 'forecast' | 'child'; status: string; markdown: string; data: any; model: string }
-interface Order { lang: string; name: string; chart: Chart; input: { date: string; time: string | null; bundle?: boolean }; forecastYear: number; items: Item[] }
+interface Order { lang: string; name: string; chart: Chart; input: { date: string; time: string | null; bundle?: boolean }; forecastYear: number; items: Item[]; cal?: string | null }
 
 const cfg = JSON.parse(document.getElementById('report-data')!.textContent!);
 const R = cfg.d.report, R2 = cfg.d.rep2, A = cfg.d.astro;
@@ -228,6 +228,12 @@ function render(o: Order) {
   addP.hidden = !missing;
   if (missing) $<HTMLAnchorElement>('rAddPartnerLink').href = `/${cfg.lang}/start/?o=${encodeURIComponent(token ?? '')}`;
   $('rPrint').hidden = o.items.every((i) => i.status !== 'ready');
+  $('rCal').hidden = !o.cal;
+  if (o.cal) {
+    const webcal = 'webcal://' + o.cal.split('://')[1];
+    $<HTMLAnchorElement>('rCalG').href = 'https://calendar.google.com/calendar/render?cid=' + encodeURIComponent(webcal);
+    $<HTMLAnchorElement>('rCalA').href = webcal;
+  }
 }
 
 async function poll() {
