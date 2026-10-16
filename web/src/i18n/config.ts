@@ -25,7 +25,7 @@ export const PRICE: Record<Lang, { amount: number; currency: string }> = {
 
 /** Upsell prices: partner compatibility and yearly forecast. */
 export const UPSELL: Record<Lang, { partner: number; forecast: number }> = {
-  pl: { partner: 39.99, forecast: 59.99 },
+  pl: { partner: 59.99, forecast: 99.99 },
   hr: { partner: 9.9, forecast: 14.9 },
   sl: { partner: 9.9, forecast: 14.9 },
   ro: { partner: 44.99, forecast: 69.99 },
