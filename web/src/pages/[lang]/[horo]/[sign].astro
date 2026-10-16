@@ -2,10 +2,9 @@
 import Base from '../../../layouts/Base.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
-import HoroCta from '../../../components/HoroCta.astro';
-import { LOCALES, INTL, type Lang } from '../../../i18n/config';
+import { LOCALES, type Lang } from '../../../i18n/config';
 import { t, fill } from '../../../i18n';
-import { SIGN_GLYPHS, signRange } from '../../../scripts/zodiac';
+import { SIGN_GLYPHS } from '../../../scripts/zodiac';
 import '../../../styles/horo.css';
 
 export function getStaticPaths() {
@@ -20,42 +19,39 @@ const d = t(lang);
 const H = d.horo;
 const name = d.astro.signs[idx];
 const paths = Object.fromEntries(LOCALES.map((l) => [l, `${t(l).horo.slug}/${t(l).horo.signSlugs[idx]}/`])) as Record<Lang, string>;
-const clientData = JSON.stringify({ lang, page: 'sign', idx, d: { horo: H, astro: d.astro } });
+const clientData = JSON.stringify({ lang, page: 'sign', idx, d: { horo: H } });
+const order = [...Array(12).keys()].map((k) => (idx + 1 + k) % 12).filter((k) => k !== idx);
 ---
 <Base lang={lang} path={paths[lang]} paths={paths} title={fill(H.signTitle, { sign: name })} description={fill(H.signDesc, { sign: name })}>
   <div class="wrap"><Header lang={lang} path={paths[lang]} paths={paths} /></div>
-  <main class="wrap horo one">
-    <nav class="crumbs mu"><a href={`/${lang}/${H.slug}/`}>{H.nav}</a> / {name}</nav>
-    <div class="signhead">
-      <span class="gl bigglyph" aria-hidden="true">{SIGN_GLYPHS[idx]}</span>
-      <div>
-        <p class="ey" id="hDate">&nbsp;</p>
-        <h1 class="sf">{fill(H.signH1, { sign: name })}</h1>
-        <p class="mu">{signRange(INTL[lang], idx)}</p>
-      </div>
-    </div>
-
-    <article class="paper reading" aria-live="polite">
-      <p id="hStatus" class="pm">{H.loading}</p>
-      <div id="hBody" hidden>
-        <h2 class="sf">{H.general}</h2><p id="hGeneral"></p>
-        <h2 class="sf">{H.love}</h2><p id="hLove"></p>
-        <h2 class="sf">{H.work}</h2><p id="hWork"></p>
-      </div>
-    </article>
-
-    <section class="skybox">
-      <h2 class="sf">{H.sky}</h2>
-      <p class="mu" id="hSky">{H.loading}</p>
+  <main class="horo hwrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href={`/${lang}/`}>Mirastela</a> / <a href={`/${lang}/${H.slug}/`}>{H.nav}</a> / {name}</nav>
+    <section class="shead">
+      <div class="sg-circle"><span class="gl" aria-hidden="true">{SIGN_GLYPHS[idx]}</span></div>
+      <div><h1 class="sf">{fill(H.signH1, { sign: name })}</h1><p class="mu small" data-hdate>&nbsp;</p></div>
     </section>
-    <HoroCta lang={lang} />
-
-    <h2 class="sf others">{H.others}</h2>
-    <ul class="mini">
-      {d.astro.signs.map((s, i) => i !== idx && (
-        <li><a href={`/${lang}/${H.slug}/${H.signSlugs[i]}/`}><span class="gl" aria-hidden="true">{SIGN_GLYPHS[i]}</span>{s}</a></li>
-      ))}
-    </ul>
+    <div class="dtabs" role="tablist" aria-label={H.today}>
+      <button type="button" role="tab" data-day="-1" aria-selected="false">{H.yesterday}</button>
+      <button type="button" role="tab" data-day="0" aria-selected="true">{H.today}</button>
+      <button type="button" role="tab" data-day="1" aria-selected="false">{H.tomorrow}</button>
+    </div>
+    <article class="hread" aria-live="polite" data-sign={idx}>
+      <p class="hstatus" id="hStatus">{H.loading}</p>
+      <div class="rd"><h2>{H.general}</h2><p data-h="general"></p></div>
+      <div class="rd"><h2>{H.love}</h2><p data-h="love"></p></div>
+      <div class="rd"><h2>{H.work}</h2><p data-h="work"></p></div>
+    </article>
+    <section class="bcta">
+      <h2 class="sf">{H.ctaSignTitle}</h2>
+      <p class="mu">{H.ctaSignText}</p>
+      <a href={`/${lang}/start/`} class="btn">{H.ctaBtn}</a>
+    </section>
+    <section class="others">
+      <h2>{H.others}</h2>
+      <nav class="pills" aria-label={H.others}>
+        {order.map((i) => <a href={`/${lang}/${H.slug}/${H.signSlugs[i]}/`} class="sgp"><span class="gl" aria-hidden="true">{SIGN_GLYPHS[i]}</span>{d.astro.signs[i]}</a>)}
+      </nav>
+    </section>
   </main>
   <Footer lang={lang} path={paths[lang]} paths={paths} />
   <script type="application/json" id="horo-data" set:html={clientData} />

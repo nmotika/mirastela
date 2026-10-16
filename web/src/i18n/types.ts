@@ -20,19 +20,32 @@ export interface Extra {
 }
 
 export interface More {
+  quiz2: {
+    sunLabel: string; timeWhyTitle: string; placeLabel: string; placeAbroad: string; placeLoading: string;
+    placeNoneTitle: string; placeNoneText: string; placeErrTitle: string; placeErrText: string; retry: string;
+    nameLabel: string; nameErr: string; focusCount: string; statusHint: string; statusNote: string; calcStatus: string; calcCta: string;
+    emailEyebrow: string; emailLabel: string; emailTerms: string; emailErrAt: string;
+  };
+  upsell2: {
+    paid: string; paidCoupon: string; partnerEyebrow: string; partnerTitle: string; forecastEyebrow: string; forecastTitle: string;
+    once: string; addFor: string; oneClick: string; partnerNext: string; pformTitle: string; pformSub: string; pformCta: string;
+  };
   sub: {
-    eyebrow: string; title: string; desc: string; bullets: string[];
-    daily: string; dailyDesc: string; weekly: string; weeklyDesc: string;
-    price: string; trial: string; cta: string; ctaFree: string; no: string;
+    eyebrow: string; title: string; desc: string; exLabel: string; exTitle: string; exText: string;
+    plan: string; badge: string; yearly: string; yearlyNote: string; monthly: string; monthlyNote: string; perMonth: string;
+    renewTitle: string; renew1: string; renew2: string; ctaYear: string; ctaMonth: string; ctaFree: string;
+    noteYear: string; noteMonth: string; no: string;
   };
-  done: { eyebrow: string; title: string; desc: string; subDaily: string; subWeekly: string; open: string; home: string };
+  done: { eyebrow: string; title: string; desc: string; subOn: string; open: string; home: string };
   horo: {
-    nav: string; slug: string; signSlugs: string[];
-    indexTitle: string; indexDesc: string; h1: string; sub: string;
-    signTitle: string; signDesc: string; signH1: string; general: string; love: string; work: string;
-    sky: string; moonChange: string; retro: string; loading: string; error: string; read: string; others: string;
-    ctaTitle: string; ctaText: string; ctaBtn: string;
+    nav: string; slug: string; signSlugs: string[]; indexTitle: string; indexDesc: string; h1: string; pick: string;
+    signTitle: string; signDesc: string; signH1: string; yesterday: string; today: string; tomorrow: string;
+    general: string; love: string; work: string; loading: string; error: string; others: string;
+    ctaEyebrow: string; ctaIdxTitle: string; ctaIdxText: string; ctaSignTitle: string; ctaSignText: string; ctaBtn: string;
+    aboutTitle: string; aboutText: string;
   };
+  rep2: { eyebrow: string; planetsTitle: string; house: string; emailNote: string; disclaimer: string; toc: string };
+  nav: { how: string };
 }
 
 export type BaseDict = Omit<Dict, keyof Extra | keyof More>;

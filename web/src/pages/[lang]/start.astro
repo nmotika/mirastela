@@ -10,27 +10,43 @@ export function getStaticPaths() {
 }
 const lang = Astro.params.lang as Lang;
 const d = t(lang);
-const Q = d.quiz;
-const O = d.offer;
+const Q = d.quiz, Q2 = d.quiz2, O = d.offer, C = d.coupon, U = d.upsell, U2 = d.upsell2, S = d.sub, Dn = d.done;
 const price = formatPrice(lang);
 const cur = PRICE[lang].currency;
-const upPrices = { partner: formatPrice(lang, { amount: UPSELL[lang].partner, currency: cur }), forecast: formatPrice(lang, { amount: UPSELL[lang].forecast, currency: cur }) };
-const C = d.coupon;
-const U = d.upsell;
-const S = d.sub;
-const Dn = d.done;
-const subPrice = formatPrice(lang, { amount: SUB[lang], currency: cur });
+const fp = (amount: number) => formatPrice(lang, { amount, currency: cur });
+const upPrices = { partner: fp(UPSELL[lang].partner), forecast: fp(UPSELL[lang].forecast) };
+const subPrices = { month: fp(SUB[lang].month), year: fp(SUB[lang].year), yearPerMonth: fp(Math.round((SUB[lang].year / 12) * 100) / 100) };
 const thisYear = new Date().getFullYear();
 const years = Array.from({ length: thisYear - 1929 - 12 }, (_, i) => thisYear - 12 - i);
 const focusKeys = ['love', 'career', 'money', 'growth'] as const;
+const focusIcons: Record<string, string> = {
+  love: '<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>',
+  career: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5h6v2M3 13h18"/>',
+  money: '<ellipse cx="12" cy="6.5" rx="7" ry="3"/><path d="M5 6.5v5c0 1.7 3.1 3 7 3s7-1.3 7-3v-5M5 11.5v5c0 1.7 3.1 3 7 3s7-1.3 7-3v-5"/>',
+  growth: '<path d="M12 21v-9M12 12c0-4 3-7 8-7 0 4-3 7-8 7zM12 14c0-3-2.5-5.5-7-5.5 0 3 2.5 5.5 7 5.5z"/>',
+};
 const statusKeys = ['relationship', 'single', 'complicated'] as const;
+const tick = '<path d="M5 12l5 5 9-10"/>';
 const chevron = '<path d="M15 18l-6-6 6-6"/>';
+const lock = '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>';
+const shield = '<path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/>';
+const eye = '<path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="2.5"/>';
+const search = '<circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/>';
+const info = '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>';
+const errIcon = '<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16v.5"/>';
+const terms = (s: string) => fill(s, {
+  terms: `<a href="/${lang}/terms/">${d.footer.terms}</a>`,
+  privacy: `<a href="/${lang}/privacy/">${d.footer.privacy}</a>`,
+});
 // Only this language's strings go to the browser.
-const clientData = JSON.stringify({ lang, price, upPrices, subPrice, d: { quiz: Q, offer: O, teaser: d.teaser, astro: d.astro, ui: d.ui, coupon: C, upsell: U, sub: S, done: Dn } });
+const clientData = JSON.stringify({
+  lang, price, upPrices, subPrices,
+  d: { quiz: Q, quiz2: Q2, offer: O, teaser: d.teaser, astro: d.astro, ui: d.ui, coupon: C, upsell: U, upsell2: U2, sub: S, done: Dn },
+});
 ---
 <Base lang={lang} path="start/" title={d.meta.title} description={d.meta.description} noindex>
-  <div class="funnel narrow" id="funnel">
-    <header class="fhead">
+  <div class="funnel" id="funnel">
+    <header class="fhead" id="fhead">
       <button type="button" class="ib" id="back" aria-label={d.ui.back} hidden>
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" set:html={chevron} /></button>
       <a href={`/${lang}/`} class="logo small" id="brand" aria-label={d.ui.home}><Logo size={24} /><span>Mirastela</span></a>
@@ -38,184 +54,274 @@ const clientData = JSON.stringify({ lang, price, upPrices, subPrice, d: { quiz: 
         <p class="mu" id="progLabel"></p>
         <div class="bar"><span id="progBar"></span></div>
       </div>
-      <LangSwitcher lang={lang} path="start/" />
+      <LangSwitcher lang={lang} path="start/" compact id="flang" />
     </header>
 
     <!-- 1 Date -->
     <section class="step" data-step="date">
-      <h1 class="sf q">{Q.dateQ}</h1>
-      <p class="mu hint">{Q.dateHint}</p>
-      <div class="dsel">
-        <label><span>{Q.day}</span>
-          <select id="dDay" class="inp"><option value="">–</option>{Array.from({ length: 31 }, (_, i) => <option value={i + 1}>{i + 1}</option>)}</select></label>
-        <label><span>{Q.month}</span>
-          <select id="dMonth" class="inp"><option value="">–</option>{Q.months.map((m, i) => <option value={i + 1}>{m}</option>)}</select></label>
-        <label><span>{Q.year}</span>
-          <select id="dYear" class="inp"><option value="">–</option>{years.map((y) => <option value={y}>{y}</option>)}</select></label>
-      </div>
-      <p class="reward" id="sunReward" aria-live="polite" hidden></p>
-      <div class="dock"><button type="button" class="btn" data-next disabled>{d.ui.next}</button></div>
+      <div class="qh"><h1 class="sf q">{Q.dateQ}</h1><p class="mu">{Q.dateHint}</p></div>
+      <fieldset class:list={["wheels date", { ymd: lang === "hu" }]}>
+        <legend class="vh">{Q.dateQ}</legend>
+        <div class="band" aria-hidden="true"></div>
+        <div class="wcol"><span class="wlab">{Q.day}</span>
+          <div class="wsc" id="wDay" tabindex="0" role="listbox" aria-label={Q.day}>{Array.from({ length: 31 }, (_, i) => <button type="button" role="option" tabindex="-1" data-v={i + 1}>{i + 1}</button>)}</div></div>
+        <div class="wcol w16"><span class="wlab">{Q.month}</span>
+          <div class="wsc" id="wMonth" tabindex="0" role="listbox" aria-label={Q.month}>{Q.months.map((m, i) => <button type="button" role="option" tabindex="-1" data-v={i + 1}>{m}</button>)}</div></div>
+        <div class="wcol w12"><span class="wlab">{Q.year}</span>
+          <div class="wsc" id="wYear" tabindex="0" role="listbox" aria-label={Q.year}>{years.map((y) => <button type="button" role="option" tabindex="-1" data-v={y}>{y}</button>)}</div></div>
+      </fieldset>
+      <section class="reward" aria-live="polite" id="sunReward" hidden>
+        <div class="rg"><span class="gl" id="rGlyph" aria-hidden="true"></span></div>
+        <div><span class="rl" id="rLabel"></span><p class="sf" id="rText"></p></div>
+      </section>
+      <div class="dock"><button type="button" class="btn" data-next>{d.ui.next}</button></div>
     </section>
 
     <!-- 2 Time -->
     <section class="step" data-step="time" hidden>
-      <h1 class="sf q">{Q.timeQ}</h1>
-      <p class="mu hint">{Q.timeHint}</p>
-      <label class="fld"><span>{Q.timeLabel}</span><input type="time" id="tTime" class="inp big" /></label>
-      <label class="ck"><input type="checkbox" id="tUnknown" /><span>{Q.timeUnknown}</span></label>
-      <p class="mu small" id="tWhy" hidden>{Q.timeWhy}</p>
-      <div class="dock"><button type="button" class="btn" data-next disabled>{d.ui.next}</button></div>
+      <div class="qh"><h1 class="sf q">{Q.timeQ}</h1><p class="mu">{Q.timeHint}</p></div>
+      <fieldset class="wheels time" id="timeWheels">
+        <legend class="vh">{Q.timeLabel}</legend>
+        <div class="band" aria-hidden="true"></div>
+        <div class="wcol tw"><div class="wsc big" id="wHour" tabindex="0" role="listbox" aria-label={Q.timeLabel}>{Array.from({ length: 24 }, (_, i) => <button type="button" role="option" tabindex="-1" data-v={i}>{String(i).padStart(2, '0')}</button>)}</div></div>
+        <span class="colon" aria-hidden="true">:</span>
+        <div class="wcol tw"><div class="wsc big" id="wMin" tabindex="0" role="listbox" aria-label={Q.timeLabel}>{Array.from({ length: 60 }, (_, i) => <button type="button" role="option" tabindex="-1" data-v={i}>{String(i).padStart(2, '0')}</button>)}</div></div>
+      </fieldset>
+      <label class="chk"><input type="checkbox" id="tUnknown" /><span>{Q.timeUnknown}</span></label>
+      <div class="why">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D9B26A" stroke-width="1.6" aria-hidden="true" set:html={info} />
+        <p class="mu"><strong>{Q2.timeWhyTitle}</strong> {Q.timeWhy}</p>
+      </div>
+      <div class="dock"><button type="button" class="btn" data-next>{d.ui.next}</button></div>
     </section>
 
     <!-- 3 Place -->
     <section class="step" data-step="place" hidden>
-      <h1 class="sf q">{Q.placeQ}</h1>
-      <p class="mu hint">{Q.placeHint}</p>
-      <label class="fld"><span class="vh">{Q.placeQ}</span>
-        <input type="text" id="pInput" class="inp big" placeholder={Q.placePh} autocomplete="off" role="combobox" aria-controls="pList" aria-expanded="false" /></label>
-      <ul id="pList" class="plist" role="listbox"></ul>
-      <p class="mu small" id="pNone" hidden>{Q.placeNone}</p>
+      <div class="qh"><h1 class="sf q">{Q.placeQ}</h1><p class="mu">{Q.placeHint}</p></div>
+      <div class="field">
+        <label for="pInput" class="lbl">{Q2.placeLabel}</label>
+        <div class="srch">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A9B0C6" stroke-width="1.8" aria-hidden="true" set:html={search} />
+          <input type="text" id="pInput" class="inp" autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="pList" aria-expanded="false" />
+        </div>
+        <div id="pList" class="opts" role="listbox" hidden></div>
+        <div class="srow" id="pLoading" hidden><span class="spin" aria-hidden="true"></span>{Q2.placeLoading}</div>
+        <div class="scard" id="pNone" hidden><strong id="pNoneTitle"></strong><p class="mu">{Q2.placeNoneText}</p></div>
+        <div class="scard err" id="pErr" hidden><strong>{Q2.placeErrTitle}</strong><p class="mu">{Q2.placeErrText}</p>
+          <button type="button" class="btn2" id="pRetry">{Q2.retry}</button></div>
+        <p class="mu small" id="pAbroad">{Q2.placeAbroad}</p>
+      </div>
       <div class="dock"><button type="button" class="btn" data-next disabled>{d.ui.next}</button></div>
     </section>
 
     <!-- 4 Name -->
     <section class="step" data-step="name" hidden>
-      <h1 class="sf q">{Q.nameQ}</h1>
-      <p class="mu hint">{Q.nameHint}</p>
-      <label class="fld"><span class="vh">{Q.nameQ}</span><input type="text" id="nInput" class="inp big" placeholder={Q.namePh} autocomplete="given-name" maxlength="40" /></label>
-      <div class="dock"><button type="button" class="btn" data-next disabled>{d.ui.next}</button></div>
+      <div class="qh"><h1 class="sf q">{Q.nameQ}</h1><p class="mu">{Q.nameHint}</p></div>
+      <div class="field">
+        <label for="nInput" class="lbl">{Q2.nameLabel}</label>
+        <input type="text" id="nInput" class="inp name" autocomplete="given-name" autocapitalize="words" maxlength="40" aria-describedby="nErr" />
+        <p class="ferr" id="nErr" hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" set:html={errIcon} />{Q2.nameErr}</p>
+      </div>
+      <div class="sumrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9B26A" stroke-width="1.7" aria-hidden="true" set:html={tick} /><p id="nSummary"></p></div>
+      <div class="dock"><button type="button" class="btn" data-next>{d.ui.next}</button></div>
     </section>
 
     <!-- 5 Focus -->
     <section class="step" data-step="focus" hidden>
-      <h1 class="sf q">{Q.focusQ}</h1>
-      <p class="mu hint">{Q.focusHint}</p>
-      <fieldset class="cards"><legend class="vh">{Q.focusQ}</legend>
-        {focusKeys.map((k) => <label class="card"><input type="checkbox" name="focus" value={k} /><span>{Q.focus[k]}</span></label>)}
-      </fieldset>
-      <div class="dock"><button type="button" class="btn" data-next disabled>{d.ui.next}</button></div>
+      <div class="qh"><h1 class="sf q">{Q.focusQ}</h1><p class="mu">{Q.focusHint}</p></div>
+      <div class="fgrid" role="group" aria-label={Q.focusQ}>
+        {focusKeys.map((k) => (
+          <button type="button" class="fcard" data-focus={k} aria-pressed="false">
+            <span class="tick"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0B1020" stroke-width="3" aria-hidden="true" set:html={tick} /></span>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#D9B26A" stroke-width="1.5" aria-hidden="true" set:html={focusIcons[k]} />
+            {Q.focus[k]}
+          </button>
+        ))}
+      </div>
+      <div class="dock"><button type="button" class="btn" data-next id="fNext" disabled></button></div>
     </section>
 
     <!-- 6 Status -->
     <section class="step" data-step="status" hidden>
-      <h1 class="sf q">{Q.statusQ}</h1>
-      <fieldset class="cards"><legend class="vh">{Q.statusQ}</legend>
-        {statusKeys.map((k) => <label class="card"><input type="radio" name="status" value={k} /><span>{Q.status[k]}</span></label>)}
-      </fieldset>
+      <div class="qh"><h1 class="sf q">{Q.statusQ}</h1><p class="mu">{Q2.statusHint}</p></div>
+      <div class="srows" role="group" aria-label={Q.statusQ}>
+        {statusKeys.map((k) => <button type="button" class="srowb" data-status={k} aria-pressed="false"><span class="dot" aria-hidden="true"></span>{Q.status[k]}</button>)}
+      </div>
+      <p class="mu small">{Q2.statusNote}</p>
     </section>
 
     <!-- 7 Calculating -->
     <section class="step calc" data-step="calc" hidden>
-      <h1 class="sf q center">{Q.calcTitle}</h1>
-      <p class="mu center small" id="calcWho"></p>
+      <div class="qh center"><h1 class="sf q cq">{Q.calcTitle}</h1><p class="mu small" id="calcWho"></p></div>
       <div class="wheelbox" id="calcWheel"></div>
-      <ul class="vals" id="calcVals" aria-live="polite"></ul>
-      <p class="err" id="calcErr" hidden>{d.ui.error}</p>
+      <div class="vals" id="calcVals" aria-live="polite"></div>
+      <p class="ferr" id="calcErr" hidden>{d.ui.error}</p>
+      <div class="cfoot">
+        <div class="bar"><span id="calcBar"></span></div>
+        <p class="mu small center" id="calcStatus">{Q2.calcStatus}</p>
+        <button type="button" class="btn" id="calcGo" hidden>{Q2.calcCta}</button>
+      </div>
     </section>
 
     <!-- 8 Email -->
     <section class="step" data-step="email" hidden>
-      <h1 class="sf q">{Q.emailQ}</h1>
-      <p class="mu hint">{Q.emailSub}</p>
-      <form id="eForm" novalidate>
-        <label class="fld"><span class="vh">{Q.emailPh}</span>
-          <input type="email" id="eInput" class="inp big" placeholder={Q.emailPh} autocomplete="email" inputmode="email" required /></label>
-        <p class="err" id="eErr" hidden>{Q.emailErr}</p>
+      <div class="qh"><p class="ey">{Q2.emailEyebrow}</p><h1 class="sf q">{Q.emailQ}</h1></div>
+      <div class="chips" id="eChips"></div>
+      <form id="eForm" novalidate class="eform">
+        <div class="field">
+          <label for="eInput" class="lbl">{Q2.emailLabel}</label>
+          <input type="email" id="eInput" class="inp" placeholder={Q.emailPh} autocomplete="email" inputmode="email" required aria-describedby="eErr" />
+          <p class="ferr" id="eErr" hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" set:html={errIcon} /><span id="eErrText"></span></p>
+        </div>
         <label class="ck"><input type="checkbox" id="eConsent" /><span>{Q.emailConsent}</span></label>
-        <p class="mu small">{Q.emailPrivacy}</p>
-        <div class="dock"><button type="submit" class="btn">{Q.emailCta}</button></div>
+        <div class="dock">
+          <button type="submit" class="btn">{Q.emailCta}</button>
+          <p class="mu tiny" set:html={terms(Q2.emailTerms)} />
+        </div>
       </form>
     </section>
 
     <!-- 9 Offer -->
     <section class="step offer" data-step="offer" hidden>
-      <p class="ey">{O.eyebrow}</p>
-      <h1 class="sf q">{O.title}</h1>
-      <p class="mu small" id="oWho"></p>
-      <div class="chips" id="oChips"></div>
-      <p class="mu small" id="oNoTime" hidden>{O.noTimeNote}</p>
-      <div class="wheelbox" id="oWheel"></div>
-
-      <article class="paper excerpt">
-        <p class="ey">{O.fragment}</p>
-        <h2 class="sf" id="oTitle"></h2>
-        <p id="oP1"></p>
-        <p id="oP2"></p>
-        <div class="blur" aria-hidden="true"><p id="oP3"></p></div>
-        <div class="fade"><span class="lock">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>{O.lock}</span></div>
-      </article>
-
-      <h2 class="sf h2">{O.incTitle}</h2>
-      <ul class="incl" id="oIncl">
-        {O.inc.map(([a, b]) => <li><strong>{a}</strong><span class="mu">{b}</span></li>)}
-      </ul>
-
-      <div class="pricebox">
-        <p style="font-weight:600">{O.cardTitle}</p>
-        <p class="sf price">{price}</p>
-        <p class="mu small">{O.priceNote}</p>
+      <div class="ogrid">
+        <div class="ol">
+          <div class="ohead">
+            <p class="ey">{O.eyebrow}</p>
+            <h1 class="sf q ot">{O.title}</h1>
+            <p class="mu small" id="oWho"></p>
+            <div class="chips" id="oChips"></div>
+            <p class="mu small" id="oNoTime" hidden>{O.noTimeNote}</p>
+          </div>
+          <article class="excerpt">
+            <p class="ek">{O.fragment}</p>
+            <h2 class="sf" id="oTitle"></h2>
+            <p id="oP1"></p>
+            <p id="oP2"></p>
+            <div class="blur" aria-hidden="true"><p id="oP3"></p></div>
+            <div class="fade"><span class="lock"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" set:html={lock} />{O.lock}</span></div>
+          </article>
+          <div class="mob">
+            <h2 class="sf h2">{O.incTitle}</h2>
+            <div class="incs" data-incs>
+              {O.inc.map(([a, b]) => <div class="inc"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9B26A" stroke-width="2" aria-hidden="true" set:html={tick} /><div><strong>{a}</strong><p>{b}</p></div></div>)}
+            </div>
+            <div class="pricebox">
+              <p style="font-weight:600">{O.cardTitle}</p>
+              <p class="sf price">{price}</p>
+              <p class="mu small">{O.priceNote}</p>
+            </div>
+            <ul class="trustl mu">
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9B26A" stroke-width="1.6" aria-hidden="true" set:html={lock} />{O.payMethods}</li>
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9B26A" stroke-width="1.6" aria-hidden="true" set:html={shield} />{d.landing.trust[1]}</li>
+              <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9B26A" stroke-width="1.6" aria-hidden="true" set:html={eye} />{d.footer.disclaimer}</li>
+            </ul>
+          </div>
+        </div>
+        <aside class="ocard" aria-label={O.cardTitle}>
+          <p class="desk dtitle">{O.cardTitle}</p>
+          <p class="sf price desk">{price}</p>
+          <p class="mu small desk">{O.priceNote}</p>
+          <details class="coupon" id="cBox">
+            <summary>{C.link}</summary>
+            <form id="cForm" class="crow" novalidate>
+              <label class="vh" for="cInput">{C.label}</label>
+              <input id="cInput" class="inp" placeholder={C.ph} autocomplete="off" autocapitalize="characters" />
+              <button type="submit" class="btn2">{C.apply}</button>
+            </form>
+            <p class="ferr" id="cErr" hidden>{C.invalid}</p>
+          </details>
+          <p class="note" id="cOk" role="status" hidden></p>
+          <p class="note" id="oSoon" role="status" hidden>{O.soon}</p>
+          <p class="ferr" id="oErr" hidden>{d.ui.error}</p>
+          <div class="dock odock">
+            <button type="button" class="btn" id="oBuy">{O.cta.replace('{price}', price)}</button>
+            <p class="mu tiny">{O.ctaNote}</p>
+          </div>
+          <div class="incs desk" data-incs>
+            {O.inc.map(([a]) => <div class="inc"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D9B26A" stroke-width="2" aria-hidden="true" set:html={tick} /><span>{a}</span></div>)}
+          </div>
+          <p class="mu tiny desk payl"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D9B26A" stroke-width="1.8" aria-hidden="true" set:html={lock} />{O.payMethods}</p>
+        </aside>
       </div>
-      <p class="mu small pay">{O.payMethods}</p>
-      <details class="coupon" id="cBox">
-        <summary>{C.link}</summary>
-        <form id="cForm" class="crow" novalidate>
-          <label class="vh" for="cInput">{C.label}</label>
-          <input id="cInput" class="inp" placeholder={C.ph} autocomplete="off" autocapitalize="characters" />
-          <button type="submit" class="btn ghost">{C.apply}</button>
-        </form>
-        <p class="err" id="cErr" hidden>{C.invalid}</p>
-      </details>
-      <p class="note" id="cOk" role="status" hidden></p>
-      <p class="note" id="oSoon" role="status" hidden>{O.soon}</p>
-      <p class="err" id="oErr" hidden>{d.ui.error}</p>
-      <div class="dock sticky"><button type="button" class="btn" id="oBuy">{O.cta.replace('{price}', price)}</button>
-        <p class="mu tiny">{O.ctaNote}</p></div>
     </section>
+
     <!-- 10 Upsell -->
-    <section class="step" data-step="upsell" hidden>
-      <p class="ey">{U.eyebrow}</p>
-      <div id="uPartner" hidden>
-        <h1 class="sf q">{U.partnerTitle}</h1>
-        <p class="mu hint">{U.partnerSub}</p>
-        <ul class="incl">{U.partnerBullets.map((b) => <li><strong>{b}</strong></li>)}</ul>
-        <div class="pform">
-          <label class="fld"><span>{U.pName}</span><input id="upName" class="inp" maxlength="40" autocomplete="off" /></label>
-          <label class="fld"><span>{U.pDate}</span><input id="upDate" type="date" class="inp" min="1930-01-01" /></label>
-          <label class="fld"><span>{U.pTime}</span><input id="upTime" type="time" class="inp" /></label>
-          <label class="ck"><input type="checkbox" id="upTimeUnknown" /><span>{U.pTimeUnknown}</span></label>
-          <label class="fld"><span>{U.pPlace}</span>
-            <input id="upPlace" class="inp" placeholder={Q.placePh} autocomplete="off" role="combobox" aria-controls="upList" aria-expanded="false" /></label>
-          <ul id="upList" class="plist" role="listbox"></ul>
+    <section class="step upsell" data-step="upsell" hidden>
+      <div class="banner" role="status"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8FD1A8" stroke-width="2.2" aria-hidden="true" set:html={tick} /><span id="uBanner"></span></div>
+      <div class="ubody">
+        <div id="uPartner" hidden class="ublock">
+          <div class="uart"><svg viewBox="0 0 260 150" width="260" height="150" aria-hidden="true">
+            <g class="wl"><circle cx="95" cy="75" r="68"/><circle cx="95" cy="75" r="56" stroke-opacity=".5"/><circle cx="165" cy="75" r="68"/><circle cx="165" cy="75" r="56" stroke-opacity=".5"/></g>
+            <g class="gl" font-size="14" text-anchor="middle" dominant-baseline="central"><text x="62" y="58" fill="#F3EEE3">☉&#xFE0E;</text><text x="78" y="112" fill="#F3EEE3">♀&#xFE0E;</text><text x="200" y="52" fill="#D9B26A">☽&#xFE0E;</text><text x="190" y="108" fill="#D9B26A">♂&#xFE0E;</text></g>
+            <g stroke="#D9B26A" stroke-opacity=".6" stroke-width=".8"><line x1="70" y1="60" x2="192" y2="55"/><line x1="86" y1="108" x2="182" y2="106"/><line x1="70" y1="62" x2="183" y2="104"/></g>
+          </svg></div>
+          <p class="ey">{U2.partnerEyebrow}</p>
+          <h1 class="sf q ot">{U2.partnerTitle}</h1>
+          <p class="mu lead">{U.partnerSub}</p>
+          <div>{U.partnerBullets.map((b) => <div class="inc nb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9B26A" stroke-width="2" aria-hidden="true" set:html={tick} /><span>{b}</span></div>)}</div>
+          <p class="mu small">{U2.partnerNext}</p>
+        </div>
+        <div id="uForecast" hidden class="ublock">
+          <div class="months" aria-hidden="true" id="uMonths"></div>
+          <p class="ey" style="padding-top:8px">{U2.forecastEyebrow}</p>
+          <h1 class="sf q ot" id="ufTitle"></h1>
+          <p class="mu lead">{U.forecastSub}</p>
+          <div>{U.forecastBullets.map((b) => <div class="inc nb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9B26A" stroke-width="2" aria-hidden="true" set:html={tick} /><span>{b}</span></div>)}</div>
         </div>
       </div>
-      <div id="uForecast" hidden>
-        <h1 class="sf q" id="ufTitle">{U.forecastTitle}</h1>
-        <p class="mu hint">{U.forecastSub}</p>
-        <ul class="incl">{U.forecastBullets.map((b) => <li><strong>{b}</strong></li>)}</ul>
-      </div>
-      <p class="err" id="uErr" hidden>{d.ui.error}</p>
-      <div class="dock">
+      <div class="ufoot">
+        <p class="uprice" id="uPriceRow"><span class="mu small">{U2.once}</span><span class="sf" id="uPrice"></span></p>
         <button type="button" class="btn" id="uAdd"></button>
-        <a class="skip" id="uNo" href="#">{U.no}</a>
+        <p class="mu tiny" id="uOneClick">{U2.oneClick}</p>
+        <p class="ferr" id="uErr" hidden>{d.ui.error}</p>
+        <button type="button" class="no" id="uNo">{U.no}</button>
       </div>
+    </section>
+
+    <!-- 10b Partner details -->
+    <section class="step" data-step="pdata" hidden>
+      <div class="qh"><p class="ey">{U2.partnerEyebrow}</p><h1 class="sf q">{U2.pformTitle}</h1><p class="mu">{U2.pformSub}</p></div>
+      <div class="pform">
+        <div class="field"><label class="lbl" for="upName">{U.pName}</label><input id="upName" class="inp" maxlength="40" autocomplete="off" /></div>
+        <div class="field"><label class="lbl" for="upDate">{U.pDate}</label><input id="upDate" type="date" class="inp" min="1930-01-01" /></div>
+        <div class="field"><label class="lbl" for="upTime">{U.pTime}</label><input id="upTime" type="time" class="inp" /></div>
+        <label class="chk"><input type="checkbox" id="upTimeUnknown" /><span>{U.pTimeUnknown}</span></label>
+        <div class="field"><label class="lbl" for="upPlace">{U.pPlace}</label>
+          <div class="srch"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A9B0C6" stroke-width="1.8" aria-hidden="true" set:html={search} />
+            <input id="upPlace" class="inp" autocomplete="off" role="combobox" aria-controls="upList" aria-expanded="false" /></div>
+          <div id="upList" class="opts" role="listbox" hidden></div></div>
+      </div>
+      <p class="ferr" id="pdErr" hidden>{d.ui.error}</p>
+      <div class="dock"><button type="button" class="btn" id="pdGo" disabled>{U2.pformCta}</button></div>
     </section>
 
     <!-- 11 Subscription -->
     <section class="step" data-step="sub" hidden>
-      <p class="ey">{S.eyebrow}</p>
-      <h1 class="sf q">{S.title}</h1>
-      <p class="mu hint">{S.desc}</p>
-      <ul class="incl">{S.bullets.map((b) => <li><strong>{b}</strong></li>)}</ul>
-      <fieldset class="cards"><legend class="vh">{S.title}</legend>
-        <label class="card"><input type="radio" name="freq" value="daily" checked /><span class="cardtx"><span>{S.daily}</span><small class="mu">{S.dailyDesc}</small></span></label>
-        <label class="card"><input type="radio" name="freq" value="weekly" /><span class="cardtx"><span>{S.weekly}</span><small class="mu">{S.weeklyDesc}</small></span></label>
+      <div class="qh"><p class="ey">{S.eyebrow}</p><h1 class="sf q ot">{S.title}</h1><p class="mu lead">{S.desc}</p></div>
+      <div class="example">
+        <p class="ek" id="sExLabel"></p>
+        <p class="sf">{S.exTitle}</p>
+        <p class="pm">{S.exText}</p>
+      </div>
+      <fieldset class="plans">
+        <legend>{S.plan}</legend>
+        <label class="plan"><input type="radio" name="plan" value="year" checked /><span class="badge">{S.badge}</span>
+          <span class="pn"><strong>{S.yearly}</strong><span class="mu small">{fill(S.yearlyNote, { price: subPrices.year })}</span></span>
+          <span class="pp"><strong class="sf">{subPrices.yearPerMonth}</strong><span class="mu">{S.perMonth}</span></span></label>
+        <label class="plan"><input type="radio" name="plan" value="month" />
+          <span class="pn"><strong>{S.monthly}</strong><span class="mu small">{S.monthlyNote}</span></span>
+          <span class="pp"><strong class="sf">{subPrices.month}</strong><span class="mu">{S.perMonth}</span></span></label>
       </fieldset>
-      <p class="mu small" id="sPrice">{fill(S.price, { price: subPrice })} · {S.trial}</p>
-      <p class="err" id="sErr" hidden>{d.ui.error}</p>
-      <div class="dock">
-        <button type="button" class="btn" id="sAdd">{S.cta}</button>
-        <a class="skip" id="sNo" href="#">{S.no}</a>
+      <div class="renew mu">
+        <p class="rt">{S.renewTitle}</p>
+        <p>{fill(S.renew1, { month: subPrices.month, year: subPrices.year })}</p>
+        <p>{S.renew2}</p>
+      </div>
+      <p class="ferr" id="sErr" hidden></p>
+      <div class="sfoot">
+        <button type="button" class="btn" id="sAdd"></button>
+        <p class="mu tiny" id="sNote"></p>
+        <button type="button" class="no" id="sNo">{S.no}</button>
       </div>
     </section>
 
@@ -224,13 +330,11 @@ const clientData = JSON.stringify({ lang, price, upPrices, subPrice, d: { quiz: 
       <div class="mailic" aria-hidden="true">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg>
       </div>
-      <p class="ey">{Dn.eyebrow}</p>
-      <h1 class="sf q">{Dn.title}</h1>
-      <p class="hint" id="dDesc"></p>
-      <p class="note" id="dSub" hidden></p>
+      <div class="qh"><p class="ey">{Dn.eyebrow}</p><h1 class="sf q">{Dn.title}</h1><p class="lead mu" id="dDesc"></p></div>
+      <p class="note" id="dSub" hidden>{Dn.subOn}</p>
       <div class="dock">
-        <a class="btn ghost wide" id="dOpen" href="#">{Dn.open}</a>
-        <a class="skip" href={`/${lang}/`}>{Dn.home}</a>
+        <a class="btn2" id="dOpen" href="#">{Dn.open}</a>
+        <a class="no" href={`/${lang}/`}>{Dn.home}</a>
       </div>
     </section>
   </div>
@@ -240,74 +344,205 @@ const clientData = JSON.stringify({ lang, price, upPrices, subPrice, d: { quiz: 
 </Base>
 
 <style is:global>
-  .funnel { padding: 0 16px 24px; min-height: 100dvh; display: flex; flex-direction: column; }
-  .fhead { display: flex; align-items: center; gap: 8px; height: 64px; }
+  .funnel { width: 100%; max-width: 480px; margin: 0 auto; padding: 0 20px; min-height: 100dvh; display: flex; flex-direction: column; }
+  .funnel.wide { max-width: 1280px; }
+  .fhead { display: flex; align-items: center; gap: 4px; height: 64px; margin: 0 -12px; }
+  .fhead .logo { padding-left: 12px; }
+  .fhead.center { justify-content: center; }
+  .fhead.center .lang { display: none; }
+  .fhead.bare { display: none; }
   .logo.small span { font-size: 20px; }
-  .prog { flex: 1; display: flex; flex-direction: column; gap: 6px; }
-  .prog p { font-size: 12px; }
-  .bar { height: 4px; border-radius: 4px; background: var(--line); overflow: hidden; }
+  #brand { flex: 1; }
+  .fhead.center #brand { flex: none; padding-left: 0; }
+  .prog { flex: 1; display: flex; flex-direction: column; gap: 6px; padding: 0 6px; }
+  .prog p { font-size: 12px; font-weight: 600; }
+  .bar { height: 3px; border-radius: 3px; background: #222B4A; overflow: hidden; }
   .bar span { display: block; height: 100%; width: 0; background: var(--gold); transition: width .3s; }
   .ib { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 0; border-radius: 999px; background: transparent; color: var(--ink); cursor: pointer; flex: none; }
-  #brand { flex: 1; }
-  .step { flex: 1; display: flex; flex-direction: column; gap: 16px; padding-top: 16px; }
+  .ib:hover { background: #151D38; }
+  .step { flex: 1; display: flex; flex-direction: column; gap: 24px; padding: 20px 0 0; }
+  .qh { display: flex; flex-direction: column; gap: 8px; }
   .q { font-size: 32px; line-height: 1.12; text-wrap: balance; }
+  .ot { font-size: 34px; line-height: 1.1; }
+  .cq { font-size: 28px; line-height: 1.15; }
   .center { text-align: center; }
-  .hint { font-size: 15px; }
   .small { font-size: 14px; }
-  .tiny { font-size: 12px; text-align: center; }
-  .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-  .inp { width: 100%; min-height: 52px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border-strong); background: var(--panel); color: var(--ink); font: 500 17px var(--sans); }
-  .inp.big { min-height: 58px; font-size: 19px; }
-  .inp::placeholder { color: #7C86A6; }
-  .dsel { display: grid; grid-template-columns: 0.8fr 1.5fr 1fr; gap: 10px; }
-  .dsel label, .fld { display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600; }
-  .reward { padding: 14px 16px; border-radius: 14px; background: var(--panel); border: 1px solid var(--border); font-weight: 600; }
-  .ck { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--border); background: var(--panel); cursor: pointer; font-size: 15px; line-height: 1.45; }
-  .ck input { width: 22px; height: 22px; margin: 0; accent-color: var(--gold); flex: none; }
-  .plist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
-  .plist button { width: 100%; min-height: 52px; padding: 10px 14px; text-align: left; border-radius: 12px; border: 1px solid var(--border); background: var(--panel); color: var(--ink); font: 600 16px var(--sans); cursor: pointer; display: flex; justify-content: space-between; gap: 8px; }
-  .plist button[aria-selected='true'] { border-color: var(--gold); box-shadow: inset 0 0 0 1px var(--gold); }
-  .plist small { color: var(--muted); font-weight: 500; }
-  .cards { border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
-  .card { display: flex; align-items: center; gap: 14px; min-height: 60px; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--border); background: var(--panel); cursor: pointer; font-weight: 600; font-size: 17px; }
-  .card:has(input:checked) { border-color: var(--gold); box-shadow: inset 0 0 0 1px var(--gold); background: var(--panel-2); }
-  .card input { width: 22px; height: 22px; margin: 0; accent-color: var(--gold); flex: none; }
-  .dock { margin-top: auto; padding-top: 16px; display: flex; flex-direction: column; gap: 6px; }
-  .sticky { position: sticky; bottom: 0; padding: 12px 0 16px; background: var(--bg); border-top: 1px solid var(--line); }
+  .tiny { font-size: 12px; text-align: center; line-height: 1.5; }
+  .lead { font-size: 17px; }
+  .field { display: flex; flex-direction: column; gap: 8px; }
+  .dock { position: sticky; bottom: 0; margin: auto -20px 0; padding: 12px 16px 28px; background: var(--bg); border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; z-index: 5; }
+
+  /* Wheel pickers */
+  .wheels { position: relative; border: 0; margin: 0; padding: 26px 4px 0; display: flex; gap: 4px; min-width: 0; }
+  .wheels.time { justify-content: center; gap: 8px; padding-top: 0; }
+  .wheels .band { position: absolute; left: 0; right: 0; top: calc(26px + 96px); height: 48px; border-radius: 12px; background: #151D38; border: 1px solid var(--border); pointer-events: none; }
+  .wheels.time .band { top: 104px; height: 52px; left: 40px; right: 40px; }
+  .wcol { position: relative; flex: 1; min-width: 0; }
+  .wcol.w16 { flex: 1.6; } .wcol.w12 { flex: 1.2; } .wcol.tw { flex: none; width: 96px; }
+  .wlab { position: absolute; top: -26px; left: 0; right: 0; text-align: center; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .wsc { height: 240px; overflow-y: auto; scroll-snap-type: y mandatory; padding: 96px 0; scrollbar-width: none; outline: none; position: relative;
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 32%, #000 68%, transparent); mask-image: linear-gradient(to bottom, transparent, #000 32%, #000 68%, transparent); }
+  .wsc::-webkit-scrollbar { display: none; }
+  .wsc button { display: block; width: 100%; height: 48px; border: 0; background: transparent; color: #8E97B4; font: 500 19px var(--sans); scroll-snap-align: center; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 2px; }
+  .wsc button[aria-selected='true'] { color: var(--ink); font-weight: 700; font-size: 21px; }
+  .wsc.big { height: 260px; padding: 104px 0; }
+  .wsc.big button { height: 52px; font-size: 24px; font-variant-numeric: tabular-nums; }
+  .wsc.big button[aria-selected='true'] { font-size: 30px; }
+  .wsc:focus-visible { box-shadow: inset 0 0 0 2px var(--gold); border-radius: 12px; }
+  .colon { position: relative; font-size: 30px; font-weight: 700; line-height: 52px; margin-top: 104px; }
+  .wheels.off { opacity: .35; pointer-events: none; }
+  .wheels.ymd .wcol:nth-of-type(2) { order: 3; } .wheels.ymd .wcol:nth-of-type(3) { order: 2; } .wheels.ymd .wcol:nth-of-type(4) { order: 1; }
+  .reward { display: flex; gap: 16px; align-items: center; padding: 18px; border-radius: 18px; background: var(--paper); color: var(--paper-ink); }
+  .rg { width: 56px; height: 56px; flex: none; border-radius: 999px; border: 1px solid #C9AE7A; display: flex; align-items: center; justify-content: center; font-size: 26px; color: var(--paper-accent); }
+  .rl { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--paper-accent); }
+  .reward p { font-size: 18px; line-height: 1.35; }
+  .chk { display: flex; align-items: center; gap: 14px; min-height: 56px; padding: 12px 16px; border-radius: 14px; border: 1px solid var(--border); background: var(--panel); cursor: pointer; font-weight: 600; }
+  .chk input { width: 22px; height: 22px; margin: 0; accent-color: var(--gold); flex: none; }
+  .why { display: flex; gap: 12px; padding: 16px; border-radius: 14px; background: var(--panel); }
+  .why svg { flex: none; margin-top: 2px; }
+  .why p { font-size: 14px; line-height: 1.5; }
+  .why strong { color: var(--ink); }
+
+  /* Place search */
+  .srch { position: relative; }
+  .srch svg { position: absolute; left: 16px; top: 18px; pointer-events: none; }
+  .srch .inp { padding-left: 48px; }
+  .opts { border-radius: 14px; background: var(--panel); border: 1px solid var(--border); overflow: hidden; display: flex; flex-direction: column; }
+  .opt { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 60px; padding: 10px 16px; border: 0; border-top: 1px solid var(--line); background: transparent; color: var(--ink); font: 500 16px var(--sans); text-align: left; cursor: pointer; }
+  .opt:first-child { border-top: 0; }
+  .opt svg { flex: none; }
+  .opt:hover, .opt[aria-selected='true'] { background: var(--panel-2); }
+  .opt .t { display: flex; flex-direction: column; line-height: 1.3; }
+  .opt .t small { color: var(--muted); font-size: 13px; }
+  .srow { display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 16px; border-radius: 14px; border: 1px solid var(--border); background: var(--panel); color: var(--muted); }
+  .scard { display: flex; flex-direction: column; gap: 6px; padding: 18px 16px; border-radius: 14px; border: 1px solid var(--border); background: var(--panel); }
+  .scard.err { border-color: #5C2E3A; }
+  .scard p { font-size: 14px; }
+  .scard .btn2 { align-self: flex-start; margin-top: 8px; }
+
+  .inp.name { min-height: 60px; font-size: 22px; }
+  .sumrow { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-radius: 14px; background: var(--panel); font-size: 14px; }
+  .sumrow svg { flex: none; }
+
+  /* Focus cards */
+  .fgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .fcard { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 14px; min-height: 150px; padding: 18px 16px; border-radius: 18px; border: 1px solid var(--border); background: var(--panel); color: var(--ink); font: 700 17px/1.25 var(--sans); text-align: left; cursor: pointer; }
+  .fcard[aria-pressed='true'] { border-color: var(--gold); background: var(--sel); box-shadow: inset 0 0 0 1px var(--gold); }
+  .fcard .tick { position: absolute; top: 14px; right: 14px; width: 24px; height: 24px; border-radius: 999px; border: 1.5px solid var(--border-strong); display: flex; align-items: center; justify-content: center; }
+  .fcard .tick svg { opacity: 0; }
+  .fcard[aria-pressed='true'] .tick { background: var(--gold); border-color: var(--gold); }
+  .fcard[aria-pressed='true'] .tick svg { opacity: 1; }
+
+  /* Status rows */
+  .srows { display: flex; flex-direction: column; gap: 12px; }
+  .srowb { display: flex; align-items: center; gap: 16px; min-height: 68px; padding: 14px 18px; border-radius: 16px; border: 1px solid var(--border); background: var(--panel); color: var(--ink); font: 700 18px/1.3 var(--sans); text-align: left; cursor: pointer; }
+  .srowb:hover, .srowb[aria-pressed='true'] { border-color: var(--gold); background: var(--sel); }
+  .dot { width: 22px; height: 22px; border-radius: 999px; border: 1.5px solid #5D6787; flex: none; }
+  .srowb[aria-pressed='true'] .dot { border: 6px solid var(--gold); }
+
+  /* Calculation */
+  .calc { gap: 18px; padding-top: 8px; }
   .wheelbox { display: flex; justify-content: center; }
-  .vals { list-style: none; margin: 0; padding: 0; }
-  .vals li { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-top: 1px solid var(--line); animation: fi .5s ease-out both; }
-  .vals li .gl { color: var(--gold); width: 22px; text-align: center; }
-  .vals li strong { margin-left: auto; }
-  .err { color: var(--error); font-size: 14px; }
-  .chips { display: flex; gap: 8px; }
-  .chip { flex: 1; display: flex; flex-direction: column; gap: 2px; padding: 12px; border-radius: 14px; background: var(--panel); border: 1px solid var(--line); }
-  .chip .gl, .chip .tag { color: var(--gold); font-size: 13px; font-weight: 700; }
-  .chip span.l { font-size: 12px; color: var(--muted); }
-  .excerpt { position: relative; overflow: hidden; padding: 28px 22px 92px; display: flex; flex-direction: column; gap: 14px; margin: 8px -4px 0; }
-  .excerpt h2 { font-size: 26px; line-height: 1.15; }
-  .excerpt p:not(.ey) { font-family: var(--serif); font-size: 18px; line-height: 1.6; }
+  .vals { display: flex; flex-direction: column; }
+  .vr { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-top: 1px solid var(--line); animation: fiu .5s ease-out both; }
+  .vr:last-child { border-bottom: 1px solid var(--line); }
+  .vr .g { width: 28px; font-size: 20px; color: var(--gold); text-align: center; font-family: var(--glyph); }
+  .vr .t { width: 28px; font-size: 13px; font-weight: 700; color: var(--gold); text-align: center; }
+  .vr .l { flex: 1; font-weight: 600; }
+  .cfoot { margin-top: auto; padding: 12px 0 28px; display: flex; flex-direction: column; gap: 10px; }
+  #calcBar { transition: width .6s linear; }
+  @keyframes fiu { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  .eform { display: flex; flex-direction: column; gap: 22px; flex: 1; }
+
+  /* Offer */
+  .offer { padding-top: 16px; gap: 0; }
+  .ogrid { display: flex; flex-direction: column; flex: 1; }
+  .ol { display: flex; flex-direction: column; }
+  .ohead { display: flex; flex-direction: column; gap: 14px; padding-bottom: 24px; }
+  .excerpt { position: relative; overflow: hidden; padding: 28px 22px 92px; display: flex; flex-direction: column; gap: 16px; margin: 0 -8px; border-radius: 20px; background: var(--paper); color: var(--paper-ink); }
+  .ek { font: 700 12px/1.4 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--paper-accent); }
+  .excerpt h2 { font-size: 27px; line-height: 1.15; }
+  .excerpt p:not(.ek) { font-family: var(--serif); font-size: 18px; line-height: 1.6; color: var(--paper-ink); }
   .blur { filter: blur(5px); user-select: none; opacity: .8; }
-  .fade { position: absolute; inset: auto 0 0 0; height: 170px; background: linear-gradient(to bottom, rgba(246,241,231,0), var(--paper) 62%); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 22px; }
+  .fade { position: absolute; inset: auto 0 0 0; height: 190px; background: linear-gradient(to bottom, rgba(246,241,231,0), var(--paper) 62%); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 22px; }
   .lock { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 999px; background: var(--paper-ink); color: var(--paper); font: 700 14px var(--sans); }
-  .h2 { font-size: 28px; line-height: 1.15; margin-top: 24px; }
-  .incl { list-style: none; margin: 0; padding: 0; }
-  .incl li { display: flex; flex-direction: column; padding: 12px 0 12px 30px; border-top: 1px solid var(--line); position: relative; }
-  .incl li::before { content: ''; position: absolute; left: 4px; top: 18px; width: 12px; height: 7px; border-left: 2px solid var(--gold); border-bottom: 2px solid var(--gold); transform: rotate(-45deg); }
-  .incl li span { font-size: 14px; }
-  .pricebox { margin-top: 12px; padding: 24px 20px; border-radius: 20px; border: 1px solid var(--gold); display: flex; flex-direction: column; gap: 8px; }
-  .price { font-size: 44px; line-height: 1; font-variant-numeric: tabular-nums; }
+  .h2 { font-size: 28px; line-height: 1.15; margin: 40px 0 16px; }
+  .incs .inc:last-child { border-bottom: 1px solid var(--line); }
+  .pricebox { margin: 28px -8px 0; padding: 24px 20px; border-radius: 20px; border: 1px solid var(--gold); display: flex; flex-direction: column; gap: 8px; }
+  .price { font-size: 44px; line-height: 1; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .trustl { list-style: none; margin: 0; padding: 22px 0 32px; display: flex; flex-direction: column; gap: 10px; font-size: 14px; }
+  .trustl li { display: flex; gap: 10px; align-items: center; }
+  .trustl svg { flex: none; }
+  .ocard { display: flex; flex-direction: column; gap: 12px; }
+  .desk { display: none !important; }
   .note { padding: 14px 16px; border-radius: 14px; background: var(--panel); border: 1px solid var(--gold); font-size: 15px; }
   .coupon summary { display: inline-flex; align-items: center; min-height: 44px; color: var(--gold); cursor: pointer; font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
   .crow { display: flex; gap: 8px; margin-top: 6px; }
-  .crow .inp { flex: 1; text-transform: uppercase; }
-  .btn.ghost { width: auto; background: transparent; color: var(--gold); border: 1px solid var(--gold); padding: 0 18px; }
-  .btn.ghost:hover { background: var(--panel-2); color: var(--gold); }
-  .pform { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
-  .cardtx { display: flex; flex-direction: column; gap: 2px; }
-  .cardtx small { font-weight: 500; font-size: 14px; }
+  .crow .inp { flex: 1; text-transform: uppercase; min-height: 48px; font-size: 16px; }
+  .odock { margin-top: 8px; }
+
+  /* Upsell */
+  .upsell { padding-top: 0; gap: 0; }
+  .banner { display: flex; align-items: center; gap: 10px; margin: 0 -20px; padding: 14px 20px; background: #13213A; border-bottom: 1px solid var(--line); font-size: 14px; font-weight: 600; }
+  .ubody { padding-top: 28px; }
+  .ublock { display: flex; flex-direction: column; gap: 18px; }
+  .uart { display: flex; justify-content: center; padding: 4px 0 8px; }
+  .inc.nb { border-top: 0; padding: 10px 0; }
+  .months { display: flex; align-items: flex-end; gap: 2px; height: 130px; padding: 0 4px 4px; border-bottom: 1px solid var(--border); }
+  .m { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; }
+  .m i { display: block; width: 2px; background: var(--border-strong); border-radius: 2px; }
+  .m.on i { background: var(--gold); width: 3px; }
+  .m span { font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  .m.on span { color: var(--gold); }
+  .ufoot, .sfoot { margin: auto -20px 0; padding: 20px 16px 28px; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--line); }
+  .sfoot { border-top: 0; }
+  .uprice { display: flex; justify-content: space-between; align-items: baseline; padding: 0 4px 6px; }
+  .uprice .sf { font-size: 28px; white-space: nowrap; }
+  .pform { display: flex; flex-direction: column; gap: 16px; }
+
+  /* Subscription */
+  .example { padding: 18px; border-radius: 16px; background: var(--paper); color: var(--paper-ink); display: flex; flex-direction: column; gap: 8px; }
+  .example .ek { letter-spacing: .12em; }
+  .example .sf { font-size: 20px; line-height: 1.3; }
+  .example .pm { font-size: 14px; color: var(--paper-muted); }
+  .plans { border: 0; padding: 12px 0 0; margin: 0; display: flex; flex-direction: column; gap: 16px; }
+  .plans legend { font-weight: 700; padding: 0 0 12px; }
+  .plan { position: relative; display: flex; align-items: center; gap: 14px; min-height: 84px; padding: 18px 16px; border-radius: 16px; border: 1px solid var(--border); background: var(--panel); cursor: pointer; }
+  .plan:has(input:checked) { border-color: var(--gold); box-shadow: inset 0 0 0 1px var(--gold); background: #1A2241; }
+  .plan input { width: 22px; height: 22px; margin: 0; accent-color: var(--gold); flex: none; }
+  .badge { position: absolute; top: -11px; right: 14px; padding: 3px 10px; border-radius: 999px; background: var(--gold); color: var(--bg); font: 700 12px/1.4 var(--sans); letter-spacing: .04em; }
+  .pn { flex: 1; display: flex; flex-direction: column; }
+  .pp { display: flex; flex-direction: column; align-items: flex-end; text-align: right; }
+  .pp strong { font-size: 22px; font-weight: 500; white-space: nowrap; }
+  .pp .mu { font-size: 13px; }
+  .renew { padding: 16px; border-radius: 14px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px; font-size: 14px; line-height: 1.55; }
+  .renew .rt { font-weight: 700; color: var(--ink); }
+
+  /* Done */
+  .done { gap: 20px; }
   .mailic { width: 72px; height: 72px; border-radius: 999px; border: 1px solid var(--gold); color: var(--gold); display: flex; align-items: center; justify-content: center; margin-top: 24px; }
-  .btn.ghost.wide { width: 100%; }
-  .skip { display: flex; align-items: center; justify-content: center; min-height: 52px; color: var(--ink); font-weight: 700; text-underline-offset: 4px; }
-  @keyframes fi { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .done .btn2 { width: 100%; min-height: 52px; font-size: 16px; }
+
+  @media (min-width: 900px) {
+    .funnel.wide .offer .ogrid { display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 56px; align-items: start; padding: 32px 0 96px; }
+    .funnel.wide .ohead { gap: 16px; }
+    .funnel.wide .ot { font-size: 56px; line-height: 1.06; }
+    .funnel.wide .excerpt { margin: 8px 0 0; padding: 56px 56px 120px; border-radius: 24px; }
+    .funnel.wide .excerpt h2 { font-size: 40px; }
+    .funnel.wide .excerpt p:not(.ek) { font-size: 20px; line-height: 1.7; }
+    .funnel.wide .chips { max-width: 520px; }
+    .funnel.wide .mob { display: none; }
+    .funnel.wide .desk { display: flex !important; }
+    .funnel.wide p.desk { display: block !important; }
+    .funnel.wide .payl { display: flex !important; }
+    .funnel.wide .dtitle { font-weight: 600; }
+    .funnel.wide .ocard { position: sticky; top: 24px; padding: 32px; border-radius: 24px; border: 1px solid var(--gold); background: #0F1630; gap: 14px; }
+    .funnel.wide .ocard .price { font-size: 52px; }
+    .funnel.wide .odock { position: static; margin: 4px 0 0; padding: 0; border: 0; background: none; }
+    .funnel.wide .odock .tiny { display: none; }
+    .funnel.wide .incs.desk { flex-direction: column; }
+    .funnel.wide .incs.desk .inc { align-items: center; font-size: 15px; }
+    .funnel.wide .payl { align-items: center; gap: 8px; text-align: left; }
+  }
 </style>

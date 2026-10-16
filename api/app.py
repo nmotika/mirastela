@@ -370,19 +370,23 @@ import threading
 _daily_locks: dict[str, threading.Lock] = {}
 
 
-def daily_for(lang: str, day: date) -> dict:
-    """Twelve sign horoscopes for one language and day, generated once and cached."""
-    key = day.isoformat()
+def _daily_cached(lang: str, key: str) -> dict | None:
     with db() as con:
         row = con.execute("select data, model from daily where lang=? and day=?", (lang, key)).fetchone()
-    if row:
-        return {"day": key, "model": row[1], **json.loads(row[0])}
+    return {"day": key, "model": row[1], **json.loads(row[0])} if row else None
+
+
+def daily_for(lang: str, day: date) -> dict:
+    """Twelve sign horoscopes for one language and day, generated once and cached (blocking)."""
+    key = day.isoformat()
+    hit = _daily_cached(lang, key)
+    if hit:
+        return hit
     lock = _daily_locks.setdefault(lang, threading.Lock())
     with lock:
-        with db() as con:
-            row = con.execute("select data, model from daily where lang=? and day=?", (lang, key)).fetchone()
-        if row:
-            return {"day": key, "model": row[1], **json.loads(row[0])}
+        hit = _daily_cached(lang, key)
+        if hit:
+            return hit
         facts = sky.day_sky(day)
         fallback = json.dumps([{"general": f"TEST MODE ({chart.SIGNS[i]}). " + ", ".join(
             f"{p['id']} {p['sign']}" for p in facts["planets"][:5]), "love": "TEST MODE", "work": "TEST MODE"} for i in range(12)])
@@ -402,8 +406,25 @@ def daily_for(lang: str, day: date) -> dict:
 
 @app.get("/api/daily")
 def daily(lang: str = "en", day: date | None = None):
+    """Cached text right away; otherwise 202 while it is generated in the background (the cron job
+    normally generates today and tomorrow shortly after midnight)."""
     lang = _lang(lang)
     d = day or sky.today()
     if abs((d - sky.today()).days) > 1:
         raise HTTPException(422, "only yesterday, today or tomorrow")
-    return daily_for(lang, d)
+    hit = _daily_cached(lang, d.isoformat())
+    if hit:
+        return hit
+    if not report.has_key():
+        return daily_for(lang, d)  # test mode is instant
+    lock = _daily_locks.setdefault(lang, threading.Lock())
+    if not lock.locked():
+        threading.Thread(target=lambda: _safe_daily(lang, d), daemon=True).start()
+    return JSONResponse({"pending": True}, status_code=202)
+
+
+def _safe_daily(lang: str, d: date):
+    try:
+        daily_for(lang, d)
+    except Exception as e:
+        print("daily", lang, d, "error", e)

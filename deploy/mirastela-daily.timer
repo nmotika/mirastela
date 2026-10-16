@@ -1,8 +1,8 @@
 [Unit]
-Description=Run Mirastela daily jobs every morning
+Description=Send Mirastela subscriber horoscopes every morning
 
 [Timer]
-OnCalendar=*-*-* 05:30 Europe/Zagreb
+OnCalendar=*-*-* 06:00 Europe/Zagreb
 Persistent=true
 
 [Install]

@@ -34,8 +34,8 @@ runcmd:
   - sudo -u mirastela /opt/mirastela/.venv/bin/pip install -q --upgrade pip setuptools wheel
   - sudo -u mirastela /opt/mirastela/.venv/bin/pip install -q -r /opt/mirastela/api/requirements.txt
   - cp /opt/mirastela/deploy/mirastela-api.service /etc/systemd/system/
-  - cp /opt/mirastela/deploy/mirastela-daily.service /opt/mirastela/deploy/mirastela-daily.timer /etc/systemd/system/
-  - systemctl daemon-reload && systemctl enable --now mirastela-api mirastela-daily.timer
+  - cp /opt/mirastela/deploy/mirastela-daily.* /opt/mirastela/deploy/mirastela-pages.* /etc/systemd/system/
+  - systemctl daemon-reload && systemctl enable --now mirastela-api mirastela-daily.timer mirastela-pages.timer
   # Cloudflare Tunnel (no open ports needed)
   - curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg -o /usr/share/keyrings/cloudflare-main.gpg
   - echo 'deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared any main' > /etc/apt/sources.list.d/cloudflared.list

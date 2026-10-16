@@ -1,0 +1,9 @@
+[Unit]
+Description=Generate Mirastela daily horoscopes shortly after midnight
+
+[Timer]
+OnCalendar=*-*-* 00:15 Europe/Zagreb
+Persistent=true
+
+[Install]
+WantedBy=timers.target

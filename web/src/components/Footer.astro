@@ -4,19 +4,21 @@ import { t } from '../i18n';
 import { LOCALES, LANG_NAMES, type Lang } from '../i18n/config';
 interface Props { lang: Lang; path: string; paths?: Record<Lang, string> }
 const { lang, path, paths } = Astro.props;
-const d = t(lang).footer;
+const d = t(lang);
+const F = d.footer;
 ---
 <footer class="site-foot">
   <div class="wrap cols">
-    <a href={`/${lang}/`} class="logo" aria-label={t(lang).ui.home}><Logo size={24} /><span style="font-size:20px">Mirastela</span></a>
+    <a href={`/${lang}/`} class="logo" aria-label={d.ui.home}><Logo size={24} /><span style="font-size:20px">Mirastela</span></a>
     <nav class="foot-links" aria-label="Info">
-      <a href={`/${lang}/terms/`}>{d.terms}</a><a href={`/${lang}/privacy/`}>{d.privacy}</a>
-      <a href={`/${lang}/cookies/`}>{d.cookies}</a><a href="mailto:hello@mirastela.com">{d.contact}</a>
+      <a href={`/${lang}/${d.horo.slug}/`}>{d.horo.nav}</a>
+      <a href={`/${lang}/terms/`}>{F.terms}</a><a href={`/${lang}/privacy/`}>{F.privacy}</a>
+      <a href={`/${lang}/cookies/`}>{F.cookies}</a><a href="mailto:hello@mirastela.com">{F.contact}</a>
       <a href="https://github.com/nmotika/mirastela" rel="noopener">AGPL · GitHub</a>
     </nav>
-    <p style="font-size:14px">{d.disclaimer}</p>
-    <p class="mu" style="font-size:13px">{d.seller}</p>
-    <nav class="lang-row" aria-label={d.languages}>
+    <p class="foot-note">{F.disclaimer}</p>
+    <p class="mu foot-seller">{F.seller}</p>
+    <nav class="lang-row" aria-label={F.languages}>
       {LOCALES.map((l) => (
         <a href={`/${l}/${paths?.[l] ?? path}`} lang={l} hreflang={l} aria-current={l === lang ? 'page' : undefined}>{LANG_NAMES[l]}</a>
       ))}

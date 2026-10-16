@@ -3,12 +3,15 @@ import Logo from './Logo.astro';
 import LangSwitcher from './LangSwitcher.astro';
 import { t } from '../i18n';
 import type { Lang } from '../i18n/config';
-interface Props { lang: Lang; path: string; paths?: Record<Lang, string> }
-const { lang, path, paths } = Astro.props;
-const H = t(lang).horo;
+interface Props { lang: Lang; path: string; paths?: Record<Lang, string>; compactLang?: boolean; nav?: boolean }
+const { lang, path, paths, compactLang, nav = true } = Astro.props;
+const d = t(lang);
 ---
 <header class="site-head">
-  <a href={`/${lang}/`} class="logo" aria-label={t(lang).ui.home}><Logo /><span>Mirastela</span></a>
-  <nav class="head-nav"><a href={`/${lang}/${H.slug}/`}>{H.nav}</a></nav>
-  <LangSwitcher lang={lang} path={path} paths={paths} />
+  <a href={`/${lang}/`} class="logo" aria-label={d.ui.home}><Logo /><span>Mirastela</span></a>
+  {nav && <nav class="head-nav" aria-label={d.horo.nav}>
+    <a href={`/${lang}/#how`}>{d.nav.how}</a>
+    <a href={`/${lang}/${d.horo.slug}/`}>{d.horo.nav}</a>
+  </nav>}
+  <LangSwitcher lang={lang} path={path} paths={paths} compact={compactLang} />
 </header>

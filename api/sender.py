@@ -1,6 +1,6 @@
-"""Scheduled jobs (systemd timer, every morning):
+"""Scheduled jobs (systemd timers): pages at 00:15, subs at 06:00, Europe/Zagreb.
   python sender.py pages   pre-generate today's free sign horoscopes in every language
-  python sender.py subs    send personal daily horoscopes (and weekly ones on Mondays)
+  python sender.py subs    send personal horoscopes (weekly ones on Mondays)
   python sender.py all     both
 """
 from __future__ import annotations
@@ -17,12 +17,14 @@ import sky
 
 
 def pages():
-    for lang in report.LANG_NAME:
-        try:
-            app.daily_for(lang, sky.today())
-            print("pages", lang, "ok")
-        except Exception as e:
-            print("pages", lang, "error", e)
+    """Today's and tomorrow's free sign horoscopes in every language (run shortly after midnight)."""
+    for day in (sky.today(), sky.today() + timedelta(days=1)):
+        for lang in report.LANG_NAME:
+            try:
+                app.daily_for(lang, day)
+                print("pages", lang, day, "ok")
+            except Exception as e:
+                print("pages", lang, day, "error", e)
 
 
 def subs():

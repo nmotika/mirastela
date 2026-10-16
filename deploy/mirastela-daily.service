@@ -1,9 +1,9 @@
 [Unit]
-Description=Mirastela daily jobs (free horoscopes, subscriber emails)
+Description=Mirastela subscriber horoscope emails
 
 [Service]
 Type=oneshot
 User=mirastela
 WorkingDirectory=/opt/mirastela/api
 EnvironmentFile=/etc/mirastela.env
-ExecStart=/opt/mirastela/.venv/bin/python sender.py all
+ExecStart=/opt/mirastela/.venv/bin/python sender.py subs

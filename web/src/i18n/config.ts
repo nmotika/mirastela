@@ -34,8 +34,11 @@ export const UPSELL: Record<Lang, { partner: number; forecast: number }> = {
   en: { partner: 9.9, forecast: 14.9 },
 };
 
-/** Monthly price of the personal horoscope subscription (placeholders until tested). */
-export const SUB: Record<Lang, number> = { pl: 19.99, hr: 4.99, sl: 4.99, ro: 24.99, cs: 119, hu: 1990, en: 4.99 };
+/** Weekly personal horoscope subscription: monthly price and yearly price (8 months). Placeholders until tested. */
+export const SUB: Record<Lang, { month: number; year: number }> = {
+  pl: { month: 19.99, year: 159.99 }, hr: { month: 4.99, year: 39.99 }, sl: { month: 4.99, year: 39.99 },
+  ro: { month: 24.99, year: 199.99 }, cs: { month: 119, year: 949 }, hu: { month: 1990, year: 15990 }, en: { month: 4.99, year: 39.99 },
+};
 
 export function formatPrice(lang: Lang, p = PRICE[lang]): string {
   const whole = Number.isInteger(p.amount);

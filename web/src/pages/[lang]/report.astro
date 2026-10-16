@@ -10,68 +10,112 @@ export function getStaticPaths() {
 const lang = Astro.params.lang as Lang;
 const d = t(lang);
 const R = d.report;
-const clientData = JSON.stringify({ lang, d: { report: R, astro: d.astro, ui: d.ui, footer: d.footer } });
+const clientData = JSON.stringify({ lang, d: { report: R, rep2: d.rep2, astro: d.astro, ui: d.ui, footer: d.footer } });
+const dl = '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>';
 ---
 <Base lang={lang} path="report/" title={`${R.title} · Mirastela`} description={R.title} noindex>
-  <div class="wrap noprint"><Header lang={lang} path="report/" /></div>
-  <main class="wrap rep">
-    <div class="rhead">
-      <div>
-        <h1 class="sf">{R.title}</h1>
-        <p class="mu" id="rFor"></p>
+  <div class="wrap noprint"><Header lang={lang} path="report/" nav={false} /></div>
+  <main class="rep">
+    <section class="wrap rhero">
+      <div class="rh-text">
+        <p class="ey">{d.rep2.eyebrow}</p>
+        <h1 class="sf" id="rName">&nbsp;</h1>
+        <p class="mu small" id="rBirth"></p>
+        <div class="rwheel mobw" id="rWheelM"></div>
+        <div class="big3" id="rBig3"></div>
+        <button type="button" class="btn noprint pdfb" id="rPrint" hidden><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" set:html={dl} />{R.print}</button>
       </div>
-      <button type="button" class="btn ghost noprint" id="rPrint" hidden>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>{R.print}</button>
-    </div>
-    <p class="mu" id="rMsg" role="status"></p>
-    <div class="tabs noprint" role="tablist" id="rTabs"></div>
-    <div id="rPanels"></div>
-    <p class="mu disclaimer">{d.footer.disclaimer}</p>
+      <div class="rwheel deskw" id="rWheelD"></div>
+    </section>
+    <p class="wrap mu" id="rMsg" role="status"></p>
+    <div class="ptabs wrap noprint" role="tablist" id="rTabs" hidden></div>
+    <div class="rpaper" id="rPanels"></div>
   </main>
   <script type="application/json" id="report-data" set:html={clientData} />
   <script src="../../scripts/report.ts"></script>
 </Base>
 
 <style is:global>
-  .rep { max-width: 760px; padding-bottom: 48px; }
-  .rhead { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 16px 0 12px; }
-  .rhead h1 { font-size: 38px; line-height: 1.1; }
-  .btn.ghost { width: auto; background: transparent; color: var(--gold); border: 1px solid var(--gold); padding: 0 18px; white-space: nowrap; }
-  .btn.ghost:hover { background: var(--panel-2); color: var(--gold); }
-  .tabs { display: flex; gap: 6px; overflow-x: auto; margin: 12px 0 20px; border-bottom: 1px solid var(--line); }
-  .tabs button { min-height: 48px; padding: 0 16px; border: 0; border-bottom: 2px solid transparent; background: none; color: var(--muted); font: 700 15px var(--sans); cursor: pointer; white-space: nowrap; }
-  .tabs button[aria-selected='true'] { color: var(--ink); border-bottom-color: var(--gold); }
-  .panel { display: flex; flex-direction: column; gap: 20px; }
-  .panel .wheelbox { display: flex; justify-content: center; }
-  .doc { background: var(--paper); color: var(--paper-ink); border-radius: 20px; padding: 32px 24px; }
-  .doc h2 { font: 400 28px/1.2 var(--serif); margin: 28px 0 10px; }
-  .doc h2:first-child { margin-top: 0; }
-  .doc h3 { font: 700 18px/1.3 var(--sans); margin: 20px 0 8px; }
-  .doc p, .doc li { font: 18px/1.65 var(--serif); }
-  .doc p + p { margin-top: 12px; }
-  .doc ul { margin: 8px 0; padding-left: 22px; }
-  .pending { display: flex; align-items: center; gap: 12px; padding: 20px; border-radius: 16px; background: var(--panel); border: 1px solid var(--border); }
-  .spin { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); border-top-color: var(--gold); animation: sp 1s linear infinite; flex: none; }
-  @keyframes sp { to { transform: rotate(360deg); } }
-  .dt h2 { font: 400 24px/1.2 var(--serif); margin-bottom: 10px; }
-  .dt table { width: 100%; border-collapse: collapse; font-size: 15px; }
-  .dt th, .dt td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
-  .dt th { color: var(--muted); font-weight: 600; font-size: 13px; }
-  .dt td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .dt .gl { color: var(--gold); margin-right: 6px; }
-  .tablewrap { overflow-x: auto; }
-  .disclaimer { margin-top: 32px; font-size: 14px; }
-  .err { color: var(--error); }
+  .rep { display: flex; flex-direction: column; flex: 1; }
+  .small { font-size: 14px; }
+  .rhero { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px; padding-top: 20px; padding-bottom: 36px; }
+  .rh-text { display: flex; flex-direction: column; align-items: center; gap: 14px; width: 100%; }
+  .rhero h1 { font-size: 44px; line-height: 1; }
+  .rwheel { display: flex; justify-content: center; }
+  .deskw { display: none; }
+  .big3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; width: 100%; }
+  .big3 div { padding: 10px; border-radius: 12px; border: 1px solid var(--border); text-align: left; }
+  .big3 .l { font-size: 12px; color: var(--muted); }
+  .big3 strong { display: block; }
+  .pdfb { margin-top: 6px; }
+  #rMsg:empty { display: none; }
+  .ptabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 20px; }
+  .ptabs button { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--border); background: transparent; color: var(--muted); font: 600 14px var(--sans); white-space: nowrap; cursor: pointer; }
+  .ptabs button[aria-selected='true'] { background: var(--paper); color: var(--paper-ink); border-color: var(--paper); }
+  .rpaper { background: var(--paper); color: var(--paper-ink); border-radius: 22px 22px 0 0; flex: 1; }
+  .panel { display: block; }
+  .panel > .wrap { display: block; }
+  .panel > .wrap > div { min-width: 0; }
+  .toc { display: flex; gap: 8px; overflow-x: auto; padding: 20px 0; }
+  .toc a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid #CDBF9F; color: var(--paper-ink); font: 600 14px var(--sans); text-decoration: none; white-space: nowrap; }
+  .toc a[aria-current] { background: var(--paper-2); }
+  .toc .pdfb { display: none; }
+  .rd { display: flex; flex-direction: column; gap: 16px; padding: 40px 2px; border-top: 1px solid var(--paper-line); }
+  .rd h2 { font: 400 32px/1.1 var(--serif); color: var(--paper-ink); }
+  .rd h3 { font: 700 18px/1.3 var(--sans); color: var(--paper-ink); }
+  .rd p, .rd li { font: 19px/1.62 var(--serif); color: var(--paper-text); }
+  .rd ul { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 6px; }
+  .rd strong { color: var(--paper-ink); }
+  .rd .kick, .kick { font: 700 12px/1.4 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--paper-accent); display: flex; align-items: center; gap: 8px; }
+  .pl { display: flex; gap: 14px; padding: 16px 0; border-top: 1px solid var(--paper-line); }
+  .pl:last-child { border-bottom: 1px solid var(--paper-line); }
+  .pl .g { width: 30px; flex: none; font-size: 22px; color: var(--paper-accent); text-align: center; line-height: 1.2; font-family: var(--glyph); }
+  .pl .tg { width: 30px; flex: none; font: 700 12px/1.9 var(--sans); color: var(--paper-accent); text-align: center; }
+  .pl div { display: flex; flex-direction: column; gap: 2px; font-family: var(--sans); }
+  .pl .ps { font-size: 15px; color: var(--paper-muted); font-family: var(--sans) !important; }
+  .asps { display: grid; gap: 10px; }
+  .asp { display: flex; flex-direction: column; gap: 6px; padding: 18px; border-radius: 14px; background: var(--paper-2); font-family: var(--sans); }
+  .asp .ao { font-size: 14px; color: var(--paper-muted); }
+  .ttable { width: 100%; border-collapse: collapse; font: 15px var(--sans); }
+  .ttable th, .ttable td { text-align: left; padding: 12px 8px; border-bottom: 1px solid var(--paper-line); vertical-align: top; }
+  .ttable th { color: var(--paper-muted); font-weight: 600; font-size: 13px; }
+  .ttable td.num { white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .twrap { overflow-x: auto; }
+  .rend { padding: 32px 2px 48px; border-top: 1px solid var(--paper-line); display: flex; flex-direction: column; gap: 16px; }
+  .rend p { font-size: 13px; color: var(--paper-muted); text-align: center; }
+  .pending { display: flex; flex-direction: column; gap: 12px; margin: 32px 0 56px; padding: 22px; border-radius: 16px; background: var(--paper-2); }
+  .pending .pr { display: flex; align-items: center; gap: 12px; font-weight: 600; }
+  .pending .spin { color: var(--paper-accent); }
+  .pending p { font-size: 15px; color: var(--paper-muted); }
+  .rerr { margin: 32px 0; color: var(--error-paper); font-weight: 600; }
+  @media (min-width: 900px) {
+    .rhero { flex-direction: row; justify-content: space-between; text-align: left; padding-top: 48px; padding-bottom: 64px; gap: 64px; }
+    .rh-text { align-items: flex-start; max-width: 560px; gap: 18px; }
+    .rhero h1 { font-size: 72px; line-height: 1.02; }
+    .mobw { display: none; }
+    .deskw { display: flex; }
+    .big3 { max-width: 520px; }
+    .pdfb { width: auto; padding: 14px 32px; }
+    .rpaper { border-radius: 28px 28px 0 0; padding-top: 40px; }
+    .panel > .wrap { display: grid; grid-template-columns: 240px minmax(0, 680px); gap: 96px; }
+    .toc { flex-direction: column; position: sticky; top: 24px; align-self: start; gap: 4px; overflow: visible; padding: 20px 0; }
+    .toc a { border: 0; min-height: 40px; border-radius: 10px; font-weight: 500; font-size: 14px; white-space: normal; }
+    .toc .pdfb { display: flex; margin-top: 16px; min-height: 44px; font-size: 14px; }
+    .rd:first-child { border-top: 0; }
+    .asps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
   @media print {
     @page { margin: 16mm; }
     body { background: #fff; color: #111; }
-    .noprint, .site-head, .tabs { display: none !important; }
-    .panel[hidden] { display: flex !important; }
+    .noprint, .site-head, .toc, .ptabs { display: none !important; }
+    .rhero { color: #111; }
+    .rhero .ey { color: #7E5E1C; }
+    .big3 div { border-color: #ccc; }
+    .panel[hidden] { display: block !important; }
     .panel { break-before: page; }
     .panel:first-child { break-before: auto; }
-    .doc { background: #fff; padding: 0; }
-    .mu, .dt th { color: #555; }
-    .dt th, .dt td { border-color: #ccc; }
+    .rpaper { background: #fff; border-radius: 0; }
+    .panel > .wrap { display: block !important; }
     .wheel .wl, .wheel line { stroke: #8a6a28; }
     .wheel text { fill: #333; }
     .wheel .fi, .wheel .dr { animation: none !important; opacity: 1 !important; stroke-dashoffset: 0 !important; }

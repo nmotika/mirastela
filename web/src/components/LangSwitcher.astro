@@ -1,19 +1,24 @@
 ---
 import { LOCALES, LANG_NAMES, type Lang } from '../i18n/config';
 import { t } from '../i18n';
-interface Props { lang: Lang; path: string; paths?: Record<Lang, string> }
-const { lang, path, paths } = Astro.props; // path after the locale, e.g. "start/"
+interface Props { lang: Lang; path: string; paths?: Record<Lang, string>; compact?: boolean; id?: string }
+const { lang, path, paths, compact, id } = Astro.props; // path after the locale, e.g. "start/"
+const CODE: Record<Lang, string> = { pl: 'PL', hr: 'HR', sl: 'SI', ro: 'RO', cs: 'CZ', hu: 'HU', en: 'EN' };
 ---
-<details class="lang">
+<details class:list={['lang', { compact }]} id={id}>
   <summary aria-label={`${t(lang).ui.changeLang}: ${LANG_NAMES[lang]}`}>
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+    <svg width={compact ? 16 : 18} height={compact ? 16 : 18} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
     {lang.toUpperCase()}
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+    {!compact && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>}
   </summary>
   <ul>
     {LOCALES.map((l) => (
       <li><a href={`/${l}/${paths?.[l] ?? path}`} lang={l} hreflang={l} aria-current={l === lang ? 'true' : undefined}>
-        {LANG_NAMES[l]}<small>{l.toUpperCase()}</small></a></li>
+        {LANG_NAMES[l]}
+        {l === lang
+          ? <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>
+          : <small>{CODE[l]}</small>}
+      </a></li>
     ))}
   </ul>
 </details>

@@ -5,7 +5,6 @@ import Footer from '../../components/Footer.astro';
 import { LOCALES, type Lang } from '../../i18n/config';
 import { t } from '../../i18n';
 import { wheelSvg, SAMPLE_WHEEL } from '../../scripts/wheel';
-import { SIGN_GLYPHS } from '../../scripts/zodiac';
 
 export function getStaticPaths() {
   return LOCALES.map((lang) => ({ params: { lang } }));
@@ -13,61 +12,56 @@ export function getStaticPaths() {
 const lang = Astro.params.lang as Lang;
 const d = t(lang);
 const L = d.landing;
-const wheel = wheelSvg(SAMPLE_WHEEL, { size: 340, label: L.eyebrow, animate: true });
+const wheel = wheelSvg(SAMPLE_WHEEL, { size: 520, label: L.eyebrow, animate: true });
 const icons = [
   '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
   '<path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/>',
   '<path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="2.5"/>',
 ];
+const marks = ['☉︎ ☽︎ ↑', '☿︎ ♀︎ ♂︎', '△ □ ☍', 'PDF'];
 const start = `/${lang}/start/`;
+const arrow = '<path d="M5 12h14M13 6l6 6-6 6"/>';
 ---
 <Base lang={lang} path="" title={d.meta.title} description={d.meta.description}>
   <div class="wrap"><Header lang={lang} path="" /></div>
-  <main>
+  <main class="land">
     <section class="wrap hero">
       <div class="hero-text">
         <p class="ey">{L.eyebrow}</p>
         <h1 class="sf">{L.h1}</h1>
         <p class="mu lead">{L.sub}</p>
         <div class="cta">
-          <a href={start} class="btn">{L.cta}
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a href={start} class="btn">{L.cta}<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" set:html={arrow} /></a>
           <p class="mu note">{L.ctaNote}</p>
         </div>
       </div>
       <div class="hero-wheel" set:html={wheel} />
     </section>
 
-    <ul class="wrap trust">
+    <ul class="wrap trust" aria-label="Mirastela">
       {L.trust.map((x, i) => (
         <li><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D9B26A" stroke-width="1.6" aria-hidden="true" set:html={icons[i]} /><span>{x}</span></li>
       ))}
     </ul>
 
-    <div class="wrap two">
-      <section class="how">
-        <h2 class="sf">{L.howTitle}</h2>
-        <ol>
-          {L.how.map(([title, desc], i) => (
-            <li><span class="sf num">{i + 1}</span><div><strong>{title}</strong><span class="mu">{desc}</span></div></li>
-          ))}
-        </ol>
-      </section>
-      <section class="paper inc">
-        <p class="ey">{L.incEyebrow}</p>
-        <h2 class="sf">{L.incTitle}</h2>
-        <ul>{L.inc.map((x) => <li>{x}</li>)}</ul>
-      </section>
-    </div>
-
-    <section class="wrap todays">
-      <h2 class="sf">{d.horo.h1}</h2>
-      <p class="mu">{d.horo.sub}</p>
-      <ul class="zrow">
-        {d.astro.signs.map((s, i) => (
-          <li><a href={`/${lang}/${d.horo.slug}/${d.horo.signSlugs[i]}/`}><span class="gl" aria-hidden="true">{SIGN_GLYPHS[i]}</span>{s}</a></li>
+    <section class="wrap how" id="how">
+      <h2 class="sf">{L.howTitle}</h2>
+      <ol>
+        {L.how.map(([title, desc], i) => (
+          <li><span class="sf num">{i + 1}</span><div><strong>{title}</strong><span class="mu">{desc}</span></div></li>
         ))}
-      </ul>
+      </ol>
+    </section>
+
+    <section class="wrap incwrap">
+      <div class="paper inc-box">
+        <div class="inc-head">
+          <p class="ey">{L.incEyebrow}</p>
+          <h2 class="sf">{L.incTitle}</h2>
+          <a href={start} class="btn desk">{L.cta}</a>
+        </div>
+        <ul>{L.inc.map((x, i) => <li><span>{x}</span><span class="gl mk" aria-hidden="true">{marks[i]}</span></li>)}</ul>
+      </div>
     </section>
 
     <section class="wrap final">
@@ -80,42 +74,60 @@ const start = `/${lang}/start/`;
 </Base>
 
 <style>
-  .hero { display: grid; gap: 28px; padding-top: 28px; padding-bottom: 40px; }
+  .land { padding-bottom: 8px; }
+  .hero { display: grid; gap: 20px; padding-top: 28px; padding-bottom: 40px; }
   .hero-text { display: flex; flex-direction: column; gap: 20px; }
-  h1 { font-size: clamp(40px, 9vw, 64px); line-height: 1.06; text-wrap: balance; }
-  .lead { font-size: 17px; text-wrap: pretty; max-width: 34em; }
-  .cta { display: flex; flex-direction: column; gap: 10px; max-width: 420px; }
+  h1 { font-size: 42px; line-height: 1.08; text-wrap: balance; }
+  .lead { font-size: 17px; text-wrap: pretty; }
+  .cta { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
   .note { font-size: 14px; text-align: center; }
-  .hero-wheel { display: flex; justify-content: center; }
+  .hero-wheel { display: flex; justify-content: center; padding-top: 12px; }
+  .hero-wheel :global(svg) { width: 320px; }
   .trust { list-style: none; margin: 0 auto; padding-bottom: 48px; display: grid; }
   .trust li { display: flex; align-items: center; gap: 14px; padding: 16px 0; border-top: 1px solid var(--line); font-weight: 600; }
   .trust li:last-child { border-bottom: 1px solid var(--line); }
-  .two { display: grid; gap: 40px; }
-  .how h2, .final h2 { font-size: 30px; line-height: 1.15; }
-  .how ol { list-style: none; margin: 24px 0 0; padding: 0; display: flex; flex-direction: column; gap: 22px; }
+  .how { padding-top: 16px; padding-bottom: 48px; display: flex; flex-direction: column; gap: 24px; }
+  .how h2 { font-size: 30px; line-height: 1.15; }
+  .how ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 22px; }
   .how li { display: flex; gap: 16px; }
   .how li > div { display: flex; flex-direction: column; gap: 4px; }
   .how strong { font-size: 17px; }
   .num { font-size: 28px; color: var(--gold); line-height: 1; width: 28px; flex: none; }
-  .inc { padding: 32px 20px; display: flex; flex-direction: column; gap: 18px; }
-  .inc h2 { font-size: 28px; line-height: 1.15; }
-  .inc ul { list-style: none; margin: 0; padding: 0; }
-  .inc li { padding: 12px 0; border-top: 1px solid var(--paper-line); }
-  .inc li:last-child { border-bottom: 1px solid var(--paper-line); }
-  .todays { padding-top: 56px; display: flex; flex-direction: column; gap: 12px; }
-  .todays h2 { font-size: 30px; line-height: 1.15; }
-  .zrow { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-  .zrow a { display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--border); color: var(--ink); text-decoration: none; font-weight: 600; }
-  .zrow a:hover { border-color: var(--gold); }
-  .zrow .gl { color: var(--gold); }
-  @media (min-width: 720px) { .zrow { grid-template-columns: repeat(4, 1fr); } }
-  @media (min-width: 1000px) { .zrow { grid-template-columns: repeat(6, 1fr); } }
-  .final { padding-top: 56px; display: flex; flex-direction: column; gap: 16px; align-items: center; text-align: center; max-width: 520px; }
+  .incwrap { padding: 0 12px; }
+  .inc-box { padding: 32px 20px; display: flex; flex-direction: column; gap: 18px; }
+  .inc-head { display: flex; flex-direction: column; gap: 18px; }
+  .inc-head h2 { font-size: 28px; line-height: 1.15; color: var(--paper-ink); }
+  .inc-box ul { list-style: none; margin: 0; padding: 0; }
+  .inc-box li { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid var(--paper-line); }
+  .inc-box li:last-child { border-bottom: 1px solid var(--paper-line); }
+  .mk { color: var(--paper-accent); white-space: nowrap; }
+  .desk { display: none; }
+  .final { padding-top: 56px; padding-bottom: 56px; display: flex; flex-direction: column; gap: 16px; text-align: center; }
+  .final h2 { font-size: 30px; line-height: 1.15; }
   @media (min-width: 900px) {
-    .hero { grid-template-columns: 1.1fr .9fr; align-items: center; padding-top: 56px; padding-bottom: 72px; }
-    .trust { grid-template-columns: repeat(3, 1fr); gap: 24px; }
-    .trust li, .trust li:last-child { border-bottom: 1px solid var(--line); }
-    .two { grid-template-columns: 1fr 1fr; align-items: start; }
-    .inc { padding: 40px; }
+    .hero { grid-template-columns: 1fr 520px; gap: 64px; align-items: center; padding-top: 48px; padding-bottom: 72px; }
+    .hero-text { gap: 24px; }
+    h1 { font-size: 72px; line-height: 1.02; }
+    .lead { font-size: 20px; max-width: 520px; }
+    .cta { flex-direction: row; align-items: center; gap: 20px; padding-top: 8px; }
+    .cta .btn { width: auto; padding: 14px 32px; }
+    .note { font-size: 15px; text-align: left; }
+    .hero-wheel :global(svg) { width: 520px; }
+    .trust { grid-template-columns: repeat(3, 1fr); padding-bottom: 0; }
+    .trust li, .trust li:last-child { padding: 24px 0; border-bottom: 1px solid var(--line); }
+    .how { display: grid; grid-template-columns: 360px 1fr; gap: 64px; padding-top: 96px; padding-bottom: 96px; }
+    .how h2 { font-size: 48px; line-height: 1.08; }
+    .how ol { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+    .how li { flex-direction: column; gap: 10px; }
+    .how li > div { gap: 10px; }
+    .how strong { font-size: 18px; }
+    .num { font-size: 40px; width: auto; }
+    .incwrap { padding: 0 40px; }
+    .inc-box { padding: 64px; border-radius: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .inc-head h2 { font-size: 44px; line-height: 1.1; }
+    .inc-box li { padding: 16px 0; }
+    .desk { display: flex; width: auto; align-self: flex-start; margin-top: 8px; padding: 14px 32px; }
+    .final { display: none; }
+    .land { padding-bottom: 96px; }
   }
 </style>
