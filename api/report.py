@@ -188,6 +188,29 @@ def generate(prompt: str, fast: bool = False, max_tokens: int = 32000, fallback:
     return text.strip(), model
 
 
+def generate_json(prompt: str, schema: dict, fast: bool = True, max_tokens: int = 8000, fallback=None):
+    """Structured output through a forced tool call: the API returns parsed JSON, so quotes or
+    stray prose in the text can never break parsing. Returns (data, model)."""
+    model = _model(fast)
+    if not has_key():
+        return fallback, "test"
+    import anthropic
+    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+    msg = client.messages.create(model=model, max_tokens=max_tokens, system=SYSTEM,
+                                 tools=[{"name": "save", "description": "Save the result.", "input_schema": schema}],
+                                 tool_choice={"type": "tool", "name": "save"},
+                                 messages=[{"role": "user", "content": prompt}])
+    for b in msg.content:
+        if b.type == "tool_use":
+            return b.input, model
+    raise ValueError(f"no tool output (stop_reason={msg.stop_reason})")
+
+
+SIGNS_SCHEMA = {"type": "object", "required": ["signs"], "properties": {"signs": {"type": "array", "items": {
+    "type": "object", "required": ["general", "love", "work"],
+    "properties": {"general": {"type": "string"}, "love": {"type": "string"}, "work": {"type": "string"}}}}}}
+
+
 def parse_json(text: str):
     """Model JSON output, tolerant of code fences and stray prose around it."""
     t = text.strip()
@@ -226,8 +249,8 @@ Base every sign's text on the real sky facts below, especially the planets in th
 Tendencies, not certainties. No predictions of illness, death, accidents, pregnancy, lottery wins or breakups. No medical, legal or financial advice.
 Do not use em dashes or en dashes as punctuation. Vary sentence openings between signs; no filler.
 
-Output ONLY a JSON array of exactly {count} objects, in this order: {names}. Each object:
-{{"general": "70 to 100 words", "love": "25 to 40 words", "work": "25 to 40 words"}}
+Save the result with the save tool: "signs" is a list of exactly {count} entries, in this order: {names}.
+Each entry: "general" 70 to 100 words, "love" 25 to 40 words, "work" 25 to 40 words.
 
 Sky facts:
 {sky_txt}

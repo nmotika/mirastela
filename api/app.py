@@ -396,9 +396,9 @@ def daily_for(lang: str, day: date) -> dict:
             fb = json.dumps(json.loads(fallback)[first:first + 6])
             for attempt in range(3):
                 try:
-                    text, model = report.generate(report.prompt_daily_signs(lang, key, txt, first, 6), fast=True,
-                                                  max_tokens=6000, fallback=fb)
-                    part = report.parse_json(text)
+                    out, model = report.generate_json(report.prompt_daily_signs(lang, key, txt, first, 6), report.SIGNS_SCHEMA,
+                                                      max_tokens=6000, fallback={"signs": json.loads(fb)})
+                    part = (out or {}).get("signs")
                     if isinstance(part, list) and len(part) == 6 and all(isinstance(x, dict) and x.get("general") for x in part):
                         signs += part
                         break
