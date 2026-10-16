@@ -1,9 +1,9 @@
 [Unit]
-Description=Mirastela free daily horoscopes (today and tomorrow, all languages)
+Description=Mirastela free daily horoscopes (yesterday, today, tomorrow; all languages)
 
 [Service]
 Type=oneshot
 User=mirastela
 WorkingDirectory=/opt/mirastela/api
 EnvironmentFile=/etc/mirastela.env
-ExecStart=/opt/mirastela/.venv/bin/python sender.py pages
+ExecStart=/opt/mirastela/.venv/bin/python -u sender.py pages

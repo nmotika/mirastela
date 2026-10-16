@@ -6,4 +6,4 @@ Type=oneshot
 User=mirastela
 WorkingDirectory=/opt/mirastela/api
 EnvironmentFile=/etc/mirastela.env
-ExecStart=/opt/mirastela/.venv/bin/python sender.py subs
+ExecStart=/opt/mirastela/.venv/bin/python -u sender.py subs
