@@ -12,6 +12,7 @@ consent and tracking are written once.
 ## Legal and privacy (GDPR)
 - [ ] Privacy policy in 7 languages: what is stored, why, how long, processors, rights, AZOP
 - [ ] Terms of sale, entertainment disclaimer, right of withdrawal for digital content
+- [ ] Checkbox before payment: consent to immediate delivery of digital content and loss of the 14-day withdrawal right (PL: art. 38 ust. 1 pkt 13 ustawy o prawach konsumenta; EU equivalent elsewhere)
 - [ ] Accept DPAs: Hetzner, Cloudflare, Resend, Anthropic (later Stripe/MoR, Meta)
 - [ ] Self-service "delete my data" link in every email and on the report page (deletes by email across leads, orders, items, subs, emails)
 - [ ] Server commands: delete by email, export by email as JSON (access requests)
@@ -29,6 +30,10 @@ consent and tracking are written once.
 - [ ] SSH key-only login, fail2ban, ufw (only SSH; API stays local behind the tunnel)
 - [ ] Encrypted off-server backups (R2 or Hetzner Storage Box)
 - [ ] Open landing and horoscope pages to the public (Access bypass); keep /api/ private paths as now
+
+## Product
+- [ ] Bundle (natal + partner + 2027 forecast) and child chart in the funnel, before flight 1
+- [ ] Personal astrological calendar (ICS feed, daily Super / Act / Stop + short text from personal transits) as the main subscription offer, before flight 3
 
 ## Content
 - [ ] Native review of sl, ro, cs, hu texts
