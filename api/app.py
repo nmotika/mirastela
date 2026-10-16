@@ -442,8 +442,10 @@ class FeedbackIn(BaseModel):
 def feedback(body: FeedbackIn, request: Request, tasks: BackgroundTasks):
     """Tester questionnaire. The email comes from Cloudflare Access when present."""
     answers = {k[:40]: (v[:3000] if isinstance(v, str) else v) for k, v in list(body.answers.items())[:40]}
-    email = (request.headers.get("x-access-email") or request.headers.get("cf-access-authenticated-user-email") or body.email or "").strip().lower()[:200]
-    ua = request.headers.get("user-agent", "")[:300]
+    # Anonymous on purpose: no e-mail, only the kind of device.
+    email = ""
+    raw_ua = request.headers.get("user-agent", "")
+    ua = "mobitel" if any(k in raw_ua for k in ("Mobile", "Android", "iPhone")) else "računalo"
     with db() as con:
         con.execute("insert into feedback(created, email, answers, ua) values(?,?,?,?)",
                     (datetime.now(timezone.utc).isoformat(), email, json.dumps(answers, ensure_ascii=False), ua))
@@ -451,8 +453,8 @@ def feedback(body: FeedbackIn, request: Request, tasks: BackgroundTasks):
     if admin:
         rows = "".join(f"<p style='margin:0 0 10px;font:15px/1.5 Arial,sans-serif;color:#F3EEE3'><b>{emails.esc(k)}</b><br>"
                        f"{emails.esc(str(v if v is not None else ''))}</p>" for k, v in answers.items())
-        html = emails.layout("hr", f"<p style='font:15px Arial,sans-serif;color:#A9B0C6'>{emails.esc(email or 'bez emaila')} · {emails.esc(ua)}</p>{rows}")
-        tasks.add_task(mailer.send, DB_PATH, admin, "feedback", f"Upitnik: {email or 'anonimno'}", html)
+        html = emails.layout("hr", f"<p style='font:15px Arial,sans-serif;color:#A9B0C6'>{emails.esc(ua)}</p>{rows}")
+        tasks.add_task(mailer.send, DB_PATH, admin, "feedback", "Mirastela: novi odgovor iz upitnika", html)
     return {"ok": True}
 
 
