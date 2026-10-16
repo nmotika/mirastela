@@ -20,6 +20,16 @@ const sections: { title: string; qs: Q[] }[] = [
     { id: 'najbolje', type: 'text', q: 'Što ti se u izvještaju najviše svidjelo?' },
     { id: 'suvisno', type: 'text', q: 'Što je bilo predugo, suvišno ili nejasno?' },
   ] },
+  { title: 'Ponuda', qs: [
+    { id: 'ponuda_jasnoca', type: 'scale', q: 'Koliko je ekran s ponudom jasan: što dobivaš i koliko košta?', lo: 'Nejasno', hi: 'Potpuno jasno' },
+    { id: 'ponuda_kupnja', type: 'choice', q: 'Da nisi imao/la kod, bi li na tom ekranu kupio/la izvještaj?', opts: ['Da', 'Možda', 'Ne'] },
+    { id: 'ponuda_komentar', type: 'text', q: 'Što bi te uvjerilo da kupiš, ili što te odbija?' },
+  ] },
+  { title: 'Besplatni dnevni horoskop', qs: [
+    { id: 'dnevni_ocjena', type: 'scale', q: 'Kako ti se čini besplatni dnevni horoskop za tvoj znak?', lo: 'Loše', hi: 'Odlično' },
+    { id: 'dnevni_citanje', type: 'choice', q: 'Bi li ga čitao/la svaki dan?', opts: ['Da', 'Možda', 'Ne'] },
+    { id: 'dnevni_komentar', type: 'text', q: 'Dojam o dnevnom horoskopu: što valja, a što ne?' },
+  ] },
   { title: 'Kompatibilnost i horoskop', qs: [
     { id: 'partner', type: 'choice', q: 'Jesi li isprobao/la kompatibilnost s partnerom?', opts: ['Da, i bilo je zanimljivo', 'Da, ali ništa posebno', 'Ne'] },
     { id: 'horoskop', type: 'choice', q: 'Bi li redovito čitao/la osobni tjedni horoskop mailom?', opts: ['Da', 'Možda', 'Ne'] },
@@ -41,7 +51,7 @@ const range = (a: number, b: number) => Array.from({ length: b - a + 1 }, (_, i)
     <form id="fb" novalidate>
       <p class="ey">Hvala što testiraš</p>
       <h1 class="sf">Upitnik</h1>
-      <p class="mu lead">Treba ti 3 do 5 minuta. Odgovori iskreno, i kritika mi puno pomaže. Nijedno pitanje nije obavezno.</p>
+      <p class="mu lead">Treba ti 5 minuta. Odgovori iskreno, i kritika mi puno pomaže. Nijedno pitanje nije obavezno.</p>
       {sections.map((s) => (
         <section class="sec">
           <h2>{s.title}</h2>
