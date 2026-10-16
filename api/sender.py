@@ -2,6 +2,7 @@
   python sender.py pages   pre-generate today's free sign horoscopes in every language
   python sender.py subs    fill personal calendars, send personal horoscopes (weekly ones on Mondays)
   python sender.py all     both
+  python sender.py recal   regenerate future calendar days for everyone (after changing cal.py)
 """
 from __future__ import annotations
 
@@ -40,6 +41,13 @@ def calendars():
             print("calendar", token[:6], "error", e)
 
 
+def recal():
+    """After a change to labels or texts: drop future calendar days and generate them again."""
+    with app.db() as con:
+        con.execute("delete from caldays where day>=?", (sky.today().isoformat(),))
+    calendars()
+
+
 def subs():
     calendars()
     day = sky.today()
@@ -70,3 +78,5 @@ if __name__ == "__main__":
         pages()
     if what in ("subs", "all"):
         subs()
+    if what == "recal":
+        recal()

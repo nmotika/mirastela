@@ -26,6 +26,7 @@ WEIGHT = {"moon": 0.6, "sun": 0.8, "mercury": 0.6, "venus": 1.0, "mars": 1.0, "j
           "saturn": 1.3, "uranus": 1.0, "neptune": 0.8, "pluto": 1.1}
 EASY = {"venus", "jupiter", "sun", "moon"}
 HARD = {"mars", "saturn", "uranus", "pluto", "neptune"}
+SLOW = {"jupiter", "saturn", "uranus", "neptune", "pluto"}
 POINT = {"sun": 1.3, "moon": 1.2, "asc": 1.2, "mc": 1.0, "venus": 1.0, "mars": 1.0}
 
 
@@ -39,7 +40,9 @@ def score(transits: list[dict]) -> float:
         else:  # conjunction: depends on who is passing over the natal point
             sign = 1 if t["transit"] in EASY else -1 if t["transit"] in HARD else 0.3
         close = 1 - t["orb"] / sky.ORB[t["transit"]]
-        s += sign * WEIGHT[t["transit"]] * POINT.get(t["natal"], 0.8) * (0.4 + 0.6 * close)
+        # Slow planets set the background for weeks; the day itself is coloured by the fast ones.
+        bg = 0.3 if t["transit"] in SLOW else 1.0
+        s += bg * sign * WEIGHT[t["transit"]] * POINT.get(t["natal"], 0.8) * (0.4 + 0.6 * close)
     return s
 
 
@@ -50,15 +53,24 @@ def _score_day(natal: dict, d: date) -> tuple[float, list[dict]]:
 
 def labels_for(natal: dict, days: list[date]) -> list[tuple[str, list[dict]]]:
     """Labels relative to the person's own rhythm: a day is compared with the 90 days around it, so
-    a long Jupiter trine does not turn a whole season green. Roughly 30% great, 25% slow down."""
-    lo, hi = days[0] - timedelta(days=45), days[-1] + timedelta(days=45)
+    a long Jupiter trine does not turn a whole season green. Roughly 30% great, 25% slow down.
+    Long runs are broken up: every fourth day of the same colour in a row becomes a plain "act" day."""
+    lo, hi = days[0] - timedelta(days=86), days[-1] + timedelta(days=45)
     window = {lo + timedelta(days=i): _score_day(natal, lo + timedelta(days=i)) for i in range((hi - lo).days + 1)}
+
+    def raw(d: date) -> str:
+        around = sorted(window[d + timedelta(days=k)][0] for k in range(-45, 46))
+        s = window[d][0]
+        top, bottom = around[int(len(around) * 0.70)], around[int(len(around) * 0.25)]
+        return "super" if s >= top and s > 0 else "slow" if s <= bottom and s < 0 else "act"
+
     out = []
     for d in days:
-        around = sorted(window[d + timedelta(days=k)][0] for k in range(-45, 46))
-        s, tr = window[d]
-        top, bottom = around[int(len(around) * 0.70)], around[int(len(around) * 0.25)]
-        out.append(("super" if s >= top and s > 0 else "slow" if s <= bottom and s < 0 else "act", tr))
+        lab = raw(d)
+        k = 0
+        while lab != "act" and k < 40 and raw(d - timedelta(days=k + 1)) == lab:
+            k += 1
+        out.append(("act" if lab != "act" and k % 4 == 3 else lab, window[d][1]))
     return out
 
 
@@ -86,7 +98,7 @@ def prompt(lang: str, name: str, natal: dict, facts: str, n: int) -> str:
     return f"""{report._header(lang, name)}
 Task: entries for a personal astrological calendar, one per day for {n} days, shown as all-day events in the reader's phone calendar.
 Every day already has a label computed from the transits: SUPER = "{lab['super']}" (easy, supportive day), ACT = "{lab['act']}" (good for getting things done, mixed energy), SLOW = "{lab['slow']}" (tense day, better to slow down and avoid big decisions). The text must fit the label.
-For each day: "title" is 2 to 6 words, a concrete theme for the day (no date, no label word). "text" is 30 to 50 words: what the day favours, one concrete transit in plain words, and one practical tip.
+For each day: "title" is 2 to 6 words, a concrete theme for the day (no date, no label word). "text" is 25 to 40 words: what the day favours and one practical tip. Mention at most one transit, in everyday words a beginner understands (for example "the Moon lights up your career zone"), never technical terms like square, trine, sextile, conjunction, opposition or MC. Do not start with the reader's name and vary how each day opens.
 Never invent transits that are not listed. Tendencies, not certainties. Do not use em dashes or en dashes.
 Save with the save tool: "days" is a list of exactly {n} entries, in date order.
 
