@@ -18,6 +18,7 @@ const upPrices = { partner: fp(UPSELL[lang].partner), forecast: fp(UPSELL[lang].
 const subPrices = { month: fp(SUB[lang].month), year: fp(SUB[lang].year), yearPerMonth: fp(Math.round((SUB[lang].year / 12) * 100) / 100) };
 const thisYear = new Date().getFullYear();
 const years = Array.from({ length: thisYear - 1929 - 12 }, (_, i) => thisYear - 12 - i);
+const pYears = Array.from({ length: thisYear - 1929 }, (_, i) => thisYear - i);
 const focusKeys = ['love', 'career', 'money', 'growth'] as const;
 const focusIcons: Record<string, string> = {
   love: '<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>',
@@ -283,8 +284,25 @@ const clientData = JSON.stringify({
       <div class="qh"><p class="ey">{U2.partnerEyebrow}</p><h1 class="sf q">{U2.pformTitle}</h1><p class="mu">{U2.pformSub}</p></div>
       <div class="pform">
         <div class="field"><label class="lbl" for="upName">{U.pName}</label><input id="upName" class="inp" maxlength="40" autocomplete="off" /></div>
-        <div class="field"><label class="lbl" for="upDate">{U.pDate}</label><input id="upDate" type="date" class="inp" min="1930-01-01" /></div>
-        <div class="field"><label class="lbl" for="upTime">{U.pTime}</label><input id="upTime" type="time" class="inp" /></div>
+        <div class="field"><span class="lbl">{U.pDate}</span>
+          <fieldset class:list={["wheels date", { ymd: lang === "hu" }]}>
+            <legend class="vh">{U.pDate}</legend>
+            <div class="band" aria-hidden="true"></div>
+            <div class="wcol"><span class="wlab">{Q.day}</span>
+              <div class="wsc" id="pwDay" tabindex="0" role="listbox" aria-label={Q.day}>{Array.from({ length: 31 }, (_, i) => <button type="button" role="option" tabindex="-1" data-v={i + 1}>{i + 1}</button>)}</div></div>
+            <div class="wcol w16"><span class="wlab">{Q.month}</span>
+              <div class="wsc" id="pwMonth" tabindex="0" role="listbox" aria-label={Q.month}>{Q.months.map((m, i) => <button type="button" role="option" tabindex="-1" data-v={i + 1}>{m}</button>)}</div></div>
+            <div class="wcol w12"><span class="wlab">{Q.year}</span>
+              <div class="wsc" id="pwYear" tabindex="0" role="listbox" aria-label={Q.year}>{pYears.map((y) => <button type="button" role="option" tabindex="-1" data-v={y}>{y}</button>)}</div></div>
+          </fieldset></div>
+        <div class="field"><span class="lbl">{U.pTime}</span>
+          <fieldset class="wheels time" id="ptWheels">
+            <legend class="vh">{U.pTime}</legend>
+            <div class="band" aria-hidden="true"></div>
+            <div class="wcol tw"><div class="wsc big" id="pwHour" tabindex="0" role="listbox" aria-label={U.pTime}>{Array.from({ length: 24 }, (_, i) => <button type="button" role="option" tabindex="-1" data-v={i}>{String(i).padStart(2, '0')}</button>)}</div></div>
+            <span class="colon" aria-hidden="true">:</span>
+            <div class="wcol tw"><div class="wsc big" id="pwMin" tabindex="0" role="listbox" aria-label={U.pTime}>{Array.from({ length: 60 }, (_, i) => <button type="button" role="option" tabindex="-1" data-v={i}>{String(i).padStart(2, '0')}</button>)}</div></div>
+          </fieldset></div>
         <label class="chk"><input type="checkbox" id="upTimeUnknown" /><span>{U.pTimeUnknown}</span></label>
         <div class="field"><label class="lbl" for="upPlace">{U.pPlace}</label>
           <div class="srch"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A9B0C6" stroke-width="1.8" aria-hidden="true" set:html={search} />

@@ -501,27 +501,42 @@ $('uAdd').addEventListener('click', async () => {
 $('uNo').addEventListener('click', () => show('sub'));
 
 /* ---------- 10b partner details ---------- */
-const upName = $<HTMLInputElement>('upName'), upDate = $<HTMLInputElement>('upDate');
-const upTime = $<HTMLInputElement>('upTime'), upTimeUnknown = $<HTMLInputElement>('upTimeUnknown');
+const upName = $<HTMLInputElement>('upName'), upTimeUnknown = $<HTMLInputElement>('upTimeUnknown');
 const upPlace = $<HTMLInputElement>('upPlace');
 let partnerCity: City | undefined;
-upDate.max = new Date().toISOString().slice(0, 10);
-function checkPartner() {
-  upTime.disabled = upTimeUnknown.checked;
-  const ok = !!upDate.value && !!partnerCity && (upTimeUnknown.checked || /^\d{2}:\d{2}$/.test(upTime.value));
-  $<HTMLButtonElement>('pdGo').disabled = !ok;
+const pwDay = wheel($('pwDay'), () => checkPartner());
+const pwMonth = wheel($('pwMonth'), () => checkPartner());
+const pwYear = wheel($('pwYear'), () => checkPartner());
+const pwHour = wheel($('pwHour'), () => checkPartner());
+const pwMin = wheel($('pwMin'), () => checkPartner());
+let pdataReady = false;
+function partnerDate(): string | null {
+  const y = pwYear.value(), m = pwMonth.value(), d = pwDay.value();
+  if (new Date(Date.UTC(y, m - 1, d)).getUTCDate() !== d) return null;
+  const iso = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  return iso <= new Date().toISOString().slice(0, 10) ? iso : null;
 }
-[upName, upDate, upTime].forEach((x) => x.addEventListener('input', checkPartner));
+function checkPartner() {
+  if (!pdataReady) {
+    // Wheels can only be positioned once the step is visible.
+    pdataReady = true;
+    pwYear.set(1990); pwMonth.set(1); pwDay.set(1); pwHour.set(12); pwMin.set(0);
+    [pwYear, pwMonth, pwDay, pwHour, pwMin].forEach((w) => w.layout());
+  }
+  $('ptWheels').classList.toggle('off', upTimeUnknown.checked);
+  $<HTMLButtonElement>('pdGo').disabled = !(partnerDate() && partnerCity);
+}
 upTimeUnknown.addEventListener('change', checkPartner);
 citySearch(upPlace, $('upList'), (c) => { partnerCity = c; checkPartner(); });
 upPlace.addEventListener('input', () => { partnerCity = undefined; checkPartner(); });
 $('pdGo').addEventListener('click', async () => {
   const btn = $<HTMLButtonElement>('pdGo');
   btn.disabled = true; $('pdErr').hidden = true;
+  const time = upTimeUnknown.checked ? null : `${String(pwHour.value()).padStart(2, '0')}:${String(pwMin.value()).padStart(2, '0')}`;
   try {
     await api(`/api/order/${encodeURIComponent(state.token!)}/add`, {
       product: 'partner',
-      partner: { name: upName.value.trim(), date: upDate.value, time: upTimeUnknown.checked ? null : upTime.value, cityId: partnerCity!.id },
+      partner: { name: upName.value.trim(), date: partnerDate(), time, cityId: partnerCity!.id },
     });
     show('sub');
   } catch { $('pdErr').hidden = false; btn.disabled = false; }

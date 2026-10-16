@@ -16,8 +16,11 @@ async function daily(env, lang, ctx) {
   const hit = await cache.match(key);
   if (hit) return hit.json();
   if (!env.API_ORIGIN) return null;
+  // Never hold the page: if the API is slow (text still being generated), serve the page as is
+  // and let the browser fill it in.
   const res = await fetch(`${env.API_ORIGIN}/api/daily?lang=${lang}&day=${day}`, {
     headers: { 'X-Proxy-Secret': env.PROXY_SECRET || '' },
+    signal: AbortSignal.timeout(2500),
   });
   if (res.status !== 200) return null;
   const data = await res.json();

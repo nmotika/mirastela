@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /api/
+Disallow: /*/start/
+Disallow: /*/report/
+
+Sitemap: https://mirastela.com/sitemap.xml
