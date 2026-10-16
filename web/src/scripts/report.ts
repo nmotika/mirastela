@@ -1,9 +1,10 @@
 import { wheelSvg } from './wheel';
 import { mdToHtml } from './md';
 import { fill } from '../i18n/fill';
+import { CUSP } from './cusp';
 
-interface Planet { id: string; lon: number; signIndex: number; deg: number; min: number; house?: number; retro: boolean }
-interface Angle { lon: number; signIndex: number; deg: number; min: number }
+interface Planet { id: string; lon: number; signIndex: number; deg: number; min: number; house?: number; retro: boolean; cusp?: number | null }
+interface Angle { lon: number; signIndex: number; deg: number; min: number; cusp?: number | null }
 interface Chart {
   timeKnown: boolean; planets: Planet[];
   houses: { cusps: number[] } | null;
@@ -57,9 +58,14 @@ function hero(o: Order) {
   $('rWheelM').innerHTML = wheelSvg(wd, { size: 300, label: R.tabs.natal, still: true });
   $('rWheelD').innerHTML = wheelSvg(wd, { size: 460, label: R.tabs.natal, still: true });
   const sun = c.planets[0], moon = c.planets[1];
-  const big = [[A.planets.sun, A.signs[sun.signIndex]], [A.planets.moon, A.signs[moon.signIndex]]];
-  if (c.angles) big.push([A.asc, A.signs[c.angles.asc.signIndex]]);
-  $('rBig3').replaceChildren(...big.map(([l, v]) => { const d = el('div'); d.append(el('span', 'l', l), el('strong', '', v)); return d; }));
+  const cu = (i?: number | null) => (i == null ? '' : `${CUSP[cfg.lang] ?? CUSP.en} ${A.signs[i]}`);
+  const big = [[A.planets.sun, A.signs[sun.signIndex], cu(sun.cusp)], [A.planets.moon, A.signs[moon.signIndex], cu(moon.cusp)]];
+  if (c.angles) big.push([A.asc, A.signs[c.angles.asc.signIndex], cu(c.angles.asc.cusp)]);
+  $('rBig3').replaceChildren(...big.map(([l, v, k]) => {
+    const d = el('div'); d.append(el('span', 'l', l), el('strong', '', v));
+    if (k) d.append(el('span', 'cu', k));
+    return d;
+  }));
   $('rBig3').style.gridTemplateColumns = `repeat(${big.length}, minmax(0, 1fr))`;
 }
 

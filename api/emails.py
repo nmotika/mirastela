@@ -202,15 +202,22 @@ def greeting(lang: str, name: str) -> str:
 
 
 # ---------------------------------------------------------------- the emails
+CUSP = {"pl": "na granicy z:", "hr": "na granici sa:", "sl": "na meji z:", "ro": "la limita cu:",
+        "cs": "na hranici s:", "hu": "határeset:", "en": "on the cusp with:"}
+
+
 def summary(lang: str, name: str, chart: dict, text: str, resume_url: str) -> tuple[str, str]:
     t = T[lang]
     sun, moon = chart["planets"][0], chart["planets"][1]
-    rows = [(t["big3"][0], sign_name(lang, sun["signIndex"])), (t["big3"][1], sign_name(lang, moon["signIndex"]))]
-    if chart.get("angles"):
-        rows.append((t["big3"][2], sign_name(lang, chart["angles"]["asc"]["signIndex"])))
-    big3 = "".join(f'<td style="padding:10px 12px;background:#1A2343;border-radius:12px;font:13px Arial,sans-serif;color:#A9B0C6">'
-                   f'{esc(k)}<br><strong style="font:400 19px Georgia,serif;color:#F3EEE3">{esc(v)}</strong></td><td width="8"></td>'
-                   for k, v in rows)
+    asc = (chart.get("angles") or {}).get("asc")
+    items = [(t["big3"][0], sun), (t["big3"][1], moon)] + ([(t["big3"][2], asc)] if asc else [])
+
+    def cell(k: str, p: dict) -> str:
+        cu = (f'<br><span style="font:11px Arial,sans-serif;color:#D9B26A">{esc(CUSP[lang])} {esc(sign_name(lang, p["cusp"]))}</span>'
+              if p.get("cusp") is not None else "")
+        return (f'<td style="padding:10px 12px;background:#1A2343;border-radius:12px;font:13px Arial,sans-serif;color:#A9B0C6;vertical-align:top">'
+                f'{esc(k)}<br><strong style="font:400 19px Georgia,serif;color:#F3EEE3">{esc(sign_name(lang, p["signIndex"]))}</strong>{cu}</td><td width="8"></td>')
+    big3 = "".join(cell(k, p) for k, p in items)
     body = (_p(greeting(lang, name)) + _p(t["sumIntro"])
             + f'<table role="presentation" cellpadding="0" cellspacing="0" style="margin:6px 0 18px"><tr>{big3}</tr></table>'
             + "".join(_p(x.strip()) for x in text.split("\n") if x.strip())

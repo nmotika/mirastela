@@ -48,6 +48,27 @@ def _sign(lon: float) -> dict:
             "min": int(round((deg - int(deg)) * 60)) % 60}
 
 
+def _cusp(lon: float, tol: float) -> int | None:
+    """Neighbouring sign index when lon is within tol degrees of a sign boundary, else None."""
+    lon %= 360
+    idx, deg = int(lon // 30), lon % 30
+    if deg >= 30 - tol:
+        return (idx + 1) % 12
+    if deg < tol:
+        return (idx - 1) % 12
+    return None
+
+
+def add_cusps(c: dict) -> dict:
+    """Adds the cusp flags to a chart stored before they existed (same thresholds as calculate)."""
+    tk = c.get("timeKnown", True)
+    for i, tol in ((0, 0.2 if tk else 0.6), (1, 1.0 if tk else 6.5)):
+        c["planets"][i].setdefault("cusp", _cusp(c["planets"][i]["lon"], tol))
+    if c.get("angles"):
+        c["angles"]["asc"].setdefault("cusp", _cusp(c["angles"]["asc"]["lon"], 2.0))
+    return c
+
+
 def _house_of(lon: float, cusps: list[float]) -> int:
     for i in range(12):
         a, b = cusps[i], cusps[(i + 1) % 12]
@@ -71,6 +92,12 @@ def calculate(b: BirthData) -> dict:
                         "retro": xx[3] < 0 and name not in LUMINARIES and name != "node",
                         **_sign(xx[0])})
 
+    # Near a sign boundary the sign depends on how exact the birth time is: flag it so the text and
+    # the UI can say so. The Ascendant moves about 1 degree every 4 minutes, the Moon about
+    # 0.5 degree an hour (a whole day's range when the time is unknown).
+    planets[0]["cusp"] = _cusp(planets[0]["lon"], 0.2 if time_known else 0.6)
+    planets[1]["cusp"] = _cusp(planets[1]["lon"], 1.0 if time_known else 6.5)
+
     houses = None
     angles = None
     if time_known:
@@ -82,7 +109,7 @@ def calculate(b: BirthData) -> dict:
             cusps, ascmc = swe.houses_ex(jd, b.lat, b.lon, hsys)
         cusps = list(cusps)[:12]
         houses = {"system": hsys.decode(), "cusps": [round(c, 4) for c in cusps]}
-        angles = {"asc": {"lon": round(ascmc[0], 4), **_sign(ascmc[0])},
+        angles = {"asc": {"lon": round(ascmc[0], 4), **_sign(ascmc[0]), "cusp": _cusp(ascmc[0], 2.0)},
                   "mc": {"lon": round(ascmc[1], 4), **_sign(ascmc[1])}}
         for p in planets:
             p["house"] = _house_of(p["lon"], cusps)

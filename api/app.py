@@ -332,7 +332,7 @@ def get_order(token: str):
                             (token,)).fetchall()
     lang, name, natal, inp = row
     return {
-        "lang": lang, "name": name, "chart": json.loads(natal), "input": json.loads(inp),
+        "lang": lang, "name": name, "chart": chart.add_cusps(json.loads(natal)), "input": json.loads(inp),
         "forecastYear": forecast_year(),
         "items": [{"product": p, "status": s, "markdown": md or "", "data": json.loads(d) if d else None, "model": m}
                   for p, s, md, d, m in items],

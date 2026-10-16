@@ -1,4 +1,5 @@
 import { wheelSvg } from './wheel';
+import { CUSP } from './cusp';
 import { fill, huArticle } from '../i18n/fill';
 import { SIGN_GLYPHS } from './zodiac';
 
@@ -9,12 +10,12 @@ const BARE: Step[] = ['upsell', 'pdata', 'sub'];
 const NEEDS_TOKEN: Step[] = ['upsell', 'pdata', 'sub', 'done'];
 
 interface City { id: number; name: string; country: string; countryName: string; tz: string }
-interface Planet { id: string; lon: number; sign: string; signIndex: number; deg: number; min: number; house?: number; retro: boolean }
+interface Planet { id: string; lon: number; sign: string; signIndex: number; deg: number; min: number; house?: number; retro: boolean; cusp?: number | null }
 interface Chart {
   timeKnown: boolean;
   planets: Planet[];
   houses: { cusps: number[] } | null;
-  angles: { asc: { lon: number; signIndex: number; deg: number; min: number } } | null;
+  angles: { asc: { lon: number; signIndex: number; deg: number; min: number; cusp?: number | null } } | null;
   aspects: { a: string; b: string; type: string }[];
 }
 interface State {
@@ -310,15 +311,16 @@ function who(): string {
 function wheelData(c: Chart) {
   return { planets: c.planets, asc: c.angles?.asc.lon ?? null, cusps: c.houses?.cusps ?? null, aspects: c.aspects.slice(0, 8) };
 }
-function big3(c: Chart): { g: string; tag: boolean; label: string; sign: string; pos: string }[] {
+function big3(c: Chart): { g: string; tag: boolean; label: string; sign: string; pos: string; cusp: string }[] {
   const A = D.astro, sun = c.planets[0], moon = c.planets[1];
+  const cusp = (i?: number | null) => (i == null ? '' : `${CUSP[lang] ?? CUSP.en} ${A.signs[i]}`);
   const rows = [
-    { g: '☉︎', tag: false, label: A.planets.sun, sign: A.signs[sun.signIndex], pos: pos(sun.deg, sun.min) },
-    { g: '☽︎', tag: false, label: A.planets.moon, sign: A.signs[moon.signIndex], pos: pos(moon.deg, moon.min) },
+    { g: '☉︎', tag: false, label: A.planets.sun, sign: A.signs[sun.signIndex], pos: pos(sun.deg, sun.min), cusp: cusp(sun.cusp) },
+    { g: '☽︎', tag: false, label: A.planets.moon, sign: A.signs[moon.signIndex], pos: pos(moon.deg, moon.min), cusp: cusp(moon.cusp) },
   ];
   rows.push(c.angles
-    ? { g: 'ASC', tag: true, label: A.asc, sign: A.signs[c.angles.asc.signIndex], pos: pos(c.angles.asc.deg, c.angles.asc.min ?? 0) }
-    : { g: 'ASC', tag: true, label: A.asc, sign: D.offer.ascUnknown, pos: '' });
+    ? { g: 'ASC', tag: true, label: A.asc, sign: A.signs[c.angles.asc.signIndex], pos: pos(c.angles.asc.deg, c.angles.asc.min ?? 0), cusp: cusp(c.angles.asc.cusp) }
+    : { g: 'ASC', tag: true, label: A.asc, sign: D.offer.ascUnknown, pos: '', cusp: '' });
   return rows;
 }
 function chipsInto(box: HTMLElement, c: Chart) {
@@ -326,6 +328,7 @@ function chipsInto(box: HTMLElement, c: Chart) {
     const div = el('div', 'chip');
     const g = el('span', r.tag ? 't' : 'g', r.g); g.setAttribute('aria-hidden', 'true');
     div.append(g, el('span', 'l', r.label), el('strong', '', r.sign));
+    if (r.cusp) div.append(el('span', 'cu', r.cusp));
     return div;
   }));
 }

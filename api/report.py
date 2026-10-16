@@ -50,7 +50,14 @@ def _fmt_planets(chart: dict) -> str:
         a = chart["angles"]
         rows.append(f"- Ascendant: {a['asc']['sign']} {a['asc']['deg']}°")
         rows.append(f"- Midheaven (MC): {a['mc']['sign']} {a['mc']['deg']}°")
-    else:
+    for label, item in (("Sun", chart["planets"][0]), ("Moon", chart["planets"][1]),
+                        ("Ascendant", (chart.get("angles") or {}).get("asc"))):
+        if item and item.get("cusp") is not None:
+            rows.append(f"- Note: the {label} is at {item['sign']} {item['deg']}°, on the cusp with {SIGNS_EN[item['cusp']]}. "
+                        f"Birth times are often rounded, so where you discuss the {label}, say plainly in one or two sentences that it sits "
+                        f"on the border and that some calculations show {SIGNS_EN[item['cusp']]}, and briefly add what {SIGNS_EN[item['cusp']]} would bring. "
+                        f"Keep {item['sign']} as the main reading.")
+    if not chart.get("angles"):
         rows.append("- Birth time unknown: no Ascendant, MC or houses. Do not mention houses or the Ascendant; the Moon sign may be uncertain if the Moon changed sign that day.")
     return "\n".join(rows)
 
