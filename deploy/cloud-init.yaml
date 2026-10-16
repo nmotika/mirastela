@@ -1,6 +1,6 @@
 #cloud-config
 # Hetzner: paste into "Cloud config" when creating the server.
-# BEFORE PASTING fill in the three values marked FILL_ME below.
+# BEFORE PASTING fill in the values marked FILL_ME below.
 package_update: true
 package_upgrade: true
 packages: [git, python3-venv, python3-dev, build-essential, sqlite3, curl, unattended-upgrades]
@@ -11,6 +11,9 @@ write_files:
     content: |
       ANTHROPIC_API_KEY=FILL_ME_ANTHROPIC_KEY
       MIRASTELA_MODEL=claude-sonnet-5-5
+      MIRASTELA_FAST_MODEL=claude-haiku-5-5
+      RESEND_API_KEY=FILL_ME_RESEND_KEY
+      MAIL_FROM=Mirastela <hello@mirastela.com>
       MIRASTELA_COUPONS=MIRATEST
       MIRASTELA_PROXY_SECRET=FILL_ME_LONG_RANDOM_SECRET
       MIRASTELA_DB=/var/lib/mirastela/mirastela.db
@@ -31,7 +34,8 @@ runcmd:
   - sudo -u mirastela /opt/mirastela/.venv/bin/pip install -q --upgrade pip setuptools wheel
   - sudo -u mirastela /opt/mirastela/.venv/bin/pip install -q -r /opt/mirastela/api/requirements.txt
   - cp /opt/mirastela/deploy/mirastela-api.service /etc/systemd/system/
-  - systemctl daemon-reload && systemctl enable --now mirastela-api
+  - cp /opt/mirastela/deploy/mirastela-daily.service /opt/mirastela/deploy/mirastela-daily.timer /etc/systemd/system/
+  - systemctl daemon-reload && systemctl enable --now mirastela-api mirastela-daily.timer
   # Cloudflare Tunnel (no open ports needed)
   - curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg -o /usr/share/keyrings/cloudflare-main.gpg
   - echo 'deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared any main' > /etc/apt/sources.list.d/cloudflared.list

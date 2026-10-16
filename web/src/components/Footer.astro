@@ -2,8 +2,8 @@
 import Logo from './Logo.astro';
 import { t } from '../i18n';
 import { LOCALES, LANG_NAMES, type Lang } from '../i18n/config';
-interface Props { lang: Lang; path: string }
-const { lang, path } = Astro.props;
+interface Props { lang: Lang; path: string; paths?: Record<Lang, string> }
+const { lang, path, paths } = Astro.props;
 const d = t(lang).footer;
 ---
 <footer class="site-foot">
@@ -18,7 +18,7 @@ const d = t(lang).footer;
     <p class="mu" style="font-size:13px">{d.seller}</p>
     <nav class="lang-row" aria-label={d.languages}>
       {LOCALES.map((l) => (
-        <a href={`/${l}/${path}`} lang={l} hreflang={l} aria-current={l === lang ? 'page' : undefined}>{LANG_NAMES[l]}</a>
+        <a href={`/${l}/${paths?.[l] ?? path}`} lang={l} hreflang={l} aria-current={l === lang ? 'page' : undefined}>{LANG_NAMES[l]}</a>
       ))}
     </nav>
   </div>

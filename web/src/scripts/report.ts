@@ -21,7 +21,7 @@ const GLYPH: Record<string, string> = {
   sun: '☉', moon: '☽', mercury: '☿', venus: '♀', mars: '♂', jupiter: '♃', saturn: '♄',
   uranus: '♅', neptune: '♆', pluto: '♇', node: '☊', asc: 'AC', mc: 'MC',
 };
-let active: string | null = null;
+let active: string | null = new URLSearchParams(location.search).get('t');
 let rendered = '';
 
 function el<K extends keyof HTMLElementTagNameMap>(tag: K, props: Record<string, string> = {}, ...kids: (Node | string)[]) {

@@ -3,10 +3,12 @@ import Logo from './Logo.astro';
 import LangSwitcher from './LangSwitcher.astro';
 import { t } from '../i18n';
 import type { Lang } from '../i18n/config';
-interface Props { lang: Lang; path: string }
-const { lang, path } = Astro.props;
+interface Props { lang: Lang; path: string; paths?: Record<Lang, string> }
+const { lang, path, paths } = Astro.props;
+const H = t(lang).horo;
 ---
 <header class="site-head">
   <a href={`/${lang}/`} class="logo" aria-label={t(lang).ui.home}><Logo /><span>Mirastela</span></a>
-  <LangSwitcher lang={lang} path={path} />
+  <nav class="head-nav"><a href={`/${lang}/${H.slug}/`}>{H.nav}</a></nav>
+  <LangSwitcher lang={lang} path={path} paths={paths} />
 </header>

@@ -5,6 +5,7 @@ import Footer from '../../components/Footer.astro';
 import { LOCALES, type Lang } from '../../i18n/config';
 import { t } from '../../i18n';
 import { wheelSvg, SAMPLE_WHEEL } from '../../scripts/wheel';
+import { SIGN_GLYPHS } from '../../scripts/zodiac';
 
 export function getStaticPaths() {
   return LOCALES.map((lang) => ({ params: { lang } }));
@@ -59,6 +60,16 @@ const start = `/${lang}/start/`;
       </section>
     </div>
 
+    <section class="wrap todays">
+      <h2 class="sf">{d.horo.h1}</h2>
+      <p class="mu">{d.horo.sub}</p>
+      <ul class="zrow">
+        {d.astro.signs.map((s, i) => (
+          <li><a href={`/${lang}/${d.horo.slug}/${d.horo.signSlugs[i]}/`}><span class="gl" aria-hidden="true">{SIGN_GLYPHS[i]}</span>{s}</a></li>
+        ))}
+      </ul>
+    </section>
+
     <section class="wrap final">
       <h2 class="sf">{L.finalTitle}</h2>
       <p class="mu">{L.finalSub}</p>
@@ -91,6 +102,14 @@ const start = `/${lang}/start/`;
   .inc ul { list-style: none; margin: 0; padding: 0; }
   .inc li { padding: 12px 0; border-top: 1px solid var(--paper-line); }
   .inc li:last-child { border-bottom: 1px solid var(--paper-line); }
+  .todays { padding-top: 56px; display: flex; flex-direction: column; gap: 12px; }
+  .todays h2 { font-size: 30px; line-height: 1.15; }
+  .zrow { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .zrow a { display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--border); color: var(--ink); text-decoration: none; font-weight: 600; }
+  .zrow a:hover { border-color: var(--gold); }
+  .zrow .gl { color: var(--gold); }
+  @media (min-width: 720px) { .zrow { grid-template-columns: repeat(4, 1fr); } }
+  @media (min-width: 1000px) { .zrow { grid-template-columns: repeat(6, 1fr); } }
   .final { padding-top: 56px; display: flex; flex-direction: column; gap: 16px; align-items: center; text-align: center; max-width: 520px; }
   @media (min-width: 900px) {
     .hero { grid-template-columns: 1.1fr .9fr; align-items: center; padding-top: 56px; padding-bottom: 72px; }

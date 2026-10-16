@@ -146,24 +146,37 @@ Sign of the slow planets during the year: {signs}
 """
 
 
-def generate(prompt: str) -> tuple[str, str]:
-    """Return (markdown, model). Falls back to a test report without an API key."""
-    key = os.environ.get("ANTHROPIC_API_KEY")
-    model = os.environ.get("MIRASTELA_MODEL", "claude-sonnet-5-5")
-    if not key:
+def _model(fast: bool) -> str:
+    if fast:
+        return os.environ.get("MIRASTELA_FAST_MODEL", "claude-haiku-5-5")
+    return os.environ.get("MIRASTELA_MODEL", "claude-sonnet-5-5")
+
+
+def has_key() -> bool:
+    return bool(os.environ.get("ANTHROPIC_API_KEY"))
+
+
+SYSTEM = "You are an experienced, careful astrologer and an excellent writer. You write personalised texts for entertainment and self-reflection."
+
+
+def generate(prompt: str, fast: bool = False, max_tokens: int = 32000, fallback: str | None = None) -> tuple[str, str]:
+    """Return (text, model). Without an API key returns a test text so the flow can be checked."""
+    model = _model(fast)
+    if not has_key():
+        if fallback is not None:
+            return fallback, "test"
         facts = prompt.split("Chart facts", 1)[-1] if "Chart facts" in prompt else prompt.split("chart:", 1)[-1]
         md = ("## TEST MODE\n\nANTHROPIC_API_KEY is not set, so this is a placeholder instead of the written report. "
               "Below are the facts the model would receive. Check them against another chart calculator.\n\n"
               "## Facts\n\n" + facts.strip())
         return md, "test"
     import anthropic
-    client = anthropic.Anthropic(api_key=key)
-    system = "You are an experienced, careful astrologer and an excellent writer. You write personalised reports for entertainment and self-reflection."
+    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
     messages = [{"role": "user", "content": prompt}]
     text = ""
     # Long reports in some languages can hit the output limit: continue from where the model stopped.
     for _ in range(3):
-        with client.messages.stream(model=model, max_tokens=32000, system=system, messages=messages) as stream:
+        with client.messages.stream(model=model, max_tokens=max_tokens, system=SYSTEM, messages=messages) as stream:
             msg = stream.get_final_message()
         part = "".join(b.text for b in msg.content if b.type == "text")
         text += part if not text or part[:1].isspace() or text[-1:] in "\n " else " " + part
@@ -173,3 +186,63 @@ def generate(prompt: str) -> tuple[str, str]:
         messages = [{"role": "user", "content": prompt}, {"role": "assistant", "content": text},
                     {"role": "user", "content": "Continue exactly where you stopped, mid-sentence if needed. Do not repeat anything and do not add any preface."}]
     return text.strip(), model
+
+
+def parse_json(text: str):
+    """Model JSON output, tolerant of code fences and stray prose around it."""
+    t = text.strip()
+    if t.startswith("```"):
+        t = t.split("\n", 1)[1].rsplit("```", 1)[0]
+    i, j = min([x for x in (t.find("["), t.find("{")) if x >= 0] or [0]), max(t.rfind("]"), t.rfind("}"))
+    return json.loads(t[i:j + 1])
+
+
+# ---------------------------------------------------------------- short texts
+def prompt_summary(lang: str, name: str, chart: dict, focus: list[str]) -> str:
+    return f"""{_header(lang, name)}
+Task: a short free summary of the natal chart for an email, 110 to 150 words, two short paragraphs.
+Paragraph 1: the Sun, the Moon{' and the Ascendant' if chart['timeKnown'] else ''} together, as one picture of the person.
+Paragraph 2: the single tightest aspect and what it adds, then one sentence saying the full report goes deeper into: {', '.join(focus) or 'love, work and personal growth'}.
+Plain text paragraphs only: no headings, no Markdown, no lists, no greeting, no sign-off.
+
+Chart facts (tropical zodiac, Placidus houses):
+{_fmt_planets(chart)}
+
+Aspects within orb, tightest first:
+{_fmt_aspects(chart['aspects'], 5)}
+"""
+
+
+def prompt_daily_signs(lang: str, day: str, sky_txt: str) -> str:
+    v = VOCAB[lang]
+    return f"""Task: today's horoscope for all twelve signs, for a website. Date: {day}.
+Write entirely in {LANG_NAME[lang]}, addressing the reader informally in the second person singular.
+Use exactly this vocabulary for signs: {v['signs']}.
+Base every sign's text on the real sky facts below, especially the planets in that sign's solar houses and the Moon's solar house today. Mention at least one concrete fact (a planet and a sign or house) per sign, in plain words.
+Tendencies, not certainties. No predictions of illness, death, accidents, pregnancy, lottery wins or breakups. No medical, legal or financial advice.
+Do not use em dashes or en dashes as punctuation. Vary sentence openings between signs; no filler.
+
+Output ONLY a JSON array of 12 objects in zodiac order Aries to Pisces, each:
+{{"general": "70 to 100 words", "love": "25 to 40 words", "work": "25 to 40 words"}}
+
+Sky facts:
+{sky_txt}
+"""
+
+
+def prompt_personal(lang: str, name: str, natal: dict, period_txt: str, weekly: bool) -> str:
+    length = "320 to 420 words" if weekly else "150 to 220 words"
+    span = "the coming week (Monday to Sunday)" if weekly else "today"
+    sections = ("a one-line title, then short sections: the week overall, love, work, the best days, one piece of advice"
+                if weekly else "a one-line title, then: the day overall (one paragraph), love (one or two sentences), work (one or two sentences), advice of the day (one sentence)")
+    return f"""{_header(lang, name)}
+Task: a personal horoscope for {span}, based on transits to the reader's own natal chart, {length}.
+Structure: {sections}. Use '## ' only for the title line and '**Label:**' style bold labels for the parts.
+Mention the concrete transits in plain words (for example "the Moon passes over your natal Venus"). Never invent transits that are not listed.
+
+Natal chart:
+{_fmt_planets(natal)}
+
+Transits for {span}:
+{period_txt}
+"""

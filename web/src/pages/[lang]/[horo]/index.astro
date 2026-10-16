@@ -1,0 +1,46 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import HoroCta from '../../../components/HoroCta.astro';
+import { LOCALES, INTL, type Lang } from '../../../i18n/config';
+import { t } from '../../../i18n';
+import { SIGN_GLYPHS, signRange } from '../../../scripts/zodiac';
+import '../../../styles/horo.css';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang, horo: t(lang).horo.slug } }));
+}
+const lang = Astro.params.lang as Lang;
+const d = t(lang);
+const H = d.horo;
+const paths = Object.fromEntries(LOCALES.map((l) => [l, `${t(l).horo.slug}/`])) as Record<Lang, string>;
+const clientData = JSON.stringify({ lang, page: 'index', d: { horo: H, astro: d.astro } });
+---
+<Base lang={lang} path={paths[lang]} paths={paths} title={H.indexTitle} description={H.indexDesc}>
+  <div class="wrap"><Header lang={lang} path={paths[lang]} paths={paths} /></div>
+  <main class="wrap horo">
+    <p class="ey" id="hDate">&nbsp;</p>
+    <h1 class="sf">{H.h1}</h1>
+    <p class="mu lead">{H.sub}</p>
+
+    <ul class="signs">
+      {d.astro.signs.map((s, i) => (
+        <li><a href={`/${lang}/${H.slug}/${H.signSlugs[i]}/`} class="sign">
+          <span class="gl glyph" aria-hidden="true">{SIGN_GLYPHS[i]}</span>
+          <span class="nm"><strong>{s}</strong><small class="mu">{signRange(INTL[lang], i)}</small></span>
+          <span class="teaser mu" data-teaser={i}></span>
+        </a></li>
+      ))}
+    </ul>
+
+    <section class="skybox" aria-live="polite">
+      <h2 class="sf">{H.sky}</h2>
+      <p class="mu" id="hSky">{H.loading}</p>
+    </section>
+    <HoroCta lang={lang} />
+  </main>
+  <Footer lang={lang} path={paths[lang]} paths={paths} />
+  <script type="application/json" id="horo-data" set:html={clientData} />
+  <script src="../../../scripts/horo.ts"></script>
+</Base>

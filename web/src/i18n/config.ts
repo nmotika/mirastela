@@ -34,6 +34,9 @@ export const UPSELL: Record<Lang, { partner: number; forecast: number }> = {
   en: { partner: 9.9, forecast: 14.9 },
 };
 
+/** Monthly price of the personal horoscope subscription (placeholders until tested). */
+export const SUB: Record<Lang, number> = { pl: 19.99, hr: 4.99, sl: 4.99, ro: 24.99, cs: 119, hu: 1990, en: 4.99 };
+
 export function formatPrice(lang: Lang, p = PRICE[lang]): string {
   const whole = Number.isInteger(p.amount);
   return new Intl.NumberFormat(INTL[lang], {

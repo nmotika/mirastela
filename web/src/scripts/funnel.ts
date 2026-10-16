@@ -1,8 +1,8 @@
 import { wheelSvg } from './wheel';
 import { fill, huArticle } from '../i18n/fill';
 
-type Step = 'date' | 'time' | 'place' | 'name' | 'focus' | 'status' | 'calc' | 'email' | 'offer' | 'upsell';
-const STEPS: Step[] = ['date', 'time', 'place', 'name', 'focus', 'status', 'calc', 'email', 'offer', 'upsell'];
+type Step = 'date' | 'time' | 'place' | 'name' | 'focus' | 'status' | 'calc' | 'email' | 'offer' | 'upsell' | 'sub' | 'done';
+const STEPS: Step[] = ['date', 'time', 'place', 'name', 'focus', 'status', 'calc', 'email', 'offer', 'upsell', 'sub', 'done'];
 const QUIZ_STEPS = 6;
 
 interface City { id: number; name: string; country: string; countryName: string; tz: string }
@@ -17,6 +17,7 @@ interface Chart {
 interface State {
   date?: string; time?: string | null; city?: City; name?: string;
   focus: string[]; status?: string; email?: string; chart?: Chart; coupon?: string; token?: string;
+  sub?: 'daily' | 'weekly';
 }
 
 const data = JSON.parse(document.getElementById('funnel-data')!.textContent!);
@@ -77,6 +78,8 @@ function show(step: Step, push = true) {
   if (step === 'calc') runCalc();
   if (step === 'offer') renderOffer();
   if (step === 'upsell') renderUpsell();
+  if (step === 'sub') renderSub();
+  if (step === 'done') renderDone();
 }
 function go(offset: number) {
   show(STEPS[STEPS.indexOf(current) + offset]);
@@ -334,8 +337,10 @@ $('oBuy').addEventListener('click', async () => {
 const forecastYear = (() => { const n = new Date(); return n.getMonth() >= 9 ? n.getFullYear() + 1 : n.getFullYear(); })();
 const upsellProduct = () => (state.status === 'single' ? 'forecast' : 'partner');
 let partnerCity: City | undefined;
+const reportUrl = () => `/${lang}/report/?o=${encodeURIComponent(state.token ?? '')}`;
 function goReport() {
-  location.href = `/${lang}/report/?o=${encodeURIComponent(state.token ?? '')}`;
+  // The report arrives by email; next comes the subscription offer, then the final screen.
+  show(state.sub ? 'done' : 'sub');
 }
 function renderUpsell() {
   if (!state.token) { show('offer'); return; }
@@ -400,6 +405,55 @@ $('uAdd').addEventListener('click', async () => {
 });
 $('uNo').addEventListener('click', (e) => { e.preventDefault(); goReport(); });
 
+/* ---------- 11 subscription ---------- */
+function renderSub() {
+  if (!state.token) { show('offer'); return; }
+  $('sAdd').textContent = state.coupon ? fill(D.sub.ctaFree, { code: state.coupon }) : D.sub.cta;
+  $('sPrice').hidden = !!state.coupon;
+}
+$('sAdd').addEventListener('click', async () => {
+  const freq = (document.querySelector<HTMLInputElement>('input[name="freq"]:checked')?.value ?? 'daily') as 'daily' | 'weekly';
+  if (!state.coupon) {
+    // Paid subscriptions arrive with payments; until then the offer only shows the price.
+    $('sErr').textContent = D.offer.soon; $('sErr').hidden = false; return;
+  }
+  const btn = $<HTMLButtonElement>('sAdd');
+  btn.disabled = true; $('sErr').hidden = true;
+  try {
+    await api('/api/subscribe', { order: state.token, freq });
+    state.sub = freq; save();
+    show('done');
+  } catch {
+    $('sErr').textContent = D.ui.error; $('sErr').hidden = false;
+  }
+  btn.disabled = false;
+});
+$('sNo').addEventListener('click', (e) => { e.preventDefault(); show('done'); });
+
+/* ---------- 12 done ---------- */
+function renderDone() {
+  if (!state.token) { show('offer'); return; }
+  $('dDesc').textContent = fill(D.done.desc, { email: state.email ?? '' });
+  $('dSub').hidden = !state.sub;
+  if (state.sub) $('dSub').textContent = state.sub === 'daily' ? D.done.subDaily : D.done.subWeekly;
+  $<HTMLAnchorElement>('dOpen').href = reportUrl();
+}
+
+/* ---------- resume from the summary email ---------- */
+async function resume(token: string): Promise<boolean> {
+  try {
+    const L = await api<{ email: string; name: string; date: string; time: string | null; city: City | null; focus: string[]; status: string }>(
+      `/api/lead/${encodeURIComponent(token)}`);
+    if (!L.city || !L.date) return false;
+    Object.assign(state, { email: L.email, name: L.name, date: L.date, time: L.time, city: L.city, focus: L.focus, status: L.status,
+      token: undefined, sub: undefined });
+    state.chart = await api<Chart>('/api/chart', { date: L.date, time: L.time, cityId: L.city.id });
+    save();
+    history.replaceState(null, '', `${location.pathname}#offer`);
+    return true;
+  } catch { return false; }
+}
+
 /* ---------- restore ---------- */
 function restore() {
   if (state.date) {
@@ -415,8 +469,9 @@ function restore() {
   document.querySelectorAll<HTMLInputElement>('input[name="status"]').forEach((r) => (r.checked = r.value === state.status));
   const hash = location.hash.slice(1) as Step;
   applyCouponUi();
-  const start: Step = STEPS.includes(hash) && hash !== 'calc' && (hash !== 'offer' || state.chart) && (hash !== 'email' || state.chart) && (hash !== 'upsell' || state.token) ? hash : 'date';
+  const start: Step = STEPS.includes(hash) && hash !== 'calc' && (hash !== 'offer' || state.chart) && (hash !== 'email' || state.chart) && (!['upsell', 'sub', 'done'].includes(hash) || state.token) ? hash : 'date';
   history.replaceState({ step: start }, '', `#${start}`);
   show(start, false);
 }
-restore();
+const resumeToken = new URLSearchParams(location.search).get('r');
+if (resumeToken) resume(resumeToken).then(restore); else restore();

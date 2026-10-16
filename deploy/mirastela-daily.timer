@@ -1,0 +1,9 @@
+[Unit]
+Description=Run Mirastela daily jobs every morning
+
+[Timer]
+OnCalendar=*-*-* 05:30 Europe/Zagreb
+Persistent=true
+
+[Install]
+WantedBy=timers.target

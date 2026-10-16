@@ -2,8 +2,8 @@
 import Base from '../../layouts/Base.astro';
 import LangSwitcher from '../../components/LangSwitcher.astro';
 import Logo from '../../components/Logo.astro';
-import { LOCALES, PRICE, UPSELL, formatPrice, type Lang } from '../../i18n/config';
-import { t } from '../../i18n';
+import { LOCALES, PRICE, UPSELL, SUB, formatPrice, type Lang } from '../../i18n/config';
+import { t, fill } from '../../i18n';
 
 export function getStaticPaths() {
   return LOCALES.map((lang) => ({ params: { lang } }));
@@ -17,13 +17,16 @@ const cur = PRICE[lang].currency;
 const upPrices = { partner: formatPrice(lang, { amount: UPSELL[lang].partner, currency: cur }), forecast: formatPrice(lang, { amount: UPSELL[lang].forecast, currency: cur }) };
 const C = d.coupon;
 const U = d.upsell;
+const S = d.sub;
+const Dn = d.done;
+const subPrice = formatPrice(lang, { amount: SUB[lang], currency: cur });
 const thisYear = new Date().getFullYear();
 const years = Array.from({ length: thisYear - 1929 - 12 }, (_, i) => thisYear - 12 - i);
 const focusKeys = ['love', 'career', 'money', 'growth'] as const;
 const statusKeys = ['relationship', 'single', 'complicated'] as const;
 const chevron = '<path d="M15 18l-6-6 6-6"/>';
 // Only this language's strings go to the browser.
-const clientData = JSON.stringify({ lang, price, upPrices, d: { quiz: Q, offer: O, teaser: d.teaser, astro: d.astro, ui: d.ui, coupon: C, upsell: U } });
+const clientData = JSON.stringify({ lang, price, upPrices, subPrice, d: { quiz: Q, offer: O, teaser: d.teaser, astro: d.astro, ui: d.ui, coupon: C, upsell: U, sub: S, done: Dn } });
 ---
 <Base lang={lang} path="start/" title={d.meta.title} description={d.meta.description} noindex>
   <div class="funnel narrow" id="funnel">
@@ -197,6 +200,39 @@ const clientData = JSON.stringify({ lang, price, upPrices, d: { quiz: Q, offer: 
         <a class="skip" id="uNo" href="#">{U.no}</a>
       </div>
     </section>
+
+    <!-- 11 Subscription -->
+    <section class="step" data-step="sub" hidden>
+      <p class="ey">{S.eyebrow}</p>
+      <h1 class="sf q">{S.title}</h1>
+      <p class="mu hint">{S.desc}</p>
+      <ul class="incl">{S.bullets.map((b) => <li><strong>{b}</strong></li>)}</ul>
+      <fieldset class="cards"><legend class="vh">{S.title}</legend>
+        <label class="card"><input type="radio" name="freq" value="daily" checked /><span class="cardtx"><span>{S.daily}</span><small class="mu">{S.dailyDesc}</small></span></label>
+        <label class="card"><input type="radio" name="freq" value="weekly" /><span class="cardtx"><span>{S.weekly}</span><small class="mu">{S.weeklyDesc}</small></span></label>
+      </fieldset>
+      <p class="mu small" id="sPrice">{fill(S.price, { price: subPrice })} · {S.trial}</p>
+      <p class="err" id="sErr" hidden>{d.ui.error}</p>
+      <div class="dock">
+        <button type="button" class="btn" id="sAdd">{S.cta}</button>
+        <a class="skip" id="sNo" href="#">{S.no}</a>
+      </div>
+    </section>
+
+    <!-- 12 Done -->
+    <section class="step done" data-step="done" hidden>
+      <div class="mailic" aria-hidden="true">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg>
+      </div>
+      <p class="ey">{Dn.eyebrow}</p>
+      <h1 class="sf q">{Dn.title}</h1>
+      <p class="hint" id="dDesc"></p>
+      <p class="note" id="dSub" hidden></p>
+      <div class="dock">
+        <a class="btn ghost wide" id="dOpen" href="#">{Dn.open}</a>
+        <a class="skip" href={`/${lang}/`}>{Dn.home}</a>
+      </div>
+    </section>
   </div>
 
   <script type="application/json" id="funnel-data" set:html={clientData} />
@@ -268,6 +304,10 @@ const clientData = JSON.stringify({ lang, price, upPrices, d: { quiz: Q, offer: 
   .btn.ghost { width: auto; background: transparent; color: var(--gold); border: 1px solid var(--gold); padding: 0 18px; }
   .btn.ghost:hover { background: var(--panel-2); color: var(--gold); }
   .pform { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+  .cardtx { display: flex; flex-direction: column; gap: 2px; }
+  .cardtx small { font-weight: 500; font-size: 14px; }
+  .mailic { width: 72px; height: 72px; border-radius: 999px; border: 1px solid var(--gold); color: var(--gold); display: flex; align-items: center; justify-content: center; margin-top: 24px; }
+  .btn.ghost.wide { width: 100%; }
   .skip { display: flex; align-items: center; justify-content: center; min-height: 52px; color: var(--ink); font-weight: 700; text-underline-offset: 4px; }
   @keyframes fi { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 </style>

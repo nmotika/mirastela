@@ -1,4 +1,4 @@
-"""Mirastela API: city search, natal chart calculation, lead capture."""
+"""Mirastela API: city search, natal chart, leads, orders, reports, emails, subscriptions, daily horoscopes."""
 from __future__ import annotations
 
 import os
@@ -27,7 +27,10 @@ _load_env()
 
 import chart
 import cities
+import emails
+import mailer
 import report
+import sky
 
 DB_PATH = os.environ.get("MIRASTELA_DB", os.path.join(os.path.dirname(__file__), "mirastela.db"))
 SOURCE_URL = os.environ.get("MIRASTELA_SOURCE_URL", "")  # AGPL: link to this source code
@@ -61,6 +64,14 @@ def db():
     con.execute("""create table if not exists items(
         id integer primary key, token text, product text, input text, data text,
         status text, markdown text, model text, created text, unique(token, product))""")
+    con.execute("""create table if not exists subs(
+        token text primary key, created text, email text, lang text, name text, chart text,
+        freq text, status text, order_token text, coupon text, last_sent text)""")
+    con.execute("""create table if not exists daily(
+        lang text, day text, data text, model text, created text, primary key(lang, day))""")
+    cols = {r[1] for r in con.execute("pragma table_info(leads)")}
+    if "token" not in cols:
+        con.execute("alter table leads add column token text")
     return con
 
 
@@ -133,16 +144,56 @@ class LeadIn(BaseModel):
 
 
 @app.post("/api/lead")
-def lead(body: LeadIn):
+def lead(body: LeadIn, bg: BackgroundTasks):
     if not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", body.email):
         raise HTTPException(422, "invalid email")
+    token = secrets.token_urlsafe(12)
     with db() as con:
-        con.execute("insert into leads(created,email,lang,name,birth_date,birth_time,city_id,focus,status,marketing_consent)"
-                    " values(?,?,?,?,?,?,?,?,?,?)",
+        con.execute("insert into leads(created,email,lang,name,birth_date,birth_time,city_id,focus,status,marketing_consent,token)"
+                    " values(?,?,?,?,?,?,?,?,?,?,?)",
                     (datetime.now(timezone.utc).isoformat(), body.email.lower(), body.lang, body.name[:80],
                      body.date, body.time, body.cityId, ",".join(body.focus), body.status,
-                     int(body.marketingConsent)))
-    return {"ok": True}
+                     int(body.marketingConsent), token))
+    if body.date and body.cityId:
+        bg.add_task(_send_summary, token)
+    return {"ok": True, "token": token}
+
+
+def _lang(x: str) -> str:
+    return x if x in report.LANG_NAME else "en"
+
+
+def _send_summary(token: str):
+    """Short free summary of the chart, written by the fast model, with a link back to the offer."""
+    with db() as con:
+        email, lang, name, d, t, city_id, focus = con.execute(
+            "select email, lang, name, birth_date, birth_time, city_id, focus from leads where token=?", (token,)).fetchone()
+    lang = _lang(lang)
+    natal = birth_chart(d, t, city_id)
+    focus_l = [f for f in (focus or "").split(",") if f]
+    sun, moon = natal["planets"][0], natal["planets"][1]
+    fallback = f"TEST MODE: sun {sun['sign']} {sun['deg']}°, moon {moon['sign']} {moon['deg']}°."
+    try:
+        text, _ = report.generate(report.prompt_summary(lang, name, natal, focus_l), fast=True, max_tokens=1200, fallback=fallback)
+    except Exception:
+        text = ""
+    subject, html = emails.summary(lang, name, natal, text, f"{emails.SITE}/{lang}/start/?r={token}")
+    mailer.send(DB_PATH, email, "summary", subject, html)
+
+
+@app.get("/api/lead/{token}")
+def get_lead(token: str):
+    """Restores the funnel from the link in the summary email."""
+    with db() as con:
+        row = con.execute("select email, lang, name, birth_date, birth_time, city_id, focus, status from leads where token=?",
+                          (token,)).fetchone()
+    if not row:
+        raise HTTPException(404, "not found")
+    email, lang, name, d, t, city_id, focus, status = row
+    city = cities.get(city_id) if city_id else None
+    return {"email": email, "lang": lang, "name": name, "date": d, "time": t, "status": status,
+            "focus": [f for f in (focus or "").split(",") if f],
+            "city": {k: city[k] for k in ("id", "name", "country", "countryName", "tz")} if city else None}
 
 
 # ---------------------------------------------------------------- orders
@@ -203,6 +254,12 @@ def _build(token: str, product: str):
     with db() as con:
         con.execute("update items set data=?, markdown=?, model=?, status=? where token=? and product=?",
                     (json.dumps(data), md, model, status, token, product))
+        email = con.execute("select email from orders where token=?", (token,)).fetchone()[0]
+    if status == "ready":
+        lang = _lang(lang)
+        subject, html = emails.report_ready(lang, name, product, forecast_year(),
+                                            f"{emails.SITE}/{lang}/report/?o={token}&t={product}")
+        mailer.send(DB_PATH, email, f"report-{product}", subject, html)
 
 
 def _add_item(token: str, product: str, item_input: dict | None, bg: BackgroundTasks):
@@ -268,3 +325,85 @@ def get_order(token: str):
         "items": [{"product": p, "status": s, "markdown": md or "", "data": json.loads(d) if d else None, "model": m}
                   for p, s, md, d, m in items],
     }
+
+
+# ---------------------------------------------------------------- subscriptions
+class SubIn(BaseModel):
+    order: str
+    freq: str = Field("daily", pattern="^(daily|weekly)$")
+
+
+@app.post("/api/subscribe")
+def subscribe(body: SubIn):
+    with db() as con:
+        row = con.execute("select lang, email, name, chart, coupon from orders where token=?", (body.order,)).fetchone()
+        if not row:
+            raise HTTPException(404, "order not found")
+        lang, email, name, natal, coupon = row
+        if not _coupon_ok(coupon or ""):
+            raise HTTPException(402, "payment required")  # Stripe subscriptions come later
+        existing = con.execute("select token from subs where order_token=?", (body.order,)).fetchone()
+        token = existing[0] if existing else secrets.token_urlsafe(16)
+        con.execute("insert into subs(token, created, email, lang, name, chart, freq, status, order_token, coupon, last_sent)"
+                    " values(?,?,?,?,?,?,?,?,?,?,?) on conflict(token) do update set freq=excluded.freq, status='active'",
+                    (token, datetime.now(timezone.utc).isoformat(), email, _lang(lang), name, natal, body.freq,
+                     "active", body.order, coupon, None))
+    unsub = f"{emails.SITE}/api/unsub/{token}"
+    subject, html = emails.sub_welcome(_lang(lang), name, body.freq, unsub)
+    mailer.send(DB_PATH, email, "sub-welcome", subject, html, unsubscribe_url=unsub)
+    return {"ok": True}
+
+
+@app.api_route("/api/unsub/{token}", methods=["GET", "POST"])
+def unsubscribe(token: str, request: Request):
+    from fastapi.responses import HTMLResponse
+    with db() as con:
+        row = con.execute("select lang from subs where token=?", (token,)).fetchone()
+        if request.method == "POST":
+            con.execute("update subs set status='cancelled' where token=?", (token,))
+    return HTMLResponse(emails.unsub_page(_lang(row[0]) if row else "en", request.method == "POST"))
+
+
+# ---------------------------------------------------------------- free daily horoscope
+import threading
+
+_daily_locks: dict[str, threading.Lock] = {}
+
+
+def daily_for(lang: str, day: date) -> dict:
+    """Twelve sign horoscopes for one language and day, generated once and cached."""
+    key = day.isoformat()
+    with db() as con:
+        row = con.execute("select data, model from daily where lang=? and day=?", (lang, key)).fetchone()
+    if row:
+        return {"day": key, "model": row[1], **json.loads(row[0])}
+    lock = _daily_locks.setdefault(lang, threading.Lock())
+    with lock:
+        with db() as con:
+            row = con.execute("select data, model from daily where lang=? and day=?", (lang, key)).fetchone()
+        if row:
+            return {"day": key, "model": row[1], **json.loads(row[0])}
+        facts = sky.day_sky(day)
+        fallback = json.dumps([{"general": f"TEST MODE ({chart.SIGNS[i]}). " + ", ".join(
+            f"{p['id']} {p['sign']}" for p in facts["planets"][:5]), "love": "TEST MODE", "work": "TEST MODE"} for i in range(12)])
+        text, model = report.generate(report.prompt_daily_signs(lang, key, sky.sky_text(facts)), fast=True,
+                                      max_tokens=8000, fallback=fallback)
+        signs = report.parse_json(text)
+        if not isinstance(signs, list) or len(signs) != 12:
+            raise HTTPException(503, "generation failed")
+        data = {"signs": signs, "sky": {"planets": [{k: p[k] for k in ("id", "signIndex", "deg", "retro")} for p in facts["planets"]],
+                                        "moonIngress": facts["moonIngress"]}}
+        if model != "test":
+            with db() as con:
+                con.execute("insert or replace into daily values(?,?,?,?,?)",
+                            (lang, key, json.dumps(data, ensure_ascii=False), model, datetime.now(timezone.utc).isoformat()))
+        return {"day": key, "model": model, **data}
+
+
+@app.get("/api/daily")
+def daily(lang: str = "en", day: date | None = None):
+    lang = _lang(lang)
+    d = day or sky.today()
+    if abs((d - sky.today()).days) > 1:
+        raise HTTPException(422, "only yesterday, today or tomorrow")
+    return daily_for(lang, d)

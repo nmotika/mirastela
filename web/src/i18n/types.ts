@@ -19,9 +19,25 @@ export interface Extra {
   };
 }
 
-export type BaseDict = Omit<Dict, keyof Extra>;
+export interface More {
+  sub: {
+    eyebrow: string; title: string; desc: string; bullets: string[];
+    daily: string; dailyDesc: string; weekly: string; weeklyDesc: string;
+    price: string; trial: string; cta: string; ctaFree: string; no: string;
+  };
+  done: { eyebrow: string; title: string; desc: string; subDaily: string; subWeekly: string; open: string; home: string };
+  horo: {
+    nav: string; slug: string; signSlugs: string[];
+    indexTitle: string; indexDesc: string; h1: string; sub: string;
+    signTitle: string; signDesc: string; signH1: string; general: string; love: string; work: string;
+    sky: string; moonChange: string; retro: string; loading: string; error: string; read: string; others: string;
+    ctaTitle: string; ctaText: string; ctaBtn: string;
+  };
+}
 
-export interface Dict extends Extra {
+export type BaseDict = Omit<Dict, keyof Extra | keyof More>;
+
+export interface Dict extends Extra, More {
   meta: { title: string; description: string };
   ui: { changeLang: string; home: string; back: string; next: string; stepOf: string; error: string };
   landing: {
