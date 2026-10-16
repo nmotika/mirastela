@@ -18,6 +18,7 @@ write_files:
       MIRASTELA_PROXY_SECRET=FILL_ME_LONG_RANDOM_SECRET
       MIRASTELA_DB=/var/lib/mirastela/mirastela.db
       MIRASTELA_SOURCE_URL=https://github.com/nmotika/mirastela
+      MIRASTELA_ADMIN_EMAIL=FILL_ME_YOUR_EMAIL
   - path: /etc/cron.daily/mirastela-backup
     permissions: '0755'
     content: |

@@ -67,6 +67,8 @@ def db():
     con.execute("""create table if not exists subs(
         token text primary key, created text, email text, lang text, name text, chart text,
         freq text, status text, order_token text, coupon text, last_sent text)""")
+    con.execute("""create table if not exists feedback(
+        id integer primary key, created text, email text, answers text, ua text)""")
     con.execute("""create table if not exists daily(
         lang text, day text, data text, model text, created text, primary key(lang, day))""")
     cols = {r[1] for r in con.execute("pragma table_info(leads)")}
@@ -429,6 +431,29 @@ def daily_for(lang: str, day: date) -> dict:
                 con.execute("insert or replace into daily values(?,?,?,?,?)",
                             (lang, key, json.dumps(data, ensure_ascii=False), model, datetime.now(timezone.utc).isoformat()))
         return {"day": key, "model": model, **data}
+
+
+class FeedbackIn(BaseModel):
+    email: str = Field("", max_length=200)
+    answers: dict[str, str | int | None]
+
+
+@app.post("/api/feedback")
+def feedback(body: FeedbackIn, request: Request, tasks: BackgroundTasks):
+    """Tester questionnaire. The email comes from Cloudflare Access when present."""
+    answers = {k[:40]: (v[:3000] if isinstance(v, str) else v) for k, v in list(body.answers.items())[:40]}
+    email = (request.headers.get("cf-access-authenticated-user-email") or body.email or "").strip().lower()[:200]
+    ua = request.headers.get("user-agent", "")[:300]
+    with db() as con:
+        con.execute("insert into feedback(created, email, answers, ua) values(?,?,?,?)",
+                    (datetime.now(timezone.utc).isoformat(), email, json.dumps(answers, ensure_ascii=False), ua))
+    admin = os.environ.get("MIRASTELA_ADMIN_EMAIL", "").strip()
+    if admin:
+        rows = "".join(f"<p style='margin:0 0 10px;font:15px/1.5 Arial,sans-serif;color:#F3EEE3'><b>{emails.esc(k)}</b><br>"
+                       f"{emails.esc(str(v if v is not None else ''))}</p>" for k, v in answers.items())
+        html = emails.layout("hr", f"<p style='font:15px Arial,sans-serif;color:#A9B0C6'>{emails.esc(email or 'bez emaila')} · {emails.esc(ua)}</p>{rows}")
+        tasks.add_task(mailer.send, DB_PATH, admin, "feedback", f"Upitnik: {email or 'anonimno'}", html)
+    return {"ok": True}
 
 
 @app.get("/api/daily")
