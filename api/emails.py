@@ -139,7 +139,7 @@ def md_to_html(md: str) -> str:
         s = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", s)
         return re.sub(r"(?<!\*)\*([^*\s][^*]*?)\*", r"<em>\1</em>", s)
     out, para, items = [], [], []
-    P = 'style="margin:0 0 14px;font:17px/1.6 Georgia,serif;color:#1A1A24"'
+    P = 'style="margin:0 0 14px;font:17px/1.6 Georgia,serif;color:#F3EEE3"'
 
     def flush():
         nonlocal para, items
@@ -148,7 +148,7 @@ def md_to_html(md: str) -> str:
             para = []
         if items:
             out.append('<ul style="margin:0 0 14px;padding-left:20px">' + "".join(
-                f'<li style="font:17px/1.6 Georgia,serif;color:#1A1A24">{inline(i)}</li>' for i in items) + "</ul>")
+                f'<li style="font:17px/1.6 Georgia,serif;color:#F3EEE3">{inline(i)}</li>' for i in items) + "</ul>")
             items = []
     for raw in md.splitlines():
         line = raw.strip()
@@ -158,7 +158,7 @@ def md_to_html(md: str) -> str:
         m = re.match(r"^#{1,4}\s+(.*)$", line)
         if m:
             flush()
-            out.append(f'<h2 style="margin:6px 0 12px;font:400 24px/1.25 Georgia,serif;color:#1A1A24">{inline(m.group(1))}</h2>')
+            out.append(f'<h2 style="margin:6px 0 12px;font:400 24px/1.25 Georgia,serif;color:#F3EEE3">{inline(m.group(1))}</h2>')
             continue
         m = re.match(r"^[-*]\s+(.*)$", line)
         if m:
@@ -174,24 +174,24 @@ def md_to_html(md: str) -> str:
 
 
 def _p(text: str) -> str:
-    return f'<p style="margin:0 0 14px;font:17px/1.6 Georgia,serif;color:#1A1A24">{esc(text)}</p>'
+    return f'<p style="margin:0 0 14px;font:17px/1.6 Georgia,serif;color:#F3EEE3">{esc(text)}</p>'
 
 
 def _button(label: str, url: str) -> str:
     return (f'<p style="margin:22px 0"><a href="{esc(url)}" style="display:inline-block;padding:14px 26px;border-radius:999px;'
-            f'background:#1A1A24;color:#F6F1E7;font:700 16px Arial,sans-serif;text-decoration:none">{esc(label)}</a></p>')
+            f'background:#D9B26A;color:#0B1020;font:700 16px Arial,sans-serif;text-decoration:none">{esc(label)}</a></p>')
 
 
 def layout(lang: str, body: str, unsubscribe_url: str | None = None) -> str:
     t = T[lang]
-    unsub = (f'<br><a href="{esc(unsubscribe_url)}" style="color:#6b6458">{esc(t["unsub"])}</a>' if unsubscribe_url else "")
-    return f"""<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#EFE8DA">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#EFE8DA"><tr><td align="center" style="padding:24px 12px">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#F6F1E7;border-radius:18px">
-<tr><td style="padding:26px 28px 6px;font:400 24px Georgia,serif;color:#1A1A24"><span style="color:#B08A3E">&#10022;</span> Mirastela</td></tr>
+    unsub = (f'<br><a href="{esc(unsubscribe_url)}" style="color:#A9B0C6">{esc(t["unsub"])}</a>' if unsubscribe_url else "")
+    return f"""<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark"></head>
+<body style="margin:0;padding:0;background:#0B1020">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0B1020"><tr><td align="center" style="padding:24px 12px">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#121A33;border:1px solid #1E2744;border-radius:18px">
+<tr><td style="padding:26px 28px 6px;font:400 24px Georgia,serif;color:#F3EEE3"><span style="color:#D9B26A">&#10022;</span> Mirastela</td></tr>
 <tr><td style="padding:12px 28px 18px">{body}</td></tr>
-<tr><td style="padding:16px 28px 26px;border-top:1px solid #e2d9c6;font:13px/1.5 Arial,sans-serif;color:#6b6458">
+<tr><td style="padding:16px 28px 26px;border-top:1px solid #1E2744;font:13px/1.5 Arial,sans-serif;color:#A9B0C6">
 Mirastela · {esc(t['disclaimer'])}<br>{esc(t['why'])}{unsub}</td></tr>
 </table></td></tr></table></body></html>"""
 
@@ -208,8 +208,8 @@ def summary(lang: str, name: str, chart: dict, text: str, resume_url: str) -> tu
     rows = [(t["big3"][0], sign_name(lang, sun["signIndex"])), (t["big3"][1], sign_name(lang, moon["signIndex"]))]
     if chart.get("angles"):
         rows.append((t["big3"][2], sign_name(lang, chart["angles"]["asc"]["signIndex"])))
-    big3 = "".join(f'<td style="padding:10px 12px;background:#EFE8DA;border-radius:12px;font:13px Arial,sans-serif;color:#6b6458">'
-                   f'{esc(k)}<br><strong style="font:400 19px Georgia,serif;color:#1A1A24">{esc(v)}</strong></td><td width="8"></td>'
+    big3 = "".join(f'<td style="padding:10px 12px;background:#1A2343;border-radius:12px;font:13px Arial,sans-serif;color:#A9B0C6">'
+                   f'{esc(k)}<br><strong style="font:400 19px Georgia,serif;color:#F3EEE3">{esc(v)}</strong></td><td width="8"></td>'
                    for k, v in rows)
     body = (_p(greeting(lang, name)) + _p(t["sumIntro"])
             + f'<table role="presentation" cellpadding="0" cellspacing="0" style="margin:6px 0 18px"><tr>{big3}</tr></table>'
@@ -245,5 +245,5 @@ def unsub_page(lang: str, done: bool) -> str:
         return layout(lang, _p(t["unsubDone"]))
     # GET only shows a button: mail scanners that open links must not unsubscribe anyone.
     form = ('<form method="post"><button type="submit" style="padding:14px 26px;border:0;border-radius:999px;'
-            f'background:#1A1A24;color:#F6F1E7;font:700 16px Arial,sans-serif;cursor:pointer">{esc(t["unsub"])}</button></form>')
+            f'background:#D9B26A;color:#0B1020;font:700 16px Arial,sans-serif;cursor:pointer">{esc(t["unsub"])}</button></form>')
     return layout(lang, form)

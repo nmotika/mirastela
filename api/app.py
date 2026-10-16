@@ -173,10 +173,14 @@ def _send_summary(token: str):
     focus_l = [f for f in (focus or "").split(",") if f]
     sun, moon = natal["planets"][0], natal["planets"][1]
     fallback = f"TEST MODE: sun {sun['sign']} {sun['deg']}°, moon {moon['sign']} {moon['deg']}°."
-    try:
-        text, _ = report.generate(report.prompt_summary(lang, name, natal, focus_l), fast=True, max_tokens=1200, fallback=fallback)
-    except Exception:
-        text = ""
+    text = ""
+    for attempt in range(2):
+        try:
+            text, _ = report.generate(report.prompt_summary(lang, name, natal, focus_l), fast=True, max_tokens=1200, fallback=fallback)
+            if text.strip():
+                break
+        except Exception as e:
+            print("summary", token[:6], "error", attempt, repr(e)[:300], flush=True)
     subject, html = emails.summary(lang, name, natal, text, f"{emails.SITE}/{lang}/start/?r={token}")
     mailer.send(DB_PATH, email, "summary", subject, html)
 
