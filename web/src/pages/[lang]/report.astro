@@ -10,7 +10,7 @@ export function getStaticPaths() {
 const lang = Astro.params.lang as Lang;
 const d = t(lang);
 const R = d.report;
-const clientData = JSON.stringify({ lang, d: { report: R, rep2: d.rep2, astro: d.astro, ui: d.ui, footer: d.footer } });
+const clientData = JSON.stringify({ lang, d: { report: R, rep2: d.rep2, astro: d.astro, ui: d.ui, footer: d.footer, shop: d.shop } });
 const dl = '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>';
 ---
 <Base lang={lang} path="report/" title={`${R.title} · Mirastela`} description={R.title} noindex>
@@ -28,6 +28,7 @@ const dl = '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>';
       <div class="rwheel deskw" id="rWheelD"></div>
     </section>
     <p class="wrap mu" id="rMsg" role="status"></p>
+    <div class="addp wrap noprint" id="rAddPartner" hidden><p>{d.shop.addPartnerText}</p><a class="btn2" id="rAddPartnerLink" href="#">{d.shop.addPartner}</a></div>
     <div class="ptabs wrap noprint" role="tablist" id="rTabs" hidden></div>
     <div class="rpaper" id="rPanels"></div>
   </main>
@@ -43,6 +44,8 @@ const dl = '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>';
   .rhero h1 { font-size: 44px; line-height: 1; }
   .rwheel { display: flex; justify-content: center; }
   .deskw { display: none; }
+  .addp { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 16px; padding-block: 16px; border: 1px solid var(--gold); border-radius: 16px; }
+  .addp p { flex: 1 1 260px; margin: 0; }
   .big3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; width: 100%; }
   .big3 div { padding: 10px; border-radius: 12px; border: 1px solid var(--border); text-align: left; }
   .big3 .l { font-size: 12px; color: var(--muted); }

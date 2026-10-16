@@ -226,6 +226,7 @@ class OrderIn(BaseModel):
     focus: list[str] = []
     status: str = ""
     coupon: str = ""
+    bundle: bool = False
 
 
 class AddIn(BaseModel):
@@ -249,6 +250,12 @@ def _build(token: str, product: str):
             bal = chart.balance(natal)
             data = {"balance": bal}
             prompt = report.prompt_natal(lang, name, natal, inp.get("focus", []), bal)
+        elif product == "child":
+            p = json.loads(item_input)
+            cc = birth_chart(p["date"], p.get("time"), p["cityId"])
+            bal = chart.balance(cc)
+            data = {"child": p, "childChart": cc, "balance": bal}
+            prompt = report.prompt_child(lang, name, p.get("name", ""), cc, bal)
         elif product == "partner":
             p = json.loads(item_input)
             pc = birth_chart(p["date"], p.get("time"), p["cityId"])
@@ -295,6 +302,8 @@ def create_order(body: OrderIn, bg: BackgroundTasks):
                     (token, datetime.now(timezone.utc).isoformat(), body.lang, body.email.lower(), body.name,
                      body.model_dump_json(exclude={"coupon"}), json.dumps(natal), body.coupon.strip().upper()))
     _add_item(token, "natal", None, bg)
+    if body.bundle:  # natal + yearly forecast now; the partner report once their details are given
+        _add_item(token, "forecast", None, bg)
     return {"token": token}
 
 
@@ -305,7 +314,7 @@ def check_coupon(body: dict):
 
 @app.post("/api/order/{token}/add")
 def add_product(token: str, body: AddIn, bg: BackgroundTasks):
-    if body.product not in ("partner", "forecast"):
+    if body.product not in ("partner", "forecast", "child"):
         raise HTTPException(422, "unknown product")
     with db() as con:
         row = con.execute("select coupon from orders where token=?", (token,)).fetchone()
@@ -313,10 +322,10 @@ def add_product(token: str, body: AddIn, bg: BackgroundTasks):
         raise HTTPException(404, "order not found")
     if not _coupon_ok(row[0] or ""):
         raise HTTPException(402, "payment required")
-    if body.product == "partner":
+    if body.product in ("partner", "child"):
         if not body.partner:
-            raise HTTPException(422, "partner data required")
-        _add_item(token, "partner", body.partner.model_dump(mode="json"), bg)
+            raise HTTPException(422, "birth data required")
+        _add_item(token, body.product, body.partner.model_dump(mode="json"), bg)
     else:
         _add_item(token, "forecast", None, bg)
     return {"ok": True}

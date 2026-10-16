@@ -3,11 +3,11 @@ import { CUSP } from './cusp';
 import { fill, huArticle } from '../i18n/fill';
 import { SIGN_GLYPHS } from './zodiac';
 
-type Step = 'date' | 'time' | 'place' | 'name' | 'focus' | 'status' | 'calc' | 'email' | 'offer' | 'upsell' | 'pdata' | 'sub' | 'done';
-const STEPS: Step[] = ['date', 'time', 'place', 'name', 'focus', 'status', 'calc', 'email', 'offer', 'upsell', 'pdata', 'sub', 'done'];
+type Step = 'date' | 'time' | 'place' | 'name' | 'focus' | 'status' | 'calc' | 'email' | 'offer' | 'upsell' | 'pdata' | 'kid' | 'sub' | 'done';
+const STEPS: Step[] = ['date', 'time', 'place', 'name', 'focus', 'status', 'calc', 'email', 'offer', 'upsell', 'pdata', 'kid', 'sub', 'done'];
 const QUIZ_STEPS = 6;
-const BARE: Step[] = ['upsell', 'pdata', 'sub'];
-const NEEDS_TOKEN: Step[] = ['upsell', 'pdata', 'sub', 'done'];
+const BARE: Step[] = ['upsell', 'pdata', 'kid', 'sub'];
+const NEEDS_TOKEN: Step[] = ['upsell', 'pdata', 'kid', 'sub', 'done'];
 
 interface City { id: number; name: string; country: string; countryName: string; tz: string }
 interface Planet { id: string; lon: number; sign: string; signIndex: number; deg: number; min: number; house?: number; retro: boolean; cusp?: number | null }
@@ -21,7 +21,7 @@ interface Chart {
 interface State {
   date?: string; time?: string | null; city?: City; name?: string;
   focus: string[]; status?: string; email?: string; chart?: Chart; coupon?: string; token?: string;
-  sub?: string;
+  sub?: string; plan?: 'natal' | 'bundle'; pMode?: 'partner' | 'child';
 }
 
 const data = JSON.parse(document.getElementById('funnel-data')!.textContent!);
@@ -89,7 +89,7 @@ function show(step: Step, push = true) {
   if (push) h?.focus({ preventScroll: true });
   const hooks: Partial<Record<Step, () => void>> = {
     date: () => syncDate(), time: () => syncTime(), name: renderName, focus: renderFocus,
-    calc: runCalc, email: renderEmail, offer: renderOffer, upsell: renderUpsell, pdata: checkPartner,
+    calc: runCalc, email: renderEmail, offer: renderOffer, upsell: renderUpsell, pdata: renderPdata, kid: renderKid,
     sub: renderSub, done: renderDone,
   };
   hooks[step]?.();
@@ -461,7 +461,15 @@ function renderOffer() {
   });
   applyCouponUi();
 }
+const planRadios = [...document.querySelectorAll<HTMLInputElement>('input[name="oplan"]')];
+const offerPrice = () => (state.plan === 'bundle' ? data.upPrices.bundle : data.price);
+function syncPlan() {
+  planRadios.forEach((r) => (r.checked = r.value === (state.plan ?? 'natal')));
+  if (!state.coupon) $('oBuy').textContent = D.offer.cta.replace('{price}', offerPrice());
+}
+planRadios.forEach((r) => r.addEventListener('change', () => { state.plan = r.value as 'natal' | 'bundle'; save(); syncPlan(); }));
 function applyCouponUi() {
+  syncPlan();
   if (!state.coupon) return;
   $('cOk').textContent = fill(D.coupon.applied, { code: state.coupon });
   $('cOk').hidden = false;
@@ -493,10 +501,11 @@ $('oBuy').addEventListener('click', async () => {
       const res = await api<{ token: string }>('/api/order', {
         lang, email: state.email, name: state.name ?? '', date: state.date, time: state.time ?? null,
         cityId: state.city!.id, focus: state.focus, status: state.status ?? '', coupon: state.coupon,
+        bundle: state.plan === 'bundle',
       });
       state.token = res.token; save();
     }
-    show('upsell');
+    if (state.plan === 'bundle') { state.pMode = 'partner'; save(); show('pdata'); } else show('upsell');
   } catch {
     $('oErr').hidden = false;
   }
@@ -532,16 +541,16 @@ function renderUpsell() {
   $('uAdd').textContent = state.coupon ? fill(D.upsell.addFree, { code: state.coupon }) : fill(D.upsell2.addFor, { price });
 }
 $('uAdd').addEventListener('click', async () => {
-  if (upsellProduct() === 'partner') { show('pdata'); return; }
+  if (upsellProduct() === 'partner') { state.pMode = 'partner'; save(); show('pdata'); return; }
   const btn = $<HTMLButtonElement>('uAdd');
   btn.disabled = true; $('uErr').hidden = true;
   try {
     await api(`/api/order/${encodeURIComponent(state.token!)}/add`, { product: 'forecast' });
-    show('sub');
+    show('kid');
   } catch { $('uErr').hidden = false; }
   btn.disabled = false;
 });
-$('uNo').addEventListener('click', () => show('sub'));
+$('uNo').addEventListener('click', () => show('kid'));
 
 /* ---------- 10b partner details ---------- */
 const upName = $<HTMLInputElement>('upName'), upTimeUnknown = $<HTMLInputElement>('upTimeUnknown');
@@ -559,11 +568,33 @@ function partnerDate(): string | null {
   const iso = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
   return iso <= new Date().toISOString().slice(0, 10) ? iso : null;
 }
+let pdataMode: 'partner' | 'child' | null = null;
+function renderPdata() {
+  if (!state.token) { show('offer'); return; }
+  const mode = state.pMode ?? 'partner', U = D.upsell, U2 = D.upsell2, SH = D.shop;
+  if (mode !== pdataMode) {
+    // A different person: start the form from scratch.
+    pdataMode = mode; pdataReady = false;
+    upName.value = ''; upPlace.value = ''; partnerCity = undefined; upTimeUnknown.checked = false;
+    $('upList').replaceChildren(); $('upList').hidden = true;
+  }
+  const kid = mode === 'child';
+  $('pdEy').textContent = kid ? SH.kidEyebrow : U2.partnerEyebrow;
+  $('pdTitle').textContent = kid ? SH.kidFormTitle : U2.pformTitle;
+  $('pdSub').textContent = kid ? SH.kidFormSub : U2.pformSub;
+  $('pdNameLbl').textContent = kid ? SH.kidName : U.pName;
+  $('pdGo').textContent = kid ? SH.kidCta : U2.pformCta;
+  const bundled = !kid && state.plan === 'bundle';
+  $('pdBundle').hidden = !bundled;
+  $('pdLater').hidden = !bundled;
+  checkPartner();
+}
+$('pdLater').addEventListener('click', () => show('kid'));
 function checkPartner() {
   if (!pdataReady) {
     // Wheels can only be positioned once the step is visible.
     pdataReady = true;
-    pwYear.set(1990); pwMonth.set(1); pwDay.set(1); pwHour.set(12); pwMin.set(0);
+    pwYear.set(pdataMode === 'child' ? 2015 : 1990); pwMonth.set(1); pwDay.set(1); pwHour.set(12); pwMin.set(0);
     [pwYear, pwMonth, pwDay, pwHour, pwMin].forEach((w) => w.layout());
   }
   $('ptWheels').classList.toggle('off', upTimeUnknown.checked);
@@ -578,13 +609,24 @@ $('pdGo').addEventListener('click', async () => {
   btn.disabled = true; $('pdErr').hidden = true;
   const time = upTimeUnknown.checked ? null : `${String(pwHour.value()).padStart(2, '0')}:${String(pwMin.value()).padStart(2, '0')}`;
   try {
+    const product = pdataMode === 'child' ? 'child' : 'partner';
     await api(`/api/order/${encodeURIComponent(state.token!)}/add`, {
-      product: 'partner',
+      product,
       partner: { name: upName.value.trim(), date: partnerDate(), time, cityId: partnerCity!.id },
     });
-    show('sub');
+    btn.disabled = false;
+    show(fromReport ? 'done' : product === 'child' ? 'sub' : 'kid');
   } catch { $('pdErr').hidden = false; btn.disabled = false; }
 });
+
+/* ---------- 10c child chart offer ---------- */
+function renderKid() {
+  if (!state.token) { show('offer'); return; }
+  $('kPriceRow').hidden = !!state.coupon;
+  $('kAdd').textContent = state.coupon ? fill(D.upsell.addFree, { code: state.coupon }) : fill(D.upsell2.addFor, { price: data.upPrices.child });
+}
+$('kAdd').addEventListener('click', () => { state.pMode = 'child'; save(); show('pdata'); });
+$('kNo').addEventListener('click', () => show('sub'));
 
 /* ---------- 11 subscription ---------- */
 const planInputs = [...document.querySelectorAll<HTMLInputElement>('input[name="plan"]')];
@@ -670,5 +712,15 @@ function restore() {
   history.replaceState({ step: start }, '', `#${start}`);
   show(start, false);
 }
-const resumeToken = new URLSearchParams(location.search).get('r');
-if (resumeToken) resume(resumeToken).then(restore); else restore();
+const params = new URLSearchParams(location.search);
+const resumeToken = params.get('r');
+const orderToken = params.get('o');
+let fromReport = false;
+if (orderToken) {
+  fromReport = true;
+  // From the report page: add the partner that came with a bundle.
+  Object.assign(state, { token: orderToken, plan: 'bundle', pMode: 'partner' });
+  save();
+  history.replaceState({ step: 'pdata' }, '', `${location.pathname}#pdata`);
+  show('pdata', false);
+} else if (resumeToken) resume(resumeToken).then(restore); else restore();

@@ -126,6 +126,32 @@ Inter-chart aspects (A planet → B planet), most important first:
 """
 
 
+def prompt_child(lang: str, parent_name: str, child_name: str, child: dict, balance: dict) -> str:
+    kid = child_name or "the child"
+    return f"""{_header(lang, parent_name)}
+Task: a natal chart report about the reader's child, {kid}, written for the parent, about 1,800 to 2,400 words.
+Address the parent in the second person singular and refer to the child by first name in the third person.
+Warm and practical: how this child tends to feel, learn and relate, and how a parent can support them. Never label, diagnose or predict; describe tendencies a parent may recognise. Nothing about health, development disorders or the child's future career success.
+
+Sections, in this order (translate headings into {LANG_NAME[lang]}):
+1. Who {kid} is: the overall picture in 2 to 3 paragraphs.
+2. Temperament and emotional needs (Sun, Moon{', Ascendant' if child['timeKnown'] else ''}).
+3. How {kid} thinks and learns (Mercury, element balance).
+4. Friendships, play and relating to others (Venus, Mars, Moon).
+5. Strengths to nurture.
+6. Where {kid} may need extra patience or support, and how to give it.
+7. Five practical suggestions for the parent.
+
+Element balance: {balance}
+
+Child's chart facts (tropical zodiac, Placidus houses):
+{_fmt_planets(child)}
+
+Aspects (tightest first):
+{_fmt_aspects(child.get("aspects", []), 16)}
+"""
+
+
 def prompt_forecast(lang: str, name: str, natal: dict, tr: dict) -> str:
     ev = "\n".join(
         f"- transiting {e['transit']} {e['type']} natal {e['natal']}: {e['from']} to {e['to']}, exact around {e['exact']}"

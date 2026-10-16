@@ -10,10 +10,11 @@ import en from './lang/en';
 
 import { EXTRA } from './lang/extra';
 import { MORE } from './lang/more';
+import { SHOP } from './lang/shop';
 
 const BASE = { pl, hr, sl, ro, cs, hu, en };
 export const DICTS = Object.fromEntries(
-  Object.entries(BASE).map(([l, d]) => [l, { ...d, ...EXTRA[l as Lang], ...MORE[l as Lang] }]),
+  Object.entries(BASE).map(([l, d]) => [l, { ...d, ...EXTRA[l as Lang], ...MORE[l as Lang], shop: SHOP[l as Lang] }]),
 ) as Record<Lang, Dict>;
 
 export function t(lang: Lang): Dict {

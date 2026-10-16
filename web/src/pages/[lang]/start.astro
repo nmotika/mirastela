@@ -14,7 +14,10 @@ const Q = d.quiz, Q2 = d.quiz2, O = d.offer, C = d.coupon, U = d.upsell, U2 = d.
 const price = formatPrice(lang);
 const cur = PRICE[lang].currency;
 const fp = (amount: number) => formatPrice(lang, { amount, currency: cur });
-const upPrices = { partner: fp(UPSELL[lang].partner), forecast: fp(UPSELL[lang].forecast) };
+const UP = UPSELL[lang], SH = d.shop;
+const upPrices = { partner: fp(UP.partner), forecast: fp(UP.forecast), bundle: fp(UP.bundle), child: fp(UP.child),
+  bundleWas: fp(Math.round((PRICE[lang].amount + UP.partner + UP.forecast) * 100) / 100) };
+const fYear = (() => { const n = new Date(); return n.getMonth() >= 9 ? n.getFullYear() + 1 : n.getFullYear(); })();
 const subPrices = { month: fp(SUB[lang].month), year: fp(SUB[lang].year), yearPerMonth: fp(Math.round((SUB[lang].year / 12) * 100) / 100) };
 const thisYear = new Date().getFullYear();
 const years = Array.from({ length: thisYear - 1929 - 12 }, (_, i) => thisYear - 12 - i);
@@ -42,7 +45,7 @@ const terms = (s: string) => fill(s, {
 // Only this language's strings go to the browser.
 const clientData = JSON.stringify({
   lang, price, upPrices, subPrices,
-  d: { quiz: Q, quiz2: Q2, offer: O, teaser: d.teaser, astro: d.astro, ui: d.ui, coupon: C, upsell: U, upsell2: U2, sub: S, done: Dn },
+  d: { quiz: Q, quiz2: Q2, offer: O, teaser: d.teaser, astro: d.astro, ui: d.ui, coupon: C, upsell: U, upsell2: U2, sub: S, done: Dn, shop: SH },
 });
 ---
 <Base lang={lang} path="start/" title={d.meta.title} description={d.meta.description} noindex>
@@ -222,8 +225,16 @@ const clientData = JSON.stringify({
         </div>
         <aside class="ocard" aria-label={O.cardTitle}>
           <p class="desk dtitle">{O.cardTitle}</p>
-          <p class="sf price desk">{price}</p>
-          <p class="mu small desk">{O.priceNote}</p>
+          <fieldset class="plans oplans">
+            <legend class="vh">{O.cardTitle}</legend>
+            <label class="plan"><input type="radio" name="oplan" value="natal" checked />
+              <span class="pn"><strong>{SH.planNatal}</strong></span>
+              <span class="pp"><strong class="sf">{price}</strong></span></label>
+            <label class="plan"><input type="radio" name="oplan" value="bundle" /><span class="badge">{SH.bundleBadge}</span>
+              <span class="pn"><strong>{fill(SH.planBundle, { year: fYear })}</strong><span class="mu small">{fill(SH.bundleWas, { price: upPrices.bundleWas })}</span></span>
+              <span class="pp"><strong class="sf">{upPrices.bundle}</strong></span></label>
+          </fieldset>
+          <p class="mu small">{O.priceNote}</p>
           <details class="coupon" id="cBox">
             <summary>{C.link}</summary>
             <form id="cForm" class="crow" novalidate>
@@ -283,9 +294,10 @@ const clientData = JSON.stringify({
 
     <!-- 10b Partner details -->
     <section class="step" data-step="pdata" hidden>
-      <div class="qh"><p class="ey">{U2.partnerEyebrow}</p><h1 class="sf q">{U2.pformTitle}</h1><p class="mu">{U2.pformSub}</p></div>
+      <div class="qh"><p class="ey" id="pdEy">{U2.partnerEyebrow}</p><h1 class="sf q" id="pdTitle">{U2.pformTitle}</h1><p class="mu" id="pdSub">{U2.pformSub}</p>
+        <p class="note pnote" id="pdBundle" hidden>{SH.bundleNote}</p></div>
       <div class="pform">
-        <div class="field"><label class="lbl" for="upName">{U.pName}</label><input id="upName" class="inp" maxlength="40" autocomplete="off" /></div>
+        <div class="field"><label class="lbl" for="upName" id="pdNameLbl">{U.pName}</label><input id="upName" class="inp" maxlength="40" autocomplete="off" /></div>
         <div class="field"><span class="lbl">{U.pDate}</span>
           <fieldset class:list={["wheels date", { ymd: lang === "hu" }]}>
             <legend class="vh">{U.pDate}</legend>
@@ -312,7 +324,29 @@ const clientData = JSON.stringify({
           <div id="upList" class="opts" role="listbox" hidden></div></div>
       </div>
       <p class="ferr" id="pdErr" hidden>{d.ui.error}</p>
-      <div class="dock"><button type="button" class="btn" id="pdGo" disabled>{U2.pformCta}</button></div>
+      <div class="dock"><button type="button" class="btn" id="pdGo" disabled>{U2.pformCta}</button>
+        <button type="button" class="no" id="pdLater" hidden>{SH.later}</button></div>
+    </section>
+
+    <!-- 10c Child chart offer -->
+    <section class="step upsell" data-step="kid" hidden>
+      <div class="ubody">
+        <div class="ublock">
+          <div class="uart"><svg viewBox="0 0 260 150" width="260" height="150" aria-hidden="true">
+            <g class="wl"><circle cx="110" cy="78" r="66"/><circle cx="110" cy="78" r="54" stroke-opacity=".5"/><circle cx="182" cy="92" r="40"/><circle cx="182" cy="92" r="31" stroke-opacity=".5"/></g>
+            <g class="gl" font-size="14" text-anchor="middle" dominant-baseline="central"><text x="84" y="60" fill="#F3EEE3">☉&#xFE0E;</text><text x="122" y="112" fill="#F3EEE3">☽&#xFE0E;</text><text x="182" y="92" fill="#D9B26A">✦</text></g>
+          </svg></div>
+          <p class="ey">{SH.kidEyebrow}</p>
+          <h1 class="sf q ot">{SH.kidTitle}</h1>
+          <p class="mu lead">{SH.kidSub}</p>
+          <div>{SH.kidBullets.map((b) => <div class="inc nb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9B26A" stroke-width="2" aria-hidden="true" set:html={tick} /><span>{b}</span></div>)}</div>
+        </div>
+      </div>
+      <div class="ufoot">
+        <p class="uprice" id="kPriceRow"><span class="mu small">{U2.once}</span><span class="sf">{upPrices.child}</span></p>
+        <button type="button" class="btn" id="kAdd"></button>
+        <button type="button" class="no" id="kNo">{SH.kidNo}</button>
+      </div>
     </section>
 
     <!-- 11 Subscription -->
@@ -550,6 +584,11 @@ const clientData = JSON.stringify({
   .plans legend { font-weight: 700; padding: 0 0 12px; }
   .plan { position: relative; display: flex; align-items: center; gap: 14px; min-height: 84px; padding: 18px 16px; border-radius: 16px; border: 1px solid var(--border); background: var(--panel); cursor: pointer; }
   .plan:has(input:checked) { border-color: var(--gold); box-shadow: inset 0 0 0 1px var(--gold); background: #1A2241; }
+  .oplans { padding: 4px 0 0; gap: 14px; }
+  .pricebox { display: none; }
+  .oplans .plan { min-height: 64px; padding: 14px; }
+  .oplans .pp strong { font-size: 19px; }
+  .pnote { margin-top: 4px; color: var(--gold); font-size: 14px; }
   .plan input { width: 22px; height: 22px; margin: 0; accent-color: var(--gold); flex: none; }
   .badge { position: absolute; top: -11px; right: 14px; padding: 3px 10px; border-radius: 999px; background: var(--gold); color: var(--bg); font: 700 12px/1.4 var(--sans); letter-spacing: .04em; }
   .pn { flex: 1; display: flex; flex-direction: column; }

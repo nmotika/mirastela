@@ -12,8 +12,8 @@ interface Chart {
   aspects: { a: string; b: string; type: string; orb: number }[];
   city?: { name: string; country: string };
 }
-interface Item { product: 'natal' | 'partner' | 'forecast'; status: string; markdown: string; data: any; model: string }
-interface Order { lang: string; name: string; chart: Chart; input: { date: string; time: string | null }; forecastYear: number; items: Item[] }
+interface Item { product: 'natal' | 'partner' | 'forecast' | 'child'; status: string; markdown: string; data: any; model: string }
+interface Order { lang: string; name: string; chart: Chart; input: { date: string; time: string | null; bundle?: boolean }; forecastYear: number; items: Item[] }
 
 const cfg = JSON.parse(document.getElementById('report-data')!.textContent!);
 const R = cfg.d.report, R2 = cfg.d.rep2, A = cfg.d.astro;
@@ -159,6 +159,8 @@ function panel(o: Order, it: Item): HTMLElement {
     const pc: Chart = it.data.partnerChart;
     extra.push([`d-partner`, R.dataTitle, it.data.partner?.name || R.dataTitle, planetList(pc)]);
     extra.push([`d-syn`, R.synastryTitle, R.synastryTitle, aspectCards((it.data.synastry ?? []).slice(0, 15), [o.name || 'A', it.data.partner?.name || 'B'])]);
+  } else if (it.product === 'child' && it.data?.childChart) {
+    extra.push([`d-child`, R.dataTitle, it.data.child?.name || R2.planetsTitle, planetList(it.data.childChart)]);
   } else if (it.product === 'forecast' && it.data?.transits) {
     const tr = it.data.transits;
     const tw = el('div', 'twrap');
@@ -201,7 +203,9 @@ function render(o: Order) {
   tabs.replaceChildren(); panels.replaceChildren();
   if (!active || !o.items.some((i) => i.product === active)) active = o.items[0]?.product ?? null;
   for (const it of o.items) {
-    const label = fill(R.tabs[it.product], { year: it.data?.transits?.year ?? o.forecastYear });
+    const label = it.product === 'child'
+      ? [cfg.d.shop.tabChild, it.data?.child?.name].filter(Boolean).join(': ')
+      : fill(R.tabs[it.product], { year: it.data?.transits?.year ?? o.forecastYear });
     const b = el('button', '', label);
     b.type = 'button';
     b.setAttribute('role', 'tab');
@@ -218,6 +222,11 @@ function render(o: Order) {
     panels.append(pnl);
   }
   tabs.hidden = o.items.length < 2;
+  // A bundle includes the partner report; until the partner's details are in, offer to add them.
+  const addP = $('rAddPartner');
+  const missing = !!o.input?.bundle && !o.items.some((i) => i.product === 'partner');
+  addP.hidden = !missing;
+  if (missing) $<HTMLAnchorElement>('rAddPartnerLink').href = `/${cfg.lang}/start/?o=${encodeURIComponent(token ?? '')}`;
   $('rPrint').hidden = o.items.every((i) => i.status !== 'ready');
 }
 

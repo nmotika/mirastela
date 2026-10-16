@@ -24,14 +24,14 @@ export const PRICE: Record<Lang, { amount: number; currency: string }> = {
 };
 
 /** Upsell prices: partner compatibility and yearly forecast. */
-export const UPSELL: Record<Lang, { partner: number; forecast: number }> = {
-  pl: { partner: 59.99, forecast: 99.99 },
-  hr: { partner: 9.9, forecast: 14.9 },
-  sl: { partner: 9.9, forecast: 14.9 },
-  ro: { partner: 44.99, forecast: 69.99 },
-  cs: { partner: 249, forecast: 349 },
-  hu: { partner: 3990, forecast: 5990 },
-  en: { partner: 9.9, forecast: 14.9 },
+export const UPSELL: Record<Lang, { partner: number; forecast: number; bundle: number; child: number }> = {
+  pl: { partner: 59.99, forecast: 99.99, bundle: 129.99, child: 49.99 },
+  hr: { partner: 9.9, forecast: 14.9, bundle: 29.9, child: 11.9 },
+  sl: { partner: 9.9, forecast: 14.9, bundle: 29.9, child: 11.9 },
+  ro: { partner: 44.99, forecast: 69.99, bundle: 149.99, child: 59.99 },
+  cs: { partner: 249, forecast: 349, bundle: 699, child: 299 },
+  hu: { partner: 3990, forecast: 5990, bundle: 11990, child: 4990 },
+  en: { partner: 9.9, forecast: 14.9, bundle: 29.9, child: 11.9 },
 };
 
 /** Weekly personal horoscope subscription: monthly price and yearly price (8 months). Placeholders until tested. */
