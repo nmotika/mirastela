@@ -34,7 +34,7 @@ consent and tracking are written once.
 ## Product
 - [ ] Bundle (natal + partner + 2027 forecast) and child chart in the funnel, before flight 1
 - [x] Personal astrological calendar (ICS feed `/api/cal/{token}.ics`, daily Great / Act / Slow down + short text, 14 days ahead, filled by the 06:00 job)
-- [ ] Cloudflare Access: Bypass policy for `mirastela.com/api/cal/*` while the site is behind Access (calendar apps cannot log in)
+- [x] Cloudflare Access: Bypass policy for `mirastela.com/api/cal/*` (separate Access app, policy "Kalendar feed (javno)") while the site is behind Access (calendar apps cannot log in)
 - [ ] Test the calendar subscription on Google Calendar, iPhone and Outlook with a real feed
 
 ## Content
