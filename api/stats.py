@@ -19,7 +19,7 @@ for email, created in q("select email, min(created) from leads group by lower(em
 for email, product, status in q("select o.email, i.product, i.status from items i join orders o on o.token = i.token"):
     r = row(email)
     if r.get(product) != "gotovo":
-        r[product] = "gotovo" if status == "done" else status
+        r[product] = {"ready": "gotovo", "pending": "u izradi", "error": "greška"}.get(status, status)
 for email, freq, status in q("select email, freq, status from subs"):
     row(email)["sub"] = f"{freq}" if status == "active" else status
 for (email,) in q("select distinct email from feedback"):
