@@ -113,7 +113,22 @@ function wheel(box: HTMLElement, onChange: (v: number) => void): Wheel {
   const items = [...box.querySelectorAll<HTMLButtonElement>('button')];
   let idx = 0, timer = 0;
   const step = () => items[0].offsetHeight || 48;
-  const mark = (i: number) => items.forEach((b, j) => b.setAttribute('aria-selected', String(j === i)));
+  // Mouse and keyboard (desktop): a plain dropdown is quicker than dragging a wheel. Same values,
+  // same API; the wheel is hidden by CSS under the same media query.
+  let sel: HTMLSelectElement | null = null;
+  if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    sel = document.createElement('select');
+    sel.className = 'inp wsel';
+    sel.setAttribute('aria-label', box.getAttribute('aria-label') || '');
+    items.forEach((b) => sel!.add(new Option(b.textContent!, b.dataset.v)));
+    box.after(sel);
+    box.removeAttribute('tabindex');
+    sel.addEventListener('change', () => pick(sel!.selectedIndex));
+  }
+  const mark = (i: number) => {
+    items.forEach((b, j) => b.setAttribute('aria-selected', String(j === i)));
+    if (sel) sel.selectedIndex = i;
+  };
   const clamp = (i: number) => Math.max(0, Math.min(items.length - 1, i));
   function pick(i: number, smooth = false, notify = true) {
     idx = clamp(i);
