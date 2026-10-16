@@ -399,10 +399,15 @@ def daily_for(lang: str, day: date) -> dict:
                     out, model = report.generate_json(report.prompt_daily_signs(lang, key, txt, first, 6), report.SIGNS_SCHEMA,
                                                       max_tokens=6000, fallback={"signs": json.loads(fb)})
                     part = (out or {}).get("signs")
+                    if isinstance(part, str):  # the model sometimes passes the list as a JSON string
+                        part = report.parse_json(part)
+                    if isinstance(part, list) and len(part) == 12:  # wrote all twelve: keep this half
+                        part = part[first:first + 6]
                     if isinstance(part, list) and len(part) == 6 and all(isinstance(x, dict) and x.get("general") for x in part):
                         signs += part
                         break
-                    print("daily", lang, key, first, "bad shape", attempt, flush=True)
+                    print("daily", lang, key, first, "bad shape", attempt, type(part).__name__,
+                          len(part) if isinstance(part, (list, str)) else "", str(out)[:200], flush=True)
                 except Exception as e:
                     print("daily", lang, key, first, "error", attempt, repr(e)[:300], flush=True)
             else:
