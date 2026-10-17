@@ -13,6 +13,7 @@ consent and tracking are written once.
 6. Flight 1 in Poland (natal entry).
 7. Flight 2: compatibility as a second entry, multi-entry funnel.
 8. After flight 2: astrocartography.
+9. After astrocartography: a Human Design style product under our own name. The calculation (planet positions at birth and at the Sun's 88° arc before birth, mapped to 64 gates, 36 channels, 9 centres, type and authority) is doable with swisseph. Do not use the trademarked names ("Human Design", "BodyGraph", "Rave") in product names, ads or headings, draw our own chart graphic and write our own texts; check the trademark registrations in the EU before launch.
 
 ## Business and payments
 - [ ] Merchant of record decision (inquiries: Lemon Squeezy, Digistore24, Payhip, PayPro, 2Checkout; fallback Stripe direct)
