@@ -36,6 +36,7 @@ consent and tracking are written once.
 - [x] Personal astrological calendar (ICS feed `/api/cal/{token}.ics`, daily Great / Act / Slow down + short text, 14 days ahead, filled by the 06:00 job)
 - [x] Cloudflare Access: Bypass policy for `mirastela.com/api/cal/*` (separate Access app, policy "Kalendar feed (javno)") while the site is behind Access (calendar apps cannot log in)
 - [ ] Test the calendar subscription on Google Calendar, iPhone and Outlook with a real feed
+- [ ] Astrocartography (after flight 2): planet lines (ASC/DSC/MC/IC) on a world map, top cities by theme (love, career, home, avoid) from ~300 relocation cities, match score from distance to lines, generated text. Birth time required. Product ~49 zł or part of a bigger bundle; also test as an ad hook (PL diaspora: UK, DE, NL). No fake testimonial ads, show a labelled example chart instead.
 
 ## Content
 - [ ] Native review of sl, ro, cs, hu texts
