@@ -31,7 +31,7 @@ const hr: BaseDict = {
     seller: '[NAZIV OBRTA] · [ADRESA], Zagreb · OIB [BROJ]',
   },
   quiz: {
-    dateQ: 'Kada si rođen ili rođena?',
+    dateQ: 'Kada si rođen/a?',
     dateHint: 'Datum rođenja određuje položaj Sunca.',
     day: 'Dan', month: 'Mjesec', year: 'Godina',
     months: ['siječanj', 'veljača', 'ožujak', 'travanj', 'svibanj', 'lipanj', 'srpanj', 'kolovoz', 'rujan', 'listopad', 'studeni', 'prosinac'],
@@ -41,7 +41,7 @@ const hr: BaseDict = {
     timeLabel: 'Vrijeme rođenja',
     timeUnknown: 'Ne znam točno vrijeme',
     timeWhy: 'O vremenu ovise podznak i kuće, najosobniji dio natalne karte. Bez njega opisujemo planete u znakovima, a podznak izostavljamo. Vrijeme piše u rodnom listu.',
-    placeQ: 'Gdje si rođen ili rođena?',
+    placeQ: 'Gdje si rođen/a?',
     placeHint: 'Mjesto određuje vremensku zonu i koordinate potrebne za izračun kuća.',
     placePh: 'Upiši grad, npr. Zagreb',
     placeNone: 'Nismo pronašli to mjesto. Upiši najbliži veći grad.',

@@ -18,3 +18,8 @@ Testirala: natalnu kartu, sinastriju (on-off partner). Planira dodati kćer i jo
 - Izračun točan, čitljivost i dizajn dobri.
 - Napredna korisnica (zna astrologiju, koristi Astroseek + AI) ne vidi dodanu vrijednost u samom tekstu. Ciljna publika su oni koji to ne rade sami.
 - Dodana vrijednost koju "copy/paste u AI" ne daje: stalni osobni sadržaj bez truda (kalendar, tjedni horoskop), lijep PDF/izvještaj za poklon, karta djeteta i sinastrija u par klikova.
+
+## 2026-10-17 · lektorica (poruka)
+
+- "Rođen ili rođena" zamijeniti s "rođen/a", hrvatski trpi takva skraćivanja. Ispravljeno u pitanjima za datum i mjesto te napomeni o inozemstvu.
+- "Ovo je horoskop za cijeli znak." loše zvuči. Novo: "Ovaj horoskop vrijedi za sve rođene u istom znaku."

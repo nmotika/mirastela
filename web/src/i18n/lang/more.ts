@@ -64,7 +64,7 @@ export const MORE: Record<Lang, More> = {
   hr: {
     quiz2: {
       sunLabel: 'Tvoje Sunce: {sign}', timeWhyTitle: 'Zašto je to važno?',
-      placeLabel: 'Grad ili mjesto', placeAbroad: 'Rođen ili rođena si u inozemstvu? Upiši grad u bilo kojoj zemlji.',
+      placeLabel: 'Grad ili mjesto', placeAbroad: 'Rođen/a si u inozemstvu? Upiši grad u bilo kojoj zemlji.',
       placeLoading: 'Tražimo mjesto…', placeNoneTitle: 'Nismo pronašli „{q}”', placeNoneText: 'Provjeri pravopis ili upiši veći grad u blizini. Dovoljna je ista vremenska zona.',
       placeErrTitle: 'Popis mjesta se nije učitao', placeErrText: 'Provjeri internetsku vezu.', retry: 'Pokušaj ponovno',
       nameLabel: 'Ime', nameErr: 'Upiši ime da nastaviš.', focusCount: 'Dalje · odabrano: {n}',
@@ -107,7 +107,7 @@ export const MORE: Record<Lang, More> = {
       general: 'Općenito', love: 'Ljubav', work: 'Posao i novac',
       loading: 'Učitavamo horoskop…', error: 'Horoskop se nije učitao. Pokušaj ponovno kasnije.', others: 'Ostali znakovi',
       ctaEyebrow: 'Više od znaka zodijaka', ctaIdxTitle: 'Dnevni horoskop opisuje samo znak Sunca', ctaIdxText: 'Tvoja natalna karta uključuje i Mjesec, podznak i položaj deset planeta u trenutku rođenja.',
-      ctaSignTitle: 'Ovo je horoskop za cijeli znak. A što kaže tvoja natalna karta?', ctaSignText: 'Mjesec, podznak i planeti u trenutku tvog rođenja. Prvi sažetak je besplatan.',
+      ctaSignTitle: 'Ovaj horoskop vrijedi za sve rođene u istom znaku. A što kaže tvoja natalna karta?', ctaSignText: 'Mjesec, podznak i planeti u trenutku tvog rođenja. Prvi sažetak je besplatan.',
       ctaBtn: 'Pogledaj svoju natalnu kartu',
       aboutTitle: 'Kako nastaje dnevni horoskop?', aboutText: 'Opisujemo kako se položaj Mjeseca i planeta tog dana odnosi na svaki znak zodijaka. Tekstovi se obnavljaju svaki dan u ponoć.',
     },
