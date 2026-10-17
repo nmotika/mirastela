@@ -3,6 +3,17 @@
 Done together once the merchant of record and the selling entity are decided, so legal texts,
 consent and tracking are written once.
 
+## Plan, in order
+
+1. Waiting: director sets up Stripe (Managed Payments) and gives nmotika@gmail.com the Developer role.
+2. Stripe integration: products and tax codes, Checkout with `managed_payments`, webhook, bundle and child as line items, subscription (calendar, monthly and yearly), withdrawal-consent checkbox.
+3. Tracking: Meta pixel + Conversions API (lead, checkout, purchase, upsells), analytics, all behind the consent banner.
+4. Legal pages that are missing: terms, privacy, cookies, withdrawal and refund policy, imprint for Something Digital d.o.o., in all languages.
+5. Sandbox testing: full flow with Stripe test cards for every path (natal, bundle, upsells, child, subscription, cancel, failed payment, refund), checking emails, reports and pixel events.
+6. Flight 1 in Poland (natal entry).
+7. Flight 2: compatibility as a second entry, multi-entry funnel.
+8. After flight 2: astrocartography.
+
 ## Business and payments
 - [ ] Merchant of record decision (inquiries: Lemon Squeezy, Digistore24, Payhip, PayPro, 2Checkout; fallback Stripe direct)
 - [ ] Selling entity (obrt or company); real seller details in the footer (now `[NAZIV OBRTA] · [ADRESA]`)
