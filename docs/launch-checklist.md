@@ -6,7 +6,7 @@ consent and tracking are written once.
 ## Plan, in order
 
 1. Waiting: director sets up Stripe (Managed Payments) and gives nmotika@gmail.com the Developer role.
-2. Stripe integration: products and tax codes, Checkout with `managed_payments`, webhook, bundle and child as line items, subscription (calendar, monthly and yearly), withdrawal-consent checkbox.
+2. Stripe integration: products and tax codes, Checkout with `managed_payments`, webhook, bundle and child as line items, subscription (calendar, monthly and yearly), withdrawal-consent checkbox. Plus a minimal account page "Moji izvještaji": magic-link login by email (link valid 30 min, no passwords), list of purchased reports, missing products with price and buy button (reuses the add-to-order flow), subscription status with calendar link and a button to the Stripe customer portal (cancel, card, invoices). Not now: editing birth data, horoscope archive, family profiles, loyalty.
 3. Tracking: Meta pixel + Conversions API (lead, checkout, purchase, upsells), analytics, all behind the consent banner.
 4. Legal pages that are missing: terms, privacy, cookies, withdrawal and refund policy, imprint for Something Digital d.o.o., in all languages.
 5. Production hardening: daily offsite backup of the SQLite database (e.g. Hetzner Storage Box or Cloudflare R2, keep 30 days, test a restore), uptime monitoring of /api/health with alerts (UptimeRobot or Cloudflare health check), 2 uvicorn workers. CX23 is enough for the planned volume; if ever needed, rescale in Hetzner to CPX/CCX.
