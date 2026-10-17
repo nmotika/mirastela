@@ -36,6 +36,7 @@ consent and tracking are written once.
 - [x] Personal astrological calendar (ICS feed `/api/cal/{token}.ics`, daily Great / Act / Slow down + short text, 14 days ahead, filled by the 06:00 job)
 - [x] Cloudflare Access: Bypass policy for `mirastela.com/api/cal/*` (separate Access app, policy "Kalendar feed (javno)") while the site is behind Access (calendar apps cannot log in)
 - [ ] Test the calendar subscription on Google Calendar, iPhone and Outlook with a real feed
+- [ ] Multiple entry points on one funnel engine: each product (natal, compatibility, child, calendar, astrocartography) gets its own landing page and ad angle; the entry product is the main offer, the rest become upsells and the bundle. Built as an entry parameter (`/start/?p=partner`) that swaps landing copy, offer card and upsell order, so quiz, checkout and report stay shared. Test order: natal (flight 1), compatibility as a second angle (flight 2), then calendar and astrocartography.
 - [ ] Astrocartography (after flight 2): planet lines (ASC/DSC/MC/IC) on a world map, top cities by theme (love, career, home, avoid) from ~300 relocation cities, match score from distance to lines, generated text. Birth time required. Product ~49 zł or part of a bigger bundle; also test as an ad hook (PL diaspora: UK, DE, NL). No fake testimonial ads, show a labelled example chart instead.
 
 ## Content
