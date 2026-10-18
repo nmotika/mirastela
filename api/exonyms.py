@@ -1,0 +1,63 @@
+"""City names as each market language writes them. GeoNames gives English names; these are the
+well-known exonyms per language (only where the local form differs). Keyed by (GeoNames name, country)."""
+# lang order: hr, sl, pl, cs, hu, ro
+_L = ("hr", "sl", "pl", "cs", "hu", "ro")
+_T = {
+    ("Vienna", "AT"):      ("Beč", "Dunaj", "Wiedeń", "Vídeň", "Bécs", "Viena"),
+    ("Rome", "IT"):        ("Rim", "Rim", "Rzym", "Řím", "Róma", "Roma"),
+    ("Venice", "IT"):      ("Venecija", "Benetke", "Wenecja", "Benátky", "Velence", "Veneția"),
+    ("Milan", "IT"):       ("Milano", "Milano", "Mediolan", "Milán", "Milánó", "Milano"),
+    ("Naples", "IT"):      ("Napulj", "Neapelj", "Neapol", "Neapol", "Nápoly", "Napoli"),
+    ("Florence", "IT"):    ("Firenca", "Firence", "Florencja", "Florencie", "Firenze", "Florența"),
+    ("Trieste", "IT"):     ("Trst", "Trst", "Triest", "Terst", "Trieszt", "Trieste"),
+    ("Turin", "IT"):       ("Torino", "Torino", "Turyn", "Turín", "Torino", "Torino"),
+    ("Munich", "DE"):      ("München", "München", "Monachium", "Mnichov", "München", "München"),
+    ("Köln", "DE"):        ("Köln", "Köln", "Kolonia", "Kolín nad Rýnem", "Köln", "Köln"),
+    ("Nuremberg", "DE"):   ("Nürnberg", "Nürnberg", "Norymberga", "Norimberk", "Nürnberg", "Nürnberg"),
+    ("Dresden", "DE"):     ("Dresden", "Dresden", "Drezno", "Drážďany", "Drezda", "Dresda"),
+    ("Leipzig", "DE"):     ("Leipzig", "Leipzig", "Lipsk", "Lipsko", "Lipcse", "Leipzig"),
+    ("Regensburg", "DE"):  ("Regensburg", "Regensburg", "Ratyzbona", "Řezno", "Regensburg", "Regensburg"),
+    ("Prague", "CZ"):      ("Prag", "Praga", "Praga", "Praha", "Prága", "Praga"),
+    ("Warsaw", "PL"):      ("Varšava", "Varšava", "Warszawa", "Varšava", "Varsó", "Varșovia"),
+    ("Kraków", "PL"):      ("Krakov", "Krakov", "Kraków", "Krakov", "Krakkó", "Cracovia"),
+    ("Bucharest", "RO"):   ("Bukurešt", "Bukarešta", "Bukareszt", "Bukurešť", "Bukarest", "București"),
+    ("Belgrade", "RS"):    ("Beograd", "Beograd", "Belgrad", "Bělehrad", "Belgrád", "Belgrad"),
+    ("Novi Sad", "RS"):    ("Novi Sad", "Novi Sad", "Nowy Sad", "Novi Sad", "Újvidék", "Novi Sad"),
+    ("Subotica", "RS"):    ("Subotica", "Subotica", "Subotica", "Subotica", "Szabadka", "Subotica"),
+    ("Athens", "GR"):      ("Atena", "Atene", "Ateny", "Atény", "Athén", "Atena"),
+    ("Thessaloníki", "GR"): ("Solun", "Solun", "Saloniki", "Soluň", "Szaloniki", "Salonic"),
+    ("Sofia", "BG"):       ("Sofija", "Sofija", "Sofia", "Sofie", "Szófia", "Sofia"),
+    ("Moscow", "RU"):      ("Moskva", "Moskva", "Moskwa", "Moskva", "Moszkva", "Moscova"),
+    ("Kyiv", "UA"):        ("Kijev", "Kijev", "Kijów", "Kyjev", "Kijev", "Kiev"),
+    ("Lviv", "UA"):        ("Lavov", "Lvov", "Lwów", "Lvov", "Lemberg", "Liov"),
+    ("Vilnius", "LT"):     ("Vilnius", "Vilna", "Wilno", "Vilnius", "Vilnius", "Vilnius"),
+    ("Paris", "FR"):       ("Pariz", "Pariz", "Paryż", "Paříž", "Párizs", "Paris"),
+    ("London", "GB"):      ("London", "London", "Londyn", "Londýn", "London", "Londra"),
+    ("Edinburgh", "GB"):   ("Edinburgh", "Edinburgh", "Edynburg", "Edinburgh", "Edinburgh", "Edinburgh"),
+    ("Brussels", "BE"):    ("Bruxelles", "Bruselj", "Bruksela", "Brusel", "Brüsszel", "Bruxelles"),
+    ("The Hague", "NL"):   ("Haag", "Haag", "Haga", "Haag", "Hága", "Haga"),
+    ("Lisbon", "PT"):      ("Lisabon", "Lizbona", "Lizbona", "Lisabon", "Lisszabon", "Lisabona"),
+    ("Copenhagen", "DK"):  ("Kopenhagen", "København", "Kopenhaga", "Kodaň", "Koppenhága", "Copenhaga"),
+    ("Stockholm", "SE"):   ("Stockholm", "Stockholm", "Sztokholm", "Stockholm", "Stockholm", "Stockholm"),
+    ("Geneva", "CH"):      ("Ženeva", "Ženeva", "Genewa", "Ženeva", "Genf", "Geneva"),
+    ("Zürich", "CH"):      ("Zürich", "Zürich", "Zurych", "Curych", "Zürich", "Zürich"),
+    ("Graz", "AT"):        ("Graz", "Gradec", "Graz", "Štýrský Hradec", "Grác", "Graz"),
+    ("Klagenfurt am Wörthersee", "AT"): ("Klagenfurt", "Celovec", "Klagenfurt", "Celovec", "Klagenfurt", "Klagenfurt"),
+    ("Salzburg", "AT"):    ("Salzburg", "Salzburg", "Salzburg", "Salcburk", "Salzburg", "Salzburg"),
+    ("Budapest", "HU"):    ("Budimpešta", "Budimpešta", "Budapeszt", "Budapešť", "Budapest", "Budapesta"),
+    ("Bratislava", "SK"):  ("Bratislava", "Bratislava", "Bratysława", "Bratislava", "Pozsony", "Bratislava"),
+    ("Košice", "SK"):      ("Košice", "Košice", "Koszyce", "Košice", "Kassa", "Košice"),
+    ("Zagreb", "HR"):      ("Zagreb", "Zagreb", "Zagrzeb", "Záhřeb", "Zágráb", "Zagreb"),
+    ("Rijeka", "HR"):      ("Rijeka", "Reka", "Rijeka", "Rijeka", "Fiume", "Rijeka"),
+    ("Ljubljana", "SI"):   ("Ljubljana", "Ljubljana", "Lublana", "Lublaň", "Ljubljana", "Ljubljana"),
+    ("Cluj-Napoca", "RO"): ("Cluj-Napoca", "Cluj-Napoca", "Kluż-Napoka", "Kluž", "Kolozsvár", "Cluj-Napoca"),
+    ("Timişoara", "RO"):   ("Temišvar", "Temišvar", "Timiszoara", "Temešvár", "Temesvár", "Timișoara"),
+    ("Oradea", "RO"):      ("Oradea", "Oradea", "Oradea", "Velký Varadín", "Nagyvárad", "Oradea"),
+    ("Târgu Mureş", "RO"): ("Târgu Mureș", "Târgu Mureș", "Târgu Mureș", "Târgu Mureș", "Marosvásárhely", "Târgu Mureș"),
+    ("Chisinau", "MD"):    ("Kišinjev", "Kišinjev", "Kiszyniów", "Kišiněv", "Chișinău", "Chișinău"),
+}
+EXONYMS: dict[str, dict[tuple[str, str], str]] = {l: {} for l in _L}
+for key, names in _T.items():
+    for l, n in zip(_L, names):
+        if n != key[0]:
+            EXONYMS[l][key] = n
