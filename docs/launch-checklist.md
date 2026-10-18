@@ -12,9 +12,10 @@ consent and tracking are written once.
 5. Production hardening: daily offsite backup of the SQLite database (e.g. Hetzner Storage Box or Cloudflare R2, keep 30 days, test a restore), uptime monitoring of /api/health with alerts (UptimeRobot or Cloudflare health check), 2 uvicorn workers. CX23 is enough for the planned volume; if ever needed, rescale in Hetzner to CPX/CCX.
 6. Sandbox testing: full flow with Stripe test cards for every path (natal, bundle, upsells, child, subscription, cancel, failed payment, refund), checking emails, reports and pixel events.
 7. Flight 1 in Poland (natal entry).
-8. Flight 2: compatibility as a second entry, multi-entry funnel.
-9. After flight 2: astrocartography.
-10. After astrocartography: a Human Design style product under our own name. The calculation (planet positions at birth and at the Sun's 88° arc before birth, mapped to 64 gates, 36 channels, 9 centres, type and authority) is doable with swisseph. Do not use the trademarked names ("Human Design", "BodyGraph", "Rave") in product names, ads or headings, draw our own chart graphic and write our own texts; check the trademark registrations in the EU before launch.
+8. Affiliate and influencer programme (after flight 1, once real conversion is known): own tracking (`?ref=` stored on lead and order, 30-day cookie, last click or used code wins), a personal discount code per creator (10 to 15%), a simple creator page with their sales, and a short contract template. Terms: 40% of net revenue (excl. VAT and fees) on first purchases, 20 to 25% on subscriptions for the first 12 months, monthly payout with a 30-day hold. Start with 5 to 10 micro creators in Poland (10k to 50k followers; lifestyle, mums, relationships, tarot), not astrologers. Paid posts must be labelled per UOKiK ("reklama"). If a ready tool (Rewardful, Tolt) is considered, first check it works with Stripe Managed Payments.
+9. Flight 2: compatibility as a second entry, multi-entry funnel.
+10. After flight 2: astrocartography.
+11. After astrocartography: a Human Design style product under our own name. The calculation (planet positions at birth and at the Sun's 88° arc before birth, mapped to 64 gates, 36 channels, 9 centres, type and authority) is doable with swisseph. Do not use the trademarked names ("Human Design", "BodyGraph", "Rave") in product names, ads or headings, draw our own chart graphic and write our own texts; check the trademark registrations in the EU before launch.
 
 ## Business and payments
 - [ ] Merchant of record decision (inquiries: Lemon Squeezy, Digistore24, Payhip, PayPro, 2Checkout; fallback Stripe direct)
