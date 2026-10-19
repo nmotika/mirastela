@@ -52,10 +52,17 @@ def _stripe():
     return stripe
 
 
-def price(lang: str, key: str) -> tuple[str, int]:
-    """Currency and amount in minor units (HUF and CZK are sent with two decimals too, as Stripe expects)."""
+WHOLE = {"huf", "czk"}  # no cents shown; discounted prices are rounded to whole units
+
+
+def price(lang: str, key: str, pct: int = 0) -> tuple[str, int]:
+    """Currency and amount in minor units (HUF and CZK are sent with two decimals too, as Stripe expects),
+    less pct percent. Must match the rounding in web/src/scripts/funnel.ts (discounted())."""
     row = _P.get(lang, _P["en"])
-    return row[0], int(round(row[1 + _KEYS.index(key)] * 100))
+    amount = row[1 + _KEYS.index(key)] * (100 - pct) / 100
+    if row[0] in WHOLE:
+        amount = round(amount)
+    return row[0], int(round(amount * 100))
 
 
 def product_name(lang: str, key: str, year: int) -> str:
@@ -67,22 +74,24 @@ def product_name(lang: str, key: str, year: int) -> str:
     return names[key].format(year=year)
 
 
-def line_item(lang: str, key: str, year: int) -> dict:
-    cur, amount = price(lang, key)
+def line_item(lang: str, key: str, year: int, pct: int = 0) -> dict:
+    cur, amount = price(lang, key, pct)
+    name = f"Mirastela · {product_name(lang, key, year)}" + (f" (−{pct} %)" if pct else "")
     pd = {"currency": cur, "unit_amount": amount, "tax_behavior": "inclusive",
-          "product_data": {"name": f"Mirastela · {product_name(lang, key, year)}", "tax_code": TAX_CODE}}
+          "product_data": {"name": name, "tax_code": TAX_CODE}}
     if key.startswith("sub"):
         pd["recurring"] = {"interval": "month" if key == "sub_month" else "year"}
     return {"price_data": pd, "quantity": 1}
 
 
-def create_session(lang: str, email: str, key: str, year: int, metadata: dict, cancel_step: str) -> dict:
-    """Hosted Checkout for one product. Returns {"id", "url"}."""
+def create_session(lang: str, email: str, key: str, year: int, metadata: dict, cancel_step: str, pct: int = 0) -> dict:
+    """Hosted Checkout for one product, pct percent off (one-time purchases only). Returns {"id", "url"}."""
     stripe = _stripe()
     sub = key.startswith("sub")
+    pct = 0 if sub or pct >= 100 else pct
     params: dict = {
         "mode": "subscription" if sub else "payment",
-        "line_items": [line_item(lang, key, year)],
+        "line_items": [line_item(lang, key, year, pct)],
         "customer_email": email,
         "locale": lang,
         "success_url": f"{SITE}/{lang}/start/?paid={{CHECKOUT_SESSION_ID}}",

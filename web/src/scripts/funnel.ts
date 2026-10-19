@@ -25,6 +25,7 @@ interface State {
   focus: string[]; status?: string; email?: string; chart?: Chart; coupon?: string; token?: string;
   sub?: string; cal?: string; plan?: 'natal' | 'bundle'; pMode?: 'partner' | 'child';
   up?: 'partner' | 'forecast'; // add-on chosen on the account page
+  disc?: { code: string; pct: number }; // discount code (not free): lower prices on one-time purchases
 }
 
 const data = JSON.parse(document.getElementById('funnel-data')!.textContent!);
@@ -478,7 +479,17 @@ function renderOffer() {
   applyCouponUi();
 }
 const planRadios = [...document.querySelectorAll<HTMLInputElement>('input[name="oplan"]')];
-const offerPrice = () => (state.plan === 'bundle' ? data.upPrices.bundle : data.price);
+type PriceKey = 'natal' | 'bundle' | 'partner' | 'forecast' | 'child';
+/** Price shown for a one-time product, less the discount code. Rounding matches api/pay.py price(). */
+function P(key: PriceKey): string {
+  let a: number = data.amounts[key];
+  const whole = ['HUF', 'CZK'].includes(data.cur);
+  if (state.disc) { a = (a * (100 - state.disc.pct)) / 100; a = whole ? Math.round(a) : Math.round(a * 100) / 100; }
+  const int = Number.isInteger(a);
+  return new Intl.NumberFormat(data.intl, { style: 'currency', currency: data.cur,
+    minimumFractionDigits: int ? 0 : 2, maximumFractionDigits: int ? 0 : 2 }).format(a);
+}
+const offerPrice = () => P(state.plan === 'bundle' ? 'bundle' : 'natal');
 function syncPlan() {
   planRadios.forEach((r) => (r.checked = r.value === (state.plan ?? 'natal')));
   if (!state.coupon) $('oBuy').textContent = D.offer.cta.replace('{price}', offerPrice());
@@ -487,6 +498,14 @@ planRadios.forEach((r) => r.addEventListener('change', () => { state.plan = r.va
 function applyCouponUi() {
   syncPlan();
   syncWaivers();
+  $('pNatal').textContent = P('natal');
+  $('pBundle').textContent = P('bundle');
+  if (state.disc) {
+    $('cOk').textContent = fill(D.coupon.appliedPct, { code: state.disc.code, pct: state.disc.pct });
+    $('cOk').hidden = false;
+    $('cBox').hidden = true;
+    return;
+  }
   if (!state.coupon) return;
   $('cOk').textContent = fill(D.coupon.applied, { code: state.coupon });
   $('cOk').hidden = false;
@@ -497,10 +516,12 @@ $('cForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const code = $<HTMLInputElement>('cInput').value.trim().toUpperCase();
   if (!code) return;
-  let valid = false;
-  try { valid = (await api<{ valid: boolean }>('/api/coupon', { code })).valid; } catch { /* treat as invalid */ }
-  $('cErr').hidden = valid;
-  if (valid) { state.coupon = code; save(); applyCouponUi(); }
+  let pct = 0;
+  try { pct = (await api<{ valid: boolean; percent?: number }>('/api/coupon', { code })).percent ?? 0; } catch { /* treat as invalid */ }
+  $('cErr').hidden = pct > 0;
+  if (pct >= 100) { state.coupon = code; state.disc = undefined; }
+  else if (pct > 0) state.disc = { code, pct };
+  if (pct > 0) { save(); applyCouponUi(); }
 });
 /** The withdrawal waiver must be ticked before any paid checkout (Managed Payments has no checkbox of its own). */
 function consented(id: string): boolean {
@@ -537,11 +558,11 @@ $('oBuy').addEventListener('click', async () => {
     if (!state.token) {
       const res = await api<{ token: string; checkout?: string }>('/api/order', {
         lang, email: state.email, name: state.name ?? '', date: state.date, time: state.time ?? null,
-        cityId: state.city!.id, focus: state.focus, status: state.status ?? '', coupon: state.coupon ?? '',
+        cityId: state.city!.id, focus: state.focus, status: state.status ?? '', coupon: state.coupon ?? state.disc?.code ?? '',
         bundle: state.plan === 'bundle', consent: true, track: trackInfo(),
       });
       state.up = undefined;
-      if (res.checkout) { state.token = undefined; save(); toCheckout(res.checkout, state.plan === 'bundle' ? data.upPrices.bundle : data.price); return; }
+      if (res.checkout) { state.token = undefined; save(); toCheckout(res.checkout, offerPrice()); return; }
       state.token = res.token; save();
     }
     if (state.plan === 'bundle') { state.pMode = 'partner'; save(); show('pdata'); } else show('upsell');
@@ -574,7 +595,7 @@ function renderUpsell() {
       return m;
     }));
   }
-  const price = data.upPrices[prod];
+  const price = P(prod);
   $('uPrice').textContent = price;
   $('uPriceRow').hidden = !!state.coupon;
   $('uOneClick').hidden = !!state.coupon;
@@ -587,7 +608,7 @@ $('uAdd').addEventListener('click', async () => {
   btn.disabled = true; $('uErr').hidden = true;
   try {
     const r = await api<{ checkout?: string }>(`/api/order/${encodeURIComponent(state.token!)}/add`, { product: 'forecast', consent: true, track: trackInfo() });
-    if (r.checkout) { toCheckout(r.checkout, data.upPrices.forecast); return; }
+    if (r.checkout) { toCheckout(r.checkout, P('forecast')); return; }
     show('kid');
   } catch { $('uErr').hidden = false; }
   btn.disabled = false;
@@ -656,7 +677,7 @@ $('pdGo').addEventListener('click', async () => {
       product,
       partner: { name: upName.value.trim(), date: partnerDate(), time, cityId: partnerCity!.id }, consent: true, track: trackInfo(),
     });
-    if (r.checkout) { toCheckout(r.checkout, data.upPrices[product]); return; }
+    if (r.checkout) { toCheckout(r.checkout, P(product)); return; }
     btn.disabled = false;
     show(fromReport ? 'done' : product === 'child' ? 'sub' : 'kid');
   } catch { $('pdErr').hidden = false; btn.disabled = false; }
@@ -666,7 +687,8 @@ $('pdGo').addEventListener('click', async () => {
 function renderKid() {
   if (!state.token) { show('offer'); return; }
   $('kPriceRow').hidden = !!state.coupon;
-  $('kAdd').textContent = state.coupon ? fill(D.upsell.addFree, { code: state.coupon }) : fill(D.upsell2.addFor, { price: data.upPrices.child });
+  $('kPrice').textContent = P('child');
+  $('kAdd').textContent = state.coupon ? fill(D.upsell.addFree, { code: state.coupon }) : fill(D.upsell2.addFor, { price: P('child') });
 }
 $('kAdd').addEventListener('click', () => {
   if (!consented('wKid')) return; state.pMode = 'child'; save(); show('pdata'); });
@@ -808,7 +830,7 @@ if (orderToken) {
   // With add=partner|forecast|child|sub: buy that add-on for an existing order.
   const add = params.get('add');
   let step: Step = 'pdata';
-  Object.assign(state, { token: orderToken, plan: 'bundle', pMode: 'partner', up: undefined, coupon: undefined });
+  Object.assign(state, { token: orderToken, plan: 'bundle', pMode: 'partner', up: undefined, coupon: undefined, disc: undefined });
   if (add === 'partner' || add === 'forecast') { Object.assign(state, { plan: 'natal', up: add }); step = 'upsell'; }
   else if (add === 'child') { state.plan = 'natal'; step = 'kid'; }
   else if (add === 'sub') step = 'sub';

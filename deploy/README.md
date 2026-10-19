@@ -49,3 +49,10 @@ Web: push to GitHub, Pages rebuilds. API: on the server `sudo /opt/mirastela/dep
 ## Data requests (GDPR)
 Customers can download or delete their data themselves on `/{lang}/account/`. By hand:
 `/opt/mirastela/deploy/data.sh export someone@example.com > someone.json` or `... delete someone@example.com`.
+
+## Coupons
+`MIRASTELA_COUPONS` in `/etc/mirastela.env`, comma separated, then `update.sh`:
+`MIRASTELA_COUPONS=MS-FREE-K7Q2,MIRA50:50,ANA15:15`
+- `CODE` alone: free access (all reports and the subscription of that order).
+- `CODE:NN`: NN % off the report and every add-on bought for that order; the subscription stays full price.
+An empty value (`MIRASTELA_COUPONS=`) switches all codes off. Without the line the old test code MIRATEST works.

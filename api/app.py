@@ -95,7 +95,19 @@ def db():
     return con
 
 
-COUPONS = {c.strip().upper() for c in os.environ.get("MIRASTELA_COUPONS", "MIRATEST").split(",") if c.strip()}
+def _parse_coupons(raw: str) -> dict[str, int]:
+    """MIRASTELA_COUPONS=FREECODE,MIRA50:50,ANA15:15 -> {code: percent off}. No percent means free (100)."""
+    out = {}
+    for part in raw.split(","):
+        code, _, pct = part.strip().partition(":")
+        pct = pct.strip()
+        if not code.strip() or (pct and not pct.isdigit()):
+            continue  # a typo in the percent must never turn a code into a free one
+        out[code.strip().upper()] = max(1, min(100, int(pct))) if pct else 100
+    return out
+
+
+COUPONS = _parse_coupons(os.environ.get("MIRASTELA_COUPONS", "MIRATEST"))
 PRODUCTS = ("natal", "partner", "forecast")
 
 
@@ -277,8 +289,14 @@ class AddIn(BaseModel):
     track: TrackIn | None = None
 
 
+def _coupon_pct(code: str) -> int:
+    """Percent off for a code: 0 unknown, 100 free, else a discount on one-time purchases."""
+    return COUPONS.get((code or "").strip().upper(), 0)
+
+
 def _coupon_ok(code: str) -> bool:
-    return code.strip().upper() in COUPONS
+    """A free-access code (100 %): everything for that order, including the subscription, is free."""
+    return _coupon_pct(code) == 100
 
 
 def _build(token: str, product: str):
@@ -336,7 +354,8 @@ def create_order(body: OrderIn, bg: BackgroundTasks, request: Request):
     guard.per_ip(DB_PATH, request, "order", 10, 600)
     if not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", body.email):
         raise HTTPException(422, "invalid email")
-    free = _coupon_ok(body.coupon)
+    pct = _coupon_pct(body.coupon)
+    free = pct == 100
     if not free and not pay.enabled():
         raise HTTPException(402, "payment required")
     if not free and not body.consent:
@@ -347,11 +366,11 @@ def create_order(body: OrderIn, bg: BackgroundTasks, request: Request):
         con.execute("insert into orders(token, created, lang, email, name, input, chart, coupon, paid) values(?,?,?,?,?,?,?,?,?)",
                     (token, datetime.now(timezone.utc).isoformat(), body.lang, body.email.lower(), body.name,
                      body.model_dump_json(exclude={"coupon"}), json.dumps(natal),
-                     body.coupon.strip().upper() if free else "", 1 if free else 0))
+                     body.coupon.strip().upper() if pct else "", 1 if free else 0))
     if not free:
         key = "bundle" if body.bundle else "natal"
         return {"token": token, "checkout": _checkout(token, _lang(body.lang), body.email, key, "order", key, "offer",
-                                                      _track(body.track, request))}
+                                                      _track(body.track, request), pct)}
     _fulfil_order(token, bg)
     return {"token": token}
 
@@ -365,10 +384,10 @@ def _fulfil_order(token: str, bg: BackgroundTasks):
 
 
 def _checkout(token: str, lang: str, email: str, key: str, kind: str, product: str, cancel_step: str,
-              track: dict | None = None) -> str:
+              track: dict | None = None, pct: int = 0) -> str:
     """Stripe Checkout for one purchase. The caller has checked that the withdrawal waiver was ticked;
     its time and wording version are kept with the payment as the record of consent."""
-    s = pay.create_session(lang, email, key, forecast_year(), {"token": token, "kind": kind, "product": product}, cancel_step)
+    s = pay.create_session(lang, email, key, forecast_year(), {"token": token, "kind": kind, "product": product}, cancel_step, pct)
     now = datetime.now(timezone.utc).isoformat()
     with db() as con:
         con.execute("insert into payments(session, token, kind, product, status, created, consent, track, price_key)"
@@ -380,7 +399,8 @@ def _checkout(token: str, lang: str, email: str, key: str, kind: str, product: s
 @app.post("/api/coupon")
 def check_coupon(body: dict, request: Request):
     guard.per_ip(DB_PATH, request, "coupon", 10, 600)
-    return {"valid": _coupon_ok(str(body.get("code", "")))}
+    pct = _coupon_pct(str(body.get("code", "")))
+    return {"valid": pct > 0, "percent": pct}
 
 
 @app.post("/api/order/{token}/add")
@@ -414,7 +434,7 @@ def add_product(token: str, body: AddIn, bg: BackgroundTasks, request: Request):
                     " on conflict(token, product) do update set input=excluded.input",
                     (token, body.product, json.dumps(item_input or {}), "unpaid", datetime.now(timezone.utc).isoformat()))
     return {"ok": False, "checkout": _checkout(token, _lang(lang), email, body.product, "add", body.product, "upsell",
-                                               _track(body.track, request))}
+                                               _track(body.track, request), _coupon_pct(coupon or ""))}
 
 
 @app.get("/api/order/{token}")
@@ -551,7 +571,9 @@ def _fulfil(session_id: str, meta: dict, bg: BackgroundTasks, customer: str | No
         prow = con.execute("select price_key, track from payments where session=?", (session_id,)).fetchone()
     lang = _lang(lang)
     key = (prow[0] if prow and prow[0] else ("sub_" + product if kind == "sub" else product))
-    cur, minor = pay.price(lang, key)
+    with db() as con:
+        crow = con.execute("select coupon from orders where token=?", (token,)).fetchone()
+    cur, minor = pay.price(lang, key, 0 if kind == "sub" else _coupon_pct(crow[0] if crow else ""))
     out = {"token": token, "kind": kind, "product": product, "email": email,
            "value": minor / 100, "currency": cur.upper(), "eventId": f"pur_{session_id}"}
     if kind == "sub":
@@ -834,7 +856,7 @@ def account_me(body: KeyIn):
         missing = [p for p in ADD_ONS if have.get(p, "unpaid") == "unpaid"]
         s = sub_by_order.get(tok)
         out.append({"token": tok, "created": created[:10], "lang": _lang(lang), "name": name, "bundle": bundle,
-                    "free": bool(coupon), "owned": owned, "missing": missing,
+                    "free": _coupon_ok(coupon or ""), "discount": _coupon_pct(coupon or "") % 100, "owned": owned, "missing": missing,
                     "sub": {"status": s[2], "cal": cal_url(s[3]) if s[3] and s[2] == "active" else None,
                             "billing": f"/api/billing/{s[0]}" if s[4] else None,
                             "unsub": f"/api/unsub/{s[0]}" if s[2] == "active" else None} if s else None})

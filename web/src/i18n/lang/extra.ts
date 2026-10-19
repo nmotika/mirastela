@@ -4,7 +4,7 @@ import type { Extra } from '../types';
 // Coupon, upsell and report strings. sl, cs, ro, hu are drafts for native review.
 export const EXTRA: Record<Lang, Extra> = {
   pl: {
-    coupon: { link: 'Masz kod?', label: 'Kod rabatowy', ph: 'Wpisz kod', apply: 'Zastosuj', invalid: 'Ten kod jest nieprawidłowy.', applied: 'Kod {code} aktywny: raport bezpłatnie.', claim: 'Odbierz pełny raport' },
+    coupon: { link: 'Masz kod?', label: 'Kod rabatowy', ph: 'Wpisz kod', apply: 'Zastosuj', invalid: 'Ten kod jest nieprawidłowy.', applied: 'Kod {code} aktywny: raport bezpłatnie.', appliedPct: 'Kod {code} aktywny: {pct}% zniżki.', claim: 'Odbierz pełny raport' },
     upsell: {
       eyebrow: 'Dodatek do raportu',
       partnerTitle: 'Jak pasujecie do siebie?',
@@ -26,7 +26,7 @@ export const EXTRA: Record<Lang, Extra> = {
     },
   },
   hr: {
-    coupon: { link: 'Imaš kod?', label: 'Kod za popust', ph: 'Upiši kod', apply: 'Primijeni', invalid: 'Ovaj kod nije ispravan.', applied: 'Kod {code} je aktivan: izvještaj je besplatan.', claim: 'Preuzmi cijeli izvještaj' },
+    coupon: { link: 'Imaš kod?', label: 'Kod za popust', ph: 'Upiši kod', apply: 'Primijeni', invalid: 'Ovaj kod nije ispravan.', applied: 'Kod {code} je aktivan: izvještaj je besplatan.', appliedPct: 'Kod {code} je aktivan: {pct} % popusta.', claim: 'Preuzmi cijeli izvještaj' },
     upsell: {
       eyebrow: 'Dodatak izvještaju',
       partnerTitle: 'Koliko se slažete?',
@@ -48,7 +48,7 @@ export const EXTRA: Record<Lang, Extra> = {
     },
   },
   sl: {
-    coupon: { link: 'Imaš kodo?', label: 'Koda za popust', ph: 'Vpiši kodo', apply: 'Uporabi', invalid: 'Ta koda ni veljavna.', applied: 'Koda {code} je aktivna: poročilo je brezplačno.', claim: 'Prevzemi celotno poročilo' },
+    coupon: { link: 'Imaš kodo?', label: 'Koda za popust', ph: 'Vpiši kodo', apply: 'Uporabi', invalid: 'Ta koda ni veljavna.', applied: 'Koda {code} je aktivna: poročilo je brezplačno.', appliedPct: 'Koda {code} je aktivna: {pct} % popusta.', claim: 'Prevzemi celotno poročilo' },
     upsell: {
       eyebrow: 'Dodatek k poročilu',
       partnerTitle: 'Kako se ujemata?',
@@ -70,7 +70,7 @@ export const EXTRA: Record<Lang, Extra> = {
     },
   },
   ro: {
-    coupon: { link: 'Ai un cod?', label: 'Cod de reducere', ph: 'Introdu codul', apply: 'Aplică', invalid: 'Codul nu este valid.', applied: 'Codul {code} este activ: raportul este gratuit.', claim: 'Primește raportul complet' },
+    coupon: { link: 'Ai un cod?', label: 'Cod de reducere', ph: 'Introdu codul', apply: 'Aplică', invalid: 'Codul nu este valid.', applied: 'Codul {code} este activ: raportul este gratuit.', appliedPct: 'Codul {code} este activ: {pct}% reducere.', claim: 'Primește raportul complet' },
     upsell: {
       eyebrow: 'Supliment la raport',
       partnerTitle: 'Cât de compatibili sunteți?',
@@ -92,7 +92,7 @@ export const EXTRA: Record<Lang, Extra> = {
     },
   },
   cs: {
-    coupon: { link: 'Máš kód?', label: 'Slevový kód', ph: 'Zadej kód', apply: 'Použít', invalid: 'Tento kód není platný.', applied: 'Kód {code} je aktivní: zpráva je zdarma.', claim: 'Získat celou zprávu' },
+    coupon: { link: 'Máš kód?', label: 'Slevový kód', ph: 'Zadej kód', apply: 'Použít', invalid: 'Tento kód není platný.', applied: 'Kód {code} je aktivní: zpráva je zdarma.', appliedPct: 'Kód {code} je aktivní: sleva {pct} %.', claim: 'Získat celou zprávu' },
     upsell: {
       eyebrow: 'Doplněk ke zprávě',
       partnerTitle: 'Jak k sobě ladíte?',
@@ -114,7 +114,7 @@ export const EXTRA: Record<Lang, Extra> = {
     },
   },
   hu: {
-    coupon: { link: 'Van kódod?', label: 'Kedvezménykód', ph: 'Írd be a kódot', apply: 'Beváltás', invalid: 'Ez a kód érvénytelen.', applied: 'A(z) {code} kód aktív: a jelentés ingyenes.', claim: 'Kérem a teljes jelentést' },
+    coupon: { link: 'Van kódod?', label: 'Kedvezménykód', ph: 'Írd be a kódot', apply: 'Beváltás', invalid: 'Ez a kód érvénytelen.', applied: 'A(z) {code} kód aktív: a jelentés ingyenes.', appliedPct: 'A(z) {code} kód aktív: {pct}% kedvezmény.', claim: 'Kérem a teljes jelentést' },
     upsell: {
       eyebrow: 'Kiegészítés a jelentéshez',
       partnerTitle: 'Mennyire illetek össze?',
@@ -136,7 +136,7 @@ export const EXTRA: Record<Lang, Extra> = {
     },
   },
   en: {
-    coupon: { link: 'Have a code?', label: 'Discount code', ph: 'Enter code', apply: 'Apply', invalid: 'This code isn’t valid.', applied: 'Code {code} applied: the report is free.', claim: 'Get the full report' },
+    coupon: { link: 'Have a code?', label: 'Discount code', ph: 'Enter code', apply: 'Apply', invalid: 'This code isn’t valid.', applied: 'Code {code} applied: the report is free.', appliedPct: 'Code {code} applied: {pct}% off.', claim: 'Get the full report' },
     upsell: {
       eyebrow: 'Add to your report',
       partnerTitle: 'How compatible are you?',

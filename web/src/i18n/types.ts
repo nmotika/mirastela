@@ -3,7 +3,7 @@
  * Teaser templates: {signIn} sign with preposition, {trait}, {house}, {topic}, {houseArt} (Hungarian article).
  */
 export interface Extra {
-  coupon: { link: string; label: string; ph: string; apply: string; invalid: string; applied: string; claim: string };
+  coupon: { link: string; label: string; ph: string; apply: string; invalid: string; applied: string; appliedPct: string; claim: string };
   upsell: {
     eyebrow: string; partnerTitle: string; partnerSub: string; partnerBullets: string[];
     pName: string; pDate: string; pTime: string; pTimeUnknown: string; pPlace: string;

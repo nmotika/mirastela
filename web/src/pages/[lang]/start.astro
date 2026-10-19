@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import LangSwitcher from '../../components/LangSwitcher.astro';
 import Logo from '../../components/Logo.astro';
-import { LOCALES, PRICE, UPSELL, SUB, formatPrice, type Lang } from '../../i18n/config';
+import { LOCALES, PRICE, UPSELL, SUB, INTL, formatPrice, type Lang } from '../../i18n/config';
 import { t, fill } from '../../i18n';
 
 export function getStaticPaths() {
@@ -44,7 +44,8 @@ const terms = (s: string) => fill(s, {
 });
 // Only this language's strings go to the browser.
 const clientData = JSON.stringify({
-  lang, price, upPrices, subPrices,
+  lang, price, upPrices, subPrices, cur, intl: INTL[lang],
+  amounts: { natal: PRICE[lang].amount, bundle: UP.bundle, partner: UP.partner, forecast: UP.forecast, child: UP.child },
   d: { quiz: Q, quiz2: Q2, offer: O, teaser: d.teaser, astro: d.astro, ui: d.ui, coupon: C, upsell: U, upsell2: U2, sub: S, done: Dn, shop: SH },
 });
 ---
@@ -231,10 +232,10 @@ const clientData = JSON.stringify({
             <legend class="vh">{O.cardTitle}</legend>
             <label class="plan"><input type="radio" name="oplan" value="natal" checked />
               <span class="pn"><strong>{SH.planNatal}</strong></span>
-              <span class="pp"><strong class="sf">{price}</strong></span></label>
+              <span class="pp"><strong class="sf" id="pNatal">{price}</strong></span></label>
             <label class="plan"><input type="radio" name="oplan" value="bundle" /><span class="badge">{SH.bundleBadge}</span>
               <span class="pn"><strong>{fill(SH.planBundle, { year: fYear })}</strong><span class="mu small">{fill(SH.bundleWas, { price: upPrices.bundleWas })}</span></span>
-              <span class="pp"><strong class="sf">{upPrices.bundle}</strong></span></label>
+              <span class="pp"><strong class="sf" id="pBundle">{upPrices.bundle}</strong></span></label>
           </fieldset>
           <p class="mu small">{O.priceNote}</p>
           <details class="coupon" id="cBox">
@@ -347,7 +348,7 @@ const clientData = JSON.stringify({
         </div>
       </div>
       <div class="ufoot">
-        <p class="uprice" id="kPriceRow"><span class="mu small">{U2.once}</span><span class="sf">{upPrices.child}</span></p>
+        <p class="uprice" id="kPriceRow"><span class="mu small">{U2.once}</span><span class="sf" id="kPrice">{upPrices.child}</span></p>
         <label class="waiver" id="wKidBox"><input type="checkbox" id="wKid" /><span>{SH.waiver} <a href={`/${lang}/terms/`} target="_blank" rel="noopener">{SH.waiverTerms}</a></span></label>
         <button type="button" class="btn" id="kAdd"></button>
         <button type="button" class="no" id="kNo">{SH.kidNo}</button>
