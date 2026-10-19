@@ -485,24 +485,21 @@ $('cForm').addEventListener('submit', async (e) => {
   $('cErr').hidden = valid;
   if (valid) { state.coupon = code; save(); applyCouponUi(); }
 });
+/** Leave for Stripe Checkout; the state stays in sessionStorage for the way back (?paid=...). */
+function toCheckout(url: string) { save(); location.href = url; }
 $('oBuy').addEventListener('click', async () => {
-  if (!state.coupon) {
-    // Payments come in the next iteration.
-    $('oSoon').hidden = false;
-    $('oSoon').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    return;
-  }
   const btn = $<HTMLButtonElement>('oBuy');
   btn.disabled = true;
   btn.setAttribute('aria-busy', 'true');
   $('oErr').hidden = true;
   try {
     if (!state.token) {
-      const res = await api<{ token: string }>('/api/order', {
+      const res = await api<{ token: string; checkout?: string }>('/api/order', {
         lang, email: state.email, name: state.name ?? '', date: state.date, time: state.time ?? null,
-        cityId: state.city!.id, focus: state.focus, status: state.status ?? '', coupon: state.coupon,
+        cityId: state.city!.id, focus: state.focus, status: state.status ?? '', coupon: state.coupon ?? '',
         bundle: state.plan === 'bundle',
       });
+      if (res.checkout) { state.token = undefined; save(); toCheckout(res.checkout); return; }
       state.token = res.token; save();
     }
     if (state.plan === 'bundle') { state.pMode = 'partner'; save(); show('pdata'); } else show('upsell');
@@ -545,7 +542,8 @@ $('uAdd').addEventListener('click', async () => {
   const btn = $<HTMLButtonElement>('uAdd');
   btn.disabled = true; $('uErr').hidden = true;
   try {
-    await api(`/api/order/${encodeURIComponent(state.token!)}/add`, { product: 'forecast' });
+    const r = await api<{ checkout?: string }>(`/api/order/${encodeURIComponent(state.token!)}/add`, { product: 'forecast' });
+    if (r.checkout) { toCheckout(r.checkout); return; }
     show('kid');
   } catch { $('uErr').hidden = false; }
   btn.disabled = false;
@@ -610,10 +608,11 @@ $('pdGo').addEventListener('click', async () => {
   const time = upTimeUnknown.checked ? null : `${String(pwHour.value()).padStart(2, '0')}:${String(pwMin.value()).padStart(2, '0')}`;
   try {
     const product = pdataMode === 'child' ? 'child' : 'partner';
-    await api(`/api/order/${encodeURIComponent(state.token!)}/add`, {
+    const r = await api<{ checkout?: string }>(`/api/order/${encodeURIComponent(state.token!)}/add`, {
       product,
       partner: { name: upName.value.trim(), date: partnerDate(), time, cityId: partnerCity!.id },
     });
+    if (r.checkout) { toCheckout(r.checkout); return; }
     btn.disabled = false;
     show(fromReport ? 'done' : product === 'child' ? 'sub' : 'kid');
   } catch { $('pdErr').hidden = false; btn.disabled = false; }
@@ -654,14 +653,11 @@ function updateSubCta() {
 }
 planInputs.forEach((x) => x.addEventListener('change', updateSubCta));
 $('sAdd').addEventListener('click', async () => {
-  if (!state.coupon) {
-    // Paid subscriptions arrive with payments; until then the offer only shows the price.
-    $('sErr').textContent = D.offer.soon; $('sErr').hidden = false; return;
-  }
   const btn = $<HTMLButtonElement>('sAdd');
   btn.disabled = true; $('sErr').hidden = true;
   try {
-    const r = await api<{ cal?: string }>('/api/subscribe', { order: state.token, freq: 'weekly' });
+    const r = await api<{ cal?: string; checkout?: string }>('/api/subscribe', { order: state.token, freq: 'weekly', plan: plan() });
+    if (r.checkout) { toCheckout(r.checkout); return; }
     state.sub = 'weekly'; state.cal = r.cal; save();
     show('done');
   } catch {
@@ -722,7 +718,30 @@ function restore() {
   history.replaceState({ step: start }, '', `#${start}`);
   show(start, false);
 }
+/** Back from Stripe Checkout: confirm the payment and continue where the purchase led. */
+async function returnFromCheckout(session: string) {
+  history.replaceState(null, '', location.pathname);
+  type Paid = { token: string; kind: 'order' | 'add' | 'sub'; product: string; email: string; cal?: string };
+  let r: Paid | undefined;
+  for (let i = 0; i < 6 && !r; i++) {
+    try { r = await api<Paid>(`/api/checkout/confirm?session=${encodeURIComponent(session)}`); }
+    catch { await new Promise((ok) => setTimeout(ok, 1500)); }
+  }
+  if (!r) { restore(); return; }
+  Object.assign(state, { token: r.token, email: state.email || r.email });
+  let next: Step;
+  if (r.kind === 'order') {
+    state.plan = r.product === 'bundle' ? 'bundle' : 'natal';
+    if (state.plan === 'bundle') { state.pMode = 'partner'; next = 'pdata'; } else next = 'upsell';
+  } else if (r.kind === 'add') next = r.product === 'child' ? 'sub' : 'kid';
+  else { state.sub = 'weekly'; state.cal = r.cal ?? undefined; next = 'done'; }
+  save();
+  history.replaceState({ step: next }, '', `${location.pathname}#${next}`);
+  show(next, false);
+}
+
 const params = new URLSearchParams(location.search);
+const paidSession = params.get('paid');
 const resumeToken = params.get('r');
 const orderToken = params.get('o');
 let fromReport = false;
@@ -733,4 +752,5 @@ if (orderToken) {
   save();
   history.replaceState({ step: 'pdata' }, '', `${location.pathname}#pdata`);
   show('pdata', false);
-} else if (resumeToken) resume(resumeToken).then(restore); else restore();
+} else if (paidSession) returnFromCheckout(paidSession);
+else if (resumeToken) resume(resumeToken).then(restore); else restore();

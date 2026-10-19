@@ -27,6 +27,7 @@ _load_env()
 
 import cal
 import chart
+import pay
 import cities
 import emails
 import mailer
@@ -77,8 +78,14 @@ def db():
     cols = {r[1] for r in con.execute("pragma table_info(leads)")}
     if "token" not in cols:
         con.execute("alter table leads add column token text")
-    if "cal" not in {r[1] for r in con.execute("pragma table_info(subs)")}:
-        con.execute("alter table subs add column cal text")
+    sub_cols = {r[1] for r in con.execute("pragma table_info(subs)")}
+    for col in ("cal", "stripe_customer", "stripe_sub"):
+        if col not in sub_cols:
+            con.execute(f"alter table subs add column {col} text")
+    if "paid" not in {r[1] for r in con.execute("pragma table_info(orders)")}:
+        con.execute("alter table orders add column paid integer default 1")  # rows before payments existed were coupon orders
+    con.execute("""create table if not exists payments(
+        session text primary key, token text, kind text, product text, status text, created text, done text)""")
     return con
 
 
@@ -297,19 +304,37 @@ def _add_item(token: str, product: str, item_input: dict | None, bg: BackgroundT
 def create_order(body: OrderIn, bg: BackgroundTasks):
     if not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", body.email):
         raise HTTPException(422, "invalid email")
-    if not _coupon_ok(body.coupon):
-        # Real payments (Stripe) come later; until then only a valid coupon completes an order.
+    free = _coupon_ok(body.coupon)
+    if not free and not pay.enabled():
         raise HTTPException(402, "payment required")
     natal = birth_chart(body.date.isoformat(), body.time, body.cityId)
     token = secrets.token_urlsafe(16)
     with db() as con:
-        con.execute("insert into orders values(?,?,?,?,?,?,?,?)",
+        con.execute("insert into orders(token, created, lang, email, name, input, chart, coupon, paid) values(?,?,?,?,?,?,?,?,?)",
                     (token, datetime.now(timezone.utc).isoformat(), body.lang, body.email.lower(), body.name,
-                     body.model_dump_json(exclude={"coupon"}), json.dumps(natal), body.coupon.strip().upper()))
-    _add_item(token, "natal", None, bg)
-    if body.bundle:  # natal + yearly forecast now; the partner report once their details are given
-        _add_item(token, "forecast", None, bg)
+                     body.model_dump_json(exclude={"coupon"}), json.dumps(natal),
+                     body.coupon.strip().upper() if free else "", 1 if free else 0))
+    if not free:
+        key = "bundle" if body.bundle else "natal"
+        return {"token": token, "checkout": _checkout(token, _lang(body.lang), body.email, key, "order", key, "offer")}
+    _fulfil_order(token, bg)
     return {"token": token}
+
+
+def _fulfil_order(token: str, bg: BackgroundTasks):
+    with db() as con:
+        inp = json.loads(con.execute("select input from orders where token=?", (token,)).fetchone()[0])
+    _add_item(token, "natal", None, bg)
+    if inp.get("bundle"):  # natal + yearly forecast now; the partner report once their details are given
+        _add_item(token, "forecast", None, bg)
+
+
+def _checkout(token: str, lang: str, email: str, key: str, kind: str, product: str, cancel_step: str) -> str:
+    s = pay.create_session(lang, email, key, forecast_year(), {"token": token, "kind": kind, "product": product}, cancel_step)
+    with db() as con:
+        con.execute("insert into payments(session, token, kind, product, status, created) values(?,?,?,?,?,?)",
+                    (s["id"], token, kind, product, "open", datetime.now(timezone.utc).isoformat()))
+    return s["url"]
 
 
 @app.post("/api/coupon")
@@ -322,18 +347,29 @@ def add_product(token: str, body: AddIn, bg: BackgroundTasks):
     if body.product not in ("partner", "forecast", "child"):
         raise HTTPException(422, "unknown product")
     with db() as con:
-        row = con.execute("select coupon from orders where token=?", (token,)).fetchone()
+        row = con.execute("select coupon, input, paid, lang, email from orders where token=?", (token,)).fetchone()
+        have = {r[0]: r[1] for r in con.execute("select product, status from items where token=?", (token,))}
     if not row:
         raise HTTPException(404, "order not found")
-    if not _coupon_ok(row[0] or ""):
+    coupon, inp, paid, lang, email = row
+    if not paid:
+        raise HTTPException(402, "order not paid")
+    if have.get(body.product, "unpaid") != "unpaid":
+        return {"ok": True}  # already bought
+    if body.product in ("partner", "child") and not body.partner:
+        raise HTTPException(422, "birth data required")
+    item_input = body.partner.model_dump(mode="json") if body.partner else None
+    included = body.product == "partner" and json.loads(inp).get("bundle")
+    if _coupon_ok(coupon or "") or included:
+        _add_item(token, body.product, item_input, bg)
+        return {"ok": True}
+    if not pay.enabled():
         raise HTTPException(402, "payment required")
-    if body.product in ("partner", "child"):
-        if not body.partner:
-            raise HTTPException(422, "birth data required")
-        _add_item(token, body.product, body.partner.model_dump(mode="json"), bg)
-    else:
-        _add_item(token, "forecast", None, bg)
-    return {"ok": True}
+    with db() as con:  # keep the birth data with the unpaid item; payment turns it on
+        con.execute("insert into items(token, product, input, status, created) values(?,?,?,?,?)"
+                    " on conflict(token, product) do update set input=excluded.input",
+                    (token, body.product, json.dumps(item_input or {}), "unpaid", datetime.now(timezone.utc).isoformat()))
+    return {"ok": False, "checkout": _checkout(token, _lang(lang), email, body.product, "add", body.product, "upsell")}
 
 
 @app.get("/api/order/{token}")
@@ -342,8 +378,8 @@ def get_order(token: str):
         row = con.execute("select lang, name, chart, input from orders where token=?", (token,)).fetchone()
         if not row:
             raise HTTPException(404, "order not found")
-        items = con.execute("select product, status, markdown, data, model from items where token=? order by id",
-                            (token,)).fetchall()
+        items = con.execute("select product, status, markdown, data, model from items where token=? and status!='unpaid'"
+                            " order by id", (token,)).fetchall()
         sub = con.execute("select cal from subs where order_token=? and status='active'", (token,)).fetchone()
     lang, name, natal, inp = row
     return {
@@ -358,7 +394,8 @@ def get_order(token: str):
 # ---------------------------------------------------------------- subscriptions
 class SubIn(BaseModel):
     order: str
-    freq: str = Field("daily", pattern="^(daily|weekly)$")
+    freq: str = Field("weekly", pattern="^(daily|weekly)$")
+    plan: str = Field("year", pattern="^(month|year)$")
 
 
 CAL_AHEAD = 14  # days of calendar entries kept ready ahead of today
@@ -424,29 +461,112 @@ def subscribe(body: SubIn, bg: BackgroundTasks):
         if not row:
             raise HTTPException(404, "order not found")
         lang, email, name, natal, coupon = row
-        if not _coupon_ok(coupon or ""):
-            raise HTTPException(402, "payment required")  # Stripe subscriptions come later
-        existing = con.execute("select token, cal from subs where order_token=?", (body.order,)).fetchone()
+    if _coupon_ok(coupon or ""):
+        return {"ok": True, "cal": _activate_sub(body.order, body.freq, bg)}
+    if not pay.enabled():
+        raise HTTPException(402, "payment required")
+    return {"ok": False, "checkout": _checkout(body.order, _lang(lang), email, f"sub_{body.plan}", "sub", body.plan, "sub")}
+
+
+def _activate_sub(order: str, freq: str, bg: BackgroundTasks, customer: str | None = None, stripe_sub: str | None = None) -> str:
+    """Create or re-activate the subscription for an order, send the welcome email, start the calendar."""
+    with db() as con:
+        lang, email, name, natal, coupon = con.execute(
+            "select lang, email, name, chart, coupon from orders where token=?", (order,)).fetchone()
+        existing = con.execute("select token, cal from subs where order_token=?", (order,)).fetchone()
         token = existing[0] if existing else secrets.token_urlsafe(16)
         cal_token = (existing[1] if existing else None) or secrets.token_urlsafe(18)
-        con.execute("insert into subs(token, created, email, lang, name, chart, freq, status, order_token, coupon, last_sent, cal)"
-                    " values(?,?,?,?,?,?,?,?,?,?,?,?) on conflict(token) do update set freq=excluded.freq, status='active', cal=excluded.cal",
-                    (token, datetime.now(timezone.utc).isoformat(), email, _lang(lang), name, natal, body.freq,
-                     "active", body.order, coupon, None, cal_token))
+        con.execute("insert into subs(token, created, email, lang, name, chart, freq, status, order_token, coupon, last_sent, cal,"
+                    " stripe_customer, stripe_sub) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?) on conflict(token) do update set"
+                    " freq=excluded.freq, status='active', cal=excluded.cal,"
+                    " stripe_customer=coalesce(excluded.stripe_customer, stripe_customer), stripe_sub=coalesce(excluded.stripe_sub, stripe_sub)",
+                    (token, datetime.now(timezone.utc).isoformat(), email, _lang(lang), name, natal, freq,
+                     "active", order, coupon, None, cal_token, customer, stripe_sub))
     unsub = f"{emails.SITE}/api/unsub/{token}"
-    subject, html = emails.sub_welcome(_lang(lang), name, body.freq, unsub, cal_url(cal_token))
+    subject, html = emails.sub_welcome(_lang(lang), name, freq, unsub, cal_url(cal_token))
     mailer.send(DB_PATH, email, "sub-welcome", subject, html, unsubscribe_url=unsub)
     bg.add_task(_fill_calendar_safe, token)
-    return {"ok": True, "cal": cal_url(cal_token)}
+    return cal_url(cal_token)
+
+
+# ---------------------------------------------------------------- payments
+def _fulfil(session_id: str, meta: dict, bg: BackgroundTasks, customer: str | None = None, stripe_sub: str | None = None) -> dict:
+    """Turn a paid Checkout Session into the product. Safe to call twice (webhook and return page race)."""
+    token, kind, product = meta.get("token", ""), meta.get("kind", ""), meta.get("product", "")
+    with db() as con:
+        claimed = con.execute("update payments set status='paid', done=? where session=? and status='open'",
+                              (datetime.now(timezone.utc).isoformat(), session_id)).rowcount
+        email = (con.execute("select email from orders where token=?", (token,)).fetchone() or [""])[0]
+    out = {"token": token, "kind": kind, "product": product, "email": email}
+    if kind == "sub":
+        with db() as con:
+            row = con.execute("select cal from subs where order_token=? and status='active'", (token,)).fetchone()
+        out["cal"] = cal_url(row[0]) if row and row[0] else None
+    if not claimed:
+        return out
+    if kind == "order":
+        with db() as con:
+            con.execute("update orders set paid=1 where token=?", (token,))
+        _fulfil_order(token, bg)
+    elif kind == "add":
+        with db() as con:
+            con.execute("update items set status='pending' where token=? and product=? and status='unpaid'", (token, product))
+        bg.add_task(_build, token, product)
+    elif kind == "sub":
+        out["cal"] = _activate_sub(token, "weekly", bg, customer, stripe_sub)
+    return out
+
+
+@app.get("/api/checkout/confirm")
+def checkout_confirm(session: str, bg: BackgroundTasks):
+    """The return page after Stripe: confirm the payment directly, without waiting for the webhook."""
+    with db() as con:
+        if not con.execute("select 1 from payments where session=?", (session,)).fetchone():
+            raise HTTPException(404, "unknown session")
+    s = pay.retrieve_session(session)
+    if not s["paid"]:
+        raise HTTPException(402, "not paid")
+    return _fulfil(s["id"], s["metadata"], bg, s["customer"], s["subscription"])
+
+
+@app.post("/api/stripe/webhook")
+async def stripe_webhook(request: Request, bg: BackgroundTasks):
+    try:
+        event = pay.parse_webhook(await request.body(), request.headers.get("stripe-signature", ""))
+    except Exception:
+        raise HTTPException(400, "bad signature")
+    obj = event["data"]["object"]
+    kind = event["type"]
+    if kind in ("checkout.session.completed", "checkout.session.async_payment_succeeded"):
+        if obj.get("payment_status") in ("paid", "no_payment_required"):
+            _fulfil(obj["id"], dict(obj.get("metadata") or {}), bg, obj.get("customer"), obj.get("subscription"))
+    elif kind == "customer.subscription.deleted":
+        with db() as con:
+            con.execute("update subs set status='cancelled' where stripe_sub=?", (obj["id"],))
+    return {"ok": True}
+
+
+@app.get("/api/billing/{sub_token}")
+def billing_portal(sub_token: str):
+    """Stripe customer portal for a paid subscription (cancel, card, invoices)."""
+    from fastapi.responses import RedirectResponse
+    with db() as con:
+        row = con.execute("select stripe_customer, lang from subs where token=?", (sub_token,)).fetchone()
+    if not row or not row[0]:
+        raise HTTPException(404, "no paid subscription")
+    return RedirectResponse(pay.portal_url(row[0], f"{emails.SITE}/{_lang(row[1])}/"), status_code=303)
 
 
 @app.api_route("/api/unsub/{token}", methods=["GET", "POST"])
 def unsubscribe(token: str, request: Request):
     from fastapi.responses import HTMLResponse
     with db() as con:
-        row = con.execute("select lang from subs where token=?", (token,)).fetchone()
-        if request.method == "POST":
-            con.execute("update subs set status='cancelled' where token=?", (token,))
+        row = con.execute("select lang, stripe_sub from subs where token=?", (token,)).fetchone()
+        if request.method == "POST" and row:
+            if row[1] and pay.enabled():
+                pay.cancel_subscription(row[1])  # access runs to the end of the paid period; the webhook ends it
+            else:
+                con.execute("update subs set status='cancelled' where token=?", (token,))
     return HTMLResponse(emails.unsub_page(_lang(row[0]) if row else "en", request.method == "POST"))
 
 
