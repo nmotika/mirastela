@@ -1,0 +1,7 @@
+[Unit]
+Description=Mirastela database backup
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/mirastela.env
+ExecStart=/opt/mirastela/deploy/backup.sh

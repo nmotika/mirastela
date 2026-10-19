@@ -1,0 +1,121 @@
+import type { Lang } from '../config';
+
+// "My reports" page: magic-link sign-in, purchased reports, add-ons, subscription, own data.
+// sl, ro, cs, hu are drafts for native review.
+export interface Account {
+  nav: string; title: string; intro: string; emailLabel: string; send: string; sent: string; expired: string;
+  signedAs: string; logout: string; empty: string; startCta: string;
+  chartOf: string; ordered: string; open: string; preparing: string; error: string;
+  products: { natal: string; partner: string; forecast: string; child: string };
+  addTitle: string; addPartnerFree: string;
+  subTitle: string; subActive: string; subOff: string; subStart: string; manage: string; cancel: string;
+  dataTitle: string; dataText: string; export: string; del: string; delConfirm: string; delGo: string; delDone: string;
+}
+
+export const ACCOUNT: Record<Lang, Account> = {
+  pl: {
+    nav: 'Moje raporty', title: 'Moje raporty', intro: 'Podaj adres e-mail użyty przy zakupie. Wyślemy Ci link do logowania, bez hasła.',
+    emailLabel: 'Adres e-mail', send: 'Wyślij link', sent: 'Jeśli pod tym adresem są zakupy, wysłaliśmy link. Sprawdź skrzynkę (także folder spam). Link działa 30 minut.',
+    expired: 'Ten link wygasł albo został już użyty. Poproś o nowy.',
+    signedAs: 'Zalogowano jako {email}', logout: 'Wyloguj', empty: 'Pod tym adresem nie ma jeszcze zakupionych raportów.', startCta: 'Zacznij od darmowego kosmogramu',
+    chartOf: 'Kosmogram: {name}', ordered: 'zamówiono {date}', open: 'Otwórz raport', preparing: 'w przygotowaniu', error: 'Coś poszło nie tak. Spróbuj ponownie.',
+    products: { natal: 'Kosmogram', partner: 'Dopasowanie', forecast: 'Prognoza roczna', child: 'Kosmogram dziecka' },
+    addTitle: 'Dodaj do tego kosmogramu', addPartnerFree: 'Dodaj dane partnera (w pakiecie)',
+    subTitle: 'Kalendarz i horoskop tygodniowy', subActive: 'Subskrypcja aktywna', subOff: 'Bez subskrypcji', subStart: 'Włącz subskrypcję',
+    manage: 'Karta, faktury, rezygnacja', cancel: 'Zrezygnuj z subskrypcji',
+    dataTitle: 'Twoje dane', dataText: 'Możesz pobrać wszystkie dane, które o Tobie przechowujemy, albo je trwale usunąć.',
+    export: 'Pobierz moje dane', del: 'Usuń wszystkie moje dane',
+    delConfirm: 'Rozumiem, że raporty, kalendarz i subskrypcja zostaną trwale usunięte, a aktywna subskrypcja anulowana od razu.',
+    delGo: 'Usuń trwale', delDone: 'Twoje dane zostały usunięte.',
+  },
+  hr: {
+    nav: 'Moji izvještaji', title: 'Moji izvještaji', intro: 'Upiši e-mail adresu s kojom si kupovao/la. Poslat ćemo ti link za prijavu, bez lozinke.',
+    emailLabel: 'E-mail adresa', send: 'Pošalji link', sent: 'Ako na toj adresi postoje kupnje, poslali smo link. Provjeri inbox (i spam). Link vrijedi 30 minuta.',
+    expired: 'Ovaj link je istekao ili je već iskorišten. Zatraži novi.',
+    signedAs: 'Prijavljen/a kao {email}', logout: 'Odjava', empty: 'Na ovoj adresi još nema kupljenih izvještaja.', startCta: 'Kreni s besplatnom natalnom kartom',
+    chartOf: 'Natalna karta: {name}', ordered: 'naručeno {date}', open: 'Otvori izvještaj', preparing: 'u pripremi', error: 'Nešto nije u redu. Pokušaj ponovno.',
+    products: { natal: 'Natalna karta', partner: 'Kompatibilnost', forecast: 'Godišnja prognoza', child: 'Natalna karta djeteta' },
+    addTitle: 'Dodaj uz ovu kartu', addPartnerFree: 'Dodaj podatke partnera (u paketu)',
+    subTitle: 'Kalendar i tjedni horoskop', subActive: 'Pretplata je aktivna', subOff: 'Bez pretplate', subStart: 'Uključi pretplatu',
+    manage: 'Kartica, računi, otkazivanje', cancel: 'Otkaži pretplatu',
+    dataTitle: 'Tvoji podaci', dataText: 'Možeš preuzeti sve podatke koje o tebi čuvamo ili ih trajno obrisati.',
+    export: 'Preuzmi moje podatke', del: 'Obriši sve moje podatke',
+    delConfirm: 'Razumijem da će izvještaji, kalendar i pretplata biti trajno obrisani, a aktivna pretplata odmah otkazana.',
+    delGo: 'Trajno obriši', delDone: 'Tvoji podaci su obrisani.',
+  },
+  sl: {
+    nav: 'Moja poročila', title: 'Moja poročila', intro: 'Vpiši e-poštni naslov, s katerim si kupoval(a). Poslali ti bomo povezavo za prijavo, brez gesla.',
+    emailLabel: 'E-poštni naslov', send: 'Pošlji povezavo', sent: 'Če so na tem naslovu nakupi, smo poslali povezavo. Preveri nabiralnik (tudi vsiljeno pošto). Povezava velja 30 minut.',
+    expired: 'Ta povezava je potekla ali je že bila uporabljena. Zahtevaj novo.',
+    signedAs: 'Prijavljen(a) kot {email}', logout: 'Odjava', empty: 'Na tem naslovu še ni kupljenih poročil.', startCta: 'Začni z brezplačno natalno karto',
+    chartOf: 'Natalna karta: {name}', ordered: 'naročeno {date}', open: 'Odpri poročilo', preparing: 'v pripravi', error: 'Nekaj je šlo narobe. Poskusi znova.',
+    products: { natal: 'Natalna karta', partner: 'Združljivost', forecast: 'Letna napoved', child: 'Natalna karta otroka' },
+    addTitle: 'Dodaj k tej karti', addPartnerFree: 'Dodaj podatke partnerja (v paketu)',
+    subTitle: 'Koledar in tedenski horoskop', subActive: 'Naročnina je aktivna', subOff: 'Brez naročnine', subStart: 'Vklopi naročnino',
+    manage: 'Kartica, računi, preklic', cancel: 'Prekliči naročnino',
+    dataTitle: 'Tvoji podatki', dataText: 'Lahko preneseš vse podatke, ki jih hranimo o tebi, ali jih trajno izbrišeš.',
+    export: 'Prenesi moje podatke', del: 'Izbriši vse moje podatke',
+    delConfirm: 'Razumem, da bodo poročila, koledar in naročnina trajno izbrisani, aktivna naročnina pa takoj preklicana.',
+    delGo: 'Trajno izbriši', delDone: 'Tvoji podatki so izbrisani.',
+  },
+  ro: {
+    nav: 'Rapoartele mele', title: 'Rapoartele mele', intro: 'Scrie adresa de e-mail folosită la cumpărare. Îți trimitem un link de autentificare, fără parolă.',
+    emailLabel: 'Adresa de e-mail', send: 'Trimite linkul', sent: 'Dacă există cumpărături pe această adresă, am trimis un link. Verifică inboxul (și spam). Linkul e valabil 30 de minute.',
+    expired: 'Acest link a expirat sau a fost deja folosit. Cere unul nou.',
+    signedAs: 'Autentificat(ă) ca {email}', logout: 'Ieșire', empty: 'Nu există încă rapoarte cumpărate pe această adresă.', startCta: 'Începe cu harta natală gratuită',
+    chartOf: 'Harta natală: {name}', ordered: 'comandat {date}', open: 'Deschide raportul', preparing: 'în pregătire', error: 'Ceva nu a mers. Încearcă din nou.',
+    products: { natal: 'Harta natală', partner: 'Compatibilitate', forecast: 'Prognoza anuală', child: 'Harta natală a copilului' },
+    addTitle: 'Adaugă la această hartă', addPartnerFree: 'Adaugă datele partenerului (în pachet)',
+    subTitle: 'Calendar și horoscop săptămânal', subActive: 'Abonamentul este activ', subOff: 'Fără abonament', subStart: 'Activează abonamentul',
+    manage: 'Card, facturi, anulare', cancel: 'Anulează abonamentul',
+    dataTitle: 'Datele tale', dataText: 'Poți descărca toate datele pe care le păstrăm despre tine sau le poți șterge definitiv.',
+    export: 'Descarcă datele mele', del: 'Șterge toate datele mele',
+    delConfirm: 'Înțeleg că rapoartele, calendarul și abonamentul vor fi șterse definitiv, iar abonamentul activ va fi anulat imediat.',
+    delGo: 'Șterge definitiv', delDone: 'Datele tale au fost șterse.',
+  },
+  cs: {
+    nav: 'Moje zprávy', title: 'Moje zprávy', intro: 'Zadej e-mail, který jsi použil(a) při nákupu. Pošleme ti odkaz pro přihlášení, bez hesla.',
+    emailLabel: 'E-mailová adresa', send: 'Poslat odkaz', sent: 'Pokud na této adrese existují nákupy, poslali jsme odkaz. Zkontroluj schránku (i spam). Odkaz platí 30 minut.',
+    expired: 'Tento odkaz vypršel nebo už byl použit. Požádej o nový.',
+    signedAs: 'Přihlášen(a) jako {email}', logout: 'Odhlásit', empty: 'Na této adrese zatím nejsou žádné zakoupené zprávy.', startCta: 'Začni bezplatným horoskopem',
+    chartOf: 'Natální horoskop: {name}', ordered: 'objednáno {date}', open: 'Otevřít zprávu', preparing: 'připravuje se', error: 'Něco se nepovedlo. Zkus to znovu.',
+    products: { natal: 'Natální horoskop', partner: 'Kompatibilita', forecast: 'Roční předpověď', child: 'Horoskop dítěte' },
+    addTitle: 'Přidat k tomuto horoskopu', addPartnerFree: 'Přidat údaje partnera (v balíčku)',
+    subTitle: 'Kalendář a týdenní horoskop', subActive: 'Předplatné je aktivní', subOff: 'Bez předplatného', subStart: 'Zapnout předplatné',
+    manage: 'Karta, faktury, zrušení', cancel: 'Zrušit předplatné',
+    dataTitle: 'Tvoje údaje', dataText: 'Můžeš si stáhnout všechny údaje, které o tobě uchováváme, nebo je trvale smazat.',
+    export: 'Stáhnout moje údaje', del: 'Smazat všechny moje údaje',
+    delConfirm: 'Rozumím, že zprávy, kalendář a předplatné budou trvale smazány a aktivní předplatné bude okamžitě zrušeno.',
+    delGo: 'Trvale smazat', delDone: 'Tvoje údaje byly smazány.',
+  },
+  hu: {
+    nav: 'Jelentéseim', title: 'Jelentéseim', intro: 'Add meg a vásárláskor használt e-mail-címet. Küldünk egy bejelentkezési linket, jelszó nélkül.',
+    emailLabel: 'E-mail-cím', send: 'Link küldése', sent: 'Ha ezen a címen vannak vásárlások, elküldtük a linket. Nézd meg a postafiókodat (a spamet is). A link 30 percig érvényes.',
+    expired: 'Ez a link lejárt vagy már felhasználták. Kérj újat.',
+    signedAs: 'Bejelentkezve: {email}', logout: 'Kijelentkezés', empty: 'Ezen a címen még nincs megvásárolt jelentés.', startCta: 'Kezdd az ingyenes születési képlettel',
+    chartOf: 'Születési képlet: {name}', ordered: 'rendelve: {date}', open: 'Jelentés megnyitása', preparing: 'készül', error: 'Valami nem sikerült. Próbáld újra.',
+    products: { natal: 'Születési képlet', partner: 'Párkapcsolati összhang', forecast: 'Éves előrejelzés', child: 'A gyermek képlete' },
+    addTitle: 'Hozzáadás ehhez a képlethez', addPartnerFree: 'A partner adatainak megadása (a csomagban)',
+    subTitle: 'Naptár és heti horoszkóp', subActive: 'Az előfizetés aktív', subOff: 'Nincs előfizetés', subStart: 'Előfizetés bekapcsolása',
+    manage: 'Kártya, számlák, lemondás', cancel: 'Előfizetés lemondása',
+    dataTitle: 'Adataid', dataText: 'Letöltheted az összes rólad tárolt adatot, vagy véglegesen törölheted őket.',
+    export: 'Adataim letöltése', del: 'Összes adatom törlése',
+    delConfirm: 'Tudomásul veszem, hogy a jelentések, a naptár és az előfizetés véglegesen törlődnek, az aktív előfizetés pedig azonnal megszűnik.',
+    delGo: 'Végleges törlés', delDone: 'Adataidat töröltük.',
+  },
+  en: {
+    nav: 'My reports', title: 'My reports', intro: 'Enter the email address you used when buying. We will send you a sign-in link, no password needed.',
+    emailLabel: 'Email address', send: 'Send link', sent: 'If this address has purchases, we have sent a link. Check your inbox (and spam). The link works for 30 minutes.',
+    expired: 'This link has expired or was already used. Ask for a new one.',
+    signedAs: 'Signed in as {email}', logout: 'Sign out', empty: 'There are no purchased reports for this address yet.', startCta: 'Start with a free natal chart',
+    chartOf: 'Natal chart: {name}', ordered: 'ordered {date}', open: 'Open report', preparing: 'being prepared', error: 'Something went wrong. Please try again.',
+    products: { natal: 'Natal chart', partner: 'Compatibility', forecast: 'Yearly forecast', child: "Child's chart" },
+    addTitle: 'Add to this chart', addPartnerFree: "Add your partner's details (included)",
+    subTitle: 'Calendar and weekly horoscope', subActive: 'Subscription active', subOff: 'No subscription', subStart: 'Start subscription',
+    manage: 'Card, invoices, cancel', cancel: 'Cancel subscription',
+    dataTitle: 'Your data', dataText: 'You can download all the data we keep about you, or delete it permanently.',
+    export: 'Download my data', del: 'Delete all my data',
+    delConfirm: 'I understand that my reports, calendar and subscription will be deleted permanently and an active subscription cancelled right away.',
+    delGo: 'Delete permanently', delDone: 'Your data has been deleted.',
+  },
+};

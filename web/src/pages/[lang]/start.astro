@@ -181,6 +181,7 @@ const clientData = JSON.stringify({
           <p class="ferr" id="eErr" hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" set:html={errIcon} /><span id="eErrText"></span></p>
         </div>
         <label class="ck"><input type="checkbox" id="eConsent" /><span>{Q.emailConsent}</span></label>
+        <div id="eCaptcha"></div>
         <div class="dock">
           <button type="submit" class="btn">{Q.emailCta}</button>
           <p class="mu tiny" set:html={terms(Q2.emailTerms)} />

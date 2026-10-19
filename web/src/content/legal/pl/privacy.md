@@ -59,6 +59,8 @@ Masz prawo dostępu do swoich danych, ich sprostowania lub usunięcia, ogranicze
 
 Aby skorzystać ze swoich praw, napisz na adres [hello@mirastela.com](mailto:hello@mirastela.com) z adresu e-mail, którego używasz w kontaktach z nami. Odpowiemy w ciągu miesiąca.
 
+Na stronie [Moje raporty](../account/) możesz też samodzielnie pobrać lub usunąć swoje dane, po zalogowaniu linkiem wysłanym na Twój e-mail.
+
 Masz również prawo wnieść skargę do organu nadzorczego: w Chorwacji jest to Agencja Ochrony Danych Osobowych (AZOP, azop.hr), a w Polsce Prezes Urzędu Ochrony Danych Osobowych (UODO). Co do zasady możesz wnieść skargę do organu nadzorczego w tym państwie UE, w którym mieszkasz.
 
 ## 7. Zautomatyzowane przetwarzanie

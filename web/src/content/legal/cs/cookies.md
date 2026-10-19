@@ -9,6 +9,7 @@ Následující je nezbytné pro fungování webu a nevyžaduje tvůj souhlas.
 | mirastela-funnel | Úložiště relace (session storage) ve tvém prohlížeči | Pamatuje si tvé odpovědi, zatímco procházíš jednotlivé kroky, abys o ně nepřišel nebo nepřišla při opětovném načtení stránky | Do zavření karty |
 | __cf_bm, cf_clearance | Cookies nastavené službou Cloudflare | Chrání web před boty a útoky | Až 30 minut / až 1 rok |
 | mirastela-consent | Místní úložiště (local storage) ve tvém prohlížeči | Pamatuje si tvou volbu ohledně cookies | Dokud ji nesmažeš |
+| mirastela-account | Místní úložiště (local storage) ve tvém prohlížeči | Udržuje tě přihlášeného/přihlášenou na stránce „Moje zprávy“ po otevření přihlašovacího odkazu | Do odhlášení, nejdéle 90 dní |
 
 ## Analytika a reklama
 

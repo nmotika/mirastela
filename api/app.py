@@ -31,6 +31,7 @@ import chart
 import pay
 import cities
 import emails
+import guard
 import mailer
 import report
 import sky
@@ -138,7 +139,8 @@ class ChartIn(BaseModel):
 
 
 @app.post("/api/chart")
-def make_chart(body: ChartIn):
+def make_chart(body: ChartIn, request: Request):
+    guard.per_ip(DB_PATH, request, "chart", 60, 600)
     city = cities.get(body.cityId)
     if not city:
         raise HTTPException(404, "city not found")
@@ -160,8 +162,7 @@ class TrackIn(BaseModel):
 def _track(t: "TrackIn | None", request: Request) -> dict:
     if not t or not t.consent:
         return {}
-    ip = request.headers.get("cf-connecting-ip") or request.headers.get("x-forwarded-for", "").split(",")[0].strip()
-    return {"consent": True, "fbp": t.fbp, "fbc": t.fbc, "ip": ip, "ua": request.headers.get("user-agent", "")[:400]}
+    return {"consent": True, "fbp": t.fbp, "fbc": t.fbc, "ip": guard.client_ip(request), "ua": request.headers.get("user-agent", "")[:400]}
 
 
 class LeadIn(BaseModel):
@@ -175,12 +176,16 @@ class LeadIn(BaseModel):
     status: str = ""
     marketingConsent: bool = False
     track: TrackIn | None = None
+    captcha: str | None = Field(None, max_length=4000)
 
 
 @app.post("/api/lead")
 def lead(body: LeadIn, bg: BackgroundTasks, request: Request):
     if not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", body.email):
         raise HTTPException(422, "invalid email")
+    guard.per_ip(DB_PATH, request, "lead", 6, 600)
+    guard.limit(DB_PATH, f"lead-mail:{body.email.lower()}", 4, 3600)
+    guard.turnstile(body.captcha, request)
     token = secrets.token_urlsafe(12)
     with db() as con:
         con.execute("insert into leads(created,email,lang,name,birth_date,birth_time,city_id,focus,status,marketing_consent,token)"
@@ -328,6 +333,7 @@ def _add_item(token: str, product: str, item_input: dict | None, bg: BackgroundT
 
 @app.post("/api/order")
 def create_order(body: OrderIn, bg: BackgroundTasks, request: Request):
+    guard.per_ip(DB_PATH, request, "order", 10, 600)
     if not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", body.email):
         raise HTTPException(422, "invalid email")
     free = _coupon_ok(body.coupon)
@@ -372,12 +378,14 @@ def _checkout(token: str, lang: str, email: str, key: str, kind: str, product: s
 
 
 @app.post("/api/coupon")
-def check_coupon(body: dict):
+def check_coupon(body: dict, request: Request):
+    guard.per_ip(DB_PATH, request, "coupon", 10, 600)
     return {"valid": _coupon_ok(str(body.get("code", "")))}
 
 
 @app.post("/api/order/{token}/add")
 def add_product(token: str, body: AddIn, bg: BackgroundTasks, request: Request):
+    guard.per_ip(DB_PATH, request, "add", 20, 600)
     if body.product not in ("partner", "forecast", "child"):
         raise HTTPException(422, "unknown product")
     with db() as con:
@@ -495,6 +503,7 @@ def calendar_feed(name: str):
 
 @app.post("/api/subscribe")
 def subscribe(body: SubIn, bg: BackgroundTasks, request: Request):
+    guard.per_ip(DB_PATH, request, "sub", 10, 600)
     with db() as con:
         row = con.execute("select lang, email, name, chart, coupon from orders where token=?", (body.order,)).fetchone()
         if not row:
@@ -684,6 +693,7 @@ class FeedbackIn(BaseModel):
 @app.post("/api/feedback")
 def feedback(body: FeedbackIn, request: Request, tasks: BackgroundTasks):
     """Tester questionnaire. The email comes from Cloudflare Access when present."""
+    guard.per_ip(DB_PATH, request, "feedback", 10, 3600)
     answers = {k[:40]: (v[:3000] if isinstance(v, str) else v) for k, v in list(body.answers.items())[:40]}
     # Anonymous on purpose: no e-mail, only the kind of device.
     email = ""
@@ -725,3 +735,204 @@ def _safe_daily(lang: str, d: date):
         daily_for(lang, d)
     except Exception as e:
         print("daily", lang, d, "error", e)
+
+
+# ---------------------------------------------------------------- account ("my reports"), magic link
+LOGIN_TTL = timedelta(minutes=30)
+ACCOUNT_TTL = timedelta(days=90)
+ADD_ONS = ("partner", "forecast", "child")
+
+
+def _account_tables(con):
+    con.execute("create table if not exists logins(token text primary key, email text, lang text, created text, used text)")
+    con.execute("create table if not exists accounts(key text primary key, email text, created text)")
+
+
+def _known(con, email: str) -> bool:
+    return any(con.execute(f"select 1 from {t} where lower(email)=? limit 1", (email,)).fetchone()
+               for t in ("orders", "subs", "leads"))
+
+
+class LoginIn(BaseModel):
+    email: str = Field(max_length=200)
+    lang: str = "en"
+    captcha: str | None = Field(None, max_length=4000)
+
+
+@app.post("/api/account/login")
+def account_login(body: LoginIn, request: Request, bg: BackgroundTasks):
+    """Email a one-time sign-in link. Same answer whether or not the address is known."""
+    email = body.email.strip().lower()
+    if not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", email):
+        raise HTTPException(422, "invalid email")
+    guard.per_ip(DB_PATH, request, "login", 5, 600)
+    guard.limit(DB_PATH, f"login-mail:{email}", 3, 900)
+    guard.turnstile(body.captcha, request)
+    lang = _lang(body.lang)
+    with db() as con:
+        _account_tables(con)
+        if not _known(con, email):
+            return {"ok": True}
+        token = secrets.token_urlsafe(24)
+        con.execute("insert into logins(token, email, lang, created) values(?,?,?,?)",
+                    (token, email, lang, datetime.now(timezone.utc).isoformat()))
+    subject, html = emails.login(lang, f"{emails.SITE}/{lang}/account/?t={token}")
+    bg.add_task(mailer.send, DB_PATH, email, "login", subject, html)
+    return {"ok": True}
+
+
+class SessionIn(BaseModel):
+    t: str = Field(max_length=100)
+
+
+@app.post("/api/account/session")
+def account_session(body: SessionIn, request: Request):
+    """Exchange the one-time link for an account key the browser keeps (90 days)."""
+    guard.per_ip(DB_PATH, request, "session", 20, 600)
+    now = datetime.now(timezone.utc)
+    with db() as con:
+        _account_tables(con)
+        row = con.execute("select email, created, used from logins where token=?", (body.t,)).fetchone()
+        if not row or row[2] or now - datetime.fromisoformat(row[1]) > LOGIN_TTL:
+            raise HTTPException(410, "link expired")
+        con.execute("update logins set used=? where token=?", (now.isoformat(), body.t))
+        key = secrets.token_urlsafe(32)
+        con.execute("insert into accounts(key, email, created) values(?,?,?)", (key, row[0], now.isoformat()))
+    return {"key": key}
+
+
+class KeyIn(BaseModel):
+    key: str = Field(max_length=100)
+
+
+def _account_email(key: str) -> str:
+    with db() as con:
+        _account_tables(con)
+        row = con.execute("select email, created from accounts where key=?", (key,)).fetchone()
+    if not row or datetime.now(timezone.utc) - datetime.fromisoformat(row[1]) > ACCOUNT_TTL:
+        raise HTTPException(401, "signed out")
+    return row[0]
+
+
+@app.post("/api/account/me")
+def account_me(body: KeyIn):
+    email = _account_email(body.key)
+    with db() as con:
+        orders = con.execute("select token, created, lang, name, input, coupon from orders"
+                             " where lower(email)=? and paid=1 order by created desc", (email,)).fetchall()
+        subs = con.execute("select token, order_token, status, cal, stripe_customer, created from subs"
+                           " where lower(email)=? order by created desc", (email,)).fetchall()
+        items = {}
+        for tok, *_ in orders:
+            items[tok] = {p: s for p, s in con.execute("select product, status from items where token=? order by id", (tok,))}
+    sub_by_order = {s[1]: s for s in subs}
+    out = []
+    for tok, created, lang, name, inp, coupon in orders:
+        have = items.get(tok, {})
+        owned = [{"product": p, "status": s} for p, s in have.items() if s != "unpaid"]
+        bundle = bool(json.loads(inp).get("bundle"))
+        missing = [p for p in ADD_ONS if have.get(p, "unpaid") == "unpaid"]
+        s = sub_by_order.get(tok)
+        out.append({"token": tok, "created": created[:10], "lang": _lang(lang), "name": name, "bundle": bundle,
+                    "free": bool(coupon), "owned": owned, "missing": missing,
+                    "sub": {"status": s[2], "cal": cal_url(s[3]) if s[3] and s[2] == "active" else None,
+                            "billing": f"/api/billing/{s[0]}" if s[4] else None,
+                            "unsub": f"/api/unsub/{s[0]}" if s[2] == "active" else None} if s else None})
+    return {"email": email, "orders": out}
+
+
+def export_data(email: str) -> dict:
+    """Everything stored about one email address (GDPR access request)."""
+    email = email.strip().lower()
+    with db() as con:
+        _account_tables(con)
+        con.row_factory = sqlite3.Row
+        q = lambda sql, *a: [dict(r) for r in con.execute(sql, a)]
+        orders = q("select * from orders where lower(email)=?", email)
+        toks = [o["token"] for o in orders]
+        subs = q("select * from subs where lower(email)=?", email)
+        ph = ",".join("?" * len(toks)) or "''"
+        sph = ",".join("?" * len(subs)) or "''"
+        data = {
+            "email": email,
+            "leads": q("select * from leads where lower(email)=?", email),
+            "orders": orders,
+            "items": q(f"select token, product, input, status, markdown, created from items where token in ({ph})", *toks),
+            "subscriptions": subs,
+            "calendar": q(f"select * from caldays where sub in ({sph})", *[s["token"] for s in subs]),
+            "payments": q(f"select session, token, kind, product, status, created, done, consent from payments where token in ({ph})", *toks),
+            "emails": q("select created, kind, subject, status from emails where lower(recipient)=?", email)
+            if con.execute("select 1 from sqlite_master where name='emails'").fetchone() else [],
+        }
+    for k in ("orders", "subscriptions"):
+        for row in data[k]:
+            for f in ("input", "chart"):
+                if isinstance(row.get(f), str):
+                    try:
+                        row[f] = json.loads(row[f])
+                    except ValueError:
+                        pass
+    return data
+
+
+def forget(email: str) -> dict:
+    """Delete everything about one email address. Paid Stripe subscriptions are cancelled right away
+    (Stripe keeps its own payment and tax records as the merchant of record)."""
+    email = email.strip().lower()
+    with db() as con:
+        _account_tables(con)
+        toks = [r[0] for r in con.execute("select token from orders where lower(email)=?", (email,))]
+        subs = con.execute("select token, stripe_sub, status from subs where lower(email)=?", (email,)).fetchall()
+    for _, stripe_sub, status in subs:
+        if stripe_sub and status == "active" and pay.enabled():
+            try:
+                pay.cancel_subscription(stripe_sub, now=True)
+            except Exception as e:
+                print("forget: stripe cancel failed", e)
+    counts = {}
+    with db() as con:
+        ph = ",".join("?" * len(toks)) or "''"
+        sph = ",".join("?" * len(subs)) or "''"
+        for name, sql, args in (
+            ("items", f"delete from items where token in ({ph})", toks),
+            ("payments", f"delete from payments where token in ({ph})", toks),
+            ("caldays", f"delete from caldays where sub in ({sph})", [s[0] for s in subs]),
+            ("subs", "delete from subs where lower(email)=?", [email]),
+            ("orders", "delete from orders where lower(email)=?", [email]),
+            ("leads", "delete from leads where lower(email)=?", [email]),
+            ("logins", "delete from logins where lower(email)=?", [email]),
+            ("accounts", "delete from accounts where lower(email)=?", [email]),
+        ):
+            counts[name] = con.execute(sql, args).rowcount
+        if con.execute("select 1 from sqlite_master where name='emails'").fetchone():
+            counts["emails"] = con.execute("delete from emails where lower(recipient)=?", (email,)).rowcount
+    print("forget", email.split("@")[-1], counts, flush=True)
+    return counts
+
+
+@app.post("/api/account/export")
+def account_export(body: KeyIn, request: Request):
+    guard.per_ip(DB_PATH, request, "export", 10, 3600)
+    return JSONResponse(export_data(_account_email(body.key)),
+                        headers={"Content-Disposition": 'attachment; filename="mirastela-data.json"'})
+
+
+class DeleteIn(KeyIn):
+    confirm: bool = False
+
+
+@app.post("/api/account/delete")
+def account_delete(body: DeleteIn, request: Request):
+    guard.per_ip(DB_PATH, request, "delete", 5, 3600)
+    if not body.confirm:
+        raise HTTPException(422, "confirm required")
+    forget(_account_email(body.key))
+    return {"ok": True}
+
+
+@app.post("/api/account/logout")
+def account_logout(body: KeyIn):
+    with db() as con:
+        _account_tables(con)
+        con.execute("delete from accounts where key=?", (body.key,))
+    return {"ok": True}

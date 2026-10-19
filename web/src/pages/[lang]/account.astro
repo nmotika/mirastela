@@ -1,0 +1,72 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { LOCALES, PRICE, UPSELL, SUB, formatPrice, type Lang } from '../../i18n/config';
+import { t } from '../../i18n';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+const lang = Astro.params.lang as Lang;
+const d = t(lang);
+const A = d.account;
+const fp = (amount: number) => formatPrice(lang, { amount, currency: PRICE[lang].currency });
+const prices = { partner: fp(UPSELL[lang].partner), forecast: fp(UPSELL[lang].forecast), child: fp(UPSELL[lang].child), sub: fp(SUB[lang].month) };
+const clientData = JSON.stringify({ lang, A, prices, shop: { calGoogle: d.shop.calGoogle, calApple: d.shop.calApple } });
+---
+<Base lang={lang} path="account/" title={`${A.title} · Mirastela`} description={A.intro} noindex>
+  <div class="wrap"><Header lang={lang} path="account/" /></div>
+  <main class="wrap acc">
+    <h1 class="sf">{A.title}</h1>
+
+    <section id="aLogin" hidden>
+      <p class="mu">{A.intro}</p>
+      <form id="aForm" novalidate class="aform">
+        <label for="aEmail" class="lbl">{A.emailLabel}</label>
+        <input type="email" id="aEmail" class="inp" autocomplete="email" inputmode="email" required />
+        <div id="aCap"></div>
+        <button type="submit" class="btn">{A.send}</button>
+      </form>
+    </section>
+    <p id="aMsg" class="amsg" role="status" hidden></p>
+
+    <section id="aMain" hidden>
+      <div class="awho"><span class="mu" id="aWho"></span><button type="button" class="linkb" id="aOut">{A.logout}</button></div>
+      <div id="aOrders"></div>
+      <section class="acard">
+        <h2 class="sf">{A.dataTitle}</h2>
+        <p class="mu">{A.dataText}</p>
+        <div class="arow">
+          <button type="button" class="btn2" id="aExport">{A.export}</button>
+          <button type="button" class="btn2 danger" id="aDel">{A.del}</button>
+        </div>
+        <div id="aDelBox" class="adel" hidden>
+          <label class="ck"><input type="checkbox" id="aDelOk" /><span>{A.delConfirm}</span></label>
+          <button type="button" class="btn2 danger" id="aDelGo" disabled>{A.delGo}</button>
+        </div>
+      </section>
+    </section>
+  </main>
+  <Footer lang={lang} path="account/" />
+  <script type="application/json" id="account-data" set:html={clientData} />
+  <script src="../../scripts/account.ts"></script>
+</Base>
+
+<style is:global>
+  .acc { max-width: 720px; display: flex; flex-direction: column; gap: 20px; padding-top: 24px; padding-bottom: 56px; flex: 1; }
+  .acc h1 { font-size: 40px; line-height: 1.1; margin: 0; }
+  .acc h2 { font-size: 26px; margin: 0; }
+  .acc h3 { font: 700 13px/1.4 var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin: 8px 0 0; }
+  .aform { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+  .amsg { padding: 14px 16px; border: 1px solid var(--border); border-radius: 14px; margin: 0; }
+  .awho { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+  .linkb { background: none; border: 0; padding: 8px 0; color: var(--gold); font: 600 14px var(--sans); cursor: pointer; text-decoration: underline; }
+  .acard { display: flex; flex-direction: column; gap: 12px; padding: 22px; border: 1px solid var(--border); border-radius: 18px; background: var(--panel); margin-bottom: 16px; }
+  .acard ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+  .acard li { display: flex; justify-content: space-between; gap: 12px; }
+  .arow { display: flex; flex-wrap: wrap; gap: 10px; }
+  .adel { display: flex; flex-direction: column; gap: 10px; }
+  .danger { border-color: var(--error-line); color: var(--error); }
+  .btn2[disabled] { opacity: .5; cursor: not-allowed; }
+</style>

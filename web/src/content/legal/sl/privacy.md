@@ -59,6 +59,8 @@ Imaš pravico do dostopa do svojih podatkov, do njihovega popravka ali izbrisa, 
 
 Za uveljavljanje pravic nam piši na [hello@mirastela.com](mailto:hello@mirastela.com) z e-poštnega naslova, ki si ga uporabil oziroma uporabila pri nas. Odgovorimo v enem mesecu.
 
+Na strani [Moja poročila](../account/) lahko svoje podatke tudi sam oziroma sama preneseš ali izbrišeš, po prijavi s povezavo, ki ti jo pošljemo po e-pošti.
+
 Imaš tudi pravico vložiti pritožbo pri nadzornem organu: na Hrvaškem pri Agenciji za varstvo osebnih podatkov (AZOP, azop.hr), v Sloveniji pri Informacijskem pooblaščencu (ip-rs.si) ali pri organu v državi EU, v kateri prebivaš.
 
 ## 7. Avtomatizirana obdelava

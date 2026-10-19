@@ -51,3 +51,6 @@ export function formatPrice(lang: Lang, p = PRICE[lang]): string {
 export function isLang(x: string | undefined): x is Lang {
   return !!x && (LOCALES as readonly string[]).includes(x);
 }
+
+/** Cloudflare Turnstile site key (public). Empty: no challenge (the API skips the check without its secret too). */
+export const TURNSTILE_SITEKEY = '';

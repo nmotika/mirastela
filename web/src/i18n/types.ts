@@ -48,10 +48,11 @@ export interface More {
   nav: { how: string };
 }
 
-export type BaseDict = Omit<Dict, keyof Extra | keyof More | 'shop'>;
+export type BaseDict = Omit<Dict, keyof Extra | keyof More | 'shop' | 'account'>;
 
 export interface Dict extends Extra, More {
   shop: import('./lang/shop').Shop;
+  account: import('./lang/account').Account;
   meta: { title: string; description: string };
   ui: { changeLang: string; home: string; back: string; next: string; stepOf: string; error: string };
   landing: {

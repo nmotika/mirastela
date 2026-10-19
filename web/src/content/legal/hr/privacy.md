@@ -59,6 +59,8 @@ Imaš pravo na pristup svojim podacima, na njihov ispravak ili brisanje, na ogra
 
 Za ostvarivanje svojih prava piši na [hello@mirastela.com](mailto:hello@mirastela.com) s e-mail adrese koju si koristio/la kod nas. Odgovaramo u roku od mjesec dana.
 
+Na stranici [Moji izvještaji](../account/) svoje podatke možeš i sam/a preuzeti ili obrisati, nakon prijave linkom koji ti pošaljemo e-mailom.
+
 Imaš i pravo podnijeti pritužbu nadzornom tijelu: u Hrvatskoj je to Agencija za zaštitu osobnih podataka (AZOP, azop.hr), a možeš se obratiti i tijelu u državi članici EU-a u kojoj živiš.
 
 ## 7. Automatizirana obrada

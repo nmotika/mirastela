@@ -9,6 +9,7 @@ Naslednje je nujno za delovanje spletne strani in ne potrebuje tvojega soglasja.
 | mirastela-funnel | Shramba seje v tvojem brskalniku | Zapomni si tvoje odgovore, medtem ko greš skozi korake, da jih ob ponovnem nalaganju strani ne izgubiš | Dokler ne zapreš zavihka |
 | __cf_bm, cf_clearance | Piškotki, ki jih nastavi Cloudflare | Ščitijo spletno mesto pred boti in napadi | Do 30 minut / do 1 leta |
 | mirastela-consent | Lokalna shramba (local storage) v tvojem brskalniku | Zapomni si tvojo izbiro glede piškotkov | Dokler je ne izbrišeš |
+| mirastela-account | Lokalna shramba (local storage) v tvojem brskalniku | Ohrani prijavo na strani „Moja poročila”, ko odpreš povezavo za prijavo | Do odjave, največ 90 dni |
 
 ## Analitika in oglaševanje
 

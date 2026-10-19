@@ -3,6 +3,7 @@ import { CUSP } from './cusp';
 import { fill, huArticle } from '../i18n/fill';
 import { SIGN_GLYPHS } from './zodiac';
 import { fbTrack, trackInfo } from './track';
+import { captcha, type Captcha } from './captcha';
 
 type Step = 'date' | 'time' | 'place' | 'name' | 'focus' | 'status' | 'calc' | 'email' | 'offer' | 'upsell' | 'pdata' | 'kid' | 'sub' | 'done';
 const STEPS: Step[] = ['date', 'time', 'place', 'name', 'focus', 'status', 'calc', 'email', 'offer', 'upsell', 'pdata', 'kid', 'sub', 'done'];
@@ -23,6 +24,7 @@ interface State {
   date?: string; time?: string | null; city?: City; name?: string;
   focus: string[]; status?: string; email?: string; chart?: Chart; coupon?: string; token?: string;
   sub?: string; cal?: string; plan?: 'natal' | 'bundle'; pMode?: 'partner' | 'child';
+  up?: 'partner' | 'forecast'; // add-on chosen on the account page
 }
 
 const data = JSON.parse(document.getElementById('funnel-data')!.textContent!);
@@ -402,8 +404,10 @@ $('calcGo').addEventListener('click', () => {
 });
 
 /* ---------- 8 email ---------- */
+let eCap: Captcha | undefined;
 function renderEmail() {
   if (!state.chart) { show('date'); return; }
+  eCap ??= captcha($('eCaptcha'), lang);
   chipsInto($('eChips'), state.chart);
   if (state.email) $<HTMLInputElement>('eInput').value = state.email;
 }
@@ -423,13 +427,20 @@ $('eForm').addEventListener('submit', async (e) => {
   const btn = (e.currentTarget as HTMLFormElement).querySelector<HTMLButtonElement>('button[type=submit]')!;
   btn.disabled = true;
   try {
+    const cap = await eCap?.token();
     const r = await api<{ token: string }>('/api/lead', {
       email, lang, name: state.name ?? '', date: state.date ?? '', time: state.time ?? null,
       cityId: state.city?.id ?? null, focus: state.focus, status: state.status ?? '',
-      marketingConsent: $<HTMLInputElement>('eConsent').checked, track: trackInfo(),
+      marketingConsent: $<HTMLInputElement>('eConsent').checked, track: trackInfo(), captcha: cap,
     });
     fbTrack('Lead', {}, `lead_${r.token}`);
-  } catch { /* keep the funnel moving even if the lead call fails */ }
+  } catch (err) {
+    eCap?.reset();
+    if (String((err as Error).message) === '403') {  // the security check failed: let them try again
+      btn.disabled = false; $('eErrText').textContent = D.ui.error; $('eErr').hidden = false; return;
+    }
+    /* otherwise keep the funnel moving even if the lead call fails */
+  }
   btn.disabled = false;
   show('offer');
 });
@@ -529,6 +540,7 @@ $('oBuy').addEventListener('click', async () => {
         cityId: state.city!.id, focus: state.focus, status: state.status ?? '', coupon: state.coupon ?? '',
         bundle: state.plan === 'bundle', consent: true, track: trackInfo(),
       });
+      state.up = undefined;
       if (res.checkout) { state.token = undefined; save(); toCheckout(res.checkout, state.plan === 'bundle' ? data.upPrices.bundle : data.price); return; }
       state.token = res.token; save();
     }
@@ -542,12 +554,13 @@ $('oBuy').addEventListener('click', async () => {
 
 /* ---------- 10 upsell ---------- */
 const forecastYear = (() => { const n = new Date(); return n.getMonth() >= 9 ? n.getFullYear() + 1 : n.getFullYear(); })();
-const upsellProduct = () => (state.status === 'single' ? 'forecast' : 'partner');
+const upsellProduct = () => state.up ?? (state.status === 'single' ? 'forecast' : 'partner');
 const reportUrl = () => `/${lang}/report/?o=${encodeURIComponent(state.token ?? '')}`;
 function renderUpsell() {
   if (!state.token) { show('offer'); return; }
   const prod = upsellProduct();
   $('uBanner').textContent = state.coupon ? D.upsell2.paidCoupon : D.upsell2.paid;
+  $('uBanner').parentElement!.hidden = !!state.up;
   $('uPartner').hidden = prod !== 'partner';
   $('uForecast').hidden = prod !== 'forecast';
   $('ufTitle').textContent = fill(D.upsell2.forecastTitle, { year: forecastYear });
@@ -791,10 +804,16 @@ const orderToken = params.get('o');
 let fromReport = false;
 if (orderToken) {
   fromReport = true;
-  // From the report page: add the partner that came with a bundle.
-  Object.assign(state, { token: orderToken, plan: 'bundle', pMode: 'partner' });
+  // From the report or account page. Without "add": the partner that came with a bundle.
+  // With add=partner|forecast|child|sub: buy that add-on for an existing order.
+  const add = params.get('add');
+  let step: Step = 'pdata';
+  Object.assign(state, { token: orderToken, plan: 'bundle', pMode: 'partner', up: undefined, coupon: undefined });
+  if (add === 'partner' || add === 'forecast') { Object.assign(state, { plan: 'natal', up: add }); step = 'upsell'; }
+  else if (add === 'child') { state.plan = 'natal'; step = 'kid'; }
+  else if (add === 'sub') step = 'sub';
   save();
-  history.replaceState({ step: 'pdata' }, '', `${location.pathname}#pdata`);
-  show('pdata', false);
+  history.replaceState({ step }, '', `${location.pathname}#${step}`);
+  show(step, false);
 } else if (paidSession) returnFromCheckout(paidSession);
 else if (resumeToken) resume(resumeToken).then(restore); else restore();

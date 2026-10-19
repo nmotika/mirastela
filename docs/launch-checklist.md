@@ -6,10 +6,10 @@ consent and tracking are written once.
 ## Plan, in order
 
 1. Waiting: director sets up Stripe (Managed Payments) and gives nmotika@gmail.com the Developer role.
-2. Stripe integration: products and tax codes, Checkout with `managed_payments`, webhook, bundle and child as line items, subscription (calendar, monthly and yearly), withdrawal-consent checkbox. Plus a minimal account page "Moji izvještaji": magic-link login by email (link valid 30 min, no passwords), list of purchased reports, missing products with price and buy button (reuses the add-to-order flow), subscription status with calendar link and a button to the Stripe customer portal (cancel, card, invoices). Not now: editing birth data, horoscope archive, family profiles, loyalty.
+2. [done 2026-10-19: Stripe; account page /{lang}/account/ with magic link, add-ons, subscription, export and delete] Stripe integration: products and tax codes, Checkout with `managed_payments`, webhook, bundle and child as line items, subscription (calendar, monthly and yearly), withdrawal-consent checkbox. Plus a minimal account page "Moji izvještaji": magic-link login by email (link valid 30 min, no passwords), list of purchased reports, missing products with price and buy button (reuses the add-to-order flow), subscription status with calendar link and a button to the Stripe customer portal (cancel, card, invoices). Not now: editing birth data, horoscope archive, family profiles, loyalty.
 3. [done 2026-10-19: Meta pixel + CAPI dataset 2027523501240767, GA4 G-4W6JYDV6GR, consent banner; mark generate_lead as key event in GA once it shows up] Tracking: Meta pixel + Conversions API (lead, checkout, purchase, upsells), analytics, all behind the consent banner.
 4. [done 2026-10-19: terms, privacy, cookies in 7 languages, site public] Legal pages: terms, privacy, cookies, withdrawal and refund policy, imprint for Something Digital d.o.o., in all languages.
-5. Production hardening: daily offsite backup of the SQLite database (e.g. Hetzner Storage Box or Cloudflare R2, keep 30 days, test a restore), uptime monitoring of /api/health with alerts (UptimeRobot or Cloudflare health check), 2 uvicorn workers. CX23 is enough for the planned volume; if ever needed, rescale in Hetzner to CPX/CCX.
+5. [scripts ready 2026-10-19: deploy/harden.sh, backup timer, restore-test, 2 workers; R2 bucket, UptimeRobot and Turnstile keys pending] Production hardening: daily offsite backup of the SQLite database (e.g. Hetzner Storage Box or Cloudflare R2, keep 30 days, test a restore), uptime monitoring of /api/health with alerts (UptimeRobot or Cloudflare health check), 2 uvicorn workers. CX23 is enough for the planned volume; if ever needed, rescale in Hetzner to CPX/CCX.
 6. Sandbox testing: full flow with Stripe test cards for every path (natal, bundle, upsells, child, subscription, cancel, failed payment, refund), checking emails, reports and pixel events.
 7. Flight 1 in Poland (natal entry). Payments stay on Stripe Managed Payments with a separate hosted checkout per add-on (MP has no one-click upsell). Measure: share of upsell viewers who complete the second checkout, and checkout drop-off without BLIK. If the second checkout passes under ~15% or BLIK is missed, consider regular Stripe (one-click upsells, BLIK, own VAT/OSS).
 8. Affiliate and influencer programme (after flight 1, once real conversion is known): own tracking (`?ref=` stored on lead and order, 30-day cookie, last click or used code wins), a personal discount code per creator (10 to 15%), a simple creator page with their sales, and a short contract template. Terms: 40% of net revenue (excl. VAT and fees) on first purchases, 20 to 25% on subscriptions for the first 12 months, monthly payout with a 30-day hold. Start with 5 to 10 micro creators in Poland (10k to 50k followers; lifestyle, mums, relationships, tarot), not astrologers. Paid posts must be labelled per UOKiK ("reklama"). If a ready tool (Rewardful, Tolt) is considered, first check it works with Stripe Managed Payments.
@@ -28,10 +28,10 @@ consent and tracking are written once.
 - [x] Terms of sale, entertainment disclaimer, right of withdrawal for digital content
 - [x] Checkbox before payment: consent to immediate delivery of digital content and loss of the 14-day withdrawal right (PL: art. 38 ust. 1 pkt 13 ustawy o prawach konsumenta; EU equivalent elsewhere)
 - [ ] Accept DPAs: Hetzner, Cloudflare, Resend, Anthropic (later Stripe/MoR, Meta)
-- [ ] Self-service "delete my data" link in every email and on the report page (deletes by email across leads, orders, items, subs, emails)
-- [ ] Server commands: delete by email, export by email as JSON (access requests)
-- [ ] Retention: leads without purchase 12 months; email bodies 30 days; backups 14 days (stated in policy)
-- [ ] Emails table: store recipient, kind, status, time only; no HTML body
+- [x] Self-service "delete my data" link in every email and on the report page (deletes by email across leads, orders, items, subs, emails)
+- [x] Server commands: delete by email, export by email as JSON (access requests)
+- [x] Retention (sender.py prune, daily): leads without purchase 12 months, email log 12 months, sign-in links 1 day, sessions 90 days; backups 30 days offsite
+- [x] Emails table: store recipient, kind, status, time only; no HTML body
 - [ ] Legal review of the texts
 
 ## Tracking and consent
@@ -40,7 +40,7 @@ consent and tracking are written once.
 - [ ] Marketing consent wording at the email step
 
 ## Security
-- [ ] Turnstile + rate limiting on /api/lead and other public POST endpoints
+- [x] Rate limiting on all public POST endpoints; Turnstile on email step and account sign-in (keys pending)
 - [ ] SSH key-only login, fail2ban, ufw (only SSH; API stays local behind the tunnel)
 - [ ] Encrypted off-server backups (R2 or Hetzner Storage Box)
 - [x] Open landing and horoscope pages to the public (Access bypass); keep /api/ private paths as now

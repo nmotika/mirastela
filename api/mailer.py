@@ -16,6 +16,10 @@ API = "https://api.resend.com/emails"
 
 
 def _log(db_path: str, to: str, kind: str, subject: str, html: str, status: str, info: str = ""):
+    # The body is kept only for emails that were not sent (local testing); sent emails are logged
+    # without their content (data minimisation).
+    if status != "skipped":
+        html = ""
     con = sqlite3.connect(db_path)
     with con:
         con.execute("""create table if not exists emails(

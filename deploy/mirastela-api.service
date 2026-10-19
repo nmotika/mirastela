@@ -7,7 +7,7 @@ User=mirastela
 WorkingDirectory=/opt/mirastela/api
 EnvironmentFile=/etc/mirastela.env
 Environment=PYTHONUNBUFFERED=1
-ExecStart=/opt/mirastela/.venv/bin/uvicorn app:app --host 127.0.0.1 --port 8000 --proxy-headers
+ExecStart=/opt/mirastela/.venv/bin/uvicorn app:app --host 127.0.0.1 --port 8000 --proxy-headers --workers 2
 Restart=always
 RestartSec=3
 

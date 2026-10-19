@@ -9,6 +9,7 @@ Poniższe są niezbędne do działania strony i nie wymagają Twojej zgody.
 | mirastela-funnel | Pamięć sesji (session storage) w Twojej przeglądarce | Zapamiętuje Twoje odpowiedzi podczas przechodzenia przez kolejne kroki, aby nie przepadły po odświeżeniu strony | Do zamknięcia karty |
 | __cf_bm, cf_clearance | Pliki cookie ustawiane przez Cloudflare | Chronią stronę przed botami i atakami | Do 30 minut / do 1 roku |
 | mirastela-consent | Pamięć lokalna (local storage) w Twojej przeglądarce | Zapamiętuje Twój wybór dotyczący cookies | Do czasu usunięcia |
+| mirastela-account | Pamięć lokalna (local storage) w Twojej przeglądarce | Utrzymuje zalogowanie na stronie „Moje raporty” po otwarciu linku do logowania | Do wylogowania, najdłużej 90 dni |
 
 ## Analityka i reklama
 

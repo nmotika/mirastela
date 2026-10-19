@@ -59,6 +59,8 @@ Ai dreptul de acces la datele tale, dreptul la rectificarea sau ștergerea lor, 
 
 Ca să îți exerciți drepturile, scrie-ne la [hello@mirastela.com](mailto:hello@mirastela.com) de pe adresa de e-mail pe care ai folosit-o la noi. Răspundem în termen de o lună.
 
+Pe pagina [Rapoartele mele](../account/) îți poți descărca sau șterge singur(ă) datele, după autentificarea cu un link trimis pe e-mail.
+
 Ai, de asemenea, dreptul să depui o plângere la o autoritate de supraveghere: în Croația, Agenția pentru Protecția Datelor cu Caracter Personal (AZOP, azop.hr), sau autoritatea din țara UE în care locuiești. Dacă locuiești în România, aceasta este Autoritatea Națională de Supraveghere a Prelucrării Datelor cu Caracter Personal (ANSPDCP, dataprotection.ro).
 
 ## 7. Prelucrare automată

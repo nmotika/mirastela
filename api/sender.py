@@ -3,6 +3,7 @@
   python sender.py subs    fill personal calendars, send personal horoscopes (weekly ones on Mondays)
   python sender.py all     both
   python sender.py recal   regenerate future calendar days for everyone (after changing cal.py)
+  python sender.py prune   retention clean-up (also runs after subs)
 """
 from __future__ import annotations
 
@@ -72,11 +73,36 @@ def subs():
             print("sub", token[:6], "error", e)
 
 
+def prune():
+    """Retention: leads that never bought go after 12 months, the email log after 12 months,
+    sign-in links after a day, account sessions after 90 days, rate-limit hits after a day."""
+    from datetime import datetime, timezone
+    now = datetime.now(timezone.utc)
+    ago = lambda **kw: (now - timedelta(**kw)).isoformat()
+    with app.db() as con:
+        app._account_tables(con)
+        con.execute("create table if not exists hits(key text, ts real)")
+        n = {
+            "leads": con.execute("delete from leads where created<? and lower(email) not in (select lower(email) from orders)"
+                                 " and lower(email) not in (select lower(email) from subs)", (ago(days=365),)).rowcount,
+            "logins": con.execute("delete from logins where created<?", (ago(days=1),)).rowcount,
+            "accounts": con.execute("delete from accounts where created<?", (ago(days=90),)).rowcount,
+            "hits": con.execute("delete from hits where ts<?", (now.timestamp() - 86400,)).rowcount,
+        }
+        if con.execute("select 1 from sqlite_master where name='emails'").fetchone():
+            n["emails"] = con.execute("delete from emails where created<?", (ago(days=365),)).rowcount
+            con.execute("update emails set html='' where created<? and html!=''", (ago(days=30),))
+    print("prune", n)
+
+
 if __name__ == "__main__":
     what = sys.argv[1] if len(sys.argv) > 1 else "all"
     if what in ("pages", "all"):
         pages()
     if what in ("subs", "all"):
         subs()
+        prune()
     if what == "recal":
         recal()
+    if what == "prune":
+        prune()

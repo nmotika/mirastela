@@ -36,6 +36,7 @@ T = {
         subWeekly="W każdy poniedziałek rano dostaniesz horoskop na cały tydzień, obliczony na podstawie Twojego kosmogramu.",
         dailySubject="{name}, Twój horoskop na {date}", weeklySubject="{name}, Twój tydzień od {date}",
         unsub="Wypisz się z subskrypcji", unsubDone="Wypisano Cię z subskrypcji. Nie będziemy już wysyłać horoskopów.",
+        loginSubject="Twój link do logowania w Mirastela", loginBody="Kliknij przycisk, aby zobaczyć swoje raporty i subskrypcję. Link działa 30 minut i tylko raz.", loginBtn="Otwórz moje raporty", loginAfter="Jeśli to nie Ty prosił(a)ś o link, zignoruj tę wiadomość.", account="Moje raporty i dane",
         why="Otrzymujesz tę wiadomość, ponieważ ten adres został podany na mirastela.com.",
         disclaimer="Treści służą rozrywce i autorefleksji."),
     "hr": dict(
@@ -49,6 +50,7 @@ T = {
         subWeekly="Svakog ponedjeljka ujutro dobivaš horoskop za cijeli tjedan, izračunat prema svojoj natalnoj karti.",
         dailySubject="{name}, tvoj horoskop za {date}", weeklySubject="{name}, tvoj tjedan od {date}",
         unsub="Odjava od pretplate", unsubDone="Odjava je uspjela. Više ti nećemo slati horoskope.",
+        loginSubject="Tvoj link za prijavu u Mirastelu", loginBody="Klikni gumb da vidiš svoje izvještaje i pretplatu. Link vrijedi 30 minuta i samo jednom.", loginBtn="Otvori moje izvještaje", loginAfter="Ako nisi ti tražio/la link, zanemari ovu poruku.", account="Moji izvještaji i podaci",
         why="Ovaj e-mail dobivaš jer je ova adresa upisana na mirastela.com.",
         disclaimer="Sadržaj je namijenjen zabavi i samorefleksiji."),
     "sl": dict(
@@ -62,6 +64,7 @@ T = {
         subWeekly="Vsak ponedeljek zjutraj prejmeš horoskop za ves teden, izračunan po tvoji natalni karti.",
         dailySubject="{name}, tvoj horoskop za {date}", weeklySubject="{name}, tvoj teden od {date}",
         unsub="Odjava od naročnine", unsubDone="Odjava je uspela. Horoskopov ti ne bomo več pošiljali.",
+        loginSubject="Tvoja povezava za prijavo v Mirastelo", loginBody="Klikni gumb, da vidiš svoja poročila in naročnino. Povezava velja 30 minut in samo enkrat.", loginBtn="Odpri moja poročila", loginAfter="Če povezave nisi zahteval(a) ti, to sporočilo prezri.", account="Moja poročila in podatki",
         why="To sporočilo prejemaš, ker je bil ta naslov vpisan na mirastela.com.",
         disclaimer="Vsebina je namenjena zabavi in samorefleksiji."),
     "ro": dict(
@@ -75,6 +78,7 @@ T = {
         subWeekly="În fiecare luni dimineață primești horoscopul pentru toată săptămâna, calculat după harta ta natală.",
         dailySubject="{name}, horoscopul tău pentru {date}", weeklySubject="{name}, săptămâna ta de la {date}",
         unsub="Dezabonare", unsubDone="Te-ai dezabonat. Nu îți mai trimitem horoscoape.",
+        loginSubject="Linkul tău de autentificare în Mirastela", loginBody="Apasă butonul ca să vezi rapoartele și abonamentul tău. Linkul este valabil 30 de minute și o singură dată.", loginBtn="Deschide rapoartele mele", loginAfter="Dacă nu tu ai cerut linkul, ignoră acest mesaj.", account="Rapoartele și datele mele",
         why="Primești acest e-mail pentru că adresa a fost introdusă pe mirastela.com.",
         disclaimer="Conținutul are scop de divertisment și autoreflecție."),
     "cs": dict(
@@ -88,6 +92,7 @@ T = {
         subWeekly="Každé pondělí ráno ti přijde horoskop na celý týden, spočítaný podle tvého natálního horoskopu.",
         dailySubject="{name}, tvůj horoskop na {date}", weeklySubject="{name}, tvůj týden od {date}",
         unsub="Odhlásit předplatné", unsubDone="Odhlášení proběhlo. Horoskopy ti už posílat nebudeme.",
+        loginSubject="Tvůj odkaz pro přihlášení do Mirastely", loginBody="Klikni na tlačítko a uvidíš své zprávy a předplatné. Odkaz platí 30 minut a jen jednou.", loginBtn="Otevřít moje zprávy", loginAfter="Pokud jsi o odkaz nežádal(a) ty, tuto zprávu ignoruj.", account="Moje zprávy a údaje",
         why="Tento e-mail dostáváš, protože tato adresa byla zadána na mirastela.com.",
         disclaimer="Obsah slouží k zábavě a sebereflexi."),
     "hu": dict(
@@ -101,6 +106,7 @@ T = {
         subWeekly="Minden hétfő reggel megkapod az egész hetes horoszkópodat, a születési képleted alapján.",
         dailySubject="{name}, a horoszkópod: {date}", weeklySubject="{name}, a heti horoszkópod: {date}",
         unsub="Leiratkozás", unsubDone="Sikeresen leiratkoztál. Több horoszkópot nem küldünk.",
+        loginSubject="Bejelentkezési linked a Mirastelához", loginBody="Kattints a gombra, és látod a jelentéseidet és az előfizetésedet. A link 30 percig és csak egyszer érvényes.", loginBtn="Jelentéseim megnyitása", loginAfter="Ha nem te kérted a linket, hagyd figyelmen kívül ezt az üzenetet.", account="Jelentéseim és adataim",
         why="Azért kapod ezt az e-mailt, mert ezt a címet megadták a mirastela.com oldalon.",
         disclaimer="A tartalom szórakoztatási és önismereti célt szolgál."),
     "en": dict(
@@ -114,6 +120,7 @@ T = {
         subWeekly="Every Monday morning you will get a horoscope for the whole week, calculated from your natal chart.",
         dailySubject="{name}, your horoscope for {date}", weeklySubject="{name}, your week from {date}",
         unsub="Unsubscribe", unsubDone="You have been unsubscribed. We will not send you any more horoscopes.",
+        loginSubject="Your Mirastela sign-in link", loginBody="Click the button to see your reports and subscription. The link works for 30 minutes and only once.", loginBtn="Open my reports", loginAfter="If you did not ask for this link, ignore this email.", account="My reports and data",
         why="You are receiving this email because this address was entered on mirastela.com.",
         disclaimer="The content is meant for entertainment and self-reflection."),
 }
@@ -185,6 +192,7 @@ def _button(label: str, url: str) -> str:
 def layout(lang: str, body: str, unsubscribe_url: str | None = None) -> str:
     t = T[lang]
     unsub = (f'<br><a href="{esc(unsubscribe_url)}" style="color:#A9B0C6">{esc(t["unsub"])}</a>' if unsubscribe_url else "")
+    unsub += f'<br><a href="{SITE}/{lang}/account/" style="color:#A9B0C6">{esc(t["account"])}</a>'
     return f"""<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark"></head>
 <body style="margin:0;padding:0;background:#0B1020">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0B1020"><tr><td align="center" style="padding:24px 12px">
@@ -276,3 +284,8 @@ def unsub_page(lang: str, done: bool) -> str:
     form = ('<form method="post"><button type="submit" style="padding:14px 26px;border:0;border-radius:999px;'
             f'background:#D9B26A;color:#0B1020;font:700 16px Arial,sans-serif;cursor:pointer">{esc(t["unsub"])}</button></form>')
     return layout(lang, form)
+
+
+def login(lang: str, url: str) -> tuple[str, str]:
+    t = T[lang]
+    return t["loginSubject"], layout(lang, _p(t["loginBody"]) + _button(t["loginBtn"], url) + _p(t["loginAfter"]))

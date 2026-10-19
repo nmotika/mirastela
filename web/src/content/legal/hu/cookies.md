@@ -9,6 +9,7 @@ Az alábbiak a weboldal működéséhez feltétlenül szükségesek, és nem ig�
 | mirastela-funnel | Munkamenet-tároló (session storage) a böngésződben | Megjegyzi a válaszaidat, amíg végighaladsz a lépéseken, hogy az oldal újratöltésekor ne vesszenek el | Amíg be nem zárod a fület |
 | __cf_bm, cf_clearance | A Cloudflare által beállított sütik | A weboldal védelme a botok és a támadások ellen | Legfeljebb 30 perc / legfeljebb 1 év |
 | mirastela-consent | Helyi tárhely (local storage) a böngésződben | Megjegyzi a sütikkel kapcsolatos döntésedet | Amíg nem törlöd |
+| mirastela-account | Helyi tárhely (local storage) a böngésződben | Bejelentkezve tart a „Jelentéseim” oldalon, miután megnyitottad a bejelentkezési linket | Kijelentkezésig, legfeljebb 90 napig |
 
 ## Analitika és hirdetések
 

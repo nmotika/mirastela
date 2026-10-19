@@ -59,6 +59,8 @@ You have the right to access your data, to have it corrected or deleted, to rest
 
 To exercise your rights, write to [hello@mirastela.com](mailto:hello@mirastela.com) from the email address you used with us. We reply within one month.
 
+On the [My reports](../account/) page you can also download all your data or delete it yourself, after signing in with a link sent to your email.
+
 You also have the right to lodge a complaint with a supervisory authority: in Croatia the Personal Data Protection Agency (AZOP, azop.hr), or the authority in the EU country where you live.
 
 ## 7. Automated processing

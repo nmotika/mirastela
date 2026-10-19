@@ -124,9 +124,13 @@ def parse_webhook(payload: bytes, sig: str) -> dict:
     return _plain(stripe.Webhook.construct_event(payload, sig, os.environ["STRIPE_WEBHOOK_SECRET"]))
 
 
-def cancel_subscription(sub_id: str):
-    """Stop renewal; access runs to the end of the paid period (the webhook then ends it)."""
-    _stripe().Subscription.modify(sub_id, cancel_at_period_end=True)
+def cancel_subscription(sub_id: str, now: bool = False):
+    """Stop renewal; access runs to the end of the paid period (the webhook then ends it).
+    now=True cancels immediately (account deletion)."""
+    if now:
+        _stripe().Subscription.cancel(sub_id)
+    else:
+        _stripe().Subscription.modify(sub_id, cancel_at_period_end=True)
 
 
 def portal_url(customer: str, return_url: str) -> str:

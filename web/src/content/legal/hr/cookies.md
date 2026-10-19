@@ -9,6 +9,7 @@ Ovo je nužno za rad web stranice i za to nije potrebna tvoja privola.
 | mirastela-funnel | Pohrana sesije (session storage) u tvom pregledniku | Pamti tvoje odgovore dok prolaziš kroz korake, kako ih ne bi izgubio/la pri ponovnom učitavanju stranice | Dok ne zatvoriš karticu |
 | __cf_bm, cf_clearance | Kolačići koje postavlja Cloudflare | Štite web stranicu od botova i napada | Do 30 minuta / do 1 godine |
 | mirastela-consent | Lokalna pohrana (local storage) u tvom pregledniku | Pamti tvoj izbor o kolačićima | Dok ga ne obrišeš |
+| mirastela-account | Lokalna pohrana (local storage) u tvom pregledniku | Drži te prijavljenim/om na stranici „Moji izvještaji” nakon što otvoriš link za prijavu | Do odjave, najdulje 90 dana |
 
 ## Analitika i oglašavanje
 

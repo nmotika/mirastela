@@ -4,10 +4,11 @@ set -euo pipefail
 cd /opt/mirastela
 sudo -u mirastela git pull --ff-only
 sudo -u mirastela /opt/mirastela/.venv/bin/pip install -q -r api/requirements.txt
-cp deploy/mirastela-api.service deploy/mirastela-daily.service deploy/mirastela-daily.timer deploy/mirastela-pages.service deploy/mirastela-pages.timer /etc/systemd/system/
+cp deploy/mirastela-api.service deploy/mirastela-daily.service deploy/mirastela-daily.timer deploy/mirastela-pages.service deploy/mirastela-pages.timer \
+   deploy/mirastela-backup.service deploy/mirastela-backup.timer /etc/systemd/system/
 systemctl daemon-reload
-systemctl enable --now mirastela-daily.timer mirastela-pages.timer >/dev/null
+systemctl enable --now mirastela-daily.timer mirastela-pages.timer mirastela-backup.timer >/dev/null
 systemctl restart mirastela-api
-sleep 2 && curl -fsS http://127.0.0.1:8000/api/health && echo " OK"
+sleep 3 && curl -fsS http://127.0.0.1:8000/api/health && echo " OK"
 # Generate today's horoscopes now if they are missing (runs in the background).
 systemctl start --no-block mirastela-pages.service

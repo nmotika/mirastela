@@ -9,6 +9,7 @@ These are strictly necessary for the website to work and do not need your consen
 | mirastela-funnel | Session storage in your browser | Remembers your answers while you go through the steps, so that you do not lose them on reload | Until you close the tab |
 | __cf_bm, cf_clearance | Cookies set by Cloudflare | Protect the website against bots and attacks | Up to 30 minutes / up to 1 year |
 | mirastela-consent | Local storage in your browser | Remembers your cookie choice | Until you delete it |
+| mirastela-account | Local storage in your browser | Keeps you signed in on "My reports" after you open the sign-in link | Until you sign out, at most 90 days |
 
 ## Analytics and advertising
 

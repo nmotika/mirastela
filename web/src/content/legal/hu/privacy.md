@@ -59,6 +59,8 @@ Jogod van az adataidhoz való hozzáféréshez, azok helyesbítéséhez vagy tö
 
 Jogaid gyakorlásához írj a [hello@mirastela.com](mailto:hello@mirastela.com) címre arról az e-mail-címről, amelyet nálunk használtál. Egy hónapon belül válaszolunk.
 
+A [Jelentéseim](../account/) oldalon az adataidat magad is letöltheted vagy törölheted, miután bejelentkeztél az e-mailben küldött linkkel.
+
 Jogod van továbbá panaszt tenni egy felügyeleti hatóságnál: Horvátországban a Személyes Adatok Védelmének Ügynökségénél (AZOP, azop.hr), vagy annak az uniós országnak a hatóságánál, ahol élsz. Magyarországon ez a Nemzeti Adatvédelmi és Információszabadság Hatóság (NAIH, naih.hu).
 
 ## 7. Automatizált adatkezelés

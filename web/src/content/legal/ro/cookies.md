@@ -9,6 +9,7 @@ Următoarele sunt strict necesare funcționării site-ului și nu necesită acor
 | mirastela-funnel | Stocare de sesiune în browserul tău | Reține răspunsurile tale în timp ce parcurgi pașii, ca să nu le pierzi la reîncărcarea paginii | Până închizi fila |
 | __cf_bm, cf_clearance | Cookie-uri setate de Cloudflare | Protejează site-ul împotriva boților și a atacurilor | Până la 30 de minute / până la 1 an |
 | mirastela-consent | Stocare locală (local storage) în browserul tău | Reține alegerea ta privind cookie-urile | Până când o ștergi |
+| mirastela-account | Stocare locală (local storage) în browserul tău | Te menține autentificat(ă) pe pagina „Rapoartele mele” după ce deschizi linkul de autentificare | Până la ieșire, cel mult 90 de zile |
 
 ## Analiză și publicitate
 

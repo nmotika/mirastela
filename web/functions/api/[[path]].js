@@ -9,6 +9,8 @@ export async function onRequest({ request, env }) {
   headers.delete('cookie');
   headers.set('X-Proxy-Secret', env.PROXY_SECRET);
   headers.set('X-Forwarded-For', request.headers.get('CF-Connecting-IP') ?? '');
+  // Visitor IP for rate limits and the Conversions API; Cloudflare may rewrite CF-Connecting-IP on this hop.
+  headers.set('X-Client-IP', request.headers.get('CF-Connecting-IP') ?? '');
   const init = { method: request.method, headers, redirect: 'manual' };
   if (!['GET', 'HEAD'].includes(request.method)) init.body = await request.arrayBuffer();
   const res = await fetch(target, init);

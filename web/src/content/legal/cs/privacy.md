@@ -59,6 +59,8 @@ Máš právo na přístup ke svým údajům, na jejich opravu nebo výmaz, na om
 
 Pro uplatnění svých práv nám napiš na [hello@mirastela.com](mailto:hello@mirastela.com) z e-mailové adresy, kterou jsi u nás použil nebo použila. Odpovíme do jednoho měsíce.
 
+Na stránce [Moje zprávy](../account/) si můžeš své údaje také sám nebo sama stáhnout či smazat, po přihlášení odkazem, který ti pošleme e-mailem.
+
 Máš také právo podat stížnost u dozorového úřadu: v Chorvatsku u Agentury pro ochranu osobních údajů (AZOP, azop.hr), nebo u úřadu v zemi EU, kde žiješ. V České republice je to Úřad pro ochranu osobních údajů (uoou.gov.cz).
 
 ## 7. Automatizované zpracování
