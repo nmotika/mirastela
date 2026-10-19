@@ -37,7 +37,7 @@ consent and tracking are written once.
 ## Tracking and consent
 - [x] Consent banner (decline by default for non-essential)
 - [x] Meta pixel + Conversions API, analytics (GA4), all behind consent
-- [ ] Marketing consent wording at the email step
+- [x] Marketing consent wording at the email step (separate optional checkbox)
 
 ## Security
 - [x] Rate limiting on all public POST endpoints; Turnstile on email step and account sign-in
