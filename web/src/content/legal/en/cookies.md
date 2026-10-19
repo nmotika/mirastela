@@ -14,9 +14,12 @@ These are strictly necessary for the website to work and do not need your consen
 
 Only if you click "Accept all" in the cookie banner do we load the Meta pixel, which measures how our ads on Facebook and Instagram perform (for example, whether someone who saw an ad later bought a report). With "Necessary only" nothing is loaded. You can change your choice at any time with the "Cookie settings" link at the bottom of every page.
 
+We also load Google Analytics, which shows how visitors use the site (which pages they open, where they leave the questionnaire, how many buy). Google receives your IP address, which it shortens, and browser details, but not your email or birth data.
+
 | Name | Type | Purpose | Duration |
 | --- | --- | --- | --- |
 | _fbp, _fbc | Cookies set by Meta | Recognise the browser and the ad click to measure ad results | Up to 90 days |
+| _ga, _ga_* | Cookies set by Google Analytics | Distinguish visitors and visits for site statistics | Up to 2 years |
 
 ## How to remove them
 

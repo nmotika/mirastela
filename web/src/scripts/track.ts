@@ -1,9 +1,10 @@
 // Meta pixel behind the cookie banner. Nothing loads and nothing is sent until the visitor accepts
 // marketing cookies. Purchase and Lead are also sent server-side (Conversions API) with the same event id.
 export const META_PIXEL_ID = '2027523501240767'; // dataset "Mirastela web" in Events Manager
+export const GA_ID = ''; // Google Analytics 4 measurement ID (G-...), loaded only after "accept all"
 export const CONSENT_KEY = 'mirastela-consent'; // 'all' or 'necessary'
 
-declare global { interface Window { fbq?: any; _fbq?: any } }
+declare global { interface Window { fbq?: any; _fbq?: any; dataLayer?: unknown[]; gtag?: (...a: unknown[]) => void } }
 
 export function consent(): string | null {
   try { return localStorage.getItem(CONSENT_KEY); } catch { return null; }
@@ -20,7 +21,21 @@ try {
   if (id) sessionStorage.setItem('mirastela-fbclid', JSON.stringify({ id, t: Date.now() }));
 } catch { /* ignore */ }
 
+function loadGa() {
+  if (!GA_ID || !marketingOk() || window.gtag) return;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer!.push(arguments); }; // gtag needs the arguments object
+  // Consent Mode v2, basic: GA only runs after "accept all", which covers measurement but not ad personalisation.
+  window.gtag('consent', 'default', { analytics_storage: 'granted', ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'denied' });
+  window.gtag('js', new Date());
+  window.gtag('config', GA_ID);
+  const s = document.createElement('script'); s.async = true; s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+  document.head.appendChild(s);
+}
+
+/** Loads every tracker the visitor accepted (Meta pixel and Google Analytics). */
 export function loadPixel() {
+  loadGa();
   if (!META_PIXEL_ID || !marketingOk() || window.fbq) return;
   /* eslint-disable */
   const n: any = (window.fbq = function (...a: unknown[]) { n.callMethod ? n.callMethod(...a) : n.queue.push(a); });
@@ -33,10 +48,23 @@ export function loadPixel() {
   window.fbq('track', 'PageView');
 }
 
+const GA_EVENT: Record<string, string> = { Lead: 'generate_lead', InitiateCheckout: 'begin_checkout', Purchase: 'purchase' };
+
+/** One call per funnel event: Meta pixel (standard event) and its GA4 equivalent. */
 export function fbTrack(event: string, params: Record<string, unknown> = {}, eventId?: string) {
-  if (!META_PIXEL_ID || !marketingOk()) return;
+  if (!marketingOk()) return;
   loadPixel();
-  window.fbq?.('track', event, params, eventId ? { eventID: eventId } : undefined);
+  if (META_PIXEL_ID) window.fbq?.('track', event, params, eventId ? { eventID: eventId } : undefined);
+  const ga = GA_EVENT[event];
+  if (GA_ID && ga && window.gtag) {
+    const p: Record<string, unknown> = {};
+    if (params.value !== undefined) { p.value = params.value; p.currency = String(params.currency ?? 'EUR').toUpperCase(); }
+    if (event === 'Purchase') {
+      p.transaction_id = eventId;
+      p.items = [{ item_name: params.content_name ?? 'report', price: params.value, quantity: 1 }];
+    }
+    window.gtag('event', ga, p);
+  }
 }
 
 function cookie(name: string): string {

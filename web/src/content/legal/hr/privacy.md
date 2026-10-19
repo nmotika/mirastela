@@ -25,6 +25,7 @@ Podatke o tvojoj kartici ne primamo niti pohranjujemo. Upisuješ ih isključivo 
 | E-mailovi s horoskopima i ponudama koje nisi naručio/la | Tvoja privola, čl. 6. st. 1. t. (a), koju možeš povući u bilo kojem trenutku |
 | Sigurnost, sprečavanje zlouporabe, ispravljanje pogrešaka | Legitimni interes, čl. 6. st. 1. t. (f) |
 | Mjerenje rezultata naših oglasa na Facebooku i Instagramu (Meta piksel i Conversions API) | Tvoja privola, čl. 6. st. 1. t. (a), dana u banneru za kolačiće, koju možeš povući u bilo kojem trenutku putem „Postavke kolačića” |
+| Statistika posjećenosti stranice (Google Analytics) | Tvoja privola, čl. 6. st. 1. t. (a), dana u banneru za kolačiće, koju možeš povući u bilo kojem trenutku putem „Postavke kolačića” |
 | Vođenje računovodstvene evidencije | Pravna obveza, čl. 6. st. 1. t. (c) |
 
 Podaci o rođenju nisu posebna kategorija podataka prema GDPR-u, ali s njima postupamo pažljivo: koriste se isključivo za izračun karata i pisanje tvojih tekstova.
@@ -39,6 +40,7 @@ Koristimo pažljivo odabrane pružatelje usluga, obvezane ugovorima o obradi pod
 - **Resend**: slanje e-mailova.
 - **Stripe**: plaćanja. Za kupnje Stripe djeluje kao preprodavač (merchant of record) i obrađuje podatke o plaćanju kao samostalni voditelj obrade, prema vlastitim pravilima privatnosti.
 - **Meta Platforms Ireland Ltd.** (Irska): mjerenje rezultata naših oglasa na Facebooku i Instagramu, samo ako u banneru za kolačiće klikneš „Prihvaćam sve”. Tada Meti šaljemo događaj (na primjer dovršenu kupnju) i njegovu vrijednost, identifikatore preglednika i klika na oglas, tvoju IP adresu i podatke o pregledniku te tvoju e-mail adresu u hashiranom (pseudonimiziranom) obliku. Za prikupljanje i slanje tih podataka s Metom smo zajednički voditelji obrade (čl. 26. GDPR-a), a Meta ih dalje obrađuje kao samostalni voditelj obrade prema vlastitim pravilima privatnosti. Bez tvoje privole Meti ne šaljemo ništa.
+- **Google Ireland Ltd.** (Irska): statistika posjećenosti putem Google Analyticsa, samo ako u banneru za kolačiće klikneš „Prihvaćam sve”. Google dobiva stranice koje posjećuješ, korake u upitniku i kupnje (proizvod i iznos), tvoju IP adresu, koju skraćuje, i podatke o pregledniku, ali ne i tvoju e-mail adresu ni podatke o rođenju. Google podatke obrađuje kao naš izvršitelj obrade, a mogu se prenijeti u SAD u okviru EU-US Data Privacy Frameworka.
 
 Neki od tih pružatelja usluga imaju sjedište u Sjedinjenim Američkim Državama. Prijenosi su zaštićeni Okvirom za privatnost podataka EU-SAD ili standardnim ugovornim klauzulama Europske komisije.
 

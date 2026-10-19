@@ -25,6 +25,7 @@ Nie otrzymujemy ani nie przechowujemy danych Twojej karty. Wpisujesz je wyłącz
 | Niezamówione przez Ciebie e-maile z horoskopami i ofertami | Twoja zgoda, art. 6 ust. 1 lit. a, którą możesz wycofać w każdej chwili |
 | Bezpieczeństwo, zapobieganie nadużyciom, usuwanie błędów | Prawnie uzasadniony interes, art. 6 ust. 1 lit. f |
 | Mierzenie skuteczności naszych reklam na Facebooku i Instagramie (piksel Meta i Conversions API) | Twoja zgoda, art. 6 ust. 1 lit. a, wyrażona w banerze cookies, którą możesz wycofać w każdej chwili w „Ustawienia cookies” |
+| Statystyki odwiedzin strony (Google Analytics) | Twoja zgoda, art. 6 ust. 1 lit. a, wyrażona w banerze cookies, którą możesz wycofać w każdej chwili w „Ustawienia cookies” |
 | Prowadzenie dokumentacji księgowej | Obowiązek prawny, art. 6 ust. 1 lit. c |
 
 Dane urodzenia nie należą do szczególnych kategorii danych w rozumieniu RODO, ale traktujemy je z należytą starannością: wykorzystujemy je wyłącznie do obliczania kosmogramów i pisania Twoich tekstów.
@@ -39,6 +40,7 @@ Korzystamy ze starannie wybranych usługodawców, którzy jako podmioty przetwar
 - **Resend**: wysyłka e-maili.
 - **Stripe**: płatności. Przy zakupach Stripe działa jako odsprzedawca (merchant of record) i przetwarza dane dotyczące płatności jako niezależny administrator danych, zgodnie z własną polityką prywatności.
 - **Meta Platforms Ireland Ltd.** (Irlandia): mierzenie skuteczności naszych reklam na Facebooku i Instagramie, wyłącznie jeśli w banerze cookies klikniesz „Akceptuję wszystkie”. Wtedy przekazujemy Meta zdarzenie (na przykład zakończony zakup) i jego wartość, identyfikatory przeglądarki i kliknięcia reklamy, Twój adres IP i dane przeglądarki oraz Twój adres e-mail w postaci zahashowanej (pseudonimizowanej). W zakresie zbierania i przekazywania tych danych jesteśmy współadministratorami z Meta (art. 26 RODO), a dalej Meta przetwarza je jako niezależny administrator zgodnie z własną polityką prywatności. Bez Twojej zgody nic nie jest przekazywane do Meta.
+- **Google Ireland Ltd.** (Irlandia): statystyki odwiedzin za pomocą Google Analytics, wyłącznie jeśli w banerze cookies klikniesz „Akceptuję wszystkie”. Google otrzymuje odwiedzane strony, kroki w kwestionariuszu i zakupy (produkt i kwotę), Twój adres IP, który jest skracany, oraz dane przeglądarki, ale nie Twój adres e-mail ani dane urodzenia. Google przetwarza dane jako nasz podmiot przetwarzający; dane mogą być przekazywane do USA w ramach EU-US Data Privacy Framework.
 
 Niektórzy z tych usługodawców mają siedzibę w Stanach Zjednoczonych. Przekazywanie danych jest zabezpieczone na podstawie Ram ochrony danych UE-USA (EU-US Data Privacy Framework) lub standardowych klauzul umownych Komisji Europejskiej.
 

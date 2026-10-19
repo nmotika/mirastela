@@ -25,6 +25,7 @@ Podatkov o tvoji kartici ne prejemamo in ne shranjujemo. Vneseš jih le pri Stri
 | E-poštna sporočila s horoskopi in ponudbami, ki jih nisi naročil oziroma naročila | Tvoja privolitev, člen 6(1)(a), ki jo lahko kadar koli prekličeš |
 | Varnost, preprečevanje zlorab, odpravljanje napak | Zakoniti interes, člen 6(1)(f) |
 | Merjenje rezultatov naših oglasov na Facebooku in Instagramu (Meta piksel in Conversions API) | Tvoja privolitev, člen 6(1)(a), dana v pasici za piškotke, ki jo lahko kadar koli prekličeš v „Nastavitve piškotkov” |
+| Statistika obiskov strani (Google Analytics) | Tvoja privolitev, člen 6(1)(a), dana v pasici za piškotke, ki jo lahko kadar koli prekličeš v „Nastavitve piškotkov” |
 | Vodenje računovodskih evidenc | Zakonska obveznost, člen 6(1)(c) |
 
 Podatki o rojstvu po Splošni uredbi o varstvu podatkov niso posebna vrsta podatkov, vendar z njimi ravnamo skrbno: uporabljamo jih le za izračun kart in pisanje tvojih besedil.
@@ -39,6 +40,7 @@ Uporabljamo skrbno izbrane ponudnike storitev, ki jih zavezujejo pogodbe o obdel
 - **Resend**: pošiljanje e-pošte.
 - **Stripe**: plačila. Pri nakupih Stripe nastopa kot preprodajalec (merchant of record) in plačilne podatke obdeluje kot samostojni upravljavec v skladu s svojo politiko zasebnosti.
 - **Meta Platforms Ireland Ltd.** (Irska): merjenje rezultatov naših oglasov na Facebooku in Instagramu, samo če v pasici za piškotke klikneš „Sprejmem vse”. Takrat Meti pošljemo dogodek (na primer zaključen nakup) in njegovo vrednost, identifikatorja brskalnika in klika na oglas, tvoj naslov IP in podatke o brskalniku ter tvoj e-poštni naslov v zgoščeni (psevdonimizirani) obliki. Za zbiranje in pošiljanje teh podatkov smo z Meto skupni upravljavci (člen 26 GDPR), Meta pa jih nato obdeluje kot samostojni upravljavec v skladu s svojo politiko zasebnosti. Brez tvoje privolitve Meti ne pošljemo ničesar.
+- **Google Ireland Ltd.** (Irska): statistika obiskov z Google Analytics, samo če v pasici za piškotke klikneš „Sprejmem vse”. Google prejme strani, ki jih obiščeš, korake v vprašalniku in nakupe (izdelek in znesek), tvoj naslov IP, ki se skrajša, in podatke o brskalniku, ne pa tvojega e-poštnega naslova ali podatkov o rojstvu. Google podatke obdeluje kot naš obdelovalec; prenos v ZDA je mogoč v okviru EU-US Data Privacy Framework.
 
 Nekateri od teh ponudnikov imajo sedež v Združenih državah Amerike. Prenosi so zaščiteni z okvirom EU-ZDA za zasebnost podatkov ali s standardnimi pogodbenimi klavzulami Evropske komisije.
 

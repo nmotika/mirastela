@@ -14,9 +14,12 @@ Az alábbiak a weboldal működéséhez feltétlenül szükségesek, és nem ig�
 
 Csak akkor töltjük be a Meta pixelt, ha a sütikről szóló sávban a „Mindet elfogadom” gombra kattintasz. Ez méri a Facebookon és Instagramon futó hirdetéseink eredményességét (például azt, hogy aki látott egy hirdetést, később vett-e jelentést). A „Csak a szükségesek” választásakor semmi sem töltődik be. A döntésedet bármikor megváltoztathatod minden oldal alján a „Süti beállítások” linkkel.
 
+Betöltjük a Google Analyticset is, amely megmutatja, hogyan használják a látogatók az oldalt (mely oldalakat nyitják meg, hol hagyják félbe a kérdőívet, hányan vásárolnak). A Google megkapja az IP-címedet, amelyet lerövidít, és a böngésződ adatait, de az e-mail-címedet és a születési adataidat nem.
+
 | Név | Típus | Cél | Időtartam |
 | --- | --- | --- | --- |
 | _fbp, _fbc | A Meta által beállított sütik | Felismerik a böngészőt és a hirdetésre kattintást a hirdetési eredmények méréséhez | Legfeljebb 90 napig |
+| _ga, _ga_* | A Google Analytics által beállított sütik | Megkülönböztetik a látogatókat és a látogatásokat az oldal statisztikájához | Legfeljebb 2 évig |
 
 ## Hogyan törölheted őket
 

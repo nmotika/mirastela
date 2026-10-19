@@ -14,9 +14,12 @@ Naslednje je nujno za delovanje spletne strani in ne potrebuje tvojega soglasja.
 
 Šele ko v obvestilu o piškotkih klikneš "Sprejmem vse", naložimo piksel Meta, ki meri uspešnost naših oglasov na Facebooku in Instagramu (na primer, ali je nekdo, ki je videl oglas, kasneje kupil poročilo). Pri izbiri "Samo nujni" se ne naloži nič. Izbiro lahko kadar koli spremeniš s povezavo "Nastavitve piškotkov" na dnu vsake strani.
 
+Naložimo tudi Google Analytics, ki kaže, kako obiskovalci uporabljajo stran (katere strani odprejo, kje zapustijo vprašalnik, koliko jih kupi). Google prejme tvoj naslov IP, ki ga skrajša, in podatke o brskalniku, ne pa tvojega e-poštnega naslova ali podatkov o rojstvu.
+
 | Ime | Vrsta | Namen | Trajanje |
 | --- | --- | --- | --- |
 | _fbp, _fbc | Piškotki, ki jih nastavi Meta | Prepoznajo brskalnik in klik na oglas za merjenje rezultatov oglasov | Do 90 dni |
+| _ga, _ga_* | Piškotki, ki jih nastavi Google Analytics | Ločijo obiskovalce in obiske za statistiko strani | Do 2 leti |
 
 ## Kako jih odstraniti
 

@@ -25,6 +25,7 @@ Nu primim și nu stocăm datele cardului tău. Acestea se introduc doar la Strip
 | E-mailuri cu horoscoape și oferte pe care nu le-ai comandat | Consimțământul tău, art. 6 alin. (1) lit. (a), pe care îl poți retrage oricând |
 | Securitate, prevenirea abuzurilor, remedierea erorilor | Interes legitim, art. 6 alin. (1) lit. (f) |
 | Măsurarea rezultatelor reclamelor noastre pe Facebook și Instagram (pixelul Meta și Conversions API) | Consimțământul tău, art. 6 alin. (1) lit. (a), dat în bannerul de cookie-uri, pe care îl poți retrage oricând din „Setări cookie” |
+| Statistici despre vizitarea site-ului (Google Analytics) | Consimțământul tău, art. 6 alin. (1) lit. (a), dat în bannerul de cookie-uri, pe care îl poți retrage oricând din „Setări cookie” |
 | Păstrarea evidențelor contabile | Obligație legală, art. 6 alin. (1) lit. (c) |
 
 Datele de naștere nu sunt o categorie specială de date conform GDPR, dar le tratăm cu grijă: sunt folosite doar pentru calcularea hărților și scrierea textelor tale.
@@ -39,6 +40,7 @@ Folosim furnizori de servicii aleși cu atenție, obligați prin acorduri de pre
 - **Resend**: trimiterea e-mailurilor.
 - **Stripe**: plăți. Pentru achiziții, Stripe acționează ca revânzător (merchant of record) și prelucrează datele de plată ca operator independent, conform propriei politici de confidențialitate.
 - **Meta Platforms Ireland Ltd.** (Irlanda): măsurarea rezultatelor reclamelor noastre pe Facebook și Instagram, doar dacă apeși „Accept toate” în bannerul de cookie-uri. Atunci îi trimitem lui Meta evenimentul (de exemplu o achiziție finalizată) și valoarea lui, identificatorii browserului și ai clicului pe reclamă, adresa ta IP și datele browserului, precum și adresa ta de e-mail în formă hash-uită (pseudonimizată). Pentru colectarea și transmiterea acestor date suntem operatori asociați cu Meta (art. 26 GDPR), iar ulterior Meta le prelucrează ca operator independent, conform propriei politici de confidențialitate. Fără consimțământul tău nu trimitem nimic către Meta.
+- **Google Ireland Ltd.** (Irlanda): statistici despre vizite cu Google Analytics, doar dacă apeși „Accept toate” în bannerul de cookie-uri. Google primește paginile pe care le vizitezi, pașii din chestionar și achizițiile (produsul și suma), adresa ta IP, care este scurtată, și datele browserului, dar nu și adresa de e-mail sau datele de naștere. Google prelucrează datele ca persoană împuternicită de noi; datele pot fi transferate în SUA în cadrul EU-US Data Privacy Framework.
 
 Unii dintre acești furnizori au sediul în Statele Unite. Transferurile sunt protejate prin Cadrul UE-SUA privind protecția datelor (EU-US Data Privacy Framework) sau prin clauzele contractuale standard ale Comisiei Europene.
 

@@ -14,9 +14,12 @@ Următoarele sunt strict necesare funcționării site-ului și nu necesită acor
 
 Abia după ce apeși „Accept toate” în bannerul de cookie-uri încărcăm pixelul Meta, care măsoară eficiența reclamelor noastre pe Facebook și Instagram (de exemplu, dacă cineva care a văzut o reclamă a cumpărat apoi un raport). Cu „Doar necesare” nu se încarcă nimic. Îți poți schimba alegerea oricând din linkul „Setări cookie” din josul fiecărei pagini.
 
+Încărcăm și Google Analytics, care arată cum folosesc vizitatorii site-ul (ce pagini deschid, unde abandonează chestionarul, câți cumpără). Google primește adresa ta IP, pe care o scurtează, și datele browserului, dar nu și e-mailul sau datele de naștere.
+
 | Nume | Tip | Scop | Durată |
 | --- | --- | --- | --- |
 | _fbp, _fbc | Cookie-uri setate de Meta | Recunosc browserul și clicul pe reclamă pentru a măsura rezultatele reclamelor | Până la 90 de zile |
+| _ga, _ga_* | Cookie-uri setate de Google Analytics | Disting vizitatorii și vizitele pentru statisticile site-ului | Până la 2 ani |
 
 ## Cum le ștergi
 

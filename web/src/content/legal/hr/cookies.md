@@ -14,9 +14,12 @@ Ovo je nužno za rad web stranice i za to nije potrebna tvoja privola.
 
 Tek kad u obavijesti o kolačićima klikneš "Prihvaćam sve", učitavamo Meta piksel koji mjeri uspješnost naših oglasa na Facebooku i Instagramu (na primjer, je li netko tko je vidio oglas kasnije kupio izvještaj). Uz "Samo nužni" ništa se ne učitava. Izbor možeš promijeniti u bilo kojem trenutku poveznicom "Postavke kolačića" na dnu svake stranice.
 
+Učitavamo i Google Analytics, koji pokazuje kako posjetitelji koriste stranicu (koje stranice otvaraju, gdje napuštaju upitnik, koliko ih kupi). Google dobiva tvoju IP adresu, koju skraćuje, i podatke o pregledniku, ali ne i tvoj e-mail ni podatke o rođenju.
+
 | Naziv | Vrsta | Svrha | Trajanje |
 | --- | --- | --- | --- |
 | _fbp, _fbc | Kolačići koje postavlja Meta | Prepoznaju preglednik i klik na oglas radi mjerenja rezultata oglasa | Do 90 dana |
+| _ga, _ga_* | Kolačići koje postavlja Google Analytics | Razlikuju posjetitelje i posjete za statistiku stranice | Do 2 godine |
 
 ## Kako ih ukloniti
 

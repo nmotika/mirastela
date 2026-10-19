@@ -14,9 +14,12 @@ Následující je nezbytné pro fungování webu a nevyžaduje tvůj souhlas.
 
 Teprve když v liště cookies klikneš na „Přijmout vše“, načteme pixel Meta, který měří úspěšnost našich reklam na Facebooku a Instagramu (například zda si někdo, kdo reklamu viděl, později koupil zprávu). Při volbě „Jen nezbytné“ se nic nenačte. Svou volbu můžeš kdykoli změnit odkazem „Nastavení cookies“ v dolní části každé stránky.
 
+Načítáme také Google Analytics, které ukazuje, jak návštěvníci web používají (které stránky otevírají, kde opouštějí dotazník, kolik jich nakoupí). Google dostává tvou IP adresu, kterou zkracuje, a údaje o prohlížeči, ale ne tvůj e-mail ani údaje o narození.
+
 | Název | Typ | Účel | Doba trvání |
 | --- | --- | --- | --- |
 | _fbp, _fbc | Cookies nastavené společností Meta | Rozpoznávají prohlížeč a kliknutí na reklamu kvůli měření výsledků reklam | Až 90 dní |
+| _ga, _ga_* | Cookies nastavené službou Google Analytics | Rozlišují návštěvníky a návštěvy pro statistiku webu | Až 2 roky |
 
 ## Jak je odstranit
 
