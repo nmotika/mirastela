@@ -55,6 +55,6 @@ consent and tracking are written once.
 
 ## Content
 - [x] German, French, Italian added 2026-10-19 (EUR 14.90 / 11.90 / 17.90 / 34.90 / 13.90, sub 7.99 / 59.99); drafts for native review
-- [ ] DE legal review before any German campaign: Widerrufsbelehrung, Impressum (court register number MBS and managing director's name still missing)
+- [ ] DE legal review before any German campaign: Widerrufsbelehrung, Impressum (MBS and director filled in)
 - [ ] Native review of sl, ro, cs, hu texts
 - [ ] Astrocartography and sky map (deferred)
