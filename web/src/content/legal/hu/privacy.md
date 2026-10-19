@@ -38,7 +38,7 @@ Gondosan kiválasztott szolgáltatókat veszünk igénybe, akiket adatfeldolgoz�
 - **Resend**: e-mailek küldése.
 - **Stripe**: fizetések. A vásárlások esetében a Stripe viszonteladóként (merchant of record) jár el, és a fizetési adatokat önálló adatkezelőként, saját adatvédelmi szabályzata szerint kezeli.
 
-E szolgáltatók egy része az Egyesült Államokban működik. Az adattovábbítást az EU–USA adatvédelmi keretrendszer (Data Privacy Framework) vagy az Európai Bizottság általános szerződési feltételei védik.
+E szolgáltatók egy része az Egyesült Államokban működik. Az adattovábbítást az EU-USA adatvédelmi keretrendszer (Data Privacy Framework) vagy az Európai Bizottság által elfogadott általános adatvédelmi kikötések (standard contractual clauses) védik.
 
 Adataidat nem adjuk el, és senkivel nem osztjuk meg saját reklámcéljaira.
 

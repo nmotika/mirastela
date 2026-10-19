@@ -1,0 +1,70 @@
+*Ostatnia aktualizacja: 19 października 2026*
+
+## 1. Kto odpowiada za Twoje dane
+
+Administratorem Twoich danych osobowych jest **Something Digital d.o.o.**, Gračanska cesta 127c, 10000 Zagreb, Chorwacja, OIB 50480964887.
+W każdej sprawie dotyczącej Twoich danych napisz na adres [hello@mirastela.com](mailto:hello@mirastela.com).
+
+## 2. Jakie dane zbieramy
+
+- **Podane przez Ciebie dane urodzenia:** data, godzina i miejsce urodzenia, imię oraz odpowiedzi w kwestionariuszu (obszary zainteresowań, sytuacja uczuciowa).
+- **Adres e-mail**, abyśmy mogli wysyłać Ci podsumowanie, raporty i horoskopy, oraz Twoja decyzja dotycząca e-maili marketingowych.
+- **Podane przez Ciebie dane innych osób:** imię i dane urodzenia partnera lub dziecka, gdy zamawiasz takie raporty.
+- **Zamówienia i subskrypcje:** co kupujesz, kiedy, w jakiej wersji językowej oraz status Twojej subskrypcji.
+- **Dane techniczne:** adres IP i podstawowe informacje o przeglądarce zapisywane w logach serwera i logach bezpieczeństwa.
+- **Ankieta dla testerów:** odpowiedzi są przechowywane anonimowo, bez Twojego adresu e-mail.
+
+Nie otrzymujemy ani nie przechowujemy danych Twojej karty. Wpisujesz je wyłącznie w serwisie Stripe.
+
+## 3. W jakim celu i na jakiej podstawie prawnej je wykorzystujemy
+
+| Cel | Podstawa prawna (RODO) |
+| --- | --- |
+| Obliczanie Twojego kosmogramu, przygotowywanie i dostarczanie raportów, horoskopów i kalendarza | Wykonanie umowy, art. 6 ust. 1 lit. b |
+| Wysyłanie bezpłatnego podsumowania i e-maili serwisowych dotyczących zamówień | Wykonanie umowy i działania przed jej zawarciem, art. 6 ust. 1 lit. b |
+| Niezamówione przez Ciebie e-maile z horoskopami i ofertami | Twoja zgoda, art. 6 ust. 1 lit. a, którą możesz wycofać w każdej chwili |
+| Bezpieczeństwo, zapobieganie nadużyciom, usuwanie błędów | Prawnie uzasadniony interes, art. 6 ust. 1 lit. f |
+| Prowadzenie dokumentacji księgowej | Obowiązek prawny, art. 6 ust. 1 lit. c |
+
+Dane urodzenia nie należą do szczególnych kategorii danych w rozumieniu RODO, ale traktujemy je z należytą starannością: wykorzystujemy je wyłącznie do obliczania kosmogramów i pisania Twoich tekstów.
+
+## 4. Kto przetwarza dane w naszym imieniu
+
+Korzystamy ze starannie wybranych usługodawców, którzy jako podmioty przetwarzające są związani umowami powierzenia przetwarzania danych:
+
+- **Hetzner Online GmbH** (Niemcy): serwery, na których działają aplikacja i baza danych.
+- **Cloudflare, Inc.**: dostarczanie i ochrona strony internetowej.
+- **Anthropic PBC**: sztuczna inteligencja, która pisze teksty. Przekazujemy jej obliczony kosmogram, Twoje imię i język, ale nie Twój adres e-mail.
+- **Resend**: wysyłka e-maili.
+- **Stripe**: płatności. Przy zakupach Stripe działa jako odsprzedawca (merchant of record) i przetwarza dane dotyczące płatności jako niezależny administrator danych, zgodnie z własną polityką prywatności.
+
+Niektórzy z tych usługodawców mają siedzibę w Stanach Zjednoczonych. Przekazywanie danych jest zabezpieczone na podstawie Ram ochrony danych UE-USA (EU-US Data Privacy Framework) lub standardowych klauzul umownych Komisji Europejskiej.
+
+Nie sprzedajemy Twoich danych i nie udostępniamy ich nikomu do celów jego własnej reklamy.
+
+## 5. Jak długo je przechowujemy
+
+- Dane urodzenia, raporty i zamówienia: przez cały okres korzystania z Mirastela, nie dłużej jednak niż 3 lata od Twojej ostatniej aktywności, chyba że wcześniej poprosisz o ich usunięcie.
+- Dokumentacja księgowa dotycząca płatności: 11 lat, zgodnie z wymogami prawa chorwackiego.
+- Logi serwera i logi bezpieczeństwa: do 30 dni.
+- Zgoda na e-maile marketingowe: do czasu jej wycofania.
+
+## 6. Twoje prawa
+
+Masz prawo dostępu do swoich danych, ich sprostowania lub usunięcia, ograniczenia przetwarzania, przenoszenia danych oraz wniesienia sprzeciwu wobec przetwarzania opartego na prawnie uzasadnionym interesie. Zgodę na e-maile marketingowe możesz wycofać w każdej chwili, korzystając z linku zamieszczonego w każdym e-mailu.
+
+Aby skorzystać ze swoich praw, napisz na adres [hello@mirastela.com](mailto:hello@mirastela.com) z adresu e-mail, którego używasz w kontaktach z nami. Odpowiemy w ciągu miesiąca.
+
+Masz również prawo wnieść skargę do organu nadzorczego: w Chorwacji jest to Agencja Ochrony Danych Osobowych (AZOP, azop.hr), a w Polsce Prezes Urzędu Ochrony Danych Osobowych (UODO). Co do zasady możesz wnieść skargę do organu nadzorczego w tym państwie UE, w którym mieszkasz.
+
+## 7. Zautomatyzowane przetwarzanie
+
+Teksty są pisane automatycznie, ale nie wywołuje to wobec Ciebie skutków prawnych ani nie wpływa na Ciebie w podobnie istotny sposób. Nie podejmujemy wobec Ciebie zautomatyzowanych decyzji w rozumieniu art. 22 RODO.
+
+## 8. Wiek
+
+Mirastela jest przeznaczona dla osób pełnoletnich. Kosmogram dziecka może zamówić wyłącznie rodzic lub opiekun prawny, który odpowiada za podanie danych dziecka.
+
+## 9. Zmiany
+
+Będziemy aktualizować niniejszą politykę, gdy zmieni się sposób, w jaki przetwarzamy dane. Data na górze strony wskazuje aktualną wersję.

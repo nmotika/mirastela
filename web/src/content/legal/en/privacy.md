@@ -38,7 +38,7 @@ We use carefully chosen service providers, bound by data processing agreements:
 - **Resend**: sending emails.
 - **Stripe**: payments. For purchases, Stripe acts as the reseller (merchant of record) and processes payment data as an independent controller under its own privacy policy.
 
-Some of these providers are based in the United States. Transfers are protected by the EU–US Data Privacy Framework or the European Commission's standard contractual clauses.
+Some of these providers are based in the United States. Transfers are protected by the EU-US Data Privacy Framework or the European Commission's standard contractual clauses.
 
 We do not sell your data and we do not share it with anyone for their own advertising.
 
