@@ -26,6 +26,7 @@ def _load_env():
 _load_env()
 
 import cal
+import capi
 import chart
 import pay
 import cities
@@ -86,8 +87,10 @@ def db():
         con.execute("alter table orders add column paid integer default 1")  # rows before payments existed were coupon orders
     con.execute("""create table if not exists payments(
         session text primary key, token text, kind text, product text, status text, created text, done text, consent text)""")
-    if "consent" not in {r[1] for r in con.execute("pragma table_info(payments)")}:
-        con.execute("alter table payments add column consent text")
+    pay_cols = {r[1] for r in con.execute("pragma table_info(payments)")}
+    for col in ("consent", "track", "price_key"):
+        if col not in pay_cols:
+            con.execute(f"alter table payments add column {col} text")
     return con
 
 
@@ -147,6 +150,20 @@ def make_chart(body: ChartIn):
     return res
 
 
+class TrackIn(BaseModel):
+    """Browser identifiers for the Meta pixel, sent only after the visitor accepted marketing cookies."""
+    consent: bool = False
+    fbp: str = Field("", max_length=200)
+    fbc: str = Field("", max_length=300)
+
+
+def _track(t: "TrackIn | None", request: Request) -> dict:
+    if not t or not t.consent:
+        return {}
+    ip = request.headers.get("cf-connecting-ip") or request.headers.get("x-forwarded-for", "").split(",")[0].strip()
+    return {"consent": True, "fbp": t.fbp, "fbc": t.fbc, "ip": ip, "ua": request.headers.get("user-agent", "")[:400]}
+
+
 class LeadIn(BaseModel):
     email: str
     lang: str = "pl"
@@ -157,10 +174,11 @@ class LeadIn(BaseModel):
     focus: list[str] = []
     status: str = ""
     marketingConsent: bool = False
+    track: TrackIn | None = None
 
 
 @app.post("/api/lead")
-def lead(body: LeadIn, bg: BackgroundTasks):
+def lead(body: LeadIn, bg: BackgroundTasks, request: Request):
     if not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", body.email):
         raise HTTPException(422, "invalid email")
     token = secrets.token_urlsafe(12)
@@ -172,6 +190,8 @@ def lead(body: LeadIn, bg: BackgroundTasks):
                      int(body.marketingConsent), token))
     if body.date and body.cityId:
         bg.add_task(_send_summary, token)
+    bg.add_task(capi.send, "Lead", f"lead_{token}", f"{emails.SITE}/{_lang(body.lang)}/start/", body.email,
+                _track(body.track, request))
     return {"ok": True, "token": token}
 
 
@@ -242,12 +262,14 @@ class OrderIn(BaseModel):
     coupon: str = ""
     bundle: bool = False
     consent: bool = False  # withdrawal waiver ticked on the offer screen
+    track: TrackIn | None = None
 
 
 class AddIn(BaseModel):
     product: str
     partner: PartnerIn | None = None
     consent: bool = False
+    track: TrackIn | None = None
 
 
 def _coupon_ok(code: str) -> bool:
@@ -305,7 +327,7 @@ def _add_item(token: str, product: str, item_input: dict | None, bg: BackgroundT
 
 
 @app.post("/api/order")
-def create_order(body: OrderIn, bg: BackgroundTasks):
+def create_order(body: OrderIn, bg: BackgroundTasks, request: Request):
     if not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", body.email):
         raise HTTPException(422, "invalid email")
     free = _coupon_ok(body.coupon)
@@ -322,7 +344,8 @@ def create_order(body: OrderIn, bg: BackgroundTasks):
                      body.coupon.strip().upper() if free else "", 1 if free else 0))
     if not free:
         key = "bundle" if body.bundle else "natal"
-        return {"token": token, "checkout": _checkout(token, _lang(body.lang), body.email, key, "order", key, "offer")}
+        return {"token": token, "checkout": _checkout(token, _lang(body.lang), body.email, key, "order", key, "offer",
+                                                      _track(body.track, request))}
     _fulfil_order(token, bg)
     return {"token": token}
 
@@ -335,14 +358,16 @@ def _fulfil_order(token: str, bg: BackgroundTasks):
         _add_item(token, "forecast", None, bg)
 
 
-def _checkout(token: str, lang: str, email: str, key: str, kind: str, product: str, cancel_step: str) -> str:
+def _checkout(token: str, lang: str, email: str, key: str, kind: str, product: str, cancel_step: str,
+              track: dict | None = None) -> str:
     """Stripe Checkout for one purchase. The caller has checked that the withdrawal waiver was ticked;
     its time and wording version are kept with the payment as the record of consent."""
     s = pay.create_session(lang, email, key, forecast_year(), {"token": token, "kind": kind, "product": product}, cancel_step)
     now = datetime.now(timezone.utc).isoformat()
     with db() as con:
-        con.execute("insert into payments(session, token, kind, product, status, created, consent) values(?,?,?,?,?,?,?)",
-                    (s["id"], token, kind, product, "open", now, f"waiver-v1 {lang} {now}"))
+        con.execute("insert into payments(session, token, kind, product, status, created, consent, track, price_key)"
+                    " values(?,?,?,?,?,?,?,?,?)",
+                    (s["id"], token, kind, product, "open", now, f"waiver-v1 {lang} {now}", json.dumps(track or {}), key))
     return s["url"]
 
 
@@ -352,7 +377,7 @@ def check_coupon(body: dict):
 
 
 @app.post("/api/order/{token}/add")
-def add_product(token: str, body: AddIn, bg: BackgroundTasks):
+def add_product(token: str, body: AddIn, bg: BackgroundTasks, request: Request):
     if body.product not in ("partner", "forecast", "child"):
         raise HTTPException(422, "unknown product")
     with db() as con:
@@ -380,7 +405,8 @@ def add_product(token: str, body: AddIn, bg: BackgroundTasks):
         con.execute("insert into items(token, product, input, status, created) values(?,?,?,?,?)"
                     " on conflict(token, product) do update set input=excluded.input",
                     (token, body.product, json.dumps(item_input or {}), "unpaid", datetime.now(timezone.utc).isoformat()))
-    return {"ok": False, "checkout": _checkout(token, _lang(lang), email, body.product, "add", body.product, "upsell")}
+    return {"ok": False, "checkout": _checkout(token, _lang(lang), email, body.product, "add", body.product, "upsell",
+                                               _track(body.track, request))}
 
 
 @app.get("/api/order/{token}")
@@ -408,6 +434,7 @@ class SubIn(BaseModel):
     freq: str = Field("weekly", pattern="^(daily|weekly)$")
     plan: str = Field("year", pattern="^(month|year)$")
     consent: bool = False
+    track: TrackIn | None = None
 
 
 CAL_AHEAD = 14  # days of calendar entries kept ready ahead of today
@@ -467,7 +494,7 @@ def calendar_feed(name: str):
 
 
 @app.post("/api/subscribe")
-def subscribe(body: SubIn, bg: BackgroundTasks):
+def subscribe(body: SubIn, bg: BackgroundTasks, request: Request):
     with db() as con:
         row = con.execute("select lang, email, name, chart, coupon from orders where token=?", (body.order,)).fetchone()
         if not row:
@@ -479,7 +506,8 @@ def subscribe(body: SubIn, bg: BackgroundTasks):
         raise HTTPException(402, "payment required")
     if not body.consent:
         raise HTTPException(422, "consent required")
-    return {"ok": False, "checkout": _checkout(body.order, _lang(lang), email, f"sub_{body.plan}", "sub", body.plan, "sub")}
+    return {"ok": False, "checkout": _checkout(body.order, _lang(lang), email, f"sub_{body.plan}", "sub", body.plan, "sub",
+                                               _track(body.track, request))}
 
 
 def _activate_sub(order: str, freq: str, bg: BackgroundTasks, customer: str | None = None, stripe_sub: str | None = None) -> str:
@@ -510,14 +538,21 @@ def _fulfil(session_id: str, meta: dict, bg: BackgroundTasks, customer: str | No
     with db() as con:
         claimed = con.execute("update payments set status='paid', done=? where session=? and status='open'",
                               (datetime.now(timezone.utc).isoformat(), session_id)).rowcount
-        email = (con.execute("select email from orders where token=?", (token,)).fetchone() or [""])[0]
-    out = {"token": token, "kind": kind, "product": product, "email": email}
+        email, lang = con.execute("select email, lang from orders where token=?", (token,)).fetchone() or ("", "en")
+        prow = con.execute("select price_key, track from payments where session=?", (session_id,)).fetchone()
+    lang = _lang(lang)
+    key = (prow[0] if prow and prow[0] else ("sub_" + product if kind == "sub" else product))
+    cur, minor = pay.price(lang, key)
+    out = {"token": token, "kind": kind, "product": product, "email": email,
+           "value": minor / 100, "currency": cur.upper(), "eventId": f"pur_{session_id}"}
     if kind == "sub":
         with db() as con:
             row = con.execute("select cal from subs where order_token=? and status='active'", (token,)).fetchone()
         out["cal"] = cal_url(row[0]) if row and row[0] else None
     if not claimed:
         return out
+    bg.add_task(capi.send, "Purchase", f"pur_{session_id}", f"{emails.SITE}/{lang}/start/", email,
+                json.loads(prow[1]) if prow and prow[1] else {}, minor / 100, cur, key)
     if kind == "order":
         with db() as con:
             con.execute("update orders set paid=1 where token=?", (token,))

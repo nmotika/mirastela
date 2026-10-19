@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import Consent from '../components/Consent.astro';
 import { LOCALES, INTL, type Lang } from '../i18n/config';
 interface Props { lang: Lang; path: string; paths?: Record<Lang, string>; title: string; description: string; noindex?: boolean }
 const { lang, path, paths, title, description, noindex } = Astro.props;
@@ -27,5 +28,6 @@ const site = 'https://mirastela.com';
 </head>
 <body>
   <slot />
+  <Consent lang={lang} />
 </body>
 </html>

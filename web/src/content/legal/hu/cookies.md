@@ -2,16 +2,21 @@
 
 ## Mit használunk
 
-A Mirastela jelenleg csak azt használja, ami a weboldal működéséhez feltétlenül szükséges. Ezekhez nincs szükség a hozzájárulásodra.
+Az alábbiak a weboldal működéséhez feltétlenül szükségesek, és nem igényelnek hozzájárulást.
 
 | Név | Típus | Cél | Időtartam |
 | --- | --- | --- | --- |
 | mirastela-funnel | Munkamenet-tároló (session storage) a böngésződben | Megjegyzi a válaszaidat, amíg végighaladsz a lépéseken, hogy az oldal újratöltésekor ne vesszenek el | Amíg be nem zárod a fület |
 | __cf_bm, cf_clearance | A Cloudflare által beállított sütik | A weboldal védelme a botok és a támadások ellen | Legfeljebb 30 perc / legfeljebb 1 év |
+| mirastela-consent | Helyi tárhely (local storage) a böngésződben | Megjegyzi a sütikkel kapcsolatos döntésedet | Amíg nem törlöd |
 
 ## Analitika és hirdetések
 
-Jelenleg nem használunk analitikai vagy hirdetési sütiket. Ha bevezetjük őket, például a látogatások vagy hirdetéseink eredményeinek mérésére, előbb egy egyértelmű sávban kérjük a hozzájárulásodat, és felsoroljuk őket ezen az oldalon. A döntésedet bármikor megváltoztathatod majd.
+Csak akkor töltjük be a Meta pixelt, ha a sütikről szóló sávban a „Mindet elfogadom” gombra kattintasz. Ez méri a Facebookon és Instagramon futó hirdetéseink eredményességét (például azt, hogy aki látott egy hirdetést, később vett-e jelentést). A „Csak a szükségesek” választásakor semmi sem töltődik be. A döntésedet bármikor megváltoztathatod minden oldal alján a „Süti beállítások” linkkel.
+
+| Név | Típus | Cél | Időtartam |
+| --- | --- | --- | --- |
+| _fbp, _fbc | A Meta által beállított sütik | Felismerik a böngészőt és a hirdetésre kattintást a hirdetési eredmények méréséhez | Legfeljebb 90 napig |
 
 ## Hogyan törölheted őket
 

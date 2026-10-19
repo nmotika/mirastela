@@ -1,0 +1,34 @@
+---
+import { t } from '../i18n';
+import type { Lang } from '../i18n/config';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const S = t(lang).shop;
+---
+<div class="ck" id="ck" role="dialog" aria-live="polite" aria-label={S.ckSettings} hidden>
+  <p>{S.ckText} <a href={`/${lang}/cookies/`}>{S.ckMore}</a></p>
+  <div class="ckb">
+    <button type="button" class="ckbtn" data-ck="necessary">{S.ckNecessary}</button>
+    <button type="button" class="ckbtn" data-ck="all">{S.ckAll}</button>
+  </div>
+</div>
+<script>
+  import { consent, setConsent, loadPixel } from '../scripts/track';
+  const box = document.getElementById('ck')!;
+  if (!consent()) box.hidden = false; else loadPixel();
+  box.querySelectorAll<HTMLButtonElement>('[data-ck]').forEach((b) => b.addEventListener('click', () => {
+    setConsent(b.dataset.ck as 'all' | 'necessary');
+    box.hidden = true;
+  }));
+  document.querySelectorAll('[data-ck-open]').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); box.hidden = false; }));
+</script>
+<style>
+  .ck { position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 50; max-width: 560px; margin: 0 auto;
+    padding: 16px 18px; border-radius: 16px; background: #121A33; border: 1px solid rgba(217,178,106,.45);
+    box-shadow: 0 12px 40px rgba(0,0,0,.45); color: #E9E4DA; font-size: 14px; line-height: 1.5; }
+  .ck a { color: #D9B26A; text-decoration: underline; }
+  .ckb { display: flex; gap: 10px; margin-top: 12px; }
+  .ckbtn { flex: 1; min-height: 44px; border-radius: 999px; border: 1px solid #D9B26A; background: transparent;
+    color: #F3EBDD; font: 600 14px var(--sans, sans-serif); cursor: pointer; }
+  .ckbtn:hover { background: rgba(217,178,106,.15); }
+</style>

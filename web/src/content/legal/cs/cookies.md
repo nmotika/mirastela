@@ -2,16 +2,21 @@
 
 ## Co používáme
 
-Mirastela v současnosti používá pouze to, co je nezbytně nutné pro fungování webu. K tomu nepotřebujeme tvůj souhlas.
+Následující je nezbytné pro fungování webu a nevyžaduje tvůj souhlas.
 
 | Název | Typ | Účel | Doba trvání |
 | --- | --- | --- | --- |
 | mirastela-funnel | Úložiště relace (session storage) ve tvém prohlížeči | Pamatuje si tvé odpovědi, zatímco procházíš jednotlivé kroky, abys o ně nepřišel nebo nepřišla při opětovném načtení stránky | Do zavření karty |
 | __cf_bm, cf_clearance | Cookies nastavené službou Cloudflare | Chrání web před boty a útoky | Až 30 minut / až 1 rok |
+| mirastela-consent | Místní úložiště (local storage) ve tvém prohlížeči | Pamatuje si tvou volbu ohledně cookies | Dokud ji nesmažeš |
 
 ## Analytika a reklama
 
-Analytické ani reklamní cookies v tuto chvíli nepoužíváme. Pokud je zavedeme, například pro měření návštěvnosti nebo výsledků našich reklam, nejdříve tě požádáme o souhlas prostřednictvím jasné lišty a uvedeme je na této stránce. Svou volbu budeš moci kdykoli změnit.
+Teprve když v liště cookies klikneš na „Přijmout vše“, načteme pixel Meta, který měří úspěšnost našich reklam na Facebooku a Instagramu (například zda si někdo, kdo reklamu viděl, později koupil zprávu). Při volbě „Jen nezbytné“ se nic nenačte. Svou volbu můžeš kdykoli změnit odkazem „Nastavení cookies“ v dolní části každé stránky.
+
+| Název | Typ | Účel | Doba trvání |
+| --- | --- | --- | --- |
+| _fbp, _fbc | Cookies nastavené společností Meta | Rozpoznávají prohlížeč a kliknutí na reklamu kvůli měření výsledků reklam | Až 90 dní |
 
 ## Jak je odstranit
 

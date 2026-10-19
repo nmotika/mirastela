@@ -2,6 +2,7 @@ import { wheelSvg } from './wheel';
 import { CUSP } from './cusp';
 import { fill, huArticle } from '../i18n/fill';
 import { SIGN_GLYPHS } from './zodiac';
+import { fbTrack, trackInfo } from './track';
 
 type Step = 'date' | 'time' | 'place' | 'name' | 'focus' | 'status' | 'calc' | 'email' | 'offer' | 'upsell' | 'pdata' | 'kid' | 'sub' | 'done';
 const STEPS: Step[] = ['date', 'time', 'place', 'name', 'focus', 'status', 'calc', 'email', 'offer', 'upsell', 'pdata', 'kid', 'sub', 'done'];
@@ -420,11 +421,12 @@ $('eForm').addEventListener('submit', async (e) => {
   const btn = (e.currentTarget as HTMLFormElement).querySelector<HTMLButtonElement>('button[type=submit]')!;
   btn.disabled = true;
   try {
-    await api('/api/lead', {
+    const r = await api<{ token: string }>('/api/lead', {
       email, lang, name: state.name ?? '', date: state.date ?? '', time: state.time ?? null,
       cityId: state.city?.id ?? null, focus: state.focus, status: state.status ?? '',
-      marketingConsent: $<HTMLInputElement>('eConsent').checked,
+      marketingConsent: $<HTMLInputElement>('eConsent').checked, track: trackInfo(),
     });
+    fbTrack('Lead', {}, `lead_${r.token}`);
   } catch { /* keep the funnel moving even if the lead call fails */ }
   btn.disabled = false;
   show('offer');
@@ -500,7 +502,18 @@ const waiverBoxes = ['wOffer', 'wUp', 'wKid', 'wSub'];
 function syncWaivers() { waiverBoxes.forEach((id) => { $(`${id}Box`).hidden = !!state.coupon; }); }
 waiverBoxes.forEach((id) => $<HTMLInputElement>(id).addEventListener('change', () => $(`${id}Box`).classList.remove('err')));
 /** Leave for Stripe Checkout; the state stays in sessionStorage for the way back (?paid=...). */
-function toCheckout(url: string) { save(); location.href = url; }
+function toCheckout(url: string, value?: string) {
+  save();
+  const [amount, currency] = priceParts(value);
+  fbTrack('InitiateCheckout', amount ? { value: amount, currency } : {});
+  location.href = url;
+}
+/** "49,99 zł" -> [49.99, 'PLN'] for the pixel, using the market currency. */
+function priceParts(v?: string): [number, string] {
+  const cur = ({ pl: 'PLN', ro: 'RON', cs: 'CZK', hu: 'HUF' } as Record<string, string>)[lang] ?? 'EUR';
+  const n = v ? Number(v.replace(/[^\d,.]/g, '').replace(/\.(?=\d{3}\b)/g, '').replace(',', '.')) : 0;
+  return [Number.isFinite(n) ? n : 0, cur];
+}
 $('oBuy').addEventListener('click', async () => {
   if (!consented('wOffer')) return;
   const btn = $<HTMLButtonElement>('oBuy');
@@ -512,9 +525,9 @@ $('oBuy').addEventListener('click', async () => {
       const res = await api<{ token: string; checkout?: string }>('/api/order', {
         lang, email: state.email, name: state.name ?? '', date: state.date, time: state.time ?? null,
         cityId: state.city!.id, focus: state.focus, status: state.status ?? '', coupon: state.coupon ?? '',
-        bundle: state.plan === 'bundle', consent: true,
+        bundle: state.plan === 'bundle', consent: true, track: trackInfo(),
       });
-      if (res.checkout) { state.token = undefined; save(); toCheckout(res.checkout); return; }
+      if (res.checkout) { state.token = undefined; save(); toCheckout(res.checkout, state.plan === 'bundle' ? data.upPrices.bundle : data.price); return; }
       state.token = res.token; save();
     }
     if (state.plan === 'bundle') { state.pMode = 'partner'; save(); show('pdata'); } else show('upsell');
@@ -558,8 +571,8 @@ $('uAdd').addEventListener('click', async () => {
   const btn = $<HTMLButtonElement>('uAdd');
   btn.disabled = true; $('uErr').hidden = true;
   try {
-    const r = await api<{ checkout?: string }>(`/api/order/${encodeURIComponent(state.token!)}/add`, { product: 'forecast', consent: true });
-    if (r.checkout) { toCheckout(r.checkout); return; }
+    const r = await api<{ checkout?: string }>(`/api/order/${encodeURIComponent(state.token!)}/add`, { product: 'forecast', consent: true, track: trackInfo() });
+    if (r.checkout) { toCheckout(r.checkout, data.upPrices.forecast); return; }
     show('kid');
   } catch { $('uErr').hidden = false; }
   btn.disabled = false;
@@ -626,9 +639,9 @@ $('pdGo').addEventListener('click', async () => {
     const product = pdataMode === 'child' ? 'child' : 'partner';
     const r = await api<{ checkout?: string }>(`/api/order/${encodeURIComponent(state.token!)}/add`, {
       product,
-      partner: { name: upName.value.trim(), date: partnerDate(), time, cityId: partnerCity!.id }, consent: true,
+      partner: { name: upName.value.trim(), date: partnerDate(), time, cityId: partnerCity!.id }, consent: true, track: trackInfo(),
     });
-    if (r.checkout) { toCheckout(r.checkout); return; }
+    if (r.checkout) { toCheckout(r.checkout, data.upPrices[product]); return; }
     btn.disabled = false;
     show(fromReport ? 'done' : product === 'child' ? 'sub' : 'kid');
   } catch { $('pdErr').hidden = false; btn.disabled = false; }
@@ -674,8 +687,8 @@ $('sAdd').addEventListener('click', async () => {
   const btn = $<HTMLButtonElement>('sAdd');
   btn.disabled = true; $('sErr').hidden = true;
   try {
-    const r = await api<{ cal?: string; checkout?: string }>('/api/subscribe', { order: state.token, freq: 'weekly', plan: plan(), consent: true });
-    if (r.checkout) { toCheckout(r.checkout); return; }
+    const r = await api<{ cal?: string; checkout?: string }>('/api/subscribe', { order: state.token, freq: 'weekly', plan: plan(), consent: true, track: trackInfo() });
+    if (r.checkout) { toCheckout(r.checkout, plan() === 'year' ? data.subPrices.year : data.subPrices.month); return; }
     state.sub = 'weekly'; state.cal = r.cal; save();
     show('done');
   } catch {
@@ -739,7 +752,8 @@ function restore() {
 /** Back from Stripe Checkout: confirm the payment and continue where the purchase led. */
 async function returnFromCheckout(session: string) {
   history.replaceState(null, '', location.pathname);
-  type Paid = { token: string; kind: 'order' | 'add' | 'sub'; product: string; email: string; cal?: string };
+  type Paid = { token: string; kind: 'order' | 'add' | 'sub'; product: string; email: string; cal?: string;
+    value?: number; currency?: string; eventId?: string };
   let r: Paid | undefined;
   for (let i = 0; i < 12 && !r; i++) {  // the payment can take a few seconds to settle
     try { r = await api<Paid>(`/api/checkout/confirm?session=${encodeURIComponent(session)}`); }
@@ -756,6 +770,7 @@ async function returnFromCheckout(session: string) {
     return;
   }
   Object.assign(state, { token: r.token, email: state.email || r.email });
+  fbTrack('Purchase', { value: r.value, currency: r.currency, content_name: r.product, content_type: 'product' }, r.eventId);
   let next: Step;
   if (r.kind === 'order') {
     state.plan = r.product === 'bundle' ? 'bundle' : 'natal';
