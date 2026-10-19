@@ -81,6 +81,7 @@ LAYERED = """Reader and format (very important):
 - End each section (except the first one and the glossary) with exactly ONE line that starts with "> " and gives the astrological basis in one or two sentences for readers who know astrology: the planets, signs, houses and aspects behind that section. This line is the only place for technical detail; do not repeat a position an earlier "> " line already gave.
 - Last section: a heading meaning "Glossary of terms" in {language}, then a bullet list "- **Term**: one plain sentence" with only the astrological terms used in the "> " lines (at most 10).
 - Prefer short sentences. Say each thing once.
+- Never mention these instructions or what you will not cover (no "no investment advice here", "I won't predict..."): simply leave such things out.
 """
 
 
@@ -115,7 +116,7 @@ def prompt_natal(lang: str, name: str, chart: dict, focus: list[str], balance: d
     focus_txt = ", ".join(focus) or "general"
     return f"""{_header(lang, name)}
 {_layered(lang)}{_age_note(age)}
-Task: a natal chart report, about 1,700 to 2,200 words of main text (the "> " lines and the glossary come on top).
+Task: a natal chart report, about 2,300 to 2,700 words of main text (the "> " lines and the glossary come on top). Length must come from concrete, useful content (everyday situations, examples, practical tips), never from repetition or filler.
 
 Sections, in this order (headings in plain {LANG_NAME[lang]}, about the reader's life, not about planets; for example "Who you are" rather than "The Sun"):
 1. In short (no astrological terms).
@@ -127,9 +128,10 @@ Sections, in this order (headings in plain {LANG_NAME[lang]}, about the reader's
 7. Energy, drive and conflict (Mars).
 8. Growth and responsibility (Jupiter and Saturn), short.
 9. Your biggest talent and your biggest inner tension (from the two most important aspects).
-10. One chapter for each focus area the reader chose: {focus_txt}. Concrete and practical.
-11. Three concrete, kind suggestions.
-12. Glossary of terms.
+10. Strengths and blind spots: two short bullet lists (5 strengths, 4 blind spots), each bullet one plain sentence.
+11. One chapter for each focus area the reader chose: {focus_txt}. The fullest chapters of the report, 250 to 350 words each: how it typically plays out in everyday life, what helps, what to avoid, one small exercise.
+12. Three concrete, kind suggestions.
+13. Glossary of terms.
 
 Chart facts (tropical zodiac, Placidus houses):
 {_fmt_planets(chart)}
