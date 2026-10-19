@@ -30,7 +30,7 @@ const hu: BaseDict = {
   footer: {
     terms: 'Felhasználási feltételek', privacy: 'Adatvédelem', cookies: 'Sütik', contact: 'Kapcsolat',
     disclaimer: 'A tartalom szórakoztatási és önismereti célt szolgál.', languages: 'Nyelvek',
-    seller: '[CÉGNÉV] · [CÍM], Zágráb, Horvátország · OIB [SZÁM]',
+    seller: 'Something Digital d.o.o. · Gračanska cesta 127c, 10000 Zágráb, Horvátország · OIB 50480964887',
   },
   quiz: {
     dateQ: 'Mikor születtél?',

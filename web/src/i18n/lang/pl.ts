@@ -28,7 +28,7 @@ const pl: BaseDict = {
   footer: {
     terms: 'Regulamin', privacy: 'Polityka prywatności', cookies: 'Pliki cookie', contact: 'Kontakt',
     disclaimer: 'Treści służą rozrywce i autorefleksji.', languages: 'Wersje językowe',
-    seller: '[NAZWA FIRMY] · [ADRES], Zagrzeb, Chorwacja · OIB [NUMER]',
+    seller: 'Something Digital d.o.o. · Gračanska cesta 127c, 10000 Zagrzeb, Chorwacja · OIB 50480964887',
   },
   quiz: {
     dateQ: 'Kiedy się urodziłaś lub urodziłeś?',

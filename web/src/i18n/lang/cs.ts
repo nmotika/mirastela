@@ -29,7 +29,7 @@ const cs: BaseDict = {
   footer: {
     terms: 'Obchodní podmínky', privacy: 'Ochrana soukromí', cookies: 'Cookies', contact: 'Kontakt',
     disclaimer: 'Obsah slouží k zábavě a sebepoznání.', languages: 'Jazykové verze',
-    seller: '[NÁZEV FIRMY] · [ADRESA], Záhřeb, Chorvatsko · OIB [ČÍSLO]',
+    seller: 'Something Digital d.o.o. · Gračanska cesta 127c, 10000 Záhřeb, Chorvatsko · OIB 50480964887',
   },
   quiz: {
     dateQ: 'Kdy ses narodil nebo narodila?',

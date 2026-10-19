@@ -29,7 +29,7 @@ const sl: BaseDict = {
   footer: {
     terms: 'Pogoji uporabe', privacy: 'Politika zasebnosti', cookies: 'Piškotki', contact: 'Kontakt',
     disclaimer: 'Vsebina je namenjena zabavi in samorefleksiji.', languages: 'Jezikovne različice',
-    seller: '[NAZIV PODJETJA] · [NASLOV], Zagreb, Hrvaška · OIB [ŠTEVILKA]',
+    seller: 'Something Digital d.o.o. · Gračanska cesta 127c, 10000 Zagreb, Hrvaška · OIB 50480964887',
   },
   quiz: {
     dateQ: 'Kdaj si se rodil ali rodila?',

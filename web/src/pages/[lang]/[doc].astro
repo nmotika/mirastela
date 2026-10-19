@@ -5,20 +5,41 @@ import Footer from '../../components/Footer.astro';
 import { LOCALES, type Lang } from '../../i18n/config';
 import { t } from '../../i18n';
 
+const DOCS = ['terms', 'privacy', 'cookies'] as const;
+type Doc = typeof DOCS[number];
+const files = import.meta.glob<{ Content: any }>('../../content/legal/*/*.md', { eager: true });
+
 export function getStaticPaths() {
-  const docs = ['terms', 'privacy', 'cookies'];
-  return LOCALES.flatMap((lang) => docs.map((doc) => ({ params: { lang, doc } })));
+  return LOCALES.flatMap((lang) => ['terms', 'privacy', 'cookies'].map((doc) => ({ params: { lang, doc } })));
 }
 const lang = Astro.params.lang as Lang;
-const doc = Astro.params.doc as 'terms' | 'privacy' | 'cookies';
+const doc = Astro.params.doc as Doc;
 const d = t(lang);
 const title = d.footer[doc];
+const file = files[`../../content/legal/${lang}/${doc}.md`] ?? files[`../../content/legal/en/${doc}.md`];
+const Content = file.Content;
 ---
-<Base lang={lang} path={`${doc}/`} title={`${title} · Mirastela`} description={title} noindex>
+<Base lang={lang} path={`${doc}/`} title={`${title} · Mirastela`} description={`${title} · Mirastela`}>
   <div class="wrap"><Header lang={lang} path={`${doc}/`} /></div>
-  <main class="wrap" style="max-width:720px;padding-top:32px;padding-bottom:64px">
-    <h1 class="sf" style="font-size:36px">{title}</h1>
-    <p class="mu" style="margin-top:16px">[DRAFT · {doc.toUpperCase()} · {lang.toUpperCase()}]</p>
+  <main class="wrap legal">
+    <h1 class="sf">{title}</h1>
+    <Content />
   </main>
   <Footer lang={lang} path={`${doc}/`} />
 </Base>
+
+<style is:global>
+  .legal { max-width: 760px; padding-top: 32px; padding-bottom: 72px; }
+  .legal h1 { font-size: 40px; line-height: 1.1; margin-bottom: 8px; }
+  .legal h2 { font: 400 24px/1.3 var(--serif); margin: 36px 0 10px; }
+  .legal p, .legal li { font-size: 16px; line-height: 1.65; color: var(--ink, inherit); }
+  .legal p { margin: 10px 0; }
+  .legal ul { padding-left: 22px; margin: 10px 0; }
+  .legal li { margin: 6px 0; }
+  .legal em { color: var(--muted, #A9B0C6); }
+  .legal a { color: var(--gold); text-decoration: underline; }
+  .legal table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 15px; display: block; overflow-x: auto; }
+  .legal th, .legal td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  .legal th { font-weight: 700; }
+  @media (max-width: 600px) { .legal h1 { font-size: 32px; } }
+</style>

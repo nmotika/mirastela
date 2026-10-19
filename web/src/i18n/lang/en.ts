@@ -28,7 +28,7 @@ const en: BaseDict = {
   footer: {
     terms: 'Terms', privacy: 'Privacy policy', cookies: 'Cookies', contact: 'Contact',
     disclaimer: 'Content is intended for entertainment and self-reflection.', languages: 'Languages',
-    seller: '[COMPANY NAME] · [ADDRESS], Zagreb, Croatia · OIB [NUMBER]',
+    seller: 'Something Digital d.o.o. · Gračanska cesta 127c, 10000 Zagreb, Croatia · OIB 50480964887',
   },
   quiz: {
     dateQ: 'When were you born?',
