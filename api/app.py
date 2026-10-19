@@ -85,7 +85,9 @@ def db():
     if "paid" not in {r[1] for r in con.execute("pragma table_info(orders)")}:
         con.execute("alter table orders add column paid integer default 1")  # rows before payments existed were coupon orders
     con.execute("""create table if not exists payments(
-        session text primary key, token text, kind text, product text, status text, created text, done text)""")
+        session text primary key, token text, kind text, product text, status text, created text, done text, consent text)""")
+    if "consent" not in {r[1] for r in con.execute("pragma table_info(payments)")}:
+        con.execute("alter table payments add column consent text")
     return con
 
 
@@ -239,11 +241,13 @@ class OrderIn(BaseModel):
     status: str = ""
     coupon: str = ""
     bundle: bool = False
+    consent: bool = False  # withdrawal waiver ticked on the offer screen
 
 
 class AddIn(BaseModel):
     product: str
     partner: PartnerIn | None = None
+    consent: bool = False
 
 
 def _coupon_ok(code: str) -> bool:
@@ -307,6 +311,8 @@ def create_order(body: OrderIn, bg: BackgroundTasks):
     free = _coupon_ok(body.coupon)
     if not free and not pay.enabled():
         raise HTTPException(402, "payment required")
+    if not free and not body.consent:
+        raise HTTPException(422, "consent required")
     natal = birth_chart(body.date.isoformat(), body.time, body.cityId)
     token = secrets.token_urlsafe(16)
     with db() as con:
@@ -330,10 +336,13 @@ def _fulfil_order(token: str, bg: BackgroundTasks):
 
 
 def _checkout(token: str, lang: str, email: str, key: str, kind: str, product: str, cancel_step: str) -> str:
+    """Stripe Checkout for one purchase. The caller has checked that the withdrawal waiver was ticked;
+    its time and wording version are kept with the payment as the record of consent."""
     s = pay.create_session(lang, email, key, forecast_year(), {"token": token, "kind": kind, "product": product}, cancel_step)
+    now = datetime.now(timezone.utc).isoformat()
     with db() as con:
-        con.execute("insert into payments(session, token, kind, product, status, created) values(?,?,?,?,?,?)",
-                    (s["id"], token, kind, product, "open", datetime.now(timezone.utc).isoformat()))
+        con.execute("insert into payments(session, token, kind, product, status, created, consent) values(?,?,?,?,?,?,?)",
+                    (s["id"], token, kind, product, "open", now, f"waiver-v1 {lang} {now}"))
     return s["url"]
 
 
@@ -365,6 +374,8 @@ def add_product(token: str, body: AddIn, bg: BackgroundTasks):
         return {"ok": True}
     if not pay.enabled():
         raise HTTPException(402, "payment required")
+    if not body.consent:
+        raise HTTPException(422, "consent required")
     with db() as con:  # keep the birth data with the unpaid item; payment turns it on
         con.execute("insert into items(token, product, input, status, created) values(?,?,?,?,?)"
                     " on conflict(token, product) do update set input=excluded.input",
@@ -396,6 +407,7 @@ class SubIn(BaseModel):
     order: str
     freq: str = Field("weekly", pattern="^(daily|weekly)$")
     plan: str = Field("year", pattern="^(month|year)$")
+    consent: bool = False
 
 
 CAL_AHEAD = 14  # days of calendar entries kept ready ahead of today
@@ -465,6 +477,8 @@ def subscribe(body: SubIn, bg: BackgroundTasks):
         return {"ok": True, "cal": _activate_sub(body.order, body.freq, bg)}
     if not pay.enabled():
         raise HTTPException(402, "payment required")
+    if not body.consent:
+        raise HTTPException(422, "consent required")
     return {"ok": False, "checkout": _checkout(body.order, _lang(lang), email, f"sub_{body.plan}", "sub", body.plan, "sub")}
 
 

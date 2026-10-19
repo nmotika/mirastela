@@ -68,6 +68,7 @@ function el<K extends keyof HTMLElementTagNameMap>(tag: K, cls = '', text = ''):
 /* ---------- navigation ---------- */
 function show(step: Step, push = true) {
   current = step;
+  syncWaivers();
   STEPS.forEach((s) => (sections[s].hidden = s !== step));
   const i = STEPS.indexOf(step);
   const inQuiz = i < QUIZ_STEPS;
@@ -470,6 +471,7 @@ function syncPlan() {
 planRadios.forEach((r) => r.addEventListener('change', () => { state.plan = r.value as 'natal' | 'bundle'; save(); syncPlan(); }));
 function applyCouponUi() {
   syncPlan();
+  syncWaivers();
   if (!state.coupon) return;
   $('cOk').textContent = fill(D.coupon.applied, { code: state.coupon });
   $('cOk').hidden = false;
@@ -485,9 +487,22 @@ $('cForm').addEventListener('submit', async (e) => {
   $('cErr').hidden = valid;
   if (valid) { state.coupon = code; save(); applyCouponUi(); }
 });
+/** The withdrawal waiver must be ticked before any paid checkout (Managed Payments has no checkbox of its own). */
+function consented(id: string): boolean {
+  if (state.coupon) return true;
+  const c = $<HTMLInputElement>(id);
+  const box = $(`${id}Box`);
+  box.classList.toggle('err', !c.checked);
+  if (!c.checked) { box.scrollIntoView({ behavior: 'smooth', block: 'center' }); return false; }
+  return true;
+}
+const waiverBoxes = ['wOffer', 'wUp', 'wKid', 'wSub'];
+function syncWaivers() { waiverBoxes.forEach((id) => { $(`${id}Box`).hidden = !!state.coupon; }); }
+waiverBoxes.forEach((id) => $<HTMLInputElement>(id).addEventListener('change', () => $(`${id}Box`).classList.remove('err')));
 /** Leave for Stripe Checkout; the state stays in sessionStorage for the way back (?paid=...). */
 function toCheckout(url: string) { save(); location.href = url; }
 $('oBuy').addEventListener('click', async () => {
+  if (!consented('wOffer')) return;
   const btn = $<HTMLButtonElement>('oBuy');
   btn.disabled = true;
   btn.setAttribute('aria-busy', 'true');
@@ -497,7 +512,7 @@ $('oBuy').addEventListener('click', async () => {
       const res = await api<{ token: string; checkout?: string }>('/api/order', {
         lang, email: state.email, name: state.name ?? '', date: state.date, time: state.time ?? null,
         cityId: state.city!.id, focus: state.focus, status: state.status ?? '', coupon: state.coupon ?? '',
-        bundle: state.plan === 'bundle',
+        bundle: state.plan === 'bundle', consent: true,
       });
       if (res.checkout) { state.token = undefined; save(); toCheckout(res.checkout); return; }
       state.token = res.token; save();
@@ -538,11 +553,12 @@ function renderUpsell() {
   $('uAdd').textContent = state.coupon ? fill(D.upsell.addFree, { code: state.coupon }) : fill(D.upsell2.addFor, { price });
 }
 $('uAdd').addEventListener('click', async () => {
+  if (!consented('wUp')) return;
   if (upsellProduct() === 'partner') { state.pMode = 'partner'; save(); show('pdata'); return; }
   const btn = $<HTMLButtonElement>('uAdd');
   btn.disabled = true; $('uErr').hidden = true;
   try {
-    const r = await api<{ checkout?: string }>(`/api/order/${encodeURIComponent(state.token!)}/add`, { product: 'forecast' });
+    const r = await api<{ checkout?: string }>(`/api/order/${encodeURIComponent(state.token!)}/add`, { product: 'forecast', consent: true });
     if (r.checkout) { toCheckout(r.checkout); return; }
     show('kid');
   } catch { $('uErr').hidden = false; }
@@ -610,7 +626,7 @@ $('pdGo').addEventListener('click', async () => {
     const product = pdataMode === 'child' ? 'child' : 'partner';
     const r = await api<{ checkout?: string }>(`/api/order/${encodeURIComponent(state.token!)}/add`, {
       product,
-      partner: { name: upName.value.trim(), date: partnerDate(), time, cityId: partnerCity!.id },
+      partner: { name: upName.value.trim(), date: partnerDate(), time, cityId: partnerCity!.id }, consent: true,
     });
     if (r.checkout) { toCheckout(r.checkout); return; }
     btn.disabled = false;
@@ -624,7 +640,8 @@ function renderKid() {
   $('kPriceRow').hidden = !!state.coupon;
   $('kAdd').textContent = state.coupon ? fill(D.upsell.addFree, { code: state.coupon }) : fill(D.upsell2.addFor, { price: data.upPrices.child });
 }
-$('kAdd').addEventListener('click', () => { state.pMode = 'child'; save(); show('pdata'); });
+$('kAdd').addEventListener('click', () => {
+  if (!consented('wKid')) return; state.pMode = 'child'; save(); show('pdata'); });
 $('kNo').addEventListener('click', () => show('sub'));
 
 /* ---------- 11 subscription ---------- */
@@ -653,10 +670,11 @@ function updateSubCta() {
 }
 planInputs.forEach((x) => x.addEventListener('change', updateSubCta));
 $('sAdd').addEventListener('click', async () => {
+  if (!consented('wSub')) return;
   const btn = $<HTMLButtonElement>('sAdd');
   btn.disabled = true; $('sErr').hidden = true;
   try {
-    const r = await api<{ cal?: string; checkout?: string }>('/api/subscribe', { order: state.token, freq: 'weekly', plan: plan() });
+    const r = await api<{ cal?: string; checkout?: string }>('/api/subscribe', { order: state.token, freq: 'weekly', plan: plan(), consent: true });
     if (r.checkout) { toCheckout(r.checkout); return; }
     state.sub = 'weekly'; state.cal = r.cal; save();
     show('done');

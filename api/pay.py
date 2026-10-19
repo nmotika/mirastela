@@ -1,7 +1,7 @@
 """Stripe Checkout (hosted) with Managed Payments: prices, line items, sessions and webhook parsing.
 
 Env: STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, STRIPE_MANAGED_PAYMENTS=1 (default on),
-     STRIPE_TOS_CONSENT=1 (default on, needs the Terms URL set in Stripe > Settings > Public details),
+     STRIPE_TOS_CONSENT=1 (only without Managed Payments; needs the Terms URL in Stripe > Public details),
      STRIPE_API_VERSION (optional).
 Prices must match web/src/i18n/config.ts (PRICE, UPSELL, SUB), which only displays them.
 """
@@ -94,12 +94,14 @@ def create_session(lang: str, email: str, key: str, year: int, metadata: dict, c
         params["subscription_data"] = {"metadata": metadata}
     else:
         params["payment_intent_data"] = {"metadata": metadata}
-    if os.environ.get("STRIPE_TOS_CONSENT", "1") == "1":
+    if os.environ.get("STRIPE_MANAGED_PAYMENTS", "1") == "1":
+        params["managed_payments"] = {"enabled": True}
+    elif os.environ.get("STRIPE_TOS_CONSENT", "0") == "1":
+        # Managed Payments rejects custom_text, so the withdrawal waiver is collected on our offer screens
+        # (stored with the payment); this only applies when Managed Payments is switched off.
         params["consent_collection"] = {"terms_of_service": "required"}
         params["custom_text"] = {"terms_of_service_acceptance": {
             "message": WAIVER.get(lang, WAIVER["en"]).format(url=f"{SITE}/{lang}/terms/")}}
-    if os.environ.get("STRIPE_MANAGED_PAYMENTS", "1") == "1":
-        params["managed_payments"] = {"enabled": True}
     s = stripe.checkout.Session.create(**params)
     return {"id": s.id, "url": s.url}
 

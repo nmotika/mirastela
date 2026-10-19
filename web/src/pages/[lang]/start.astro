@@ -248,6 +248,7 @@ const clientData = JSON.stringify({
           <p class="note" id="oSoon" role="status" hidden>{O.soon}</p>
           <p class="ferr" id="oErr" hidden>{d.ui.error}</p>
           <div class="dock odock">
+            <label class="waiver" id="wOfferBox"><input type="checkbox" id="wOffer" /><span>{SH.waiver} <a href={`/${lang}/terms/`} target="_blank" rel="noopener">{SH.waiverTerms}</a></span></label>
             <button type="button" class="btn" id="oBuy">{O.cta.replace('{price}', price)}</button>
             <p class="mu tiny">{O.ctaNote}</p>
           </div>
@@ -285,6 +286,7 @@ const clientData = JSON.stringify({
       </div>
       <div class="ufoot">
         <p class="uprice" id="uPriceRow"><span class="mu small">{U2.once}</span><span class="sf" id="uPrice"></span></p>
+        <label class="waiver" id="wUpBox"><input type="checkbox" id="wUp" /><span>{SH.waiver} <a href={`/${lang}/terms/`} target="_blank" rel="noopener">{SH.waiverTerms}</a></span></label>
         <button type="button" class="btn" id="uAdd"></button>
         <p class="mu tiny" id="uOneClick">{U2.oneClick}</p>
         <p class="ferr" id="uErr" hidden>{d.ui.error}</p>
@@ -344,6 +346,7 @@ const clientData = JSON.stringify({
       </div>
       <div class="ufoot">
         <p class="uprice" id="kPriceRow"><span class="mu small">{U2.once}</span><span class="sf">{upPrices.child}</span></p>
+        <label class="waiver" id="wKidBox"><input type="checkbox" id="wKid" /><span>{SH.waiver} <a href={`/${lang}/terms/`} target="_blank" rel="noopener">{SH.waiverTerms}</a></span></label>
         <button type="button" class="btn" id="kAdd"></button>
         <button type="button" class="no" id="kNo">{SH.kidNo}</button>
       </div>
@@ -378,6 +381,7 @@ const clientData = JSON.stringify({
       </div>
       <p class="ferr" id="sErr" hidden></p>
       <div class="sfoot">
+        <label class="waiver" id="wSubBox"><input type="checkbox" id="wSub" /><span>{SH.waiver} <a href={`/${lang}/terms/`} target="_blank" rel="noopener">{SH.waiverTerms}</a></span></label>
         <button type="button" class="btn" id="sAdd"></button>
         <p class="mu tiny" id="sNote"></p>
         <button type="button" class="no" id="sNo">{S.no}</button>
@@ -412,6 +416,10 @@ const clientData = JSON.stringify({
 </Base>
 
 <style is:global>
+  .waiver { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.45; color: var(--muted, #A9B0C6); cursor: pointer; text-align: left; }
+  .waiver input { margin-top: 2px; width: 18px; height: 18px; flex: none; accent-color: var(--gold); }
+  .waiver a { color: var(--gold); text-decoration: underline; }
+  .waiver.err span { color: #F28B82; }
   .funnel { width: 100%; max-width: 480px; margin: 0 auto; padding: 0 20px; min-height: 100dvh; display: flex; flex-direction: column; }
   .funnel.wide { max-width: 1280px; }
   .fhead { display: flex; align-items: center; gap: 4px; height: 64px; margin: 0 -12px; }
