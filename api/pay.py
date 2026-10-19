@@ -106,16 +106,22 @@ def create_session(lang: str, email: str, key: str, year: int, metadata: dict, c
     return {"id": s.id, "url": s.url}
 
 
+def _plain(obj) -> dict:
+    """Stripe objects are not dicts in stripe-python 12+; work with plain data everywhere."""
+    return obj.to_dict() if hasattr(obj, "to_dict") else dict(obj)
+
+
 def retrieve_session(session_id: str) -> dict:
-    s = _stripe().checkout.Session.retrieve(session_id)
-    return {"id": s.id, "paid": s.payment_status in ("paid", "no_payment_required") or s.status == "complete",
-            "metadata": dict(s.metadata or {}), "customer": s.customer, "subscription": s.subscription,
-            "mode": s.mode}
+    s = _plain(_stripe().checkout.Session.retrieve(session_id))
+    return {"id": s["id"], "paid": s.get("payment_status") in ("paid", "no_payment_required") or s.get("status") == "complete",
+            "metadata": dict(s.get("metadata") or {}), "customer": s.get("customer"), "subscription": s.get("subscription"),
+            "mode": s.get("mode")}
 
 
-def parse_webhook(payload: bytes, sig: str):
+def parse_webhook(payload: bytes, sig: str) -> dict:
+    """Verify the signature and return the event as plain data."""
     stripe = _stripe()
-    return stripe.Webhook.construct_event(payload, sig, os.environ["STRIPE_WEBHOOK_SECRET"])
+    return _plain(stripe.Webhook.construct_event(payload, sig, os.environ["STRIPE_WEBHOOK_SECRET"]))
 
 
 def cancel_subscription(sub_id: str):
