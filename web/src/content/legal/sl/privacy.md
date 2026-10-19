@@ -24,6 +24,7 @@ Podatkov o tvoji kartici ne prejemamo in ne shranjujemo. Vneseš jih le pri Stri
 | Pošiljanje brezplačnega povzetka in servisnih sporočil o tvojih naročilih | Izvajanje pogodbe in ukrepi pred njeno sklenitvijo, člen 6(1)(b) |
 | E-poštna sporočila s horoskopi in ponudbami, ki jih nisi naročil oziroma naročila | Tvoja privolitev, člen 6(1)(a), ki jo lahko kadar koli prekličeš |
 | Varnost, preprečevanje zlorab, odpravljanje napak | Zakoniti interes, člen 6(1)(f) |
+| Merjenje rezultatov naših oglasov na Facebooku in Instagramu (Meta piksel in Conversions API) | Tvoja privolitev, člen 6(1)(a), dana v pasici za piškotke, ki jo lahko kadar koli prekličeš v „Nastavitve piškotkov” |
 | Vodenje računovodskih evidenc | Zakonska obveznost, člen 6(1)(c) |
 
 Podatki o rojstvu po Splošni uredbi o varstvu podatkov niso posebna vrsta podatkov, vendar z njimi ravnamo skrbno: uporabljamo jih le za izračun kart in pisanje tvojih besedil.
@@ -37,6 +38,7 @@ Uporabljamo skrbno izbrane ponudnike storitev, ki jih zavezujejo pogodbe o obdel
 - **Anthropic PBC**: umetna inteligenca, ki piše besedila. Pošljemo ji izračunano karto, tvoje ime in jezik, ne pa tudi tvojega e-poštnega naslova.
 - **Resend**: pošiljanje e-pošte.
 - **Stripe**: plačila. Pri nakupih Stripe nastopa kot preprodajalec (merchant of record) in plačilne podatke obdeluje kot samostojni upravljavec v skladu s svojo politiko zasebnosti.
+- **Meta Platforms Ireland Ltd.** (Irska): merjenje rezultatov naših oglasov na Facebooku in Instagramu, samo če v pasici za piškotke klikneš „Sprejmem vse”. Takrat Meti pošljemo dogodek (na primer zaključen nakup) in njegovo vrednost, identifikatorja brskalnika in klika na oglas, tvoj naslov IP in podatke o brskalniku ter tvoj e-poštni naslov v zgoščeni (psevdonimizirani) obliki. Za zbiranje in pošiljanje teh podatkov smo z Meto skupni upravljavci (člen 26 GDPR), Meta pa jih nato obdeluje kot samostojni upravljavec v skladu s svojo politiko zasebnosti. Brez tvoje privolitve Meti ne pošljemo ničesar.
 
 Nekateri od teh ponudnikov imajo sedež v Združenih državah Amerike. Prenosi so zaščiteni z okvirom EU-ZDA za zasebnost podatkov ali s standardnimi pogodbenimi klavzulami Evropske komisije.
 

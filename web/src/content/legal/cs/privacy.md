@@ -24,6 +24,7 @@ S jakýmkoli dotazem ohledně svých údajů nám napiš na [hello@mirastela.com
 | Zaslání bezplatného shrnutí a servisních e-mailů k tvým objednávkám | Plnění smlouvy a kroky před jejím uzavřením, čl. 6 odst. 1 písm. b) |
 | E-maily s horoskopy a nabídkami, které sis neobjednal nebo neobjednala | Tvůj souhlas, čl. 6 odst. 1 písm. a), který můžeš kdykoli odvolat |
 | Bezpečnost, prevence zneužití, oprava chyb | Oprávněný zájem, čl. 6 odst. 1 písm. f) |
+| Měření výsledků našich reklam na Facebooku a Instagramu (Meta pixel a Conversions API) | Tvůj souhlas, čl. 6 odst. 1 písm. a), udělený v liště cookies, který můžeš kdykoli odvolat v „Nastavení cookies” |
 | Vedení účetních záznamů | Právní povinnost, čl. 6 odst. 1 písm. c) |
 
 Údaje o narození nejsou zvláštní kategorií osobních údajů podle obecného nařízení o ochraně osobních údajů (GDPR), přesto s nimi zacházíme pečlivě: používáme je pouze k výpočtu horoskopů a psaní tvých textů.
@@ -37,6 +38,7 @@ Využíváme pečlivě vybrané poskytovatele služeb, kteří jsou vázáni sml
 - **Anthropic PBC**: umělá inteligence, která píše texty. Posíláme jí vypočtený horoskop, tvé křestní jméno a jazyk, ale ne tvou e-mailovou adresu.
 - **Resend**: odesílání e-mailů.
 - **Stripe**: platby. Při nákupech vystupuje Stripe jako přeprodejce (merchant of record) a zpracovává platební údaje jako samostatný správce podle svých vlastních zásad ochrany osobních údajů.
+- **Meta Platforms Ireland Ltd.** (Irsko): měření výsledků našich reklam na Facebooku a Instagramu, pouze pokud v liště cookies klikneš na „Přijmout vše”. Pak společnosti Meta posíláme událost (například dokončený nákup) a její hodnotu, identifikátory prohlížeče a kliknutí na reklamu, tvou IP adresu a údaje o prohlížeči a tvou e-mailovou adresu v hashované (pseudonymizované) podobě. Při shromažďování a předávání těchto údajů jsme s Metou společnými správci (čl. 26 GDPR), dále je Meta zpracovává jako samostatný správce podle svých zásad ochrany osobních údajů. Bez tvého souhlasu Metě nic neposíláme.
 
 Někteří z těchto poskytovatelů sídlí ve Spojených státech. Předávání údajů je chráněno rámcem pro ochranu osobních údajů mezi EU a USA (EU-U.S. Data Privacy Framework) nebo standardními smluvními doložkami Evropské komise.
 

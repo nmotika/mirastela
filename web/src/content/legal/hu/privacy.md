@@ -24,6 +24,7 @@ A kártyaadataidat nem kapjuk meg és nem tároljuk. Ezeket kizárólag a Stripe
 | Az ingyenes összefoglaló és a rendeléseiddel kapcsolatos szolgáltatási e-mailek küldése | Szerződés teljesítése és a szerződéskötést megelőző lépések, 6. cikk (1) bekezdés b) pont |
 | Általad nem rendelt horoszkópokat és ajánlatokat tartalmazó e-mailek | A hozzájárulásod, 6. cikk (1) bekezdés a) pont, amelyet bármikor visszavonhatsz |
 | Biztonság, a visszaélések megelőzése, hibák javítása | Jogos érdek, 6. cikk (1) bekezdés f) pont |
+| Facebookon és Instagramon futó hirdetéseink eredményeinek mérése (Meta pixel és Conversions API) | A hozzájárulásod, 6. cikk (1) bekezdés a) pont, amelyet a sütibannerben adsz meg, és bármikor visszavonhatsz a „Süti beállítások” alatt |
 | Számviteli nyilvántartások vezetése | Jogi kötelezettség, 6. cikk (1) bekezdés c) pont |
 
 A születési adatok a GDPR szerint nem tartoznak a személyes adatok különleges kategóriáiba, de gondosan bánunk velük: kizárólag a képletek kiszámításához és a szövegeid megírásához használjuk őket.
@@ -37,6 +38,7 @@ Gondosan kiválasztott szolgáltatókat veszünk igénybe, akiket adatfeldolgoz�
 - **Anthropic PBC**: a szövegeket író mesterséges intelligencia. Elküldjük neki a kiszámított képletet, a keresztnevedet és a nyelvet, az e-mail-címedet azonban nem.
 - **Resend**: e-mailek küldése.
 - **Stripe**: fizetések. A vásárlások esetében a Stripe viszonteladóként (merchant of record) jár el, és a fizetési adatokat önálló adatkezelőként, saját adatvédelmi szabályzata szerint kezeli.
+- **Meta Platforms Ireland Ltd.** (Írország): a Facebookon és Instagramon futó hirdetéseink eredményeinek mérése, kizárólag ha a sütibannerben a „Mindet elfogadom” gombra kattintasz. Ekkor elküldjük a Metának az eseményt (például egy befejezett vásárlást) és annak értékét, a böngésző és a hirdetésre kattintás azonosítóit, az IP-címedet és a böngésződ adatait, valamint az e-mail-címedet hash-elt (álnevesített) formában. Ezen adatok gyűjtése és továbbítása tekintetében a Metával közös adatkezelők vagyunk (GDPR 26. cikk), ezt követően a Meta önálló adatkezelőként, saját adatvédelmi szabályzata szerint kezeli őket. Hozzájárulásod nélkül semmit nem küldünk a Metának.
 
 E szolgáltatók egy része az Egyesült Államokban működik. Az adattovábbítást az EU-USA adatvédelmi keretrendszer (Data Privacy Framework) vagy az Európai Bizottság által elfogadott általános adatvédelmi kikötések (standard contractual clauses) védik.
 

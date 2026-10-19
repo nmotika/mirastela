@@ -24,6 +24,7 @@ We do not receive or store your card details. They are entered only with Stripe.
 | Sending your free summary and service emails about your orders | Performance of a contract and steps before it, Art. 6(1)(b) |
 | Emails with horoscopes and offers you have not ordered | Your consent, Art. 6(1)(a), which you can withdraw at any time |
 | Security, preventing abuse, fixing errors | Legitimate interest, Art. 6(1)(f) |
+| Measuring the results of our ads on Facebook and Instagram (Meta pixel and Conversions API) | Your consent, Art. 6(1)(a), given in the cookie banner, which you can withdraw at any time with "Cookie settings" |
 | Keeping accounting records | Legal obligation, Art. 6(1)(c) |
 
 Birth data is not a special category of data under the GDPR, but we treat it with care: it is used only to calculate charts and write your texts.
@@ -37,6 +38,7 @@ We use carefully chosen service providers, bound by data processing agreements:
 - **Anthropic PBC**: artificial intelligence that writes the texts. We send it the calculated chart, your first name and the language, but not your email address.
 - **Resend**: sending emails.
 - **Stripe**: payments. For purchases, Stripe acts as the reseller (merchant of record) and processes payment data as an independent controller under its own privacy policy.
+- **Meta Platforms Ireland Ltd.** (Ireland): measuring the results of our ads on Facebook and Instagram, only if you click "Accept all" in the cookie banner. We then send Meta the event (for example a completed purchase) and its value, the browser and ad-click identifiers, your IP address and browser details, and your email address in hashed (pseudonymised) form. For collecting and sending this data we are joint controllers with Meta (Art. 26 GDPR), and Meta then processes it as an independent controller under its own privacy policy. Without your consent nothing is sent to Meta.
 
 Some of these providers are based in the United States. Transfers are protected by the EU-US Data Privacy Framework or the European Commission's standard contractual clauses.
 

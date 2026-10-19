@@ -24,6 +24,7 @@ Podatke o tvojoj kartici ne primamo niti pohranjujemo. Upisuješ ih isključivo 
 | Slanje tvog besplatnog sažetka i servisnih e-mailova o tvojim narudžbama | Izvršavanje ugovora i radnje prije sklapanja ugovora, čl. 6. st. 1. t. (b) |
 | E-mailovi s horoskopima i ponudama koje nisi naručio/la | Tvoja privola, čl. 6. st. 1. t. (a), koju možeš povući u bilo kojem trenutku |
 | Sigurnost, sprečavanje zlouporabe, ispravljanje pogrešaka | Legitimni interes, čl. 6. st. 1. t. (f) |
+| Mjerenje rezultata naših oglasa na Facebooku i Instagramu (Meta piksel i Conversions API) | Tvoja privola, čl. 6. st. 1. t. (a), dana u banneru za kolačiće, koju možeš povući u bilo kojem trenutku putem „Postavke kolačića” |
 | Vođenje računovodstvene evidencije | Pravna obveza, čl. 6. st. 1. t. (c) |
 
 Podaci o rođenju nisu posebna kategorija podataka prema GDPR-u, ali s njima postupamo pažljivo: koriste se isključivo za izračun karata i pisanje tvojih tekstova.
@@ -37,6 +38,7 @@ Koristimo pažljivo odabrane pružatelje usluga, obvezane ugovorima o obradi pod
 - **Anthropic PBC**: umjetna inteligencija koja piše tekstove. Šaljemo joj izračunatu kartu, tvoje ime i jezik, ali ne i tvoju e-mail adresu.
 - **Resend**: slanje e-mailova.
 - **Stripe**: plaćanja. Za kupnje Stripe djeluje kao preprodavač (merchant of record) i obrađuje podatke o plaćanju kao samostalni voditelj obrade, prema vlastitim pravilima privatnosti.
+- **Meta Platforms Ireland Ltd.** (Irska): mjerenje rezultata naših oglasa na Facebooku i Instagramu, samo ako u banneru za kolačiće klikneš „Prihvaćam sve”. Tada Meti šaljemo događaj (na primjer dovršenu kupnju) i njegovu vrijednost, identifikatore preglednika i klika na oglas, tvoju IP adresu i podatke o pregledniku te tvoju e-mail adresu u hashiranom (pseudonimiziranom) obliku. Za prikupljanje i slanje tih podataka s Metom smo zajednički voditelji obrade (čl. 26. GDPR-a), a Meta ih dalje obrađuje kao samostalni voditelj obrade prema vlastitim pravilima privatnosti. Bez tvoje privole Meti ne šaljemo ništa.
 
 Neki od tih pružatelja usluga imaju sjedište u Sjedinjenim Američkim Državama. Prijenosi su zaštićeni Okvirom za privatnost podataka EU-SAD ili standardnim ugovornim klauzulama Europske komisije.
 
