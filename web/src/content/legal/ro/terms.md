@@ -29,7 +29,7 @@ Trebuie să ai cel puțin 18 ani ca să cumperi pe Mirastela. Când introduci da
 
 Toate prețurile sunt afișate în moneda versiunii tale de limbă și includ TVA. Se aplică prețul afișat în momentul comenzii.
 
-Plățile sunt procesate de partenerul nostru de plăți **Stripe**, care acționează ca revânzător (merchant of record) pentru achizițiile de pe Mirastela. Stripe se ocupă de plată, de taxele aferente vânzării și de chitanță, iar termenii săi se aplică și plății. Datele cardului tău se introduc doar pe paginile Stripe și nu sunt niciodată văzute sau stocate de noi. Pe extrasul de cont, achiziția poate apărea ca „LINK.COM* MIRASTELA”.
+Plățile sunt procesate de partenerul nostru de plăți **Stripe**, prin serviciul său Link, care acționează ca revânzător (merchant of record) pentru achizițiile de pe Mirastela. Stripe se ocupă de plată, de taxele aferente vânzării și de chitanță, iar termenii săi se aplică și plății. Datele cardului tău se introduc doar pe paginile Stripe și nu sunt niciodată văzute sau stocate de noi. Pe extrasul de cont, achiziția poate apărea ca „LINK.COM* MIRASTELA”.
 
 ## 6. Livrare
 

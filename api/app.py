@@ -337,8 +337,10 @@ def _build(token: str, product: str):
         email = con.execute("select email from orders where token=?", (token,)).fetchone()[0]
     if status == "ready":
         lang = _lang(lang)
+        with db() as con:
+            coupon = (con.execute("select coupon from orders where token=?", (token,)).fetchone() or [""])[0]
         subject, html = emails.report_ready(lang, name, product, forecast_year(),
-                                            f"{emails.SITE}/{lang}/report/?o={token}&t={product}")
+                                            f"{emails.SITE}/{lang}/report/?o={token}&t={product}", paid=not _coupon_ok(coupon or ""))
         mailer.send(DB_PATH, email, f"report-{product}", subject, html)
 
 

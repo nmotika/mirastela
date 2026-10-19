@@ -29,7 +29,7 @@ Pro nákup na Mirastele ti musí být alespoň 18 let. Když zadáváš údaje o
 
 Všechny ceny jsou uvedeny v měně tvé jazykové verze a zahrnují DPH. Platí cena zobrazená v okamžiku objednávky.
 
-Platby zpracovává náš platební partner **Stripe**, který při nákupech na Mirastele vystupuje jako přeprodejce (merchant of record). Stripe zajišťuje platbu, daň z prodeje a doklad o nákupu a na platbu se vztahují i jeho podmínky. Údaje o kartě zadáváš pouze na stránkách Stripe, my je nikdy nevidíme ani neukládáme. Na výpisu z banky se nákup může zobrazit jako „LINK.COM* MIRASTELA“.
+Platby zpracovává náš platební partner **Stripe**, prostřednictvím své služby Link, který při nákupech na Mirastele vystupuje jako přeprodejce (merchant of record). Stripe zajišťuje platbu, daň z prodeje a doklad o nákupu a na platbu se vztahují i jeho podmínky. Údaje o kartě zadáváš pouze na stránkách Stripe, my je nikdy nevidíme ani neukládáme. Na výpisu z banky se nákup může zobrazit jako „LINK.COM* MIRASTELA“.
 
 ## 6. Dodání
 

@@ -739,6 +739,7 @@ $('sNo').addEventListener('click', () => show('done'));
 function renderDone() {
   if (!state.token) { show('offer'); return; }
   $('dDesc').textContent = fill(D.done.desc, { email: state.email ?? '' });
+  $('dStmt').hidden = !!state.coupon; // paid through Stripe: say how the charge looks on the statement
   $('dSub').hidden = !state.sub;
   $<HTMLAnchorElement>('dOpen').href = reportUrl();
   $('dCal').hidden = !state.cal;

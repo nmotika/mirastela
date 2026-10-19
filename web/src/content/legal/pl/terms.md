@@ -29,7 +29,7 @@ Aby kupować w Mirastela, musisz mieć ukończone 18 lat. Podając dane urodzeni
 
 Wszystkie ceny podajemy w walucie Twojej wersji językowej i zawierają one podatek VAT. Obowiązuje cena wyświetlona w chwili złożenia zamówienia.
 
-Płatności obsługuje nasz partner płatniczy **Stripe**, który przy zakupach w Mirastela działa jako odsprzedawca (merchant of record). Stripe przeprowadza płatność, rozlicza podatek od sprzedaży i wystawia potwierdzenie zakupu, a do płatności mają zastosowanie również jego warunki. Dane karty wpisujesz wyłącznie na stronach Stripe, a my nigdy ich nie widzimy ani nie przechowujemy. Na wyciągu bankowym zakup może być widoczny jako „LINK.COM* MIRASTELA”.
+Płatności obsługuje nasz partner płatniczy **Stripe**, za pośrednictwem usługi Link, który przy zakupach w Mirastela działa jako odsprzedawca (merchant of record). Stripe przeprowadza płatność, rozlicza podatek od sprzedaży i wystawia potwierdzenie zakupu, a do płatności mają zastosowanie również jego warunki. Dane karty wpisujesz wyłącznie na stronach Stripe, a my nigdy ich nie widzimy ani nie przechowujemy. Na wyciągu bankowym zakup może być widoczny jako „LINK.COM* MIRASTELA”.
 
 ## 6. Dostawa
 

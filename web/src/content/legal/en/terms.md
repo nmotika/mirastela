@@ -29,7 +29,7 @@ You must be at least 18 years old to buy on Mirastela. When you enter the birth 
 
 All prices are shown in the currency of your language version and include VAT. The price that applies is the one shown at the moment of your order.
 
-Payments are processed by our payment partner **Stripe**, which acts as the reseller (merchant of record) for purchases on Mirastela. Stripe handles the payment, sales tax and the receipt, and its terms also apply to the payment. Your card details are entered only on Stripe's pages and are never seen or stored by us. Your bank statement may show the purchase as "LINK.COM* MIRASTELA".
+Payments are processed by our payment partner **Stripe**, through its Link service, which acts as the reseller (merchant of record) for purchases on Mirastela. Stripe handles the payment, sales tax and the receipt, and its terms also apply to the payment. Your card details are entered only on Stripe's pages and are never seen or stored by us. Your bank statement may show the purchase as "LINK.COM* MIRASTELA".
 
 ## 6. Delivery
 

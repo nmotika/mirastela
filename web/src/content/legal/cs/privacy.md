@@ -38,7 +38,7 @@ Využíváme pečlivě vybrané poskytovatele služeb, kteří jsou vázáni sml
 - **Cloudflare, Inc.**: doručování a ochrana webu.
 - **Anthropic PBC**: umělá inteligence, která píše texty. Posíláme jí vypočtený horoskop, tvé křestní jméno a jazyk, ale ne tvou e-mailovou adresu.
 - **Resend**: odesílání e-mailů.
-- **Stripe**: platby. Při nákupech vystupuje Stripe jako přeprodejce (merchant of record) a zpracovává platební údaje jako samostatný správce podle svých vlastních zásad ochrany osobních údajů.
+- **Stripe** (Link): platby. Při nákupech vystupuje Stripe prostřednictvím služby Link jako přeprodejce (merchant of record) a zpracovává platební údaje jako samostatný správce podle svých vlastních zásad ochrany osobních údajů.
 - **Meta Platforms Ireland Ltd.** (Irsko): měření výsledků našich reklam na Facebooku a Instagramu, pouze pokud v liště cookies klikneš na „Přijmout vše”. Pak společnosti Meta posíláme událost (například dokončený nákup) a její hodnotu, identifikátory prohlížeče a kliknutí na reklamu, tvou IP adresu a údaje o prohlížeči a tvou e-mailovou adresu v hashované (pseudonymizované) podobě. Při shromažďování a předávání těchto údajů jsme s Metou společnými správci (čl. 26 GDPR), dále je Meta zpracovává jako samostatný správce podle svých zásad ochrany osobních údajů. Bez tvého souhlasu Metě nic neposíláme.
 - **Google Ireland Ltd.** (Irsko): statistika návštěvnosti pomocí Google Analytics, pouze pokud v liště cookies klikneš na „Přijmout vše”. Google dostává navštívené stránky, kroky v dotazníku a nákupy (produkt a částku), tvou IP adresu, která se zkracuje, a údaje o prohlížeči, ale ne tvou e-mailovou adresu ani údaje o narození. Google zpracovává údaje jako náš zpracovatel; předání do USA je možné v rámci EU-US Data Privacy Framework.
 

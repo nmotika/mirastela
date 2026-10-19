@@ -37,6 +37,7 @@ T = {
         dailySubject="{name}, Twój horoskop na {date}", weeklySubject="{name}, Twój tydzień od {date}",
         unsub="Wypisz się z subskrypcji", unsubDone="Wypisano Cię z subskrypcji. Nie będziemy już wysyłać horoskopów.",
         loginSubject="Twój link do logowania w Mirastela", loginBody="Kliknij przycisk, aby zobaczyć swoje raporty i subskrypcję. Link działa 30 minut i tylko raz.", loginBtn="Otwórz moje raporty", loginAfter="Jeśli to nie Ty prosił(a)ś o link, zignoruj tę wiadomość.", account="Moje raporty i dane",
+        stmt='Na wyciągu z karty płatność jest widoczna jako „LINK.COM* MIRASTELA”. Link to usługa płatnicza Stripe, przez którą rozliczamy zakupy.',
         why="Otrzymujesz tę wiadomość, ponieważ ten adres został podany na mirastela.com.",
         disclaimer="Treści służą rozrywce i autorefleksji."),
     "hr": dict(
@@ -51,6 +52,7 @@ T = {
         dailySubject="{name}, tvoj horoskop za {date}", weeklySubject="{name}, tvoj tjedan od {date}",
         unsub="Odjava od pretplate", unsubDone="Odjava je uspjela. Više ti nećemo slati horoskope.",
         loginSubject="Tvoj link za prijavu u Mirastelu", loginBody="Klikni gumb da vidiš svoje izvještaje i pretplatu. Link vrijedi 30 minuta i samo jednom.", loginBtn="Otvori moje izvještaje", loginAfter="Ako nisi ti tražio/la link, zanemari ovu poruku.", account="Moji izvještaji i podaci",
+        stmt='Na izvodu kartice plaćanje se prikazuje kao „LINK.COM* MIRASTELA”. Link je Stripeova usluga plaćanja preko koje naplaćujemo kupnje.',
         why="Ovaj e-mail dobivaš jer je ova adresa upisana na mirastela.com.",
         disclaimer="Sadržaj je namijenjen zabavi i samorefleksiji."),
     "sl": dict(
@@ -65,6 +67,7 @@ T = {
         dailySubject="{name}, tvoj horoskop za {date}", weeklySubject="{name}, tvoj teden od {date}",
         unsub="Odjava od naročnine", unsubDone="Odjava je uspela. Horoskopov ti ne bomo več pošiljali.",
         loginSubject="Tvoja povezava za prijavo v Mirastelo", loginBody="Klikni gumb, da vidiš svoja poročila in naročnino. Povezava velja 30 minut in samo enkrat.", loginBtn="Odpri moja poročila", loginAfter="Če povezave nisi zahteval(a) ti, to sporočilo prezri.", account="Moja poročila in podatki",
+        stmt='Na izpisku kartice je plačilo prikazano kot "LINK.COM* MIRASTELA". Link je Stripova plačilna storitev, prek katere obračunavamo nakupe.',
         why="To sporočilo prejemaš, ker je bil ta naslov vpisan na mirastela.com.",
         disclaimer="Vsebina je namenjena zabavi in samorefleksiji."),
     "ro": dict(
@@ -79,6 +82,7 @@ T = {
         dailySubject="{name}, horoscopul tău pentru {date}", weeklySubject="{name}, săptămâna ta de la {date}",
         unsub="Dezabonare", unsubDone="Te-ai dezabonat. Nu îți mai trimitem horoscoape.",
         loginSubject="Linkul tău de autentificare în Mirastela", loginBody="Apasă butonul ca să vezi rapoartele și abonamentul tău. Linkul este valabil 30 de minute și o singură dată.", loginBtn="Deschide rapoartele mele", loginAfter="Dacă nu tu ai cerut linkul, ignoră acest mesaj.", account="Rapoartele și datele mele",
+        stmt='Pe extrasul cardului, plata apare ca „LINK.COM* MIRASTELA”. Link este serviciul de plată Stripe prin care încasăm achizițiile.',
         why="Primești acest e-mail pentru că adresa a fost introdusă pe mirastela.com.",
         disclaimer="Conținutul are scop de divertisment și autoreflecție."),
     "cs": dict(
@@ -93,6 +97,7 @@ T = {
         dailySubject="{name}, tvůj horoskop na {date}", weeklySubject="{name}, tvůj týden od {date}",
         unsub="Odhlásit předplatné", unsubDone="Odhlášení proběhlo. Horoskopy ti už posílat nebudeme.",
         loginSubject="Tvůj odkaz pro přihlášení do Mirastely", loginBody="Klikni na tlačítko a uvidíš své zprávy a předplatné. Odkaz platí 30 minut a jen jednou.", loginBtn="Otevřít moje zprávy", loginAfter="Pokud jsi o odkaz nežádal(a) ty, tuto zprávu ignoruj.", account="Moje zprávy a údaje",
+        stmt='Na výpisu z karty se platba zobrazí jako „LINK.COM* MIRASTELA“. Link je platební služba Stripe, přes kterou nákupy účtujeme.',
         why="Tento e-mail dostáváš, protože tato adresa byla zadána na mirastela.com.",
         disclaimer="Obsah slouží k zábavě a sebereflexi."),
     "hu": dict(
@@ -107,6 +112,7 @@ T = {
         dailySubject="{name}, a horoszkópod: {date}", weeklySubject="{name}, a heti horoszkópod: {date}",
         unsub="Leiratkozás", unsubDone="Sikeresen leiratkoztál. Több horoszkópot nem küldünk.",
         loginSubject="Bejelentkezési linked a Mirastelához", loginBody="Kattints a gombra, és látod a jelentéseidet és az előfizetésedet. A link 30 percig és csak egyszer érvényes.", loginBtn="Jelentéseim megnyitása", loginAfter="Ha nem te kérted a linket, hagyd figyelmen kívül ezt az üzenetet.", account="Jelentéseim és adataim",
+        stmt='A kártyakivonaton a fizetés „LINK.COM* MIRASTELA” néven jelenik meg. A Link a Stripe fizetési szolgáltatása, ezen keresztül számlázzuk a vásárlásokat.',
         why="Azért kapod ezt az e-mailt, mert ezt a címet megadták a mirastela.com oldalon.",
         disclaimer="A tartalom szórakoztatási és önismereti célt szolgál."),
     "en": dict(
@@ -121,6 +127,7 @@ T = {
         dailySubject="{name}, your horoscope for {date}", weeklySubject="{name}, your week from {date}",
         unsub="Unsubscribe", unsubDone="You have been unsubscribed. We will not send you any more horoscopes.",
         loginSubject="Your Mirastela sign-in link", loginBody="Click the button to see your reports and subscription. The link works for 30 minutes and only once.", loginBtn="Open my reports", loginAfter="If you did not ask for this link, ignore this email.", account="My reports and data",
+        stmt='Your card statement will show the payment as "LINK.COM* MIRASTELA". Link is Stripe\'s payment service, through which we charge purchases.',
         why="You are receiving this email because this address was entered on mirastela.com.",
         disclaimer="The content is meant for entertainment and self-reflection."),
 }
@@ -234,10 +241,12 @@ def summary(lang: str, name: str, chart: dict, text: str, resume_url: str) -> tu
     return subject, layout(lang, body)
 
 
-def report_ready(lang: str, name: str, product: str, year: int, url: str) -> tuple[str, str]:
+def report_ready(lang: str, name: str, product: str, year: int, url: str, paid: bool = False) -> tuple[str, str]:
     t = T[lang]
     pname = t["products"][product].format(year=year)
     body = _p(greeting(lang, name)) + _p(t["repBody"].format(product=pname)) + _button(t["repBtn"], url)
+    if paid:  # how the charge appears on the card statement (Stripe Managed Payments via Link)
+        body += _p(t["stmt"])
     return t["repSubject"].format(product=pname), layout(lang, body)
 
 

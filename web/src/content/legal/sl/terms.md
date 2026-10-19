@@ -29,7 +29,7 @@ Za nakup na Mirasteli moraš biti star oziroma stara najmanj 18 let. Ko vneseš 
 
 Vse cene so prikazane v valuti tvoje jezikovne različice in vključujejo DDV. Velja cena, ki je prikazana v trenutku naročila.
 
-Plačila obdeluje naš plačilni partner **Stripe**, ki pri nakupih na Mirasteli nastopa kot preprodajalec (merchant of record). Stripe izvede plačilo, obračuna davek in izda račun, za plačilo pa veljajo tudi njegovi pogoji. Podatke o kartici vneseš le na Stripovih straneh, mi jih nikoli ne vidimo in ne shranjujemo. Na bančnem izpisku je nakup lahko prikazan kot "LINK.COM* MIRASTELA".
+Plačila obdeluje naš plačilni partner **Stripe**, prek svoje storitve Link, ki pri nakupih na Mirasteli nastopa kot preprodajalec (merchant of record). Stripe izvede plačilo, obračuna davek in izda račun, za plačilo pa veljajo tudi njegovi pogoji. Podatke o kartici vneseš le na Stripovih straneh, mi jih nikoli ne vidimo in ne shranjujemo. Na bančnem izpisku je nakup lahko prikazan kot "LINK.COM* MIRASTELA".
 
 ## 6. Dostava
 

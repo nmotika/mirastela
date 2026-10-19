@@ -29,7 +29,7 @@ A Mirastelán csak 18. életévét betöltött személy vásárolhat. Ha más sz
 
 Minden árat a nyelvi változatodnak megfelelő pénznemben tüntetünk fel, és az árak tartalmazzák az áfát. A rendelés pillanatában feltüntetett ár az irányadó.
 
-A fizetéseket partnerünk, a **Stripe** kezeli, amely a Mirastelán történő vásárlások esetében viszonteladóként (merchant of record) jár el. A Stripe intézi a fizetést, a forgalmi adót és a nyugtát, és a fizetésre az ő feltételei is vonatkoznak. A kártyaadataidat kizárólag a Stripe oldalain adod meg, mi soha nem látjuk és nem tároljuk őket. A bankszámlakivonatodon a vásárlás „LINK.COM* MIRASTELA” megnevezéssel jelenhet meg.
+A fizetéseket partnerünk, a **Stripe** kezeli Link nevű szolgáltatásán keresztül, amely a Mirastelán történő vásárlások esetében viszonteladóként (merchant of record) jár el. A Stripe intézi a fizetést, a forgalmi adót és a nyugtát, és a fizetésre az ő feltételei is vonatkoznak. A kártyaadataidat kizárólag a Stripe oldalain adod meg, mi soha nem látjuk és nem tároljuk őket. A bankszámlakivonatodon a vásárlás „LINK.COM* MIRASTELA” megnevezéssel jelenhet meg.
 
 ## 6. Teljesítés
 

@@ -29,7 +29,7 @@ Za kupnju na Mirasteli moraš imati najmanje 18 godina. Kad upisuješ podatke o 
 
 Sve cijene prikazane su u valuti tvoje jezične verzije i uključuju PDV. Vrijedi cijena prikazana u trenutku narudžbe.
 
-Plaćanja obrađuje naš partner za plaćanje **Stripe**, koji za kupnje na Mirasteli djeluje kao preprodavač (merchant of record). Stripe obrađuje plaćanje, porez na promet i račun, a na plaćanje se primjenjuju i njegovi uvjeti. Podatke o kartici upisuješ isključivo na Stripeovim stranicama i mi ih nikada ne vidimo niti pohranjujemo. Na izvodu iz banke kupnja se može prikazati kao „LINK.COM* MIRASTELA”.
+Plaćanja obrađuje naš partner za plaćanje **Stripe**, putem svoje usluge Link, koji za kupnje na Mirasteli djeluje kao preprodavač (merchant of record). Stripe obrađuje plaćanje, porez na promet i račun, a na plaćanje se primjenjuju i njegovi uvjeti. Podatke o kartici upisuješ isključivo na Stripeovim stranicama i mi ih nikada ne vidimo niti pohranjujemo. Na izvodu iz banke kupnja se može prikazati kao „LINK.COM* MIRASTELA”.
 
 ## 6. Isporuka
 

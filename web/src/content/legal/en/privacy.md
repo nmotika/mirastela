@@ -38,7 +38,7 @@ We use carefully chosen service providers, bound by data processing agreements:
 - **Cloudflare, Inc.**: delivery and protection of the website.
 - **Anthropic PBC**: artificial intelligence that writes the texts. We send it the calculated chart, your first name and the language, but not your email address.
 - **Resend**: sending emails.
-- **Stripe**: payments. For purchases, Stripe acts as the reseller (merchant of record) and processes payment data as an independent controller under its own privacy policy.
+- **Stripe** (Link): payments. For purchases, Stripe acts through its Link service as the reseller (merchant of record) and processes payment data as an independent controller under its own privacy policy.
 - **Meta Platforms Ireland Ltd.** (Ireland): measuring the results of our ads on Facebook and Instagram, only if you click "Accept all" in the cookie banner. We then send Meta the event (for example a completed purchase) and its value, the browser and ad-click identifiers, your IP address and browser details, and your email address in hashed (pseudonymised) form. For collecting and sending this data we are joint controllers with Meta (Art. 26 GDPR), and Meta then processes it as an independent controller under its own privacy policy. Without your consent nothing is sent to Meta.
 - **Google Ireland Ltd.** (Ireland): site statistics with Google Analytics, only if you click "Accept all" in the cookie banner. Google receives the pages you visit, steps in the questionnaire and purchases (product and value), your IP address, which is shortened, and browser details, but not your email address or birth data. Google processes the data as our processor; data may be transferred to the United States under the EU-US Data Privacy Framework.
 
