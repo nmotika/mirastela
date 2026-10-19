@@ -40,7 +40,7 @@ consent and tracking are written once.
 - [ ] Marketing consent wording at the email step
 
 ## Security
-- [x] Rate limiting on all public POST endpoints; Turnstile on email step and account sign-in (keys pending)
+- [x] Rate limiting on all public POST endpoints; Turnstile on email step and account sign-in
 - [ ] SSH key-only login, fail2ban, ufw (only SSH; API stays local behind the tunnel)
 - [ ] Encrypted off-server backups (R2 or Hetzner Storage Box)
 - [x] Open landing and horoscope pages to the public (Access bypass); keep /api/ private paths as now

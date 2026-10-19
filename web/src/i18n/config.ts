@@ -53,4 +53,4 @@ export function isLang(x: string | undefined): x is Lang {
 }
 
 /** Cloudflare Turnstile site key (public). Empty: no challenge (the API skips the check without its secret too). */
-export const TURNSTILE_SITEKEY = '';
+export const TURNSTILE_SITEKEY = '0x4AAAAAAEjGoK33b0oyhjyz';
