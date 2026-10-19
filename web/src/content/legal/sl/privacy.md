@@ -18,7 +18,7 @@ Podatkov o tvoji kartici ne prejemamo in ne shranjujemo. Vneseš jih le pri Stri
 
 ## 3. Zakaj jih uporabljamo in na kateri pravni podlagi
 
-| Namen | Pravna podlaga (Splošna uredba o varstvu podatkov) |
+| Namen | Pravna podlaga (GDPR) |
 | --- | --- |
 | Izračun tvoje karte, priprava in dostava poročil, horoskopov in koledarja | Izvajanje pogodbe, člen 6(1)(b) |
 | Pošiljanje brezplačnega povzetka in servisnih sporočil o tvojih naročilih | Izvajanje pogodbe in ukrepi pred njeno sklenitvijo, člen 6(1)(b) |
