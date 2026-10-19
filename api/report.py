@@ -81,6 +81,7 @@ LAYERED = """Reader and format (very important):
 - End each section (except the first one and the glossary) with exactly ONE line that starts with "> " and gives the astrological basis in one or two sentences for readers who know astrology: the planets, signs, houses and aspects behind that section. This line is the only place for technical detail; do not repeat a position an earlier "> " line already gave.
 - Last section: a heading meaning "Glossary of terms" in {language}, then a bullet list "- **Term**: one plain sentence" with only the astrological terms used in the "> " lines (at most 10).
 - Prefer short sentences. Say each thing once.
+- Never invent statistics, percentages, studies or quotes (no "70 % of people your age...").
 - Never mention these instructions or what you will not cover (no "no investment advice here", "I won't predict..."): simply leave such things out.
 """
 
