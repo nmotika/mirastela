@@ -100,7 +100,18 @@ function show(step: Step, push = true) {
     sub: renderSub, done: renderDone,
   };
   hooks[step]?.();
+  requestAnimationFrame(moreBelow);
 }
+/** Arrow above the pinned bar while the current step still has content below it. */
+function moreBelow() {
+  const dock = sections[current]?.querySelector<HTMLElement>('.dock:not(.flow)');
+  document.querySelectorAll('.dock.more').forEach((d) => d !== dock && d.classList.remove('more'));
+  if (!dock) return;
+  const left = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
+  dock.classList.toggle('more', left > 48);
+}
+window.addEventListener('scroll', moreBelow, { passive: true });
+window.addEventListener('resize', moreBelow);
 function go(offset: number) {
   show(STEPS[STEPS.indexOf(current) + offset]);
 }
@@ -123,13 +134,29 @@ const allWheels: Wheel[] = [];
  *  gliding (or before the scroll debounce fired) never keeps the old value. */
 function commitWheels() { allWheels.forEach((w) => w.commit()); }
 function wheel(box: HTMLElement, onChange: (v: number) => void): Wheel {
+  // data-loop (hours, minutes): on touch the list repeats three times and is quietly re-centred,
+  // so 59 is one flick above 00 instead of a long scroll back.
+  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const loop = box.dataset.loop !== undefined && !fine;
+  if (loop) {
+    const orig = [...box.querySelectorAll<HTMLButtonElement>('button')];
+    box.prepend(...orig.map((b) => b.cloneNode(true) as HTMLButtonElement));
+    box.append(...orig.map((b) => b.cloneNode(true) as HTMLButtonElement));
+  }
   const items = [...box.querySelectorAll<HTMLButtonElement>('button')];
+  const base = loop ? items.length / 3 : 0;
+  const recentre = (i: number) => {
+    if (!loop || (i >= base && i < 2 * base)) return i;
+    const j = base + (i % base);
+    box.scrollTop = j * step();
+    return j;
+  };
   let idx = 0, timer = 0;
   const step = () => items[0].offsetHeight || 48;
   // Mouse and keyboard (desktop): a plain dropdown is quicker than dragging a wheel. Same values,
   // same API; the wheel is hidden by CSS under the same media query.
   let sel: HTMLSelectElement | null = null;
-  if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  if (fine) {
     sel = document.createElement('select');
     sel.className = 'inp wsel';
     sel.setAttribute('aria-label', box.getAttribute('aria-label') || '');
@@ -154,7 +181,10 @@ function wheel(box: HTMLElement, onChange: (v: number) => void): Wheel {
     mark(i);
     box.dispatchEvent(new CustomEvent('wheelpreview', { detail: +items[i].dataset.v!, bubbles: true }));
     clearTimeout(timer);
-    timer = window.setTimeout(() => { if (i !== idx) { idx = i; onChange(+items[i].dataset.v!); } }, 90);
+    timer = window.setTimeout(() => {
+      const j = recentre(i);
+      if (j !== idx) { const changed = items[j].dataset.v !== items[idx].dataset.v; idx = j; mark(j); if (changed) onChange(+items[j].dataset.v!); }
+    }, 90);
   }, { passive: true });
   items.forEach((b, i) => b.addEventListener('click', () => pick(i, true)));
   box.addEventListener('keydown', (e) => {
@@ -165,13 +195,13 @@ function wheel(box: HTMLElement, onChange: (v: number) => void): Wheel {
   });
   function commit() {
     if (sel || !box.offsetParent) return; // dropdown mode, or the step is hidden
-    const i = clamp(Math.round(box.scrollTop / step()));
+    const i = recentre(clamp(Math.round(box.scrollTop / step())));
     clearTimeout(timer);
-    if (i !== idx) { idx = i; mark(i); onChange(+items[i].dataset.v!); }
+    if (i !== idx) { const changed = items[i].dataset.v !== items[idx].dataset.v; idx = i; mark(i); if (changed) onChange(+items[i].dataset.v!); }
   }
   box.addEventListener('scrollend', commit);
   const w: Wheel = {
-    set(v, smooth = false) { const i = items.findIndex((b) => +b.dataset.v! === v); if (i >= 0) pick(i, smooth, false); },
+    set(v, smooth = false) { const i = items.findIndex((b, j) => j >= base && +b.dataset.v! === v); if (i >= 0) pick(i, smooth, false); },
     value: () => +items[idx].dataset.v!,
     layout() { box.scrollTop = idx * step(); mark(idx); },
     commit,
@@ -315,7 +345,20 @@ nInput.addEventListener('input', () => {
 
 /* ---------- 5 focus ---------- */
 const focusCards = [...document.querySelectorAll<HTMLButtonElement>('[data-focus]')];
+/** Age from the birth date; offers and texts follow the stage of life. */
+function age(): number | null {
+  if (!state.date) return null;
+  const [y, m, d] = state.date.split('-').map(Number);
+  const n = new Date();
+  return n.getFullYear() - y - (n.getMonth() + 1 < m || (n.getMonth() + 1 === m && n.getDate() < d) ? 1 : 0);
+}
+const SENIOR = 65, GRAND = 55, ADULT = 18;
 function renderFocus() {
+  const senior = (age() ?? 0) >= SENIOR;
+  document.querySelectorAll<HTMLElement>('[data-adult]').forEach((b) => {
+    b.hidden = senior;  // no career focus after 65
+    if (senior && state.focus.includes(b.dataset.focus!)) state.focus = state.focus.filter((x) => x !== b.dataset.focus);
+  });
   focusCards.forEach((b) => b.setAttribute('aria-pressed', String(state.focus.includes(b.dataset.focus!))));
   $('fNext').textContent = fill(D.quiz2.focusCount, { n: state.focus.length });
   $<HTMLButtonElement>('fNext').disabled = state.focus.length === 0;
@@ -575,7 +618,7 @@ $('oBuy').addEventListener('click', async () => {
 
 /* ---------- 10 upsell ---------- */
 const forecastYear = (() => { const n = new Date(); return n.getMonth() >= 9 ? n.getFullYear() + 1 : n.getFullYear(); })();
-const upsellProduct = () => state.up ?? (state.status === 'single' ? 'forecast' : 'partner');
+const upsellProduct = () => state.up ?? (state.status === 'single' || (age() ?? 99) < ADULT ? 'forecast' : 'partner');
 const reportUrl = () => `/${lang}/report/?o=${encodeURIComponent(state.token ?? '')}`;
 function renderUpsell() {
   if (!state.token) { show('offer'); return; }
@@ -585,6 +628,8 @@ function renderUpsell() {
   $('uPartner').hidden = prod !== 'partner';
   $('uForecast').hidden = prod !== 'forecast';
   $('ufTitle').textContent = fill(D.upsell2.forecastTitle, { year: forecastYear });
+  const work = document.querySelector<HTMLElement>('[data-work] span');
+  if (work && (age() ?? 0) >= SENIOR) work.textContent = D.shop.seniorBullet;
   if (prod === 'forecast' && !$('uMonths').childElementCount) {
     const fmt = new Intl.DateTimeFormat(htmlLang, { month: 'short' });
     const heights = [30, 46, 92, 40, 58, 34, 50, 104, 44, 62, 36, 54];
@@ -686,6 +731,8 @@ $('pdGo').addEventListener('click', async () => {
 /* ---------- 10c child chart offer ---------- */
 function renderKid() {
   if (!state.token) { show('offer'); return; }
+  if ((age() ?? 99) < ADULT) { history.replaceState({ step: 'sub' }, '', '#sub'); show('sub', false); return; }
+  $('kTitle').textContent = (age() ?? 0) >= GRAND ? D.shop.kidTitleG : D.shop.kidTitle;
   $('kPriceRow').hidden = !!state.coupon;
   $('kPrice').textContent = P('child');
   $('kAdd').textContent = state.coupon ? fill(D.upsell.addFree, { code: state.coupon }) : fill(D.upsell2.addFor, { price: P('child') });

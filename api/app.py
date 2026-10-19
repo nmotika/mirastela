@@ -306,28 +306,30 @@ def _build(token: str, product: str):
             "select lang, name, input, chart from orders where token=?", (token,)).fetchone()
         item_input = con.execute("select input from items where token=? and product=?", (token, product)).fetchone()[0]
     natal, inp = json.loads(natal), json.loads(inp)
+    age = report.age_from(inp.get("date", ""))
     try:
         if product == "natal":
             bal = chart.balance(natal)
             data = {"balance": bal}
-            prompt = report.prompt_natal(lang, name, natal, inp.get("focus", []), bal)
+            prompt = report.prompt_natal(lang, name, natal, inp.get("focus", []), bal, age)
         elif product == "child":
             p = json.loads(item_input)
             cc = birth_chart(p["date"], p.get("time"), p["cityId"])
             bal = chart.balance(cc)
             data = {"child": p, "childChart": cc, "balance": bal}
-            prompt = report.prompt_child(lang, name, p.get("name", ""), cc, bal)
+            prompt = report.prompt_child(lang, name, p.get("name", ""), cc, bal, report.age_from(p["date"]))
         elif product == "partner":
             p = json.loads(item_input)
             pc = birth_chart(p["date"], p.get("time"), p["cityId"])
             syn = chart.synastry(natal, pc)
             data = {"partner": p, "partnerChart": pc, "synastry": syn}
-            prompt = report.prompt_partner(lang, name, p.get("name", ""), natal, pc, syn)
+            prompt = report.prompt_partner(lang, name, p.get("name", ""), natal, pc, syn, age)
         else:
             tr = chart.transits(natal, forecast_year())
             data = {"transits": tr}
-            prompt = report.prompt_forecast(lang, name, natal, tr)
+            prompt = report.prompt_forecast(lang, name, natal, tr, inp.get("focus", []), age)
         md, model = report.generate(prompt)
+        data["v"] = 2  # layered format: summary first, '> ' astrology lines, glossary last
         status = "ready"
     except Exception as exc:  # keep the error visible for debugging
         data, md, model, status = {"error": str(exc)}, "", "", "error"
@@ -456,6 +458,39 @@ def get_order(token: str):
         "items": [{"product": p, "status": s, "markdown": md or "", "data": json.loads(d) if d else None, "model": m}
                   for p, s, md, d, m in items],
     }
+
+
+class PdfIn(BaseModel):
+    """Labels the website shows in the reader's language; plain strings, escaped in pdf.py."""
+    product: str = Field(pattern="^(natal|partner|forecast|child)$")
+    head: dict[str, object] = {}
+    tables: list[dict[str, object]] = []
+    basis: str = Field("", max_length=60)
+
+
+@app.post("/api/pdf/{token}")
+def report_pdf(token: str, body: PdfIn, request: Request):
+    """The report as a downloadable PDF file."""
+    from fastapi.responses import Response
+    import pdf
+    guard.per_ip(DB_PATH, request, "pdf", 20, 600)
+    with db() as con:
+        row = con.execute("select chart from orders where token=?", (token,)).fetchone()
+        it = con.execute("select markdown, data, status from items where token=? and product=?", (token, body.product)).fetchone()
+    if not row or not it or it[2] != "ready":
+        raise HTTPException(404, "not ready")
+    data = json.loads(it[1] or "{}")
+    chart_ = {"partner": data.get("partnerChart"), "child": data.get("childChart")}.get(body.product, json.loads(row[0]))
+    if body.product == "partner":
+        chart_ = json.loads(row[0])  # the wheel shows the reader's chart; the partner's data is in the tables
+    head = {k: str(v)[:300] for k, v in body.head.items() if k in ("kicker", "title", "birth", "disclaimer", "lang")}
+    head["big3"] = [[str(c)[:80] for c in r][:3] for r in (body.head.get("big3") or [])[:3] if isinstance(r, list)]
+    tables = [{"title": str(t.get("title", ""))[:120],
+               "rows": [[str(c)[:160] for c in r][:4] for r in (t.get("rows") or [])[:40] if isinstance(r, list)]}
+              for t in body.tables[:4]]
+    out = pdf.render(it[0] or "", chart_, head, tables, body.basis, data.get("v") == 2)
+    return Response(out, media_type="application/pdf",
+                    headers={"Content-Disposition": f'attachment; filename="mirastela-{body.product}.pdf"'})
 
 
 # ---------------------------------------------------------------- subscriptions

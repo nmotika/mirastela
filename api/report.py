@@ -71,25 +71,65 @@ def _header(lang: str, name: str) -> str:
     return STYLE.format(language=LANG_NAME[lang], name=name or "you", signs=v["signs"], terms=v["terms"])
 
 
-def prompt_natal(lang: str, name: str, chart: dict, focus: list[str], balance: dict) -> str:
+# Report format v2 (after tester feedback): plain words first, astrology only in one '> ' line per
+# section (shown collapsed on the site), a jargon-free summary on top and a glossary at the end.
+LAYERED = """Reader and format (very important):
+- The reader knows nothing about astrology. Write the main text in everyday words about their life: feelings, relationships, work, choices, habits.
+- First section: a heading meaning "In short" in {language}, then 5 to 6 sentences with the whole picture and NO astrological terms at all (no planet, sign, house or aspect names).
+- Every following section starts with one bold sentence (**...**) saying in plain words what this means for the reader, then 1 to 3 short paragraphs in plain words with concrete, everyday examples.
+- In the main text never use degrees, orbs, house numbers or aspect names, and never list positions. Name a sign or planet only where it truly helps.
+- End each section (except the first one and the glossary) with exactly ONE line that starts with "> " and gives the astrological basis in one or two sentences for readers who know astrology: the planets, signs, houses and aspects behind that section. This line is the only place for technical detail; do not repeat a position an earlier "> " line already gave.
+- Last section: a heading meaning "Glossary of terms" in {language}, then a bullet list "- **Term**: one plain sentence" with only the astrological terms used in the "> " lines (at most 10).
+- Prefer short sentences. Say each thing once.
+"""
+
+
+def _layered(lang: str) -> str:
+    return LAYERED.format(language=LANG_NAME[lang])
+
+
+def age_from(birth: str) -> int | None:
+    from datetime import date
+    try:
+        b = date.fromisoformat(str(birth)[:10])
+    except ValueError:
+        return None
+    t = date.today()
+    return t.year - b.year - ((t.month, t.day) < (b.month, b.day))
+
+
+def _age_note(age: int | None, who: str = "The reader") -> str:
+    if age is None:
+        return ""
+    if age >= 65:
+        return (f"{who} is {age} years old. Speak to this stage of life: meaning, relationships, family, health habits in general terms, "
+                "interests, passing on experience. No career-building, job-search or starting-a-family advice.\n")
+    if age >= 50:
+        return f"{who} is {age} years old: keep career talk to experience, change and balance, not to starting out.\n"
+    if age < 25:
+        return f"{who} is {age} years old: speak to a young adult (studies, first jobs, finding their way).\n"
+    return f"{who} is {age} years old.\n"
+
+
+def prompt_natal(lang: str, name: str, chart: dict, focus: list[str], balance: dict, age: int | None = None) -> str:
     focus_txt = ", ".join(focus) or "general"
     return f"""{_header(lang, name)}
-Task: a full natal chart report, about 2,500 to 3,200 words.
+{_layered(lang)}{_age_note(age)}
+Task: a natal chart report, about 1,700 to 2,200 words of main text (the "> " lines and the glossary come on top).
 
-Sections, in this order (translate the headings naturally into {LANG_NAME[lang]}):
-1. Introduction: the overall picture of the chart in 2 to 3 paragraphs.
-2. Sun: identity and core drive (sign{', house' if chart['timeKnown'] else ''}, key aspects).
-3. Moon: emotional needs.
-{'4. Ascendant: how others see you, first impressions.' if chart['timeKnown'] else '4. (skip the Ascendant section, birth time unknown)'}
-5. Mercury: mind and communication.
-6. Venus: love, taste, values.
-7. Mars: drive, conflict, desire.
-8. Jupiter and Saturn: growth and responsibility.
-9. Uranus, Neptune and Pluto: one short section, generational context made personal through house{' ' if chart['timeKnown'] else ''}and aspects only.
-10. The three most important aspects, one sub-paragraph each.
-11. One chapter for each focus area the reader chose: {focus_txt}.
-12. Element and modality balance and what it means in practice.
-13. Closing: three concrete, kind suggestions for reflection.
+Sections, in this order (headings in plain {LANG_NAME[lang]}, about the reader's life, not about planets; for example "Who you are" rather than "The Sun"):
+1. In short (no astrological terms).
+2. Who you are at the core (based on the Sun).
+3. What you need emotionally (the Moon).
+{'4. How others see you at first (the Ascendant).' if chart['timeKnown'] else '4. (skip: birth time unknown, no Ascendant)'}
+5. How you think and talk (Mercury).
+6. Love and what you value (Venus).
+7. Energy, drive and conflict (Mars).
+8. Growth and responsibility (Jupiter and Saturn), short.
+9. Your biggest talent and your biggest inner tension (from the two most important aspects).
+10. One chapter for each focus area the reader chose: {focus_txt}. Concrete and practical.
+11. Three concrete, kind suggestions.
+12. Glossary of terms.
 
 Chart facts (tropical zodiac, Placidus houses):
 {_fmt_planets(chart)}
@@ -101,19 +141,21 @@ Element / modality counts: {json.dumps(balance)}
 """
 
 
-def prompt_partner(lang: str, name: str, partner_name: str, a: dict, b: dict, syn: list[dict]) -> str:
+def prompt_partner(lang: str, name: str, partner_name: str, a: dict, b: dict, syn: list[dict], age: int | None = None) -> str:
     return f"""{_header(lang, name)}
-Task: a relationship compatibility (synastry) report between {name or 'the reader'} (person A) and {partner_name or 'the partner'} (person B), about 1,800 to 2,400 words.
+{_layered(lang)}{_age_note(age)}
+Task: a relationship compatibility (synastry) report between {name or 'the reader'} (person A) and {partner_name or 'the partner'} (person B), about 1,300 to 1,700 words of main text.
 Refer to person B by first name. Be balanced: name strengths and friction points, always constructive.
 
-Sections, in this order (translate headings into {LANG_NAME[lang]}):
-1. The overall dynamic of this pair.
+Sections, in this order (headings in plain {LANG_NAME[lang]}, about the relationship, not about planets):
+1. In short (no astrological terms).
 2. Emotional connection (Moons, Moon contacts).
 3. Attraction and romance (Venus and Mars contacts).
 4. Communication (Mercury contacts).
 5. Stability and long-term potential (Saturn and Jupiter contacts).
 6. Possible friction and how to handle it.
 7. Three practical suggestions for the two of them.
+8. Glossary of terms.
 
 Person A chart:
 {_fmt_planets(a)}
@@ -126,21 +168,24 @@ Inter-chart aspects (A planet → B planet), most important first:
 """
 
 
-def prompt_child(lang: str, parent_name: str, child_name: str, child: dict, balance: dict) -> str:
+def prompt_child(lang: str, parent_name: str, child_name: str, child: dict, balance: dict, age: int | None = None) -> str:
     kid = child_name or "the child"
     return f"""{_header(lang, parent_name)}
-Task: a natal chart report about the reader's child, {kid}, written for the parent, about 1,800 to 2,400 words.
+{_layered(lang)}{_age_note(age, kid)}
+Task: a natal chart report about the reader's child, {kid}, written for the parent, about 1,300 to 1,700 words of main text.
+If {kid} is already an adult, write about the adult they are and how the parent can relate to them now.
 Address the parent in the second person singular and refer to the child by first name in the third person.
 Warm and practical: how this child tends to feel, learn and relate, and how a parent can support them. Never label, diagnose or predict; describe tendencies a parent may recognise. Nothing about health, development disorders or the child's future career success.
 
-Sections, in this order (translate headings into {LANG_NAME[lang]}):
-1. Who {kid} is: the overall picture in 2 to 3 paragraphs.
+Sections, in this order (headings in plain {LANG_NAME[lang]}):
+1. In short: who {kid} is (no astrological terms).
 2. Temperament and emotional needs (Sun, Moon{', Ascendant' if child['timeKnown'] else ''}).
 3. How {kid} thinks and learns (Mercury, element balance).
 4. Friendships, play and relating to others (Venus, Mars, Moon).
 5. Strengths to nurture.
 6. Where {kid} may need extra patience or support, and how to give it.
 7. Five practical suggestions for the parent.
+8. Glossary of terms.
 
 Element balance: {balance}
 
@@ -152,22 +197,25 @@ Aspects (tightest first):
 """
 
 
-def prompt_forecast(lang: str, name: str, natal: dict, tr: dict) -> str:
+def prompt_forecast(lang: str, name: str, natal: dict, tr: dict, focus: list[str] | None = None, age: int | None = None) -> str:
     ev = "\n".join(
         f"- transiting {e['transit']} {e['type']} natal {e['natal']}: {e['from']} to {e['to']}, exact around {e['exact']}"
         for e in tr["events"]) or "- no major slow-planet transits within 1°"
     signs = "; ".join(f"{p}: " + ", ".join(f"{s['sign']} from {s['from']}" for s in seq) for p, seq in tr["signs"].items())
+    areas = ", ".join(focus or []) or "love, work and money, personal growth"
     return f"""{_header(lang, name)}
-Task: a personal forecast for the year {tr['year']}, about 2,000 to 2,600 words.
+{_layered(lang)}{_age_note(age)}
+Task: a personal forecast for the year {tr['year']}, about 1,500 to 2,000 words of main text.
 Dates must be written in the reader's language and local style (day and month names), and only dates from the list below may be used.
+The reader wants clear answers like "is {tr['year']} a good year for love, and when". Be concrete about months.
 
-Sections, in this order (translate headings into {LANG_NAME[lang]}):
-1. The theme of the year in short.
-2. One section per quarter (January to March, April to June, July to September, October to December), weaving in the transits active in that quarter with their dates.
-3. Love and relationships in {tr['year']}.
-4. Work and money in {tr['year']}.
-5. The three most important periods of the year, with dates.
-6. Closing advice.
+Sections, in this order (headings in plain {LANG_NAME[lang]}):
+1. In short: the year in 5 to 6 plain sentences (no astrological terms), naming the best and the hardest months.
+2. One section for each area the reader cares about ({areas}): start with a one-line verdict for the year, then the best months and the harder months with dates, and what to do in each. Stay within this stage of life.
+3. The year quarter by quarter (January to March, April to June, July to September, October to December), short.
+4. The three most important periods of the year, with dates, as a short list.
+5. Closing advice.
+6. Glossary of terms.
 
 Natal chart:
 {_fmt_planets(natal)}
@@ -260,9 +308,9 @@ def parse_json(text: str):
 # ---------------------------------------------------------------- short texts
 def prompt_summary(lang: str, name: str, chart: dict, focus: list[str]) -> str:
     return f"""{_header(lang, name)}
-Task: a short free summary of the natal chart for an email, 110 to 150 words, two short paragraphs.
+Task: a short free summary of the natal chart for an email, 110 to 150 words, two short paragraphs, in plain everyday words for someone who knows nothing about astrology (you may name the Sun, Moon{' and Ascendant' if chart['timeKnown'] else ''} signs once, but no aspect names, houses or degrees).
 Paragraph 1: the Sun, the Moon{' and the Ascendant' if chart['timeKnown'] else ''} together, as one picture of the person.
-Paragraph 2: the single tightest aspect and what it adds, then one sentence saying the full report goes deeper into: {', '.join(focus) or 'love, work and personal growth'}.
+Paragraph 2: one striking talent or inner tension from the tightest aspect, in plain words, then one sentence saying the full report goes deeper into: {', '.join(focus) or 'love, work and personal growth'}.
 Save it with the save tool: "paragraphs" is a list of the two paragraphs as plain text (no headings, no Markdown, no lists, no greeting, no sign-off).
 
 Chart facts (tropical zodiac, Placidus houses):

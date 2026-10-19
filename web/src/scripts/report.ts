@@ -69,16 +69,61 @@ function hero(o: Order) {
   $('rBig3').style.gridTemplateColumns = `repeat(${big.length}, minmax(0, 1fr))`;
 }
 
+const BASIS: Record<string, string> = {
+  pl: 'Podstawa astrologiczna', hr: 'Astrološka podloga', sl: 'Astrološka podlaga', ro: 'Baza astrologică', cs: 'Astrologický základ',
+  hu: 'Asztrológiai háttér', de: 'Astrologischer Hintergrund', fr: 'Base astrologique', it: 'Base astrologica', en: 'Astrological basis',
+};
+const basisLabel = BASIS[cfg.lang] ?? BASIS.en;
+
+/** Real PDF from the server. The page sends only what it shows in the reader's language (labels and table rows). */
+let lastOrder: Order | null = null;
+async function downloadPdf(product: string, btn: HTMLButtonElement) {
+  const panelEl = document.getElementById(`p-${product}`);
+  const tab = [...document.querySelectorAll<HTMLButtonElement>('#rTabs button')].find((b) => b.getAttribute('aria-controls') === `p-${product}`);
+  const big3 = [...$('rBig3').children].map((d) => [...d.children].map((c) => c.textContent ?? ''));
+  const tables = [...(panelEl?.querySelectorAll<HTMLElement>('section.rd[id^="d-"]') ?? [])].map((s) => ({
+    title: s.querySelector('h2')?.textContent ?? '',
+    rows: [
+      ...[...s.querySelectorAll('.pl')].map((r) => [r.querySelector('strong')?.textContent ?? '', r.querySelector('.ps')?.textContent ?? '']),
+      ...[...s.querySelectorAll('.asp')].map((r) => [r.querySelector('strong')?.textContent ?? '', r.querySelector('.ao')?.textContent ?? '']),
+      ...[...s.querySelectorAll('tbody tr')].map((r) => [...r.querySelectorAll('td')].map((c) => c.textContent ?? '')),
+    ],
+  }));
+  const kid = product === 'child' ? lastOrder?.items.find((i) => i.product === 'child')?.data?.child : null;
+  const head = {
+    lang: cfg.lang, kicker: tab?.textContent || R.tabs[product] || '',
+    title: (kid ? kid.name : lastOrder?.name) || R.title,
+    birth: kid ? [kid.date ? fmtDate(kid.date, true) : '', kid.time ?? ''].filter(Boolean).join(' · ') : $('rBirth').textContent ?? '',
+    big3: kid ? [] : big3,
+    disclaimer: R2.disclaimer,
+  };
+  const label = btn.innerHTML;
+  btn.disabled = true; btn.setAttribute('aria-busy', 'true');
+  try {
+    const r = await fetch(`/api/pdf/${encodeURIComponent(token)}`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ product, head, tables, basis: basisLabel }),
+    });
+    if (!r.ok) throw new Error(String(r.status));
+    const url = URL.createObjectURL(await r.blob());
+    const a = el('a'); a.href = url; a.download = `mirastela-${product}.pdf`; document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+  } catch {
+    window.print();  // the server could not make the file: fall back to the browser
+  }
+  btn.disabled = false; btn.removeAttribute('aria-busy'); btn.innerHTML = label;
+}
+
 /** Splits the model's Markdown into one section per '## ' heading. */
 function sectionsFrom(md: string): { title: string; html: string }[] {
   const out: { title: string; html: string }[] = [];
   let cur: { title: string; lines: string[] } | null = null;
   for (const line of md.split(/\r?\n/)) {
     const h = /^#{1,2}\s+(.*)$/.exec(line.trim());
-    if (h) { if (cur) out.push({ title: cur.title, html: mdToHtml(cur.lines.join('\n')) }); cur = { title: h[1].replace(/\*\*/g, ''), lines: [] }; continue; }
+    if (h) { if (cur) out.push({ title: cur.title, html: mdToHtml(cur.lines.join('\n'), basisLabel) }); cur = { title: h[1].replace(/\*\*/g, ''), lines: [] }; continue; }
     (cur ??= { title: '', lines: [] }).lines.push(line);
   }
-  if (cur) out.push({ title: cur.title, html: mdToHtml(cur.lines.join('\n')) });
+  if (cur) out.push({ title: cur.title, html: mdToHtml(cur.lines.join('\n'), basisLabel) });
   return out.filter((s) => s.title || s.html.trim());
 }
 
@@ -141,8 +186,12 @@ function panel(o: Order, it: Item): HTMLElement {
 
   const toc = el('nav', 'toc'); toc.setAttribute('aria-label', R2.toc);
   const main = el('div');
-  sectionsFrom(it.markdown).forEach((s, i) => {
+  const secs = sectionsFrom(it.markdown);
+  const layered = it.data?.v === 2;  // summary first, glossary last
+  secs.forEach((s, i) => {
     const sec = el('section', 'rd');
+    if (layered && i === 0) sec.classList.add('rsum');
+    if (layered && i === secs.length - 1 && secs.length > 2) sec.classList.add('rgloss');
     sec.id = slug(s.title || 'intro', i);
     if (s.title) sec.append(el('h2', '', s.title));
     const body = el('div'); body.innerHTML = s.html;
@@ -182,12 +231,12 @@ function panel(o: Order, it: Item): HTMLElement {
     const a = el('a', '', title); a.href = `#${id}`; toc.append(a);
   }
   const pb = el('button', 'btn pdfb noprint'); pb.type = 'button'; pb.innerHTML = `${dl}${R.print}`;
-  pb.addEventListener('click', () => window.print());
+  pb.addEventListener('click', () => downloadPdf(it.product, pb));
   toc.append(pb);
 
   const end = el('section', 'rend');
   const pb2 = el('button', 'btn noprint'); pb2.type = 'button'; pb2.innerHTML = `${dl}${R.print}`;
-  pb2.addEventListener('click', () => window.print());
+  pb2.addEventListener('click', () => downloadPdf(it.product, pb2));
   end.append(pb2, el('p', '', R2.disclaimer));
   main.append(end);
   wrap.append(toc, main);
@@ -195,6 +244,7 @@ function panel(o: Order, it: Item): HTMLElement {
 }
 
 function render(o: Order) {
+  lastOrder = o;
   hero(o);
   const sig = JSON.stringify(o.items.map((i) => [i.product, i.status]));
   if (sig === rendered) return;
@@ -251,5 +301,8 @@ async function poll() {
     setTimeout(poll, 8000);
   }
 }
-$('rPrint').addEventListener('click', () => window.print());
+$('rPrint').addEventListener('click', () => {
+  const p = active ?? lastOrder?.items.find((i) => i.status === 'ready')?.product;
+  if (p) downloadPdf(p, $('rPrint') as HTMLButtonElement);
+});
 poll();

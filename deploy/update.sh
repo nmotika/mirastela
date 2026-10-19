@@ -3,6 +3,9 @@
 set -euo pipefail
 cd /opt/mirastela
 sudo -u mirastela git pull --ff-only
+# System libraries for the PDF reports (WeasyPrint), installed once.
+dpkg -s libpango-1.0-0 libpangoft2-1.0-0 libharfbuzz-subset0 >/dev/null 2>&1 || \
+  { apt-get update -q && DEBIAN_FRONTEND=noninteractive apt-get install -y -q libpango-1.0-0 libpangoft2-1.0-0 libharfbuzz-subset0 >/dev/null; }
 sudo -u mirastela /opt/mirastela/.venv/bin/pip install -q -r api/requirements.txt
 cp deploy/mirastela-api.service deploy/mirastela-daily.service deploy/mirastela-daily.timer deploy/mirastela-pages.service deploy/mirastela-pages.timer \
    deploy/mirastela-backup.service deploy/mirastela-backup.timer /etc/systemd/system/

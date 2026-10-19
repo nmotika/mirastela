@@ -5,3 +5,4 @@ geonamescache>=2.0
 tzdata
 anthropic>=0.40
 stripe>=12.0
+weasyprint>=62

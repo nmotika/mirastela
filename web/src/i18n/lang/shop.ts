@@ -11,6 +11,7 @@ export interface Shop {
   calTitle: string; calDesc: string; calLabels: [string, string, string]; calEx: [string, string, string]; calBullets: string[];
   calAddTitle: string; calAddText: string; calGoogle: string; calApple: string; calCopy: string; calCopied: string;
   waiver: string; waiverTerms: string; waiverErr: string; payPending: string; stmt: string;
+  seniorBullet: string; kidTitleG: string; doneWhere: string; incPlain: string;
   ckText: string; ckAll: string; ckNecessary: string; ckMore: string; ckSettings: string;
 }
 
@@ -27,6 +28,9 @@ export const SHOP: Record<Lang, Shop> = {
     calTitle: "Twój osobisty kalendarz astrologiczny", calDesc: "Każdy dzień w kalendarzu w telefonie oznaczony na podstawie Twojego kosmogramu, z krótką wskazówką. Do tego w każdy poniedziałek horoskop tygodniowy e-mailem.", calLabels: ["Super dzień", "Działaj", "Zwolnij"], calEx: ["Rozmowa, która zbliża", "Domknij zaległe sprawy", "Nie podejmuj dziś decyzji o pieniądzach"], calBullets: ["Działa w Kalendarzu Google, na iPhonie i w Outlooku", "Liczony z Twojego kosmogramu, nie ze znaku", "Horoskop tygodniowy w każdy poniedziałek"], calAddTitle: "Dodaj kalendarz do telefonu", calAddText: "Jedno kliknięcie i każdego dnia zobaczysz w kalendarzu, jaki to dzień dla Ciebie.", calGoogle: "Kalendarz Google", calApple: "iPhone / Apple", calCopy: "Kopiuj link (Outlook i inne)", calCopied: "Skopiowano",
     waiver: "Zgadzam się na natychmiastowe dostarczenie treści cyfrowych i przyjmuję do wiadomości, że z chwilą ich dostarczenia tracę prawo odstąpienia od umowy.", waiverTerms: "Regulamin", waiverErr: "Zaznacz zgodę, aby przejść do płatności.", payPending: "Płatność nie została jeszcze potwierdzona. Jeśli środki zostały pobrane, raport przyjdzie e-mailem w ciągu kilku minut. W razie problemu napisz na hello@mirastela.com.",
     stmt: 'Na wyciągu z karty płatność jest widoczna jako „LINK.COM* MIRASTELA”. Link to usługa płatnicza Stripe, przez którą rozliczamy zakupy.',
+    seniorBullet: 'Miłość, rodzina i to, co dla Ciebie ważne', kidTitleG: 'Kosmogram Twojego dziecka lub wnuka',
+    doneWhere: 'Wszystkie raporty, także te, które jeszcze się przygotowują, znajdziesz też na stronie „Moje raporty”.',
+    incPlain: 'Krótkie podsumowanie prostym językiem i słowniczek pojęć',
     ckText: "Używamy plików cookie niezbędnych do działania strony. Za Twoją zgodą także cookies reklamowych (Meta, Google), aby mierzyć skuteczność reklam.", ckAll: "Akceptuję wszystkie", ckNecessary: "Tylko niezbędne", ckMore: "Więcej", ckSettings: "Ustawienia cookies",
   },
   hr: {
@@ -41,6 +45,9 @@ export const SHOP: Record<Lang, Shop> = {
     calTitle: "Tvoj osobni astrološki kalendar", calDesc: "Svaki dan u kalendaru na mobitelu označen prema tvojoj natalnoj karti, s kratkim savjetom. Uz to svakog ponedjeljka tjedni horoskop mailom.", calLabels: ["Super dan", "Djeluj", "Uspori"], calEx: ["Razgovor koji zbližava", "Završi ono što visi", "Danas ne odlučuj o novcu"], calBullets: ["Radi u Google kalendaru, na iPhoneu i u Outlooku", "Izračunat iz tvoje natalne karte, ne iz znaka", "Tjedni horoskop svakog ponedjeljka"], calAddTitle: "Dodaj kalendar na mobitel", calAddText: "Jedan klik i svaki dan u kalendaru vidiš kakav je dan za tebe.", calGoogle: "Google kalendar", calApple: "iPhone / Apple", calCopy: "Kopiraj poveznicu (Outlook i ostali)", calCopied: "Kopirano",
     waiver: "Pristajem da isporuka digitalnog sadržaja počne odmah i potvrđujem da time gubim pravo na jednostrani raskid ugovora.", waiverTerms: "Uvjeti korištenja", waiverErr: "Potvrdi suglasnost da bi nastavio/la na plaćanje.", payPending: "Plaćanje još nije potvrđeno. Ako je iznos naplaćen, izvještaj stiže e-mailom za nekoliko minuta. Ako ne stigne, javi nam se na hello@mirastela.com.",
     stmt: 'Na izvodu kartice plaćanje se prikazuje kao „LINK.COM* MIRASTELA”. Link je Stripeova usluga plaćanja preko koje naplaćujemo kupnje.',
+    seniorBullet: 'Ljubav, obitelj i ono što ti je važno', kidTitleG: 'Natalna karta tvog djeteta ili unuka',
+    doneWhere: 'Sve izvještaje, i one koji se još pripremaju, nalaziš i na stranici „Moji izvještaji”.',
+    incPlain: 'Kratki sažetak jednostavnim riječima i tumač pojmova',
     ckText: "Koristimo kolačiće nužne za rad stranice. Uz tvoju privolu i oglasne kolačiće (Meta, Google), da mjerimo uspješnost oglasa.", ckAll: "Prihvaćam sve", ckNecessary: "Samo nužni", ckMore: "Više", ckSettings: "Postavke kolačića",
   },
   sl: {
@@ -55,6 +62,9 @@ export const SHOP: Record<Lang, Shop> = {
     calTitle: "Tvoj osebni astrološki koledar", calDesc: "Vsak dan v koledarju na telefonu označen po tvoji natalni karti, s kratkim nasvetom. Poleg tega vsak ponedeljek tedenski horoskop po e-pošti.", calLabels: ["Super dan", "Ukrepaj", "Upočasni"], calEx: ["Pogovor, ki zbliža", "Zaključi, kar visi", "Danes ne odločaj o denarju"], calBullets: ["Deluje v Google Koledarju, na iPhonu in v Outlooku", "Izračunan iz tvoje natalne karte, ne iz znamenja", "Tedenski horoskop vsak ponedeljek"], calAddTitle: "Dodaj koledar na telefon", calAddText: "En klik in vsak dan v koledarju vidiš, kakšen dan je zate.", calGoogle: "Google Koledar", calApple: "iPhone / Apple", calCopy: "Kopiraj povezavo (Outlook in drugi)", calCopied: "Kopirano",
     waiver: "Soglašam, da se dobava digitalne vsebine začne takoj, in potrjujem, da s tem izgubim pravico do odstopa od pogodbe.", waiverTerms: "Pogoji uporabe", waiverErr: "Za nadaljevanje na plačilo potrdi soglasje.", payPending: "Plačilo še ni potrjeno. Če je bil znesek bremenjen, poročilo prispe po e-pošti v nekaj minutah. Če ne prispe, nam piši na hello@mirastela.com.",
     stmt: 'Na izpisku kartice je plačilo prikazano kot "LINK.COM* MIRASTELA". Link je Stripova plačilna storitev, prek katere obračunavamo nakupe.',
+    seniorBullet: 'Ljubezen, družina in to, kar ti je pomembno', kidTitleG: 'Natalna karta tvojega otroka ali vnuka',
+    doneWhere: 'Vsa poročila, tudi tista, ki se še pripravljajo, najdeš tudi na strani »Moja poročila«.',
+    incPlain: 'Kratek povzetek s preprostimi besedami in slovarček pojmov',
     ckText: "Uporabljamo piškotke, nujne za delovanje strani. S tvojim soglasjem tudi oglaševalske piškotke (Meta, Google) za merjenje uspešnosti oglasov.", ckAll: "Sprejmem vse", ckNecessary: "Samo nujni", ckMore: "Več", ckSettings: "Nastavitve piškotkov",
   },
   ro: {
@@ -69,6 +79,9 @@ export const SHOP: Record<Lang, Shop> = {
     calTitle: "Calendarul tău astrologic personal", calDesc: "Fiecare zi din calendarul telefonului marcată după harta ta natală, cu un sfat scurt. În plus, în fiecare luni horoscopul săptămânal pe e-mail.", calLabels: ["Zi super", "Acționează", "Încetinește"], calEx: ["O discuție care apropie", "Termină ce ai amânat", "Azi nu lua decizii despre bani"], calBullets: ["Merge în Google Calendar, pe iPhone și în Outlook", "Calculat după harta ta natală, nu după zodie", "Horoscop săptămânal în fiecare luni"], calAddTitle: "Adaugă calendarul pe telefon", calAddText: "Un clic și vezi zilnic în calendar ce fel de zi este pentru tine.", calGoogle: "Google Calendar", calApple: "iPhone / Apple", calCopy: "Copiază linkul (Outlook și altele)", calCopied: "Copiat",
     waiver: "Sunt de acord ca furnizarea conținutului digital să înceapă imediat și confirm că astfel îmi pierd dreptul de retragere.", waiverTerms: "Termeni și condiții", waiverErr: "Bifează acordul pentru a continua la plată.", payPending: "Plata nu a fost încă confirmată. Dacă suma a fost debitată, raportul vine pe e-mail în câteva minute. Dacă nu ajunge, scrie-ne la hello@mirastela.com.",
     stmt: 'Pe extrasul cardului, plata apare ca „LINK.COM* MIRASTELA”. Link este serviciul de plată Stripe prin care încasăm achizițiile.',
+    seniorBullet: 'Iubire, familie și ce contează pentru tine', kidTitleG: 'Harta natală a copilului sau a nepotului tău',
+    doneWhere: 'Toate rapoartele, inclusiv cele care încă se pregătesc, le găsești și pe pagina „Rapoartele mele”.',
+    incPlain: 'Un rezumat scurt, pe înțelesul tuturor, și un glosar de termeni',
     ckText: "Folosim cookie-uri necesare funcționării site-ului. Cu acordul tău, și cookie-uri de publicitate (Meta, Google), pentru a măsura eficiența reclamelor.", ckAll: "Accept toate", ckNecessary: "Doar necesare", ckMore: "Detalii", ckSettings: "Setări cookie",
   },
   cs: {
@@ -83,6 +96,9 @@ export const SHOP: Record<Lang, Shop> = {
     calTitle: "Tvůj osobní astrologický kalendář", calDesc: "Každý den v kalendáři v telefonu označený podle tvého natálního horoskopu, s krátkou radou. K tomu každé pondělí týdenní horoskop e-mailem.", calLabels: ["Skvělý den", "Jednej", "Zpomal"], calEx: ["Rozhovor, který sblíží", "Dotáhni, co visí", "Dnes nerozhoduj o penězích"], calBullets: ["Funguje v Kalendáři Google, na iPhonu i v Outlooku", "Spočítaný z tvého horoskopu, ne ze znamení", "Týdenní horoskop každé pondělí"], calAddTitle: "Přidej si kalendář do telefonu", calAddText: "Jedno kliknutí a každý den v kalendáři uvidíš, jaký je to pro tebe den.", calGoogle: "Kalendář Google", calApple: "iPhone / Apple", calCopy: "Kopírovat odkaz (Outlook a další)", calCopied: "Zkopírováno",
     waiver: "Souhlasím s okamžitým dodáním digitálního obsahu a beru na vědomí, že tím ztrácím právo odstoupit od smlouvy.", waiverTerms: "Obchodní podmínky", waiverErr: "Pro pokračování k platbě potvrď souhlas.", payPending: "Platba zatím nebyla potvrzena. Pokud byla částka stržena, zpráva přijde e-mailem během několika minut. Pokud nepřijde, napiš nám na hello@mirastela.com.",
     stmt: 'Na výpisu z karty se platba zobrazí jako „LINK.COM* MIRASTELA“. Link je platební služba Stripe, přes kterou nákupy účtujeme.',
+    seniorBullet: 'Láska, rodina a to, na čem ti záleží', kidTitleG: 'Horoskop tvého dítěte nebo vnoučete',
+    doneWhere: 'Všechny zprávy, i ty, které se ještě připravují, najdeš také na stránce „Moje zprávy“.',
+    incPlain: 'Krátké shrnutí jednoduchými slovy a slovníček pojmů',
     ckText: "Používáme cookies nezbytné pro fungování webu. S tvým souhlasem také reklamní cookies (Meta, Google) pro měření úspěšnosti reklam.", ckAll: "Přijmout vše", ckNecessary: "Jen nezbytné", ckMore: "Více", ckSettings: "Nastavení cookies",
   },
   hu: {
@@ -97,6 +113,9 @@ export const SHOP: Record<Lang, Shop> = {
     calTitle: "A személyes asztrológiai naptárad", calDesc: "A telefonod naptárában minden nap a születési képleted alapján jelölve, egy rövid tanáccsal. Mellé minden hétfőn heti horoszkóp e-mailben.", calLabels: ["Szuper nap", "Cselekedj", "Lassíts"], calEx: ["Egy közelebb hozó beszélgetés", "Zárd le, ami függőben van", "Ma ne dönts pénzről"], calBullets: ["Működik a Google Naptárban, iPhone-on és Outlookban", "A születési képletedből számolva, nem a jegyedből", "Heti horoszkóp minden hétfőn"], calAddTitle: "Add hozzá a naptárt a telefonodhoz", calAddText: "Egy kattintás, és minden nap látod a naptárban, milyen napod lesz.", calGoogle: "Google Naptár", calApple: "iPhone / Apple", calCopy: "Link másolása (Outlook és mások)", calCopied: "Másolva",
     waiver: "Hozzájárulok, hogy a digitális tartalom szolgáltatása azonnal megkezdődjön, és tudomásul veszem, hogy ezzel elveszítem az elállási jogomat.", waiverTerms: "ÁSZF", waiverErr: "A fizetéshez jelöld be a hozzájárulást.", payPending: "A fizetés még nincs megerősítve. Ha az összeget levonták, a jelentés néhány percen belül megérkezik e-mailben. Ha nem jön, írj nekünk: hello@mirastela.com.",
     stmt: 'A kártyakivonaton a fizetés „LINK.COM* MIRASTELA” néven jelenik meg. A Link a Stripe fizetési szolgáltatása, ezen keresztül számlázzuk a vásárlásokat.',
+    seniorBullet: 'Szerelem, család és ami fontos neked', kidTitleG: 'Gyermeked vagy unokád születési képlete',
+    doneWhere: 'Minden jelentésedet, a még készülőket is, megtalálod a „Jelentéseim” oldalon is.',
+    incPlain: 'Rövid, közérthető összefoglaló és fogalomtár',
     ckText: "A weboldal működéséhez szükséges sütiket használunk. Hozzájárulásoddal hirdetési sütiket is (Meta, Google), a hirdetések eredményességének méréséhez.", ckAll: "Mindet elfogadom", ckNecessary: "Csak a szükségesek", ckMore: "Részletek", ckSettings: "Süti beállítások",
   },
   en: {
@@ -111,6 +130,9 @@ export const SHOP: Record<Lang, Shop> = {
     calTitle: "Your personal astrological calendar", calDesc: "Every day in your phone calendar marked from your natal chart, with a short tip. Plus a weekly horoscope by email every Monday.", calLabels: ["Great day", "Act", "Slow down"], calEx: ["A conversation that brings you closer", "Finish what is pending", "No money decisions today"], calBullets: ["Works in Google Calendar, on iPhone and in Outlook", "Calculated from your natal chart, not your sign", "Weekly horoscope every Monday"], calAddTitle: "Add the calendar to your phone", calAddText: "One click and every day your calendar shows what kind of day it is for you.", calGoogle: "Google Calendar", calApple: "iPhone / Apple", calCopy: "Copy link (Outlook and others)", calCopied: "Copied",
     waiver: "I agree that the digital content is supplied immediately and I acknowledge that I thereby lose my right of withdrawal.", waiverTerms: "Terms", waiverErr: "Please tick the box to continue to payment.", payPending: "Your payment is not confirmed yet. If you were charged, the report will arrive by email within a few minutes. If it does not, write to hello@mirastela.com.",
     stmt: 'Your card statement will show the payment as "LINK.COM* MIRASTELA". Link is Stripe\'s payment service, through which we charge purchases.',
+    seniorBullet: 'Love, family and what matters to you', kidTitleG: "Your child's or grandchild's natal chart",
+    doneWhere: 'You will also find all your reports, including those still being written, on the "My reports" page.',
+    incPlain: 'A short summary in plain words and a glossary of terms',
     ckText: "We use cookies that the site needs to work. With your consent, also advertising cookies (Meta, Google) to measure how our ads perform.", ckAll: "Accept all", ckNecessary: "Necessary only", ckMore: "More", ckSettings: "Cookie settings",
   },
   de: {
@@ -125,6 +147,9 @@ export const SHOP: Record<Lang, Shop> = {
     calTitle: 'Dein persönlicher astrologischer Kalender', calDesc: 'Jeder Tag in deinem Handykalender, markiert nach deinem Geburtshoroskop, mit einem kurzen Tipp. Dazu jeden Montag ein Wochenhoroskop per E-Mail.', calLabels: ['Top-Tag', 'Handle', 'Mach langsam'], calEx: ['Ein Gespräch, das euch näherbringt', 'Erledige, was noch offen ist', 'Heute keine Geldentscheidungen'], calBullets: ['Funktioniert mit Google Kalender, auf dem iPhone und in Outlook', 'Berechnet aus deinem Geburtshoroskop, nicht aus deinem Sternzeichen', 'Wochenhoroskop jeden Montag'], calAddTitle: 'Kalender zum Handy hinzufügen', calAddText: 'Ein Klick, und dein Kalender zeigt dir jeden Tag, was für ein Tag es für dich ist.', calGoogle: 'Google Kalender', calApple: 'iPhone / Apple', calCopy: 'Link kopieren (Outlook und andere)', calCopied: 'Kopiert',
     waiver: 'Ich stimme zu, dass die Bereitstellung der digitalen Inhalte sofort beginnt, und nehme zur Kenntnis, dass ich damit mein Widerrufsrecht verliere.', waiverTerms: 'AGB', waiverErr: 'Bitte setze das Häkchen, um zur Zahlung zu gelangen.', payPending: 'Deine Zahlung ist noch nicht bestätigt. Falls dir der Betrag abgebucht wurde, kommt die Auswertung in wenigen Minuten per E-Mail. Falls nicht, schreib an hello@mirastela.com.',
     stmt: 'Auf deiner Kartenabrechnung erscheint die Zahlung als „LINK.COM* MIRASTELA“. Link ist der Zahlungsdienst von Stripe, über den wir Käufe abrechnen.',
+    seniorBullet: 'Liebe, Familie und was dir wichtig ist', kidTitleG: 'Das Geburtshoroskop deines Kindes oder Enkelkindes',
+    doneWhere: 'Alle Auswertungen, auch die noch entstehenden, findest du auch unter „Meine Auswertungen“.',
+    incPlain: 'Eine kurze Zusammenfassung in einfachen Worten und ein Begriffslexikon',
     ckText: 'Wir verwenden Cookies, die für den Betrieb der Website nötig sind. Mit deiner Einwilligung auch Werbe-Cookies (Meta, Google), um den Erfolg unserer Anzeigen zu messen.', ckAll: 'Alle akzeptieren', ckNecessary: 'Nur notwendige', ckMore: 'Mehr', ckSettings: 'Cookie-Einstellungen',
 },
   fr: {
@@ -139,6 +164,9 @@ export const SHOP: Record<Lang, Shop> = {
     calTitle: 'Ton calendrier astrologique personnel', calDesc: 'Chaque jour dans le calendrier de ton téléphone, marqué d’après ton thème astral, avec un court conseil. En plus, un horoscope hebdomadaire par e-mail chaque lundi.', calLabels: ['Super journée', 'Agis', 'Ralentis'], calEx: ['Une conversation qui vous rapproche', 'Termine ce qui est en attente', 'Pas de décisions d’argent aujourd’hui'], calBullets: ['Fonctionne avec Google Agenda, sur iPhone et dans Outlook', 'Calculé à partir de ton thème astral, pas de ton signe', 'Horoscope hebdomadaire chaque lundi'], calAddTitle: 'Ajoute le calendrier à ton téléphone', calAddText: 'Un clic, et chaque jour ton agenda t’indique quel genre de journée t’attend.', calGoogle: 'Google Agenda', calApple: 'iPhone / Apple', calCopy: 'Copier le lien (Outlook et autres)', calCopied: 'Copié',
     waiver: 'J’accepte que le contenu numérique me soit fourni immédiatement et je reconnais perdre ainsi mon droit de rétractation.', waiverTerms: 'Conditions générales', waiverErr: 'Coche la case pour passer au paiement.', payPending: 'Ton paiement n’est pas encore confirmé. Si tu as été débité·e, le rapport arrivera par e-mail d’ici quelques minutes. Sinon, écris à hello@mirastela.com.',
     stmt: 'Sur ton relevé de carte, le paiement apparaîtra sous le nom « LINK.COM* MIRASTELA ». Link est le service de paiement de Stripe par lequel nous encaissons les achats.',
+    seniorBullet: 'L’amour, la famille et ce qui compte pour toi', kidTitleG: 'Le thème natal de ton enfant ou petit-enfant',
+    doneWhere: 'Tous tes rapports, même ceux en préparation, sont aussi sur la page « Mes rapports ».',
+    incPlain: 'Un résumé court en mots simples et un lexique des termes',
     ckText: 'Nous utilisons les cookies nécessaires au fonctionnement du site. Avec ton accord, aussi des cookies publicitaires (Meta, Google) pour mesurer l’efficacité de nos annonces.', ckAll: 'Tout accepter', ckNecessary: 'Uniquement nécessaires', ckMore: 'En savoir plus', ckSettings: 'Paramètres des cookies',
   },
   it: {
@@ -153,6 +181,9 @@ export const SHOP: Record<Lang, Shop> = {
     calTitle: 'Il tuo calendario astrologico personale', calDesc: 'Ogni giorno nel calendario del telefono, valutato in base al tuo tema natale, con un breve consiglio. In più un oroscopo settimanale via email ogni lunedì.', calLabels: ['Giornata top', 'Agisci', 'Rallenta'], calEx: ['Una conversazione che vi avvicina', 'Chiudi ciò che è in sospeso', 'Oggi niente decisioni sul denaro'], calBullets: ['Funziona con Google Calendar, su iPhone e in Outlook', 'Calcolato sul tuo tema natale, non sul segno', 'Oroscopo settimanale ogni lunedì'], calAddTitle: 'Aggiungi il calendario al telefono', calAddText: 'Un clic e ogni giorno il tuo calendario ti mostra che giornata è per te.', calGoogle: 'Google Calendar', calApple: 'iPhone / Apple', calCopy: 'Copia il link (Outlook e altri)', calCopied: 'Copiato',
     waiver: 'Acconsento alla fornitura immediata del contenuto digitale e prendo atto che in questo modo perdo il diritto di recesso.', waiverTerms: 'Termini e condizioni', waiverErr: 'Spunta la casella per procedere al pagamento.', payPending: 'Il tuo pagamento non è ancora confermato. Se ti è stato addebitato, il report arriverà via email entro pochi minuti. In caso contrario, scrivi a hello@mirastela.com.',
     stmt: 'Sull’estratto conto della carta il pagamento comparirà come "LINK.COM* MIRASTELA". Link è il servizio di pagamento di Stripe con cui addebitiamo gli acquisti.',
+    seniorBullet: 'Amore, famiglia e ciò che conta per te', kidTitleG: 'Il tema natale di tuo figlio o nipote',
+    doneWhere: 'Tutti i tuoi report, anche quelli in preparazione, li trovi anche nella pagina «I miei report».',
+    incPlain: 'Un breve riassunto con parole semplici e un glossario dei termini',
     ckText: 'Usiamo i cookie necessari al funzionamento del sito. Con il tuo consenso, anche cookie pubblicitari (Meta, Google) per misurare l’efficacia dei nostri annunci.', ckAll: 'Accetto tutti', ckNecessary: 'Solo necessari', ckMore: 'Dettagli', ckSettings: 'Impostazioni cookie',
   },
 };

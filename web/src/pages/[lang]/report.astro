@@ -88,6 +88,15 @@ const dl = '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>';
   .ttable th { color: var(--paper-muted); font-weight: 600; font-size: 13px; }
   .ttable td.num { white-space: nowrap; font-variant-numeric: tabular-nums; }
   .twrap { overflow-x: auto; }
+  /* report format v2: plain summary card, collapsed astrological basis, compact glossary */
+  .rd.rsum { padding: 28px 24px; margin: 24px 0 8px; border: 0; border-radius: 18px; background: var(--paper-2); }
+  .rd.rsum h2 { font-size: 26px; }
+  .rd.rsum p { font-size: 20px; }
+  .rd .basis { border-left: 3px solid var(--paper-accent); padding: 4px 0 4px 14px; }
+  .rd .basis summary { cursor: pointer; font: 600 14px var(--sans); color: var(--paper-accent); min-height: 32px; display: flex; align-items: center; }
+  .rd .basis p { font: 15px/1.55 var(--sans); color: var(--paper-muted); margin-top: 6px; }
+  .rd.rgloss h2 { font-size: 24px; }
+  .rd.rgloss li, .rd.rgloss p { font: 15px/1.55 var(--sans); }
   .rend { padding: 32px 2px 48px; border-top: 1px solid var(--paper-line); display: flex; flex-direction: column; gap: 16px; }
   .rend p { font-size: 13px; color: var(--paper-muted); text-align: center; }
   .pending { display: flex; flex-direction: column; gap: 12px; margin: 32px 0 56px; padding: 22px; border-radius: 16px; background: var(--paper-2); }
@@ -126,5 +135,6 @@ const dl = '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>';
     .wheel .wl, .wheel line { stroke: #8a6a28; }
     .wheel text { fill: #333; }
     .wheel .fi, .wheel .dr { animation: none !important; opacity: 1 !important; stroke-dashoffset: 0 !important; }
+    .rd .basis > *:not(summary) { display: block; }
   }
 </style>

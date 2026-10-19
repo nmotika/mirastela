@@ -89,9 +89,9 @@ const clientData = JSON.stringify({
       <fieldset class="wheels time" id="timeWheels">
         <legend class="vh">{Q.timeLabel}</legend>
         <div class="band" aria-hidden="true"></div>
-        <div class="wcol tw"><div class="wsc big" id="wHour" tabindex="0" role="listbox" aria-label={Q.timeLabel}>{Array.from({ length: 24 }, (_, i) => <button type="button" role="option" tabindex="-1" data-v={i}>{String(i).padStart(2, '0')}</button>)}</div></div>
+        <div class="wcol tw"><div class="wsc big" id="wHour" data-loop tabindex="0" role="listbox" aria-label={Q.timeLabel}>{Array.from({ length: 24 }, (_, i) => <button type="button" role="option" tabindex="-1" data-v={i}>{String(i).padStart(2, '0')}</button>)}</div></div>
         <span class="colon" aria-hidden="true">:</span>
-        <div class="wcol tw"><div class="wsc big" id="wMin" tabindex="0" role="listbox" aria-label={Q.timeLabel}>{Array.from({ length: 60 }, (_, i) => <button type="button" role="option" tabindex="-1" data-v={i}>{String(i).padStart(2, '0')}</button>)}</div></div>
+        <div class="wcol tw"><div class="wsc big" id="wMin" data-loop tabindex="0" role="listbox" aria-label={Q.timeLabel}>{Array.from({ length: 60 }, (_, i) => <button type="button" role="option" tabindex="-1" data-v={i}>{String(i).padStart(2, '0')}</button>)}</div></div>
       </fieldset>
       <p class="pick" id="timePick" aria-live="polite"></p>
       <label class="chk"><input type="checkbox" id="tUnknown" /><span>{Q.timeUnknown}</span></label>
@@ -138,7 +138,7 @@ const clientData = JSON.stringify({
       <div class="qh"><h1 class="sf q">{Q.focusQ}</h1><p class="mu">{Q.focusHint}</p></div>
       <div class="fgrid" role="group" aria-label={Q.focusQ}>
         {focusKeys.map((k) => (
-          <button type="button" class="fcard" data-focus={k} aria-pressed="false">
+          <button type="button" class="fcard" data-focus={k} aria-pressed="false" data-adult={k === 'career' ? '' : undefined}>
             <span class="tick"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0B1020" stroke-width="3" aria-hidden="true" set:html={tick} /></span>
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#D9B26A" stroke-width="1.5" aria-hidden="true" set:html={focusIcons[k]} />
             {Q.focus[k]}
@@ -212,7 +212,7 @@ const clientData = JSON.stringify({
           <div class="mob">
             <h2 class="sf h2">{O.incTitle}</h2>
             <div class="incs" data-incs>
-              {O.inc.map(([a, b]) => <div class="inc"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9B26A" stroke-width="2" aria-hidden="true" set:html={tick} /><div><strong>{a}</strong><p>{b}</p></div></div>)}
+              {[[SH.incPlain, ''], ...O.inc].map(([a, b]) => <div class="inc"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9B26A" stroke-width="2" aria-hidden="true" set:html={tick} /><div><strong>{a}</strong>{b && <p>{b}</p>}</div></div>)}
             </div>
             <div class="pricebox">
               <p style="font-weight:600">{O.cardTitle}</p>
@@ -256,7 +256,7 @@ const clientData = JSON.stringify({
             <p class="mu tiny">{O.ctaNote}</p>
           </div>
           <div class="incs desk" data-incs>
-            {O.inc.map(([a]) => <div class="inc"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D9B26A" stroke-width="2" aria-hidden="true" set:html={tick} /><span>{a}</span></div>)}
+            {[[SH.incPlain], ...O.inc].map(([a]) => <div class="inc"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D9B26A" stroke-width="2" aria-hidden="true" set:html={tick} /><span>{a}</span></div>)}
           </div>
           <p class="mu tiny desk payl"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D9B26A" stroke-width="1.8" aria-hidden="true" set:html={lock} />{O.payMethods}</p>
         </aside>
@@ -284,7 +284,7 @@ const clientData = JSON.stringify({
           <p class="ey" style="padding-top:8px">{U2.forecastEyebrow}</p>
           <h1 class="sf q ot" id="ufTitle"></h1>
           <p class="mu lead">{U.forecastSub}</p>
-          <div>{U.forecastBullets.map((b) => <div class="inc nb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9B26A" stroke-width="2" aria-hidden="true" set:html={tick} /><span>{b}</span></div>)}</div>
+          <div>{U.forecastBullets.map((b, i) => <div class="inc nb" data-work={i === 1 ? '' : undefined}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9B26A" stroke-width="2" aria-hidden="true" set:html={tick} /><span>{b}</span></div>)}</div>
         </div>
       </div>
       <div class="ufoot">
@@ -318,9 +318,9 @@ const clientData = JSON.stringify({
           <fieldset class="wheels time" id="ptWheels">
             <legend class="vh">{U.pTime}</legend>
             <div class="band" aria-hidden="true"></div>
-            <div class="wcol tw"><div class="wsc big" id="pwHour" tabindex="0" role="listbox" aria-label={U.pTime}>{Array.from({ length: 24 }, (_, i) => <button type="button" role="option" tabindex="-1" data-v={i}>{String(i).padStart(2, '0')}</button>)}</div></div>
+            <div class="wcol tw"><div class="wsc big" id="pwHour" data-loop tabindex="0" role="listbox" aria-label={U.pTime}>{Array.from({ length: 24 }, (_, i) => <button type="button" role="option" tabindex="-1" data-v={i}>{String(i).padStart(2, '0')}</button>)}</div></div>
             <span class="colon" aria-hidden="true">:</span>
-            <div class="wcol tw"><div class="wsc big" id="pwMin" tabindex="0" role="listbox" aria-label={U.pTime}>{Array.from({ length: 60 }, (_, i) => <button type="button" role="option" tabindex="-1" data-v={i}>{String(i).padStart(2, '0')}</button>)}</div></div>
+            <div class="wcol tw"><div class="wsc big" id="pwMin" data-loop tabindex="0" role="listbox" aria-label={U.pTime}>{Array.from({ length: 60 }, (_, i) => <button type="button" role="option" tabindex="-1" data-v={i}>{String(i).padStart(2, '0')}</button>)}</div></div>
           </fieldset></div>
         <label class="chk"><input type="checkbox" id="upTimeUnknown" /><span>{U.pTimeUnknown}</span></label>
         <div class="field"><label class="lbl" for="upPlace">{U.pPlace}</label>
@@ -329,7 +329,7 @@ const clientData = JSON.stringify({
           <div id="upList" class="opts" role="listbox" hidden></div></div>
       </div>
       <p class="ferr" id="pdErr" hidden>{d.ui.error}</p>
-      <div class="dock"><button type="button" class="btn" id="pdGo" disabled>{U2.pformCta}</button>
+      <div class="dock flow"><button type="button" class="btn" id="pdGo" disabled>{U2.pformCta}</button>
         <button type="button" class="no" id="pdLater" hidden>{SH.later}</button></div>
     </section>
 
@@ -342,7 +342,7 @@ const clientData = JSON.stringify({
             <g class="gl" font-size="14" text-anchor="middle" dominant-baseline="central"><text x="84" y="60" fill="#F3EEE3">☉&#xFE0E;</text><text x="122" y="112" fill="#F3EEE3">☽&#xFE0E;</text><text x="182" y="92" fill="#D9B26A">✦</text></g>
           </svg></div>
           <p class="ey">{SH.kidEyebrow}</p>
-          <h1 class="sf q ot">{SH.kidTitle}</h1>
+          <h1 class="sf q ot" id="kTitle">{SH.kidTitle}</h1>
           <p class="mu lead">{SH.kidSub}</p>
           <div>{SH.kidBullets.map((b) => <div class="inc nb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9B26A" stroke-width="2" aria-hidden="true" set:html={tick} /><span>{b}</span></div>)}</div>
         </div>
@@ -396,7 +396,7 @@ const clientData = JSON.stringify({
       <div class="mailic" aria-hidden="true">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg>
       </div>
-      <div class="qh"><p class="ey">{Dn.eyebrow}</p><h1 class="sf q">{Dn.title}</h1><p class="lead mu" id="dDesc"></p><p class="mu small" id="dStmt" hidden>{SH.stmt}</p></div>
+      <div class="qh"><p class="ey">{Dn.eyebrow}</p><h1 class="sf q">{Dn.title}</h1><p class="lead mu" id="dDesc"></p><p class="mu small" id="dStmt" hidden>{SH.stmt}</p><p class="mu small"><a href={`/${lang}/account/`}>{SH.doneWhere}</a></p></div>
       <p class="note" id="dSub" hidden>{Dn.subOn}</p>
       <div class="calbox" id="dCal" hidden>
         <p class="sf">{SH.calAddTitle}</p>
@@ -450,6 +450,13 @@ const clientData = JSON.stringify({
   .lead { font-size: 17px; }
   .field { display: flex; flex-direction: column; gap: 8px; }
   .dock { position: sticky; bottom: 0; margin: auto -20px 0; padding: 12px 16px 28px; background: var(--bg); border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; z-index: 5; }
+  /* A long form ends in its button instead of a pinned bar, so nothing below gets hidden. */
+  .dock.flow { position: static; margin-top: 8px; border-top: 0; }
+  /* More to fill in below the pinned bar: a small arrow above it. */
+  .dock.more::before { content: ''; position: absolute; left: 50%; top: -34px; width: 14px; height: 14px; margin-left: -7px;
+    border-right: 2px solid var(--gold); border-bottom: 2px solid var(--gold); transform: rotate(45deg); animation: nudge 1.4s ease-in-out infinite; }
+  @keyframes nudge { 0%, 100% { translate: 0 0; } 50% { translate: 0 5px; } }
+  @media (prefers-reduced-motion: reduce) { .dock.more::before { animation: none; } }
 
   /* Wheel pickers */
   .wheels { position: relative; border: 0; margin: 0; padding: 26px 4px 0; display: flex; gap: 4px; min-width: 0; }
