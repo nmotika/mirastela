@@ -10,7 +10,7 @@ export interface Shop {
   tabChild: string; addPartner: string; addPartnerText: string;
   calTitle: string; calDesc: string; calLabels: [string, string, string]; calEx: [string, string, string]; calBullets: string[];
   calAddTitle: string; calAddText: string; calGoogle: string; calApple: string; calCopy: string; calCopied: string;
-  waiver: string; waiverTerms: string; waiverErr: string;
+  waiver: string; waiverTerms: string; waiverErr: string; payPending: string;
 }
 
 export const SHOP: Record<Lang, Shop> = {
@@ -24,7 +24,7 @@ export const SHOP: Record<Lang, Shop> = {
     kidName: 'Imię dziecka', kidCta: 'Przygotuj kosmogram dziecka',
     tabChild: 'Dziecko', addPartner: 'Dodaj dane partnera', addPartnerText: 'Dopasowanie z partnerem jest w Twoim pakiecie. Podaj dane partnera, a przygotujemy raport.',
     calTitle: "Twój osobisty kalendarz astrologiczny", calDesc: "Każdy dzień w kalendarzu w telefonie oznaczony na podstawie Twojego kosmogramu, z krótką wskazówką. Do tego w każdy poniedziałek horoskop tygodniowy e-mailem.", calLabels: ["Super dzień", "Działaj", "Zwolnij"], calEx: ["Rozmowa, która zbliża", "Domknij zaległe sprawy", "Nie podejmuj dziś decyzji o pieniądzach"], calBullets: ["Działa w Kalendarzu Google, na iPhonie i w Outlooku", "Liczony z Twojego kosmogramu, nie ze znaku", "Horoskop tygodniowy w każdy poniedziałek"], calAddTitle: "Dodaj kalendarz do telefonu", calAddText: "Jedno kliknięcie i każdego dnia zobaczysz w kalendarzu, jaki to dzień dla Ciebie.", calGoogle: "Kalendarz Google", calApple: "iPhone / Apple", calCopy: "Kopiuj link (Outlook i inne)", calCopied: "Skopiowano",
-    waiver: "Zgadzam się na natychmiastowe dostarczenie treści cyfrowych i przyjmuję do wiadomości, że z chwilą ich dostarczenia tracę prawo odstąpienia od umowy.", waiverTerms: "Regulamin", waiverErr: "Zaznacz zgodę, aby przejść do płatności.",
+    waiver: "Zgadzam się na natychmiastowe dostarczenie treści cyfrowych i przyjmuję do wiadomości, że z chwilą ich dostarczenia tracę prawo odstąpienia od umowy.", waiverTerms: "Regulamin", waiverErr: "Zaznacz zgodę, aby przejść do płatności.", payPending: "Płatność nie została jeszcze potwierdzona. Jeśli środki zostały pobrane, raport przyjdzie e-mailem w ciągu kilku minut. W razie problemu napisz na hello@mirastela.com.",
   },
   hr: {
     planNatal: 'Natalna karta', planBundle: 'Paket: natalna karta, slaganje i prognoza {year}', bundleWas: 'zasebno {price}', bundleBadge: 'Najbolja vrijednost',
@@ -36,7 +36,7 @@ export const SHOP: Record<Lang, Shop> = {
     kidName: 'Ime djeteta', kidCta: 'Izradi kartu djeteta',
     tabChild: 'Dijete', addPartner: 'Dodaj podatke partnera', addPartnerText: 'Slaganje s partnerom je u tvom paketu. Upiši podatke partnera i izradit ćemo izvještaj.',
     calTitle: "Tvoj osobni astrološki kalendar", calDesc: "Svaki dan u kalendaru na mobitelu označen prema tvojoj natalnoj karti, s kratkim savjetom. Uz to svakog ponedjeljka tjedni horoskop mailom.", calLabels: ["Super dan", "Djeluj", "Uspori"], calEx: ["Razgovor koji zbližava", "Završi ono što visi", "Danas ne odlučuj o novcu"], calBullets: ["Radi u Google kalendaru, na iPhoneu i u Outlooku", "Izračunat iz tvoje natalne karte, ne iz znaka", "Tjedni horoskop svakog ponedjeljka"], calAddTitle: "Dodaj kalendar na mobitel", calAddText: "Jedan klik i svaki dan u kalendaru vidiš kakav je dan za tebe.", calGoogle: "Google kalendar", calApple: "iPhone / Apple", calCopy: "Kopiraj poveznicu (Outlook i ostali)", calCopied: "Kopirano",
-    waiver: "Pristajem da isporuka digitalnog sadržaja počne odmah i potvrđujem da time gubim pravo na jednostrani raskid ugovora.", waiverTerms: "Uvjeti korištenja", waiverErr: "Potvrdi suglasnost da bi nastavio/la na plaćanje.",
+    waiver: "Pristajem da isporuka digitalnog sadržaja počne odmah i potvrđujem da time gubim pravo na jednostrani raskid ugovora.", waiverTerms: "Uvjeti korištenja", waiverErr: "Potvrdi suglasnost da bi nastavio/la na plaćanje.", payPending: "Plaćanje još nije potvrđeno. Ako je iznos naplaćen, izvještaj stiže e-mailom za nekoliko minuta. Ako ne stigne, javi nam se na hello@mirastela.com.",
   },
   sl: {
     planNatal: 'Natalna karta', planBundle: 'Paket: natalna karta, ujemanje in napoved {year}', bundleWas: 'posamično {price}', bundleBadge: 'Najboljša vrednost',
@@ -48,7 +48,7 @@ export const SHOP: Record<Lang, Shop> = {
     kidName: 'Ime otroka', kidCta: 'Pripravi karto otroka',
     tabChild: 'Otrok', addPartner: 'Dodaj partnerjeve podatke', addPartnerText: 'Ujemanje s partnerjem je v tvojem paketu. Vpiši partnerjeve podatke in pripravili bomo poročilo.',
     calTitle: "Tvoj osebni astrološki koledar", calDesc: "Vsak dan v koledarju na telefonu označen po tvoji natalni karti, s kratkim nasvetom. Poleg tega vsak ponedeljek tedenski horoskop po e-pošti.", calLabels: ["Super dan", "Ukrepaj", "Upočasni"], calEx: ["Pogovor, ki zbliža", "Zaključi, kar visi", "Danes ne odločaj o denarju"], calBullets: ["Deluje v Google Koledarju, na iPhonu in v Outlooku", "Izračunan iz tvoje natalne karte, ne iz znamenja", "Tedenski horoskop vsak ponedeljek"], calAddTitle: "Dodaj koledar na telefon", calAddText: "En klik in vsak dan v koledarju vidiš, kakšen dan je zate.", calGoogle: "Google Koledar", calApple: "iPhone / Apple", calCopy: "Kopiraj povezavo (Outlook in drugi)", calCopied: "Kopirano",
-    waiver: "Soglašam, da se dobava digitalne vsebine začne takoj, in potrjujem, da s tem izgubim pravico do odstopa od pogodbe.", waiverTerms: "Pogoji uporabe", waiverErr: "Za nadaljevanje na plačilo potrdi soglasje.",
+    waiver: "Soglašam, da se dobava digitalne vsebine začne takoj, in potrjujem, da s tem izgubim pravico do odstopa od pogodbe.", waiverTerms: "Pogoji uporabe", waiverErr: "Za nadaljevanje na plačilo potrdi soglasje.", payPending: "Plačilo še ni potrjeno. Če je bil znesek bremenjen, poročilo prispe po e-pošti v nekaj minutah. Če ne prispe, nam piši na hello@mirastela.com.",
   },
   ro: {
     planNatal: 'Harta natală', planBundle: 'Pachet: harta natală, compatibilitate și prognoza {year}', bundleWas: 'separat {price}', bundleBadge: 'Cea mai bună valoare',
@@ -60,7 +60,7 @@ export const SHOP: Record<Lang, Shop> = {
     kidName: 'Numele copilului', kidCta: 'Pregătește harta copilului',
     tabChild: 'Copilul', addPartner: 'Adaugă datele partenerului', addPartnerText: 'Compatibilitatea cu partenerul este în pachetul tău. Introdu datele partenerului și pregătim raportul.',
     calTitle: "Calendarul tău astrologic personal", calDesc: "Fiecare zi din calendarul telefonului marcată după harta ta natală, cu un sfat scurt. În plus, în fiecare luni horoscopul săptămânal pe e-mail.", calLabels: ["Zi super", "Acționează", "Încetinește"], calEx: ["O discuție care apropie", "Termină ce ai amânat", "Azi nu lua decizii despre bani"], calBullets: ["Merge în Google Calendar, pe iPhone și în Outlook", "Calculat după harta ta natală, nu după zodie", "Horoscop săptămânal în fiecare luni"], calAddTitle: "Adaugă calendarul pe telefon", calAddText: "Un clic și vezi zilnic în calendar ce fel de zi este pentru tine.", calGoogle: "Google Calendar", calApple: "iPhone / Apple", calCopy: "Copiază linkul (Outlook și altele)", calCopied: "Copiat",
-    waiver: "Sunt de acord ca furnizarea conținutului digital să înceapă imediat și confirm că astfel îmi pierd dreptul de retragere.", waiverTerms: "Termeni și condiții", waiverErr: "Bifează acordul pentru a continua la plată.",
+    waiver: "Sunt de acord ca furnizarea conținutului digital să înceapă imediat și confirm că astfel îmi pierd dreptul de retragere.", waiverTerms: "Termeni și condiții", waiverErr: "Bifează acordul pentru a continua la plată.", payPending: "Plata nu a fost încă confirmată. Dacă suma a fost debitată, raportul vine pe e-mail în câteva minute. Dacă nu ajunge, scrie-ne la hello@mirastela.com.",
   },
   cs: {
     planNatal: 'Natální horoskop', planBundle: 'Balíček: natální horoskop, partnerský soulad a předpověď {year}', bundleWas: 'samostatně {price}', bundleBadge: 'Nejlepší hodnota',
@@ -72,7 +72,7 @@ export const SHOP: Record<Lang, Shop> = {
     kidName: 'Jméno dítěte', kidCta: 'Připravit horoskop dítěte',
     tabChild: 'Dítě', addPartner: 'Doplnit údaje partnera', addPartnerText: 'Partnerský soulad je ve tvém balíčku. Doplň údaje partnera a připravíme zprávu.',
     calTitle: "Tvůj osobní astrologický kalendář", calDesc: "Každý den v kalendáři v telefonu označený podle tvého natálního horoskopu, s krátkou radou. K tomu každé pondělí týdenní horoskop e-mailem.", calLabels: ["Skvělý den", "Jednej", "Zpomal"], calEx: ["Rozhovor, který sblíží", "Dotáhni, co visí", "Dnes nerozhoduj o penězích"], calBullets: ["Funguje v Kalendáři Google, na iPhonu i v Outlooku", "Spočítaný z tvého horoskopu, ne ze znamení", "Týdenní horoskop každé pondělí"], calAddTitle: "Přidej si kalendář do telefonu", calAddText: "Jedno kliknutí a každý den v kalendáři uvidíš, jaký je to pro tebe den.", calGoogle: "Kalendář Google", calApple: "iPhone / Apple", calCopy: "Kopírovat odkaz (Outlook a další)", calCopied: "Zkopírováno",
-    waiver: "Souhlasím s okamžitým dodáním digitálního obsahu a beru na vědomí, že tím ztrácím právo odstoupit od smlouvy.", waiverTerms: "Obchodní podmínky", waiverErr: "Pro pokračování k platbě potvrď souhlas.",
+    waiver: "Souhlasím s okamžitým dodáním digitálního obsahu a beru na vědomí, že tím ztrácím právo odstoupit od smlouvy.", waiverTerms: "Obchodní podmínky", waiverErr: "Pro pokračování k platbě potvrď souhlas.", payPending: "Platba zatím nebyla potvrzena. Pokud byla částka stržena, zpráva přijde e-mailem během několika minut. Pokud nepřijde, napiš nám na hello@mirastela.com.",
   },
   hu: {
     planNatal: 'Születési horoszkóp', planBundle: 'Csomag: születési horoszkóp, párkapcsolati összhang és {year}. évi előrejelzés', bundleWas: 'külön {price}', bundleBadge: 'Legjobb ár-érték',
@@ -84,7 +84,7 @@ export const SHOP: Record<Lang, Shop> = {
     kidName: 'A gyermek neve', kidCta: 'Gyermek horoszkópjának elkészítése',
     tabChild: 'Gyermek', addPartner: 'Partner adatainak megadása', addPartnerText: 'A párkapcsolati összhang benne van a csomagodban. Add meg a partner adatait, és elkészítjük a riportot.',
     calTitle: "A személyes asztrológiai naptárad", calDesc: "A telefonod naptárában minden nap a születési képleted alapján jelölve, egy rövid tanáccsal. Mellé minden hétfőn heti horoszkóp e-mailben.", calLabels: ["Szuper nap", "Cselekedj", "Lassíts"], calEx: ["Egy közelebb hozó beszélgetés", "Zárd le, ami függőben van", "Ma ne dönts pénzről"], calBullets: ["Működik a Google Naptárban, iPhone-on és Outlookban", "A születési képletedből számolva, nem a jegyedből", "Heti horoszkóp minden hétfőn"], calAddTitle: "Add hozzá a naptárt a telefonodhoz", calAddText: "Egy kattintás, és minden nap látod a naptárban, milyen napod lesz.", calGoogle: "Google Naptár", calApple: "iPhone / Apple", calCopy: "Link másolása (Outlook és mások)", calCopied: "Másolva",
-    waiver: "Hozzájárulok, hogy a digitális tartalom szolgáltatása azonnal megkezdődjön, és tudomásul veszem, hogy ezzel elveszítem az elállási jogomat.", waiverTerms: "ÁSZF", waiverErr: "A fizetéshez jelöld be a hozzájárulást.",
+    waiver: "Hozzájárulok, hogy a digitális tartalom szolgáltatása azonnal megkezdődjön, és tudomásul veszem, hogy ezzel elveszítem az elállási jogomat.", waiverTerms: "ÁSZF", waiverErr: "A fizetéshez jelöld be a hozzájárulást.", payPending: "A fizetés még nincs megerősítve. Ha az összeget levonták, a jelentés néhány percen belül megérkezik e-mailben. Ha nem jön, írj nekünk: hello@mirastela.com.",
   },
   en: {
     planNatal: 'Natal chart', planBundle: 'Bundle: natal chart, compatibility and {year} forecast', bundleWas: 'separately {price}', bundleBadge: 'Best value',
@@ -96,6 +96,6 @@ export const SHOP: Record<Lang, Shop> = {
     kidName: "Child's name", kidCta: "Prepare my child's chart",
     tabChild: 'Child', addPartner: "Add your partner's details", addPartnerText: "Partner compatibility is in your bundle. Add your partner's details and we'll prepare the report.",
     calTitle: "Your personal astrological calendar", calDesc: "Every day in your phone calendar marked from your natal chart, with a short tip. Plus a weekly horoscope by email every Monday.", calLabels: ["Great day", "Act", "Slow down"], calEx: ["A conversation that brings you closer", "Finish what is pending", "No money decisions today"], calBullets: ["Works in Google Calendar, on iPhone and in Outlook", "Calculated from your natal chart, not your sign", "Weekly horoscope every Monday"], calAddTitle: "Add the calendar to your phone", calAddText: "One click and every day your calendar shows what kind of day it is for you.", calGoogle: "Google Calendar", calApple: "iPhone / Apple", calCopy: "Copy link (Outlook and others)", calCopied: "Copied",
-    waiver: "I agree that the digital content is supplied immediately and I acknowledge that I thereby lose my right of withdrawal.", waiverTerms: "Terms", waiverErr: "Please tick the box to continue to payment.",
+    waiver: "I agree that the digital content is supplied immediately and I acknowledge that I thereby lose my right of withdrawal.", waiverTerms: "Terms", waiverErr: "Please tick the box to continue to payment.", payPending: "Your payment is not confirmed yet. If you were charged, the report will arrive by email within a few minutes. If it does not, write to hello@mirastela.com.",
   },
 };

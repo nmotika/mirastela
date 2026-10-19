@@ -741,11 +741,20 @@ async function returnFromCheckout(session: string) {
   history.replaceState(null, '', location.pathname);
   type Paid = { token: string; kind: 'order' | 'add' | 'sub'; product: string; email: string; cal?: string };
   let r: Paid | undefined;
-  for (let i = 0; i < 6 && !r; i++) {
+  for (let i = 0; i < 12 && !r; i++) {  // the payment can take a few seconds to settle
     try { r = await api<Paid>(`/api/checkout/confirm?session=${encodeURIComponent(session)}`); }
-    catch { await new Promise((ok) => setTimeout(ok, 1500)); }
+    catch { await new Promise((ok) => setTimeout(ok, 2500)); }
   }
-  if (!r) { restore(); return; }
+  if (!r) {
+    // Not confirmed yet: stay on the offer and say so, instead of starting the quiz over.
+    restore();
+    if (state.chart) {
+      history.replaceState({ step: 'offer' }, '', `${location.pathname}#offer`);
+      show('offer', false);
+      $('oErr').textContent = D.shop.payPending; $('oErr').hidden = false;
+    }
+    return;
+  }
   Object.assign(state, { token: r.token, email: state.email || r.email });
   let next: Step;
   if (r.kind === 'order') {
