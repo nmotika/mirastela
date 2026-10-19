@@ -154,6 +154,7 @@ const clientData = JSON.stringify({
         {statusKeys.map((k) => <button type="button" class="srowb" data-status={k} aria-pressed="false"><span class="dot" aria-hidden="true"></span>{Q.status[k]}</button>)}
       </div>
       <p class="mu small">{Q2.statusNote}</p>
+      <div class="dock" id="statusDock" hidden><button type="button" class="btn" data-next>{d.ui.next}</button></div>
     </section>
 
     <!-- 7 Calculating -->

@@ -91,6 +91,8 @@ function show(step: Step, push = true) {
   if (push) h?.focus({ preventScroll: true });
   const hooks: Partial<Record<Step, () => void>> = {
     date: () => syncDate(), time: () => syncTime(), name: renderName, focus: renderFocus,
+    // Coming back with a status already picked: offer Continue, not only a re-tap of the option.
+    status: () => { $('statusDock').hidden = !state.status; },
     calc: runCalc, email: renderEmail, offer: renderOffer, upsell: renderUpsell, pdata: renderPdata, kid: renderKid,
     sub: renderSub, done: renderDone,
   };
