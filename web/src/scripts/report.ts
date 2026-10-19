@@ -108,8 +108,11 @@ async function downloadPdf(product: string, btn: HTMLButtonElement) {
     const url = URL.createObjectURL(await r.blob());
     const a = el('a'); a.href = url; a.download = `mirastela-${product}.pdf`; document.body.append(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 10000);
-  } catch {
-    window.print();  // the server could not make the file: fall back to the browser
+  } catch (e) {
+    // No print dialog as a fallback: say it failed, so the problem gets reported and fixed.
+    $('rMsg').textContent = cfg.d.ui.error;
+    $('rMsg').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    console.error('pdf', e);
   }
   btn.disabled = false; btn.removeAttribute('aria-busy'); btn.innerHTML = label;
 }
@@ -301,6 +304,13 @@ async function poll() {
     setTimeout(poll, 8000);
   }
 }
+// If someone prints the page anyway (Ctrl+P), include the collapsed astrological basis.
+let openedForPrint: HTMLDetailsElement[] = [];
+window.addEventListener('beforeprint', () => {
+  openedForPrint = [...document.querySelectorAll<HTMLDetailsElement>('details.basis:not([open])')];
+  openedForPrint.forEach((d) => (d.open = true));
+});
+window.addEventListener('afterprint', () => { openedForPrint.forEach((d) => (d.open = false)); openedForPrint = []; });
 $('rPrint').addEventListener('click', () => {
   const p = active ?? lastOrder?.items.find((i) => i.status === 'ready')?.product;
   if (p) downloadPdf(p, $('rPrint') as HTMLButtonElement);
