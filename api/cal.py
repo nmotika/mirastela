@@ -162,3 +162,12 @@ def ics(lang: str, name: str, token: str, rows: list[tuple[str, str, str, str]],
                 "TRANSP:TRANSPARENT", "END:VEVENT"]
     out.append("END:VCALENDAR")
     return "\r\n".join(_fold(x) for x in out) + "\r\n"
+
+# ---- de, fr, it (drafts for native review)
+LABELS['de'] = {'super': 'Top-Tag', 'act': 'Handle', 'slow': 'Mach langsam'}
+CAL_NAME['de'] = 'Mirastela · mein Kalender'
+LABELS['fr'] = {'super': 'Super journée', 'act': 'Agis', 'slow': 'Ralentis'}
+CAL_NAME['fr'] = 'Mirastela · mon calendrier'
+LABELS['it'] = {'super': 'Giornata top', 'act': 'Agisci', 'slow': 'Rallenta'}
+CAL_NAME['it'] = 'Mirastela · il mio calendario'
+

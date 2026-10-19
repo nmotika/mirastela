@@ -215,7 +215,7 @@ function syncDate() {
 const tUnknown = $<HTMLInputElement>('tUnknown');
 const wHour = wheel($('wHour'), () => onTime());
 const wMin = wheel($('wMin'), () => onTime());
-const PICKED: Record<string, string> = { pl: 'Wybrana godzina:', hr: 'Odabrano vrijeme:', sl: 'Izbrani čas:', ro: 'Ora aleasă:', cs: 'Vybraný čas:', hu: 'Kiválasztott idő:', en: 'Selected time:' };
+const PICKED: Record<string, string> = { pl: 'Wybrana godzina:', hr: 'Odabrano vrijeme:', sl: 'Izbrani čas:', ro: 'Ora aleasă:', cs: 'Vybraný čas:', hu: 'Kiválasztott idő:', de: 'Gewählte Uhrzeit:', fr: 'Heure choisie :', it: 'Ora scelta:', en: 'Selected time:' };
 const two = (n: number) => String(n).padStart(2, '0');
 function showPicked(h: number, m: number) {
   $('timePick').textContent = tUnknown.checked ? '' : `${PICKED[lang] ?? PICKED.en} ${two(h)}:${two(m)}`;

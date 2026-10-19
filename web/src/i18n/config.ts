@@ -1,15 +1,15 @@
-export const LOCALES = ['pl', 'hr', 'sl', 'ro', 'cs', 'hu', 'en'] as const;
+export const LOCALES = ['pl', 'hr', 'sl', 'ro', 'cs', 'hu', 'de', 'fr', 'it', 'en'] as const;
 export type Lang = (typeof LOCALES)[number];
 
 /** Native names, shown in the language switcher. */
 export const LANG_NAMES: Record<Lang, string> = {
   pl: 'Polski', hr: 'Hrvatski', sl: 'Slovenščina', ro: 'Română',
-  cs: 'Čeština', hu: 'Magyar', en: 'English',
+  cs: 'Čeština', hu: 'Magyar', de: 'Deutsch', fr: 'Français', it: 'Italiano', en: 'English',
 };
 
 /** BCP-47 tags for Intl formatting and <html lang>. */
 export const INTL: Record<Lang, string> = {
-  pl: 'pl-PL', hr: 'hr-HR', sl: 'sl-SI', ro: 'ro-RO', cs: 'cs-CZ', hu: 'hu-HU', en: 'en-GB',
+  pl: 'pl-PL', hr: 'hr-HR', sl: 'sl-SI', ro: 'ro-RO', cs: 'cs-CZ', hu: 'hu-HU', de: 'de-DE', fr: 'fr-FR', it: 'it-IT', en: 'en-GB',
 };
 
 /** Price of the full natal report per market (placeholders until tested). */
@@ -20,6 +20,9 @@ export const PRICE: Record<Lang, { amount: number; currency: string }> = {
   ro: { amount: 59.99, currency: 'RON' },
   cs: { amount: 299, currency: 'CZK' },
   hu: { amount: 4990, currency: 'HUF' },
+  de: { amount: 14.9, currency: 'EUR' },
+  fr: { amount: 14.9, currency: 'EUR' },
+  it: { amount: 14.9, currency: 'EUR' },
   en: { amount: 12.9, currency: 'EUR' },
 };
 
@@ -31,13 +34,17 @@ export const UPSELL: Record<Lang, { partner: number; forecast: number; bundle: n
   ro: { partner: 44.99, forecast: 69.99, bundle: 149.99, child: 59.99 },
   cs: { partner: 249, forecast: 349, bundle: 699, child: 299 },
   hu: { partner: 3990, forecast: 5990, bundle: 11990, child: 4990 },
+  de: { partner: 11.9, forecast: 17.9, bundle: 34.9, child: 13.9 },
+  fr: { partner: 11.9, forecast: 17.9, bundle: 34.9, child: 13.9 },
+  it: { partner: 11.9, forecast: 17.9, bundle: 34.9, child: 13.9 },
   en: { partner: 9.9, forecast: 14.9, bundle: 29.9, child: 11.9 },
 };
 
 /** Weekly personal horoscope subscription: monthly price and yearly price (8 months). Placeholders until tested. */
 export const SUB: Record<Lang, { month: number; year: number }> = {
   pl: { month: 29.99, year: 199 }, hr: { month: 6.99, year: 49.99 }, sl: { month: 6.99, year: 49.99 },
-  ro: { month: 34.99, year: 229.99 }, cs: { month: 179, year: 1190 }, hu: { month: 2790, year: 18990 }, en: { month: 6.99, year: 49.99 },
+  ro: { month: 34.99, year: 229.99 }, cs: { month: 179, year: 1190 }, hu: { month: 2790, year: 18990 },
+  de: { month: 7.99, year: 59.99 }, fr: { month: 7.99, year: 59.99 }, it: { month: 7.99, year: 59.99 }, en: { month: 6.99, year: 49.99 },
 };
 
 export function formatPrice(lang: Lang, p = PRICE[lang]): string {

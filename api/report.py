@@ -310,3 +310,19 @@ Natal chart:
 Transits for {span}:
 {period_txt}
 """
+
+# ---- de, fr, it (drafts for native review)
+LANG_NAME['de'] = 'German'
+VOCAB['de'] = {'signs': 'Widder, Stier, Zwillinge, Krebs, Löwe, Jungfrau, Waage, Skorpion, Schütze, Steinbock, Wassermann, Fische',
+ 'terms': 'Geburtshoroskop, Aszendent, Haus (1.–12.), Aspekt, Konjunktion, Opposition, Trigon, Quadrat, Sextil, '
+          'Transit'}
+LANG_NAME['fr'] = 'French'
+VOCAB['fr'] = {'signs': 'Bélier, Taureau, Gémeaux, Cancer, Lion, Vierge, Balance, Scorpion, Sagittaire, Capricorne, Verseau, '
+          'Poissons',
+ 'terms': 'thème astral, Ascendant, maison (1re–12e), aspect, conjonction, opposition, trigone, carré, sextile, '
+          'transit'}
+LANG_NAME['it'] = 'Italian'
+VOCAB['it'] = {'signs': 'Ariete, Toro, Gemelli, Cancro, Leone, Vergine, Bilancia, Scorpione, Sagittario, Capricorno, Acquario, Pesci',
+ 'terms': 'tema natale, Ascendente, casa (1ª–12ª), aspetto, congiunzione, opposizione, trigono, quadratura, sestile, '
+          'transito'}
+

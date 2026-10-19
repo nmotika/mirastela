@@ -54,5 +54,7 @@ consent and tracking are written once.
 - [ ] Astrocartography (after flight 2): planet lines (ASC/DSC/MC/IC) on a world map, top cities by theme (love, career, home, avoid) from ~300 relocation cities, match score from distance to lines, generated text. Birth time required. Product ~49 zł or part of a bigger bundle; also test as an ad hook (PL diaspora: UK, DE, NL). No fake testimonial ads, show a labelled example chart instead.
 
 ## Content
+- [x] German, French, Italian added 2026-10-19 (EUR 14.90 / 11.90 / 17.90 / 34.90 / 13.90, sub 7.99 / 59.99); drafts for native review
+- [ ] DE legal review before any German campaign: Widerrufsbelehrung, Impressum (court register number MBS and managing director's name still missing)
 - [ ] Native review of sl, ro, cs, hu texts
 - [ ] Astrocartography and sky map (deferred)

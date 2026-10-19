@@ -3,7 +3,7 @@ import { LOCALES, LANG_NAMES, type Lang } from '../i18n/config';
 import { t } from '../i18n';
 interface Props { lang: Lang; path: string; paths?: Record<Lang, string>; compact?: boolean; id?: string }
 const { lang, path, paths, compact, id } = Astro.props; // path after the locale, e.g. "start/"
-const CODE: Record<Lang, string> = { pl: 'PL', hr: 'HR', sl: 'SI', ro: 'RO', cs: 'CZ', hu: 'HU', en: 'EN' };
+const CODE: Record<Lang, string> = { pl: 'PL', hr: 'HR', sl: 'SI', ro: 'RO', cs: 'CZ', hu: 'HU', de: 'DE', fr: 'FR', it: 'IT', en: 'EN' };
 ---
 <details class:list={['lang', { compact }]} id={id}>
   <summary aria-label={`${t(lang).ui.changeLang}: ${LANG_NAMES[lang]}`}>

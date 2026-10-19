@@ -144,3 +144,15 @@ def cancel_subscription(sub_id: str, now: bool = False):
 
 def portal_url(customer: str, return_url: str) -> str:
     return _stripe().billing_portal.Session.create(customer=customer, return_url=return_url).url
+
+# ---- de, fr, it (drafts for native review)
+_P['de'] = ('eur', 14.9, 11.9, 17.9, 34.9, 13.9, 7.99, 59.99)
+WAIVER['de'] = 'Ich stimme zu, dass die Bereitstellung der digitalen Inhalte sofort beginnt, und nehme zur Kenntnis, dass ich damit mein Widerrufsrecht verliere. Ich akzeptiere die [AGB]({url}).'
+BUNDLE_NAME['de'] = 'Paket'
+_P['fr'] = ('eur', 14.9, 11.9, 17.9, 34.9, 13.9, 7.99, 59.99)
+WAIVER['fr'] = 'J’accepte que le contenu numérique me soit fourni immédiatement et je reconnais perdre ainsi mon droit de rétractation. J’accepte les [conditions générales]({url}).'
+BUNDLE_NAME['fr'] = 'Pack'
+_P['it'] = ('eur', 14.9, 11.9, 17.9, 34.9, 13.9, 7.99, 59.99)
+WAIVER['it'] = 'Acconsento alla fornitura immediata del contenuto digitale e prendo atto che in questo modo perdo il diritto di recesso. Accetto i [Termini e condizioni]({url}).'
+BUNDLE_NAME['it'] = 'Pacchetto'
+

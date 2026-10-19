@@ -298,3 +298,129 @@ def unsub_page(lang: str, done: bool) -> str:
 def login(lang: str, url: str) -> tuple[str, str]:
     t = T[lang]
     return t["loginSubject"], layout(lang, _p(t["loginBody"]) + _button(t["loginBtn"], url) + _p(t["loginAfter"]))
+
+# ---- de, fr, it (drafts for native review)
+MONTHS['de'] = 'Januar Februar März April Mai Juni Juli August September Oktober November Dezember'
+DATE_FMT['de'] = '{d}. {m}'
+T['de'] = {'hi': 'Hallo {name},',
+ 'hiNoName': 'Hallo,',
+ 'sumSubject': '{name}, die Zusammenfassung deines Geburtshoroskops',
+ 'sumIntro': 'Hier ist eine kurze Zusammenfassung deines Geburtshoroskops.',
+ 'sumCta': 'Vollständige Auswertung ansehen',
+ 'sumAfter': 'Die vollständige Auswertung beschreibt alle zehn Planeten, die Häuser und die wichtigsten Aspekte.',
+ 'big3': ('Sonne', 'Mond', 'Aszendent'),
+ 'repSubject': 'Deine Auswertung ist fertig: {product}',
+ 'repBody': 'Deine Auswertung „{product}“ ist fertig. Öffne sie über den Button unten. Auf der Seite kannst du sie '
+            'auch als PDF herunterladen.',
+ 'repBtn': 'Auswertung öffnen',
+ 'products': {'natal': 'Geburtshoroskop',
+              'partner': 'Partnerhoroskop',
+              'forecast': 'Prognose {year}',
+              'child': 'Geburtshoroskop deines Kindes'},
+ 'subSubject': 'Dein Abo ist aktiv',
+ 'subDaily': 'Ab morgen früh bekommst du jeden Tag ein Horoskop, berechnet aus deinem Geburtshoroskop.',
+ 'subWeekly': 'Jeden Montagmorgen bekommst du ein Horoskop für die ganze Woche, berechnet aus deinem Geburtshoroskop.',
+ 'dailySubject': '{name}, dein Horoskop für den {date}',
+ 'weeklySubject': '{name}, deine Woche ab dem {date}',
+ 'unsub': 'Abo kündigen',
+ 'unsubDone': 'Du hast dich abgemeldet. Wir schicken dir keine Horoskope mehr.',
+ 'loginSubject': 'Dein Anmeldelink für Mirastela',
+ 'loginBody': 'Klicke auf den Button, um deine Auswertungen und dein Abo zu sehen. Der Link gilt 30 Minuten und nur '
+              'einmal.',
+ 'loginBtn': 'Meine Auswertungen öffnen',
+ 'loginAfter': 'Wenn du diesen Link nicht angefordert hast, ignoriere diese E-Mail.',
+ 'account': 'Meine Auswertungen und Daten',
+ 'stmt': 'Auf deiner Kartenabrechnung erscheint die Zahlung als „LINK.COM* MIRASTELA“. Link ist der Zahlungsdienst von '
+         'Stripe, über den wir Käufe abrechnen.',
+ 'why': 'Du erhältst diese E-Mail, weil diese Adresse auf mirastela.com eingegeben wurde.',
+ 'disclaimer': 'Die Inhalte dienen der Unterhaltung und Selbstreflexion.'}
+CAL['de'] = ('Dein persönlicher astrologischer Kalender',
+ 'Jeden Tag in deinem Kalender: ein grüner, blauer oder orangefarbener Tag und ein kurzer Tipp, berechnet aus deinem '
+ 'Geburtshoroskop. Füge ihn mit einem Klick hinzu:',
+ 'Zu Google Kalender hinzufügen',
+ 'Zu iPhone / Apple hinzufügen',
+ 'Anderer Kalender (Outlook und andere): Kopiere diese Adresse und füge sie als Abo über eine URL hinzu:')
+CUSP['de'] = 'an der Grenze zu:'
+MONTHS['fr'] = 'janvier février mars avril mai juin juillet août septembre octobre novembre décembre'
+DATE_FMT['fr'] = '{d} {m}'
+T['fr'] = {'hi': 'Bonjour {name},',
+ 'hiNoName': 'Bonjour,',
+ 'sumSubject': '{name}, le résumé de ton thème astral',
+ 'sumIntro': 'Voici un court résumé de ton thème astral.',
+ 'sumCta': 'Voir le rapport complet',
+ 'sumAfter': 'Le rapport complet couvre les dix planètes, les maisons et les aspects les plus importants.',
+ 'big3': ('Soleil', 'Lune', 'Ascendant'),
+ 'repSubject': 'Ton rapport est prêt : {product}',
+ 'repBody': 'Ton rapport « {product} » est prêt. Ouvre-le ci-dessous. Tu peux aussi le télécharger en PDF depuis la '
+            'page.',
+ 'repBtn': 'Ouvrir le rapport',
+ 'products': {'natal': 'Thème astral',
+              'partner': 'Compatibilité',
+              'forecast': 'Prévisions {year}',
+              'child': 'Le thème astral de ton enfant'},
+ 'subSubject': 'Ton abonnement est activé',
+ 'subDaily': 'Dès demain matin, tu recevras chaque jour un horoscope calculé à partir de ton thème astral.',
+ 'subWeekly': 'Chaque lundi matin, tu recevras un horoscope pour toute la semaine, calculé à partir de ton thème '
+              'astral.',
+ 'dailySubject': '{name}, ton horoscope du {date}',
+ 'weeklySubject': '{name}, ta semaine à partir du {date}',
+ 'unsub': 'Se désabonner',
+ 'unsubDone': 'Ton désabonnement est confirmé. Nous ne t’enverrons plus d’horoscopes.',
+ 'loginSubject': 'Ton lien de connexion à Mirastela',
+ 'loginBody': 'Clique sur le bouton pour voir tes rapports et ton abonnement. Le lien est valable 30 minutes et une '
+              'seule fois.',
+ 'loginBtn': 'Ouvrir mes rapports',
+ 'loginAfter': 'Si tu n’as pas demandé ce lien, ignore cet e-mail.',
+ 'account': 'Mes rapports et mes données',
+ 'stmt': 'Sur ton relevé de carte, le paiement apparaîtra sous le nom « LINK.COM* MIRASTELA ». Link est le service de '
+         'paiement de Stripe par lequel nous encaissons les achats.',
+ 'why': 'Tu reçois cet e-mail parce que cette adresse a été saisie sur mirastela.com.',
+ 'disclaimer': 'Le contenu est destiné au divertissement et à l’introspection.'}
+CAL['fr'] = ('Ton calendrier astrologique personnel',
+ 'Chaque jour dans ton agenda : une journée verte, bleue ou orange et un court conseil, calculés à partir de ton thème '
+ 'astral. Ajoute-le en un clic :',
+ 'Ajouter à Google Agenda',
+ 'Ajouter sur iPhone / Apple',
+ 'Autre agenda (Outlook et autres) : copie cette adresse et ajoute-la comme abonnement par URL :')
+CUSP['fr'] = 'à la limite avec :'
+MONTHS['it'] = 'gennaio febbraio marzo aprile maggio giugno luglio agosto settembre ottobre novembre dicembre'
+DATE_FMT['it'] = '{d} {m}'
+T['it'] = {'hi': 'Ciao {name},',
+ 'hiNoName': 'Ciao,',
+ 'sumSubject': '{name}, il riassunto del tuo tema natale',
+ 'sumIntro': 'Ecco un breve riassunto del tuo tema natale.',
+ 'sumCta': 'Vedi il report completo',
+ 'sumAfter': 'Il report completo descrive tutti e dieci i pianeti, le case e gli aspetti più importanti.',
+ 'big3': ('Sole', 'Luna', 'Ascendente'),
+ 'repSubject': 'Il tuo report è pronto: {product}',
+ 'repBody': 'Il tuo report “{product}” è pronto. Aprilo qui sotto. Dalla pagina puoi anche scaricarlo in PDF.',
+ 'repBtn': 'Apri il report',
+ 'products': {'natal': 'Tema natale',
+              'partner': 'Affinità di coppia',
+              'forecast': 'Previsione {year}',
+              'child': 'Il tema natale di tuo figlio'},
+ 'subSubject': 'Il tuo abbonamento è attivo',
+ 'subDaily': 'Da domani mattina riceverai ogni giorno un oroscopo calcolato sul tuo tema natale.',
+ 'subWeekly': 'Ogni lunedì mattina riceverai l’oroscopo per tutta la settimana, calcolato sul tuo tema natale.',
+ 'dailySubject': '{name}, il tuo oroscopo per il {date}',
+ 'weeklySubject': '{name}, la tua settimana dal {date}',
+ 'unsub': 'Annulla l’iscrizione',
+ 'unsubDone': 'Iscrizione annullata. Non ti invieremo più oroscopi.',
+ 'loginSubject': 'Il tuo link di accesso a Mirastela',
+ 'loginBody': 'Fai clic sul pulsante per vedere i tuoi report e il tuo abbonamento. Il link è valido per 30 minuti e '
+              'una sola volta.',
+ 'loginBtn': 'Apri i miei report',
+ 'loginAfter': 'Se non hai richiesto tu questo link, ignora questa email.',
+ 'account': 'I miei report e i miei dati',
+ 'stmt': 'Sull’estratto conto della carta il pagamento comparirà come "LINK.COM* MIRASTELA". Link è il servizio di '
+         'pagamento di Stripe con cui addebitiamo gli acquisti.',
+ 'why': 'Ricevi questa email perché questo indirizzo è stato inserito su mirastela.com.',
+ 'disclaimer': 'I contenuti hanno scopo di intrattenimento e riflessione personale.'}
+CAL['it'] = ('Il tuo calendario astrologico personale',
+ 'Ogni giorno nel tuo calendario: una giornata verde, blu o arancione e un breve consiglio, calcolati sul tuo tema '
+ 'natale. Aggiungilo con un clic:',
+ 'Aggiungi a Google Calendar',
+ 'Aggiungi a iPhone / Apple',
+ 'Un altro calendario (Outlook e altri): copia questo indirizzo e aggiungilo come abbonamento da URL:')
+CUSP['it'] = 'al confine con:'
+
