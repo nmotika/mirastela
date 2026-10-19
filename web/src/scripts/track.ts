@@ -1,7 +1,7 @@
 // Meta pixel behind the cookie banner. Nothing loads and nothing is sent until the visitor accepts
 // marketing cookies. Purchase and Lead are also sent server-side (Conversions API) with the same event id.
 export const META_PIXEL_ID = '2027523501240767'; // dataset "Mirastela web" in Events Manager
-export const GA_ID = ''; // Google Analytics 4 measurement ID (G-...), loaded only after "accept all"
+export const GA_ID = 'G-4W6JYDV6GR'; // Google Analytics 4 measurement ID (G-...), loaded only after "accept all"
 export const CONSENT_KEY = 'mirastela-consent'; // 'all' or 'necessary'
 
 declare global { interface Window { fbq?: any; _fbq?: any; dataLayer?: unknown[]; gtag?: (...a: unknown[]) => void } }
