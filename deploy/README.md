@@ -29,7 +29,7 @@ Web: push to GitHub, Pages rebuilds. API: on the server `sudo /opt/mirastela/dep
 1. **Firewall, fail2ban, SSH keys:** `sudo /opt/mirastela/deploy/harden.sh`. Password login is switched off only
    if `/root/.ssh/authorized_keys` has a key; otherwise the script says so and leaves it on.
 2. **Backups:** the timer `mirastela-backup` runs `deploy/backup.sh` every night at 03:30 (7 local copies in
-   `/var/backups/mirastela`). For the offsite copy create a Cloudflare R2 bucket `mirastela-backup` and an
+   `/var/backups/mirastela`). For the offsite copy use the Cloudflare R2 bucket `mirastela-backup` (EU jurisdiction, hence the `.eu.` endpoint) and an
    R2 API token (Object Read & Write, that bucket only), then write `/etc/mirastela-backup.env` (chmod 600):
    ```
    BACKUP_PASSPHRASE=<long random passphrase, also keep it in your password manager>
@@ -38,7 +38,7 @@ Web: push to GitHub, Pages rebuilds. API: on the server `sudo /opt/mirastela/dep
    RCLONE_CONFIG_R2_PROVIDER=Cloudflare
    RCLONE_CONFIG_R2_ACCESS_KEY_ID=<key id>
    RCLONE_CONFIG_R2_SECRET_ACCESS_KEY=<secret>
-   RCLONE_CONFIG_R2_ENDPOINT=https://<account id>.r2.cloudflarestorage.com
+   RCLONE_CONFIG_R2_ENDPOINT=https://8447929ad03d3df3bfc8b452650aca37.eu.r2.cloudflarestorage.com
    ```
    Test: `systemctl start mirastela-backup && journalctl -u mirastela-backup -n 20`, then `deploy/restore-test.sh`.
 3. **Uptime monitoring:** UptimeRobot (free), HTTP monitors every 5 minutes with email alerts on
