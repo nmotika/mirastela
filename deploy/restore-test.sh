@@ -5,6 +5,7 @@ set -euo pipefail
 T=$(mktemp -d); trap 'rm -rf "$T"' EXIT
 if [ -f /etc/mirastela-backup.env ]; then
   set -a; . /etc/mirastela-backup.env; set +a
+  export RCLONE_CONFIG_R2_ACL=${RCLONE_CONFIG_R2_ACL:-private} RCLONE_CONFIG=/dev/null  # R2: private ACL avoids 501 on the first put; no config file needed
   LATEST=$(rclone lsf "r2:$R2_BUCKET/db/" --s3-no-check-bucket | sort | tail -1)
   rclone copy "r2:$R2_BUCKET/db/$LATEST" "$T" --s3-no-check-bucket
   gpg --batch --pinentry-mode loopback --passphrase "$BACKUP_PASSPHRASE" -d -o "$T/db.gz" "$T/$LATEST"

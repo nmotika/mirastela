@@ -24,7 +24,8 @@ ls -1t "$DIR"/mirastela-*.db.gz | tail -n +8 | xargs -r rm --
 echo "local backup $SNAP.gz $(du -h "$SNAP.gz" | cut -f1)"
 
 if [ -f /etc/mirastela-backup.env ]; then
-  set -a; . /etc/mirastela-backup.env; set +a   # BACKUP_PASSPHRASE, RCLONE_CONFIG_R2_* , R2_BUCKET
+  set -a; . /etc/mirastela-backup.env; set +a
+  export RCLONE_CONFIG_R2_ACL=${RCLONE_CONFIG_R2_ACL:-private} RCLONE_CONFIG=/dev/null  # R2: private ACL avoids 501 on the first put; no config file needed   # BACKUP_PASSPHRASE, RCLONE_CONFIG_R2_* , R2_BUCKET
   ENC="$SNAP.gz.gpg"
   gpg --batch --yes --pinentry-mode loopback --passphrase "$BACKUP_PASSPHRASE" --symmetric --cipher-algo AES256 -o "$ENC" "$SNAP.gz"
   rclone copy "$ENC" "r2:$R2_BUCKET/db/" --s3-no-check-bucket
