@@ -1,4 +1,4 @@
-*Ultima actualizare: 19 octombrie 2026*
+*Ultima actualizare: 20 octombrie 2026*
 
 ## 1. Cine suntem
 
@@ -51,7 +51,7 @@ Drepturile tale de consumator în cazul unui conținut digital neconform rămân
 - **Date de naștere greșite:** dacă ai greșit datele de naștere, scrie-ne în termen de 14 zile de la achiziție și pregătim din nou raportul cu datele corecte, gratuit, o singură dată pe comandă.
 - **Plată dublă sau din greșeală:** îți rambursăm integral suma plătită în plus.
 
-Rambursările se fac prin metoda de plată inițială, de regulă în termen de 14 zile de la aprobarea noastră.
+Când ai dreptul la rambursare, îți returnăm banii prin metoda de plată inițială fără întârzieri nejustificate, cel târziu în 14 zile de la data la care ne anunți.
 
 ## 9. Abonament și anulare
 
@@ -74,7 +74,7 @@ Pregătim conținutul cu grijă, dar nu putem garanta că toate calculele și te
 
 ## 13. Reclamații
 
-Poți trimite o reclamație la [hello@mirastela.com](mailto:hello@mirastela.com) sau la adresa noastră poștală. Confirmăm primirea și răspundem în scris în termen de 15 zile. Dacă nu putem rezolva disputa împreună, te poți adresa unui organism de soluționare extrajudiciară a litigiilor de consum sau instanței competente.
+Poți trimite o reclamație la [hello@mirastela.com](mailto:hello@mirastela.com) sau la adresa noastră poștală. Confirmăm primirea și răspundem în scris în termen de 15 zile. Dacă nu putem rezolva disputa împreună, te poți adresa Centrului de mediere al Camerei de Economie a Croației (Centar za mirenje pri Hrvatskoj gospodarskoj komori, Rooseveltov trg 2, 10000 Zagreb, mirenje@hgk.hr), organismul de soluționare extrajudiciară a litigiilor de consum competent pentru societatea noastră, sau instanței competente. Ajutor gratuit într-un litigiu transfrontalier oferă și Centrul European al Consumatorilor din țara ta.
 
 ## 14. Legea aplicabilă
 

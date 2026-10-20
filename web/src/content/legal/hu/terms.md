@@ -1,4 +1,4 @@
-*Utolsó frissítés: 2026. október 19.*
+*Utolsó frissítés: 2026. október 20.*
 
 ## 1. Kik vagyunk
 
@@ -51,7 +51,7 @@ A hibás digitális tartalommal kapcsolatos fogyasztói jogaid teljes mértékbe
 - **Hibás születési adatok:** ha hibásan adtad meg a születési adataidat, a vásárlástól számított 14 napon belül írj nekünk, és a helyes adatokkal díjmentesen újra elkészítjük a jelentést, rendelésenként egyszer.
 - **Kétszeres vagy téves terhelés:** a többletösszeget teljes egészében visszatérítjük.
 
-A visszatérítés az eredeti fizetési módra történik, általában a jóváhagyásunktól számított 14 napon belül.
+Ha visszatérítés jár neked, indokolatlan késedelem nélkül, legkésőbb attól a naptól számított 14 napon belül visszautaljuk az eredeti fizetési módra, amikor értesítesz minket.
 
 ## 9. Előfizetés és lemondás
 
@@ -74,7 +74,7 @@ Tartalmainkat gondosan készítjük, de nem tudjuk garantálni, hogy a számít�
 
 ## 13. Panaszok
 
-Panaszodat elküldheted a [hello@mirastela.com](mailto:hello@mirastela.com) címre vagy postai címünkre. A beérkezést visszaigazoljuk, és 15 napon belül írásban válaszolunk. Ha a vitát közösen nem tudjuk rendezni, fordulhatsz bírósági eljáráson kívüli fogyasztói vitarendezési testülethez vagy az illetékes bírósághoz.
+Panaszodat elküldheted a [hello@mirastela.com](mailto:hello@mirastela.com) címre vagy postai címünkre. A beérkezést visszaigazoljuk, és 15 napon belül írásban válaszolunk. Ha a vitát közösen nem tudjuk rendezni, fordulhatsz a Horvát Gazdasági Kamara Békéltető Központjához (Centar za mirenje pri Hrvatskoj gospodarskoj komori, Rooseveltov trg 2, 10000 Zagreb, mirenje@hgk.hr), amely a társaságunk számára illetékes, bíróságon kívüli fogyasztói vitarendezési testület, vagy az illetékes bírósághoz. Határon átnyúló vitában a lakóhelyed szerinti Európai Fogyasztói Központ is ingyenes segítséget nyújt.
 
 ## 14. Alkalmazandó jog
 

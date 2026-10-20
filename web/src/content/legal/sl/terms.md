@@ -1,4 +1,4 @@
-*Zadnja posodobitev: 19. oktober 2026*
+*Zadnja posodobitev: 20. oktober 2026*
 
 ## 1. Kdo smo
 
@@ -51,7 +51,7 @@ Tvoje potrošniške pravice v primeru napak v digitalni vsebini ostajajo v celot
 - **Napačni podatki o rojstvu:** če si se zmotil oziroma zmotila pri podatkih o rojstvu, nam piši v 14 dneh od nakupa in poročilo bomo s pravilnimi podatki brezplačno pripravili znova, enkrat na naročilo.
 - **Dvojna ali pomotna bremenitev:** preveč plačani znesek ti bomo vrnili v celoti.
 
-Vračila izvedemo na prvotni način plačila, običajno v 14 dneh od naše odobritve.
+Kadar imaš pravico do vračila denarja, ga vrnemo na prvotni način plačila brez nepotrebnega odlašanja, najpozneje v 14 dneh od dneva, ko nas obvestiš.
 
 ## 9. Naročnina in preklic
 
@@ -74,7 +74,7 @@ Vsebino pripravljamo skrbno, vendar ne moremo zagotoviti, da so izračuni in bes
 
 ## 13. Pritožbe
 
-Pritožbo lahko pošlješ na [hello@mirastela.com](mailto:hello@mirastela.com) ali na naš poštni naslov. Prejem potrdimo in pisno odgovorimo v 15 dneh. Če spora ne moremo rešiti skupaj, se lahko obrneš na organ za izvensodno reševanje potrošniških sporov ali na pristojno sodišče.
+Pritožbo lahko pošlješ na [hello@mirastela.com](mailto:hello@mirastela.com) ali na naš poštni naslov. Prejem potrdimo in pisno odgovorimo v 15 dneh. Če spora ne moremo rešiti skupaj, se lahko obrneš na Center za mediacijo pri Hrvaški gospodarski zbornici (Centar za mirenje pri Hrvatskoj gospodarskoj komori, Rooseveltov trg 2, 10000 Zagreb, mirenje@hgk.hr), organ za izvensodno reševanje potrošniških sporov, pristojen za našo družbo, ali na pristojno sodišče. Brezplačno pomoč v čezmejnem sporu nudi tudi Evropski potrošniški center v tvoji državi.
 
 ## 14. Veljavno pravo
 

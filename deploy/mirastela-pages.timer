@@ -1,8 +1,8 @@
 [Unit]
-Description=Generate Mirastela daily horoscopes shortly after midnight
+Description=Mirastela daily horoscopes: submit and collect batches, fill gaps (hourly)
 
 [Timer]
-OnCalendar=*-*-* 00:15 Europe/Zagreb
+OnCalendar=*-*-* *:15:00 Europe/Zagreb
 Persistent=true
 
 [Install]

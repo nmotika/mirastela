@@ -51,7 +51,7 @@ Your consumer rights in the case of faulty digital content remain fully in place
 - **Wrong birth data:** if you made a mistake in your birth data, write to us within 14 days of the purchase and we will prepare the report again with the correct data, free of charge, once per order.
 - **Charged twice or by mistake:** we will refund the extra payment in full.
 
-Refunds are made to the original payment method, normally within 14 days of our approval.
+When you are entitled to a refund, we pay it back to the original payment method without undue delay and at the latest within 14 days of the day you tell us.
 
 ## 9. Subscription and cancellation
 
@@ -74,7 +74,7 @@ We prepare our content carefully, but we cannot guarantee that the calculations 
 
 ## 13. Complaints
 
-You can send a complaint to [hello@mirastela.com](mailto:hello@mirastela.com) or to our postal address. We confirm receipt and reply in writing within 15 days. If we cannot resolve the dispute together, you may turn to an out-of-court consumer dispute resolution body or to the competent court.
+You can send a complaint to [hello@mirastela.com](mailto:hello@mirastela.com) or to our postal address. We confirm receipt and reply in writing within 15 days. If we cannot resolve the dispute together, you may turn to the Mediation Centre of the Croatian Chamber of Economy (Centar za mirenje pri Hrvatskoj gospodarskoj komori, Rooseveltov trg 2, 10000 Zagreb, mirenje@hgk.hr), the out-of-court consumer dispute resolution body competent for our company, or to the competent court. If you live in another EU country, the European Consumer Centre in your country also helps for free with cross-border disputes.
 
 ## 14. Applicable law
 

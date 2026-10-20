@@ -51,7 +51,7 @@ I tuoi diritti di consumatore in caso di contenuti digitali difettosi restano pi
 - **Dati di nascita errati:** se hai sbagliato i tuoi dati di nascita, scrivici entro 14 giorni dall’acquisto e prepareremo di nuovo il report con i dati corretti, gratuitamente, una volta per ordine.
 - **Addebito doppio o per errore:** ti rimborseremo per intero il pagamento in eccesso.
 
-I rimborsi vengono effettuati sul metodo di pagamento originale, di norma entro 14 giorni dalla nostra approvazione.
+Quando hai diritto a un rimborso, te lo restituiamo sul metodo di pagamento originale senza indebito ritardo e al più tardi entro 14 giorni dal giorno in cui ce lo comunichi.
 
 ## 9. Abbonamento e disdetta
 
@@ -74,7 +74,7 @@ Prepariamo i nostri contenuti con cura, ma non possiamo garantire che calcoli e 
 
 ## 13. Reclami
 
-Puoi inviare un reclamo a [hello@mirastela.com](mailto:hello@mirastela.com) o al nostro indirizzo postale. Confermiamo la ricezione e rispondiamo per iscritto entro 15 giorni. Se non riusciamo a risolvere la controversia insieme, puoi rivolgerti a un organismo di risoluzione extragiudiziale delle controversie dei consumatori o al tribunale competente.
+Puoi inviare un reclamo a [hello@mirastela.com](mailto:hello@mirastela.com) o al nostro indirizzo postale. Confermiamo la ricezione e rispondiamo per iscritto entro 15 giorni. Se non riusciamo a risolvere la controversia insieme, puoi rivolgerti al Centro di mediazione della Camera di commercio croata (Centar za mirenje pri Hrvatskoj gospodarskoj komori, Rooseveltov trg 2, 10000 Zagreb, mirenje@hgk.hr), l’organismo di risoluzione extragiudiziale delle controversie dei consumatori competente per la nostra società, o al tribunale competente. Anche il Centro europeo consumatori del tuo Paese ti aiuta gratuitamente nelle controversie transfrontaliere.
 
 ## 14. Legge applicabile
 

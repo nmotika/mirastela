@@ -51,7 +51,7 @@ Twoje prawa konsumenta w przypadku wadliwych treści cyfrowych pozostają w peł
 - **Błędne dane urodzenia:** jeśli pomylisz się przy wpisywaniu danych urodzenia, napisz do nas w ciągu 14 dni od zakupu, a bezpłatnie przygotujemy raport ponownie z poprawnymi danymi, jeden raz w ramach zamówienia.
 - **Podwójne lub omyłkowe obciążenie:** zwrócimy całą nadpłaconą kwotę.
 
-Zwrotów dokonujemy przy użyciu tej samej metody płatności, której użyto przy zakupie, zwykle w ciągu 14 dni od ich zatwierdzenia przez nas.
+Jeśli przysługuje Ci zwrot, zwracamy pieniądze przy użyciu tej samej metody płatności bez zbędnej zwłoki, najpóźniej w ciągu 14 dni od dnia, w którym nas o tym poinformujesz.
 
 ## 9. Subskrypcja i anulowanie
 
@@ -74,7 +74,7 @@ Przygotowujemy nasze treści starannie, ale nie możemy zagwarantować, że obli
 
 ## 13. Reklamacje
 
-Reklamację możesz wysłać na adres [hello@mirastela.com](mailto:hello@mirastela.com) lub na nasz adres pocztowy. Potwierdzimy jej otrzymanie i odpowiemy na piśmie w ciągu 15 dni. Jeśli nie uda nam się wspólnie rozwiązać sporu, możesz skorzystać z pozasądowego sposobu rozwiązywania sporów konsumenckich lub zwrócić się do właściwego sądu.
+Reklamację możesz wysłać na adres [hello@mirastela.com](mailto:hello@mirastela.com) lub na nasz adres pocztowy. Potwierdzimy jej otrzymanie i odpowiemy na piśmie w ciągu 15 dni. Jeśli nie uda nam się wspólnie rozwiązać sporu, możesz zwrócić się do Centrum Mediacji przy Chorwackiej Izbie Gospodarczej (Centar za mirenje pri Hrvatskoj gospodarskoj komori, Rooseveltov trg 2, 10000 Zagreb, mirenje@hgk.hr), podmiotu pozasądowego rozwiązywania sporów konsumenckich właściwego dla naszej spółki, lub do właściwego sądu. Bezpłatną pomoc w sporze transgranicznym zapewnia też Europejskie Centrum Konsumenckie w Twoim kraju.
 
 ## 14. Prawo właściwe
 

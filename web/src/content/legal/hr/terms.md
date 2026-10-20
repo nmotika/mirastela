@@ -1,4 +1,4 @@
-*Zadnje ažuriranje: 19. listopada 2026.*
+*Zadnje ažuriranje: 20. listopada 2026.*
 
 ## 1. Tko smo
 
@@ -51,7 +51,7 @@ Tvoja potrošačka prava u slučaju neispravnog digitalnog sadržaja ostaju u po
 - **Pogrešni podaci o rođenju:** ako si pogriješio/la u podacima o rođenju, javi nam se u roku od 14 dana od kupnje i besplatno ćemo ponovno pripremiti izvještaj s ispravnim podacima, jednom po narudžbi.
 - **Dvostruka ili pogrešna naplata:** vratit ćemo ti cijeli višak uplate.
 
-Povrat se vrši na izvorni način plaćanja, u pravilu u roku od 14 dana od našeg odobrenja.
+Kad imaš pravo na povrat novca, vraćamo ga na izvorni način plaćanja bez nepotrebnog odgađanja, a najkasnije u roku od 14 dana od dana kad nas obavijestiš.
 
 ## 9. Pretplata i otkazivanje
 
@@ -74,7 +74,7 @@ Naš sadržaj pripremamo pažljivo, ali ne možemo jamčiti da su izračuni i te
 
 ## 13. Prigovori
 
-Prigovor možeš poslati na [hello@mirastela.com](mailto:hello@mirastela.com) ili na našu poštansku adresu. Potvrđujemo primitak i odgovaramo u pisanom obliku u roku od 15 dana. Ako spor ne uspijemo riješiti zajedno, možeš se obratiti tijelu za izvansudsko rješavanje potrošačkih sporova ili nadležnom sudu.
+Prigovor možeš poslati na [hello@mirastela.com](mailto:hello@mirastela.com) ili na našu poštansku adresu. Potvrđujemo primitak i odgovaramo u pisanom obliku u roku od 15 dana. Ako spor ne uspijemo riješiti zajedno, možeš se obratiti Centru za mirenje pri Hrvatskoj gospodarskoj komori (Rooseveltov trg 2, 10000 Zagreb, mirenje@hgk.hr), tijelu za alternativno rješavanje potrošačkih sporova nadležnom za naše društvo, ili nadležnom sudu. Ako živiš u drugoj državi EU-a, besplatnu pomoć u prekograničnom sporu pruža i Europski potrošački centar u tvojoj državi.
 
 ## 14. Mjerodavno pravo
 

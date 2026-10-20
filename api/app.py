@@ -88,6 +88,8 @@ def db():
             con.execute(f"alter table subs add column {col} text")
     if "paid" not in {r[1] for r in con.execute("pragma table_info(orders)")}:
         con.execute("alter table orders add column paid integer default 1")  # rows before payments existed were coupon orders
+    con.execute("create table if not exists daily_parts(lang text, day text, first integer, data text, model text, primary key(lang, day, first))")
+    con.execute("create table if not exists daily_batches(id text primary key, created text, status text, items text)")
     con.execute("""create table if not exists payments(
         session text primary key, token text, kind text, product text, status text, created text, done text, consent text)""")
     pay_cols = {r[1] for r in con.execute("pragma table_info(payments)")}
@@ -708,8 +710,35 @@ def _daily_cached(lang: str, key: str) -> dict | None:
     return {"day": key, "model": row[1], **json.loads(row[0])} if row else None
 
 
+def daily_sky(day: date) -> tuple[dict, str]:
+    facts = sky.day_sky(day)
+    return facts, sky.sky_text(facts)
+
+
+def daily_parts(lang: str, key: str) -> dict[int, list]:
+    with db() as con:
+        return {f: json.loads(d) for f, d in con.execute("select first, data from daily_parts where lang=? and day=?", (lang, key))}
+
+
+def save_daily_half(lang: str, day: date, first: int, signs: list, model: str):
+    """Store one half; when both halves are there, publish the day and drop the parts."""
+    key = day.isoformat()
+    with db() as con:
+        con.execute("insert or replace into daily_parts values(?,?,?,?,?)", (lang, key, first, json.dumps(signs, ensure_ascii=False), model))
+    parts = daily_parts(lang, key)
+    if 0 in parts and 6 in parts:
+        facts = sky.day_sky(day)
+        data = {"signs": parts[0] + parts[6], "sky": {"planets": [{k: p[k] for k in ("id", "signIndex", "deg", "retro")} for p in facts["planets"]],
+                                                      "moonIngress": facts["moonIngress"]}}
+        with db() as con:
+            con.execute("insert or replace into daily values(?,?,?,?,?)",
+                        (lang, key, json.dumps(data, ensure_ascii=False), model, datetime.now(timezone.utc).isoformat()))
+            con.execute("delete from daily_parts where lang=? and day=?", (lang, key))
+
+
 def daily_for(lang: str, day: date) -> dict:
-    """Twelve sign horoscopes for one language and day, generated once and cached (blocking)."""
+    """Twelve sign horoscopes for one language and day. Normally prepared ahead by the batch job;
+    whatever is still missing is generated here with direct calls (blocking)."""
     key = day.isoformat()
     hit = _daily_cached(lang, key)
     if hit:
@@ -719,71 +748,33 @@ def daily_for(lang: str, day: date) -> dict:
         hit = _daily_cached(lang, key)
         if hit:
             return hit
-        facts = sky.day_sky(day)
-        fallback = json.dumps([{"general": f"TEST MODE ({chart.SIGNS[i]}). " + ", ".join(
-            f"{p['id']} {p['sign']}" for p in facts["planets"][:5]), "love": "TEST MODE", "work": "TEST MODE"} for i in range(12)])
-        # Two halves of six signs: shorter outputs, and one bad half is retried without redoing the other.
-        signs, model, txt = [], "test", sky.sky_text(facts)
+        facts, txt = daily_sky(day)
+        if not report.has_key():  # test mode: instant placeholder text, nothing stored
+            signs = [{"general": f"TEST MODE ({chart.SIGNS[i]}). " + ", ".join(f"{p['id']} {p['sign']}" for p in facts["planets"][:5]),
+                      "love": "TEST MODE", "work": "TEST MODE"} for i in range(12)]
+            return {"day": key, "model": "test", "signs": signs,
+                    "sky": {"planets": [{k: p[k] for k in ("id", "signIndex", "deg", "retro")} for p in facts["planets"]],
+                            "moonIngress": facts["moonIngress"]}}
         for first in (0, 6):
-            fb = json.dumps(json.loads(fallback)[first:first + 6])
+            if first in daily_parts(lang, key):
+                continue
             for attempt in range(4):
                 try:
-                    out, model = report.generate_json(report.prompt_daily_signs(lang, key, txt, first, 6), report.SIGNS_SCHEMA,
-                                                      max_tokens=6000, fallback={"signs": json.loads(fb)})
-                    part = (out or {}).get("signs")
-                    if isinstance(part, str):  # the model sometimes passes the list as a JSON string
-                        part = report.parse_json(part)
-                    want = report.SIGNS_EN[first:first + 6]
-                    by_sign = {x.get("sign"): x for x in part if isinstance(x, dict)} if isinstance(part, list) else {}
-                    if model == "test":  # the fallback has no sign names
-                        by_sign = dict(zip(want, part))
-                    got = [by_sign.get(n) for n in want]
-                    if all(x and x.get("general") for x in got):
-                        problems = [f"{n}: {p}" for n, x in zip(want, got) if (p := report.daily_problem(lang, x))]
-                        if not problems:
-                            signs += [{k: x[k] for k in ("general", "love", "work")} for x in got]
-                            break
-                        print("daily", lang, key, first, "rejected", attempt, problems, flush=True)
-                        continue
-                    print("daily", lang, key, first, "bad shape", attempt, type(part).__name__,
-                          len(part) if isinstance(part, (list, str)) else "", str(out)[:200], flush=True)
+                    params = report.daily_params(lang, key, txt, first)
+                    out = report.tool_input(report.client().messages.create(**params))
+                    signs, why = report.daily_half(lang, out, first)
+                    if signs:
+                        save_daily_half(lang, day, first, signs, params["model"])
+                        break
+                    print("daily", lang, key, first, why, attempt, flush=True)
                 except Exception as e:
                     print("daily", lang, key, first, "error", attempt, repr(e)[:300], flush=True)
             else:
                 raise HTTPException(503, "generation failed")
-        data = {"signs": signs, "sky": {"planets": [{k: p[k] for k in ("id", "signIndex", "deg", "retro")} for p in facts["planets"]],
-                                        "moonIngress": facts["moonIngress"]}}
-        if model != "test":
-            with db() as con:
-                con.execute("insert or replace into daily values(?,?,?,?,?)",
-                            (lang, key, json.dumps(data, ensure_ascii=False), model, datetime.now(timezone.utc).isoformat()))
-        return {"day": key, "model": model, **data}
-
-
-class FeedbackIn(BaseModel):
-    email: str = Field("", max_length=200)
-    answers: dict[str, str | int | None]
-
-
-@app.post("/api/feedback")
-def feedback(body: FeedbackIn, request: Request, tasks: BackgroundTasks):
-    """Tester questionnaire. The email comes from Cloudflare Access when present."""
-    guard.per_ip(DB_PATH, request, "feedback", 10, 3600)
-    answers = {k[:40]: (v[:3000] if isinstance(v, str) else v) for k, v in list(body.answers.items())[:40]}
-    # Anonymous on purpose: no e-mail, only the kind of device.
-    email = ""
-    raw_ua = request.headers.get("user-agent", "")
-    ua = "mobitel" if any(k in raw_ua for k in ("Mobile", "Android", "iPhone")) else "računalo"
-    with db() as con:
-        con.execute("insert into feedback(created, email, answers, ua) values(?,?,?,?)",
-                    (datetime.now(timezone.utc).isoformat(), email, json.dumps(answers, ensure_ascii=False), ua))
-    admin = os.environ.get("MIRASTELA_ADMIN_EMAIL", "").strip()
-    if admin:
-        rows = "".join(f"<p style='margin:0 0 10px;font:15px/1.5 Arial,sans-serif;color:#F3EEE3'><b>{emails.esc(k)}</b><br>"
-                       f"{emails.esc(str(v if v is not None else ''))}</p>" for k, v in answers.items())
-        html = emails.layout("hr", f"<p style='font:15px Arial,sans-serif;color:#A9B0C6'>{emails.esc(ua)}</p>{rows}")
-        tasks.add_task(mailer.send, DB_PATH, admin, "feedback", "Mirastela: novi odgovor iz upitnika", html)
-    return {"ok": True}
+        hit = _daily_cached(lang, key)
+        if not hit:
+            raise HTTPException(503, "generation failed")
+        return hit
 
 
 @app.get("/api/daily")

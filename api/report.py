@@ -278,16 +278,55 @@ def generate_json(prompt: str, schema: dict, fast: bool = True, max_tokens: int 
     model = _model(fast)
     if not has_key():
         return fallback, "test"
+    msg = client().messages.create(**json_params(prompt, schema, model, max_tokens))
+    return tool_input(msg), model
+
+
+def client():
     import anthropic
-    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
-    msg = client.messages.create(model=model, max_tokens=max_tokens, system=SYSTEM,
-                                 tools=[{"name": "save", "description": "Save the result.", "input_schema": schema}],
-                                 tool_choice={"type": "tool", "name": "save"},
-                                 messages=[{"role": "user", "content": prompt}])
+    return anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+
+
+def json_params(prompt: str, schema: dict, model: str, max_tokens: int) -> dict:
+    """Request parameters for structured output through a forced tool call (also used in batches)."""
+    return {"model": model, "max_tokens": max_tokens, "system": SYSTEM,
+            "tools": [{"name": "save", "description": "Save the result.", "input_schema": schema}],
+            "tool_choice": {"type": "tool", "name": "save"},
+            "messages": [{"role": "user", "content": prompt}]}
+
+
+def tool_input(msg):
     for b in msg.content:
         if b.type == "tool_use":
-            return b.input, model
+            return b.input
     raise ValueError(f"no tool output (stop_reason={msg.stop_reason})")
+
+
+# Daily sign horoscopes use the stronger model: better language for little money, mostly through the
+# Batch API (half price) a couple of days ahead.
+DAILY_FAST = os.environ.get("MIRASTELA_DAILY_FAST", "0") == "1"
+
+
+def daily_params(lang: str, day: str, sky_txt: str, first: int) -> dict:
+    return json_params(prompt_daily_signs(lang, day, sky_txt, first, 6), SIGNS_SCHEMA, _model(DAILY_FAST), 6000)
+
+
+def daily_half(lang: str, out, first: int, test: bool = False):
+    """Validate one generated half (six signs). Returns (entries, None) or (None, reason)."""
+    part = (out or {}).get("signs") if isinstance(out, dict) else None
+    if isinstance(part, str):  # the model sometimes passes the list as a JSON string
+        part = parse_json(part)
+    if not isinstance(part, list):
+        return None, f"bad shape {type(part).__name__}"
+    want = SIGNS_EN[first:first + 6]
+    by_sign = dict(zip(want, part)) if test else {x.get("sign"): x for x in part if isinstance(x, dict)}
+    got = [by_sign.get(n) for n in want]
+    if not all(isinstance(x, dict) and x.get("general") for x in got):
+        return None, f"missing signs ({len(part)} entries)"
+    problems = [f"{n}: {p}" for n, x in zip(want, got) if (p := daily_problem(lang, x))]
+    if problems:
+        return None, "rejected " + "; ".join(problems)
+    return [{k: str(x.get(k, "")) for k in ("general", "love", "work")} for x in got], None
 
 
 SIGNS_EN = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"]

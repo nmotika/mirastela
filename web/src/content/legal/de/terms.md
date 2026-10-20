@@ -1,4 +1,4 @@
-*Stand: 19. Oktober 2026*
+*Stand: 20. Oktober 2026*
 
 <!-- ENTWURF: vor dem Start von einer muttersprachlichen Lektorin oder einem Lektor und juristisch prüfen lassen. -->
 
@@ -78,7 +78,7 @@ Deine Verbraucherrechte bei mangelhaften digitalen Inhalten bleiben vollständig
 - **Falsche Geburtsdaten:** Wenn du dich bei deinen Geburtsdaten vertan hast, schreib uns innerhalb von 14 Tagen nach dem Kauf. Wir erstellen die Auswertung dann einmal pro Bestellung kostenlos mit den richtigen Daten neu.
 - **Doppelt oder irrtümlich belastet:** Den zu viel gezahlten Betrag erstatten wir vollständig.
 
-Erstattungen erfolgen auf das ursprüngliche Zahlungsmittel, in der Regel innerhalb von 14 Tagen nach unserer Freigabe.
+Wenn du Anspruch auf eine Erstattung hast, zahlen wir den Betrag unverzüglich auf das ursprüngliche Zahlungsmittel zurück, spätestens innerhalb von 14 Tagen ab dem Tag, an dem du uns informierst.
 
 ## 9. Abo und Kündigung
 
@@ -101,7 +101,7 @@ Wir erstellen unsere Inhalte sorgfältig, können aber nicht garantieren, dass B
 
 ## 13. Beschwerden und Streitbeilegung
 
-Beschwerden kannst du an [hello@mirastela.com](mailto:hello@mirastela.com) oder an unsere Postanschrift schicken. Wir bestätigen den Eingang und antworten innerhalb von 15 Tagen schriftlich. Können wir eine Streitigkeit nicht gemeinsam lösen, kannst du dich an eine außergerichtliche Verbraucherschlichtungsstelle oder an das zuständige Gericht wenden. Wir sind nicht verpflichtet und nicht bereit, an einem Streitbeilegungsverfahren vor einer deutschen Verbraucherschlichtungsstelle teilzunehmen, sofern keine gesetzliche Pflicht dazu besteht.
+Beschwerden kannst du an [hello@mirastela.com](mailto:hello@mirastela.com) oder an unsere Postanschrift schicken. Wir bestätigen den Eingang und antworten innerhalb von 15 Tagen schriftlich. Können wir eine Streitigkeit nicht gemeinsam lösen, kannst du dich an das Schlichtungszentrum der Kroatischen Wirtschaftskammer (Centar za mirenje pri Hrvatskoj gospodarskoj komori, Rooseveltov trg 2, 10000 Zagreb, mirenje@hgk.hr) wenden, die für unser Unternehmen zuständige Stelle zur außergerichtlichen Beilegung von Verbraucherstreitigkeiten, oder an das zuständige Gericht. Kostenlose Hilfe bei grenzüberschreitenden Streitigkeiten bietet auch das Europäische Verbraucherzentrum in deinem Land. Wir sind nicht verpflichtet und nicht bereit, an einem Streitbeilegungsverfahren vor einer deutschen Verbraucherschlichtungsstelle teilzunehmen, sofern keine gesetzliche Pflicht dazu besteht.
 
 ## 14. Anwendbares Recht
 

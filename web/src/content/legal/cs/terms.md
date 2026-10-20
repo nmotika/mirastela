@@ -1,4 +1,4 @@
-*Poslední aktualizace: 19. října 2026*
+*Poslední aktualizace: 20. října 2026*
 
 ## 1. Kdo jsme
 
@@ -51,7 +51,7 @@ Tvá spotřebitelská práva v případě vadného digitálního obsahu zůstáv
 - **Chybné údaje o narození:** pokud ses v údajích o narození spletl nebo spletla, napiš nám do 14 dnů od nákupu a zprávu připravíme znovu se správnými údaji, zdarma, jednou na objednávku.
 - **Dvojí nebo omylem provedená platba:** přeplatek ti vrátíme v plné výši.
 
-Peníze vracíme původním platebním prostředkem, obvykle do 14 dnů od našeho schválení.
+Pokud máš nárok na vrácení peněz, vrátíme je původním platebním prostředkem bez zbytečného odkladu, nejpozději do 14 dnů ode dne, kdy nám to oznámíš.
 
 ## 9. Předplatné a jeho zrušení
 
@@ -74,7 +74,7 @@ Náš obsah připravujeme pečlivě, ale nemůžeme zaručit, že výpočty a te
 
 ## 13. Reklamace a stížnosti
 
-Reklamaci nebo stížnost můžeš poslat na [hello@mirastela.com](mailto:hello@mirastela.com) nebo na naši poštovní adresu. Potvrdíme přijetí a písemně odpovíme do 15 dnů. Pokud spor nevyřešíme společně, můžeš se obrátit na subjekt mimosoudního řešení spotřebitelských sporů nebo na příslušný soud.
+Reklamaci nebo stížnost můžeš poslat na [hello@mirastela.com](mailto:hello@mirastela.com) nebo na naši poštovní adresu. Potvrdíme přijetí a písemně odpovíme do 15 dnů. Pokud spor nevyřešíme společně, můžeš se obrátit na Smírčí centrum při Chorvatské hospodářské komoře (Centar za mirenje pri Hrvatskoj gospodarskoj komori, Rooseveltov trg 2, 10000 Zagreb, mirenje@hgk.hr), subjekt mimosoudního řešení spotřebitelských sporů příslušný pro naši společnost, nebo na příslušný soud. Bezplatnou pomoc v přeshraničním sporu poskytuje také Evropské spotřebitelské centrum ve tvé zemi.
 
 ## 14. Rozhodné právo
 

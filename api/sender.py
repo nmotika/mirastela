@@ -1,5 +1,5 @@
-"""Scheduled jobs (systemd timers): pages at 00:15, subs at 06:00, Europe/Zagreb.
-  python sender.py pages   pre-generate today's free sign horoscopes in every language
+"""Scheduled jobs (systemd timers): pages every hour at :15, subs at 06:00, Europe/Zagreb.
+  python sender.py pages   free sign horoscopes in every language (batch two days ahead, direct fallback)
   python sender.py subs    fill personal calendars, send personal horoscopes (weekly ones on Mondays)
   python sender.py all     both
   python sender.py recal   regenerate future calendar days for everyone (after changing cal.py)
@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import json
 import sys
-from datetime import timedelta
+from datetime import date, datetime, timedelta, timezone
 
 import app
 import emails
@@ -19,14 +19,98 @@ import report
 import sky
 
 
-def pages():
-    """Free sign horoscopes for yesterday, today and tomorrow in every language (run shortly after
-    midnight). Days already in the database are skipped, so normally only tomorrow is generated."""
-    for day in (sky.today() - timedelta(days=1), sky.today(), sky.today() + timedelta(days=1)):
+BATCH_GRACE = timedelta(hours=6)  # after this, a day still waiting for its batch is generated directly
+
+
+def _open_batches() -> list[tuple[str, str, list[str]]]:
+    with app.db() as con:
+        return [(b, c, json.loads(i)) for b, c, i in con.execute("select id, created, items from daily_batches where status='open'")]
+
+
+def collect_batches():
+    """Store the results of finished batches (each request is one half of one language and day)."""
+    if not report.has_key():
+        return
+    client = report.client()
+    for bid, _, _ in _open_batches():
+        b = client.messages.batches.retrieve(bid)
+        if b.processing_status != "ended":
+            continue
+        ok = bad = 0
+        for r in client.messages.batches.results(bid):
+            lang, key, first = r.custom_id.split("_")
+            day = date.fromisoformat(f"{key[:4]}-{key[4:6]}-{key[6:]}")
+            if app._daily_cached(lang, day.isoformat()):
+                continue
+            signs, why = (None, r.result.type)
+            if r.result.type == "succeeded":
+                try:
+                    signs, why = report.daily_half(lang, report.tool_input(r.result.message), int(first))
+                except Exception as e:
+                    why = repr(e)[:200]
+            if signs:
+                app.save_daily_half(lang, day, int(first), signs, r.result.message.model)
+                ok += 1
+            else:
+                bad += 1
+                print("batch", bid, r.custom_id, why, flush=True)
+        with app.db() as con:
+            con.execute("update daily_batches set status='done' where id=?", (bid,))
+        print("batch", bid, "collected", ok, "ok", bad, "failed", flush=True)
+
+
+def submit_batch(days: list[date]):
+    """One batch with every half that is missing and not already waiting in an open batch."""
+    if not report.has_key():
+        return
+    pending = {i for _, _, items in _open_batches() for i in items}
+    requests = []
+    for day in days:
+        key = day.isoformat()
+        _, txt = app.daily_sky(day)
         for lang in report.LANG_NAME:
+            if app._daily_cached(lang, key):
+                continue
+            have = app.daily_parts(lang, key)
+            for first in (0, 6):
+                cid = f"{lang}_{key.replace('-', '')}_{first}"
+                if first not in have and cid not in pending:
+                    requests.append({"custom_id": cid, "params": report.daily_params(lang, key, txt, first)})
+    if not requests:
+        return
+    b = report.client().messages.batches.create(requests=requests)
+    with app.db() as con:
+        con.execute("insert into daily_batches values(?,?,?,?)", (b.id, datetime.now(timezone.utc).isoformat(), "open",
+                                                                  json.dumps([r["custom_id"] for r in requests])))
+    print("batch", b.id, "submitted", len(requests), "requests", flush=True)
+
+
+def pages():
+    """Free sign horoscopes in every language (runs every hour). Days two ahead go through the Batch
+    API at half price; yesterday, today and tomorrow are generated directly only if still missing
+    (tomorrow only once its batch is late)."""
+    today = sky.today()
+    try:
+        collect_batches()
+        submit_batch([today + timedelta(days=1), today + timedelta(days=2)])
+    except Exception as e:
+        print("batch error", repr(e)[:300], flush=True)
+    waiting = {}
+    for _, created, items in _open_batches():
+        for i in items:
+            waiting[i] = min(waiting.get(i, created), created)
+    now = datetime.now(timezone.utc)
+    for day in (today - timedelta(days=1), today, today + timedelta(days=1)):
+        for lang in report.LANG_NAME:
+            if app._daily_cached(lang, day.isoformat()):
+                continue
+            ids = [f"{lang}_{day.isoformat().replace('-', '')}_{f}" for f in (0, 6)]
+            since = [datetime.fromisoformat(waiting[i]) for i in ids if i in waiting]
+            if day > today and since and now - min(since) < BATCH_GRACE:
+                continue  # its batch should arrive soon
             try:
                 app.daily_for(lang, day)
-                print("pages", lang, day, "ok")
+                print("pages", lang, day, "ok (direct)")
             except Exception as e:
                 print("pages", lang, day, "error", e)
 
@@ -108,6 +192,9 @@ if __name__ == "__main__":
     if what == "prune":
         prune()
     if what == "repages":
+        since = (sky.today() - timedelta(days=1)).isoformat()
         with app.db() as con:
-            con.execute("delete from daily where day>=?", ((sky.today() - timedelta(days=1)).isoformat(),))
+            con.execute("delete from daily where day>=?", (since,))
+            con.execute("delete from daily_parts where day>=?", (since,))
+            con.execute("update daily_batches set status='dropped' where status='open'")
         pages()
