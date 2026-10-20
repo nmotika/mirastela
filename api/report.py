@@ -289,9 +289,10 @@ def client():
 
 def json_params(prompt: str, schema: dict, model: str, max_tokens: int) -> dict:
     """Request parameters for structured output through a forced tool call (also used in batches)."""
-    return {"model": model, "max_tokens": max_tokens, "system": SYSTEM,
+    return {"model": model, "max_tokens": max_tokens, "system": SYSTEM + "\n\nAlways answer by calling the save tool exactly once.",
             "tools": [{"name": "save", "description": "Save the result.", "input_schema": schema}],
-            "tool_choice": {"type": "tool", "name": "save"},
+            # Newer models reject a forced tool choice; "auto" plus the instruction in the prompt works on all.
+            "tool_choice": {"type": "auto"},
             "messages": [{"role": "user", "content": prompt}]}
 
 
@@ -299,6 +300,9 @@ def tool_input(msg):
     for b in msg.content:
         if b.type == "tool_use":
             return b.input
+    text = "".join(getattr(b, "text", "") for b in msg.content)
+    if "{" in text:  # answered with plain JSON instead of calling the tool
+        return parse_json(text)
     raise ValueError(f"no tool output (stop_reason={msg.stop_reason})")
 
 
