@@ -31,6 +31,7 @@ import chart
 import pay
 import cities
 import emails
+import gifts
 import guard
 import mailer
 import report
@@ -88,6 +89,7 @@ def db():
             con.execute(f"alter table subs add column {col} text")
     if "paid" not in {r[1] for r in con.execute("pragma table_info(orders)")}:
         con.execute("alter table orders add column paid integer default 1")  # rows before payments existed were coupon orders
+    gifts.schema(con)
     con.execute("create table if not exists daily_parts(lang text, day text, first integer, data text, model text, primary key(lang, day, first))")
     con.execute("create table if not exists daily_batches(id text primary key, created text, status text, items text)")
     con.execute("""create table if not exists payments(
@@ -353,7 +355,7 @@ def _build(token: str, product: str):
         with db() as con:
             coupon = (con.execute("select coupon from orders where token=?", (token,)).fetchone() or [""])[0]
         subject, html = emails.report_ready(lang, name, product, forecast_year(),
-                                            f"{emails.SITE}/{lang}/report/?o={token}&t={product}", paid=not _coupon_ok(coupon or ""))
+                                            f"{emails.SITE}/{lang}/report/?o={token}&t={product}", paid=not (_coupon_ok(coupon or "") or (coupon or "").startswith("GIFT:")))
         mailer.send(DB_PATH, email, f"report-{product}", subject, html)
 
 
@@ -369,7 +371,11 @@ def create_order(body: OrderIn, bg: BackgroundTasks, request: Request):
     guard.per_ip(DB_PATH, request, "order", 10, 600)
     if not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", body.email):
         raise HTTPException(422, "invalid email")
-    pct = _coupon_pct(body.coupon)
+    with db() as con:
+        gift = gifts.active(con, body.coupon)
+    if gift:  # the gifted product only; later add-ons are paid as usual
+        body.bundle = gift["product"] == "bundle"
+    pct = 100 if gift else _coupon_pct(body.coupon)
     free = pct == 100
     if not free and not pay.enabled():
         raise HTTPException(402, "payment required")
@@ -378,10 +384,12 @@ def create_order(body: OrderIn, bg: BackgroundTasks, request: Request):
     natal = birth_chart(body.date.isoformat(), body.time, body.cityId)
     token = secrets.token_urlsafe(16)
     with db() as con:
+        if gift and not gifts.redeem(con, gift["code"], token):
+            raise HTTPException(409, "gift code already used")
         con.execute("insert into orders(token, created, lang, email, name, input, chart, coupon, paid) values(?,?,?,?,?,?,?,?,?)",
                     (token, datetime.now(timezone.utc).isoformat(), body.lang, body.email.lower(), body.name,
                      body.model_dump_json(exclude={"coupon"}), json.dumps(natal),
-                     body.coupon.strip().upper() if pct else "", 1 if free else 0))
+                     f"GIFT:{gift['code']}" if gift else (body.coupon.strip().upper() if pct else ""), 1 if free else 0))
     if not free:
         key = "bundle" if body.bundle else "natal"
         return {"token": token, "checkout": _checkout(token, _lang(body.lang), body.email, key, "order", key, "offer",
@@ -399,10 +407,11 @@ def _fulfil_order(token: str, bg: BackgroundTasks):
 
 
 def _checkout(token: str, lang: str, email: str, key: str, kind: str, product: str, cancel_step: str,
-              track: dict | None = None, pct: int = 0) -> str:
+              track: dict | None = None, pct: int = 0, success_url: str | None = None, cancel_url: str | None = None) -> str:
     """Stripe Checkout for one purchase. The caller has checked that the withdrawal waiver was ticked;
     its time and wording version are kept with the payment as the record of consent."""
-    s = pay.create_session(lang, email, key, forecast_year(), {"token": token, "kind": kind, "product": product}, cancel_step, pct)
+    s = pay.create_session(lang, email, key, forecast_year(), {"token": token, "kind": kind, "product": product}, cancel_step, pct,
+                           success_url, cancel_url)
     now = datetime.now(timezone.utc).isoformat()
     with db() as con:
         con.execute("insert into payments(session, token, kind, product, status, created, consent, track, price_key)"
@@ -414,7 +423,12 @@ def _checkout(token: str, lang: str, email: str, key: str, kind: str, product: s
 @app.post("/api/coupon")
 def check_coupon(body: dict, request: Request):
     guard.per_ip(DB_PATH, request, "coupon", 10, 600)
-    pct = _coupon_pct(str(body.get("code", "")))
+    code = str(body.get("code", ""))
+    with db() as con:
+        g = gifts.active(con, code)
+    if g:  # a gift code: the gifted product, free
+        return {"valid": True, "percent": 100, "gift": g["product"]}
+    pct = _coupon_pct(code)
     return {"valid": pct > 0, "percent": pct}
 
 
@@ -615,6 +629,9 @@ def _fulfil(session_id: str, meta: dict, bg: BackgroundTasks, customer: str | No
     with db() as con:
         claimed = con.execute("update payments set status='paid', done=? where session=? and status='open'",
                               (datetime.now(timezone.utc).isoformat(), session_id)).rowcount
+    if kind == "gift":
+        return _fulfil_gift(session_id, token, product, bool(claimed), bg)
+    with db() as con:
         email, lang = con.execute("select email, lang from orders where token=?", (token,)).fetchone() or ("", "en")
         prow = con.execute("select price_key, track from payments where session=?", (session_id,)).fetchone()
     lang = _lang(lang)
@@ -643,6 +660,70 @@ def _fulfil(session_id: str, meta: dict, bg: BackgroundTasks, customer: str | No
     elif kind == "sub":
         out["cal"] = _activate_sub(token, "weekly", bg, customer, stripe_sub)
     return out
+
+
+GIFT_SLUG = {"pl": "prezent", "hr": "poklon", "sl": "darilo", "ro": "cadou", "cs": "darek", "hu": "ajandek",
+             "en": "gift", "de": "geschenk", "fr": "cadeau", "it": "regalo"}  # must match web/src/i18n/lang/gift.ts
+
+
+def _fulfil_gift(session_id: str, code: str, product: str, claimed: bool, bg: BackgroundTasks) -> dict:
+    with db() as con:
+        if claimed:
+            con.execute("update gifts set status='active', session=? where code=? and status='unpaid'", (session_id, code))
+        g = gifts.info(con, code) or {}
+        email = (con.execute("select email from gifts where code=?", (code,)).fetchone() or [""])[0]
+        prow = con.execute("select track from payments where session=?", (session_id,)).fetchone()
+    lang = _lang(g.get("lang", "en"))
+    cur, minor = pay.price(lang, product)
+    out = {"token": code, "kind": "gift", "product": product, "email": email, "gift": g,
+           "value": minor / 100, "currency": cur.upper(), "eventId": f"pur_{session_id}"}
+    if claimed and g:
+        card = f"{emails.SITE}/{lang}/{GIFT_SLUG[lang]}/?code={code}"
+        subject, html = gifts.email(lang, code, pay.product_name(lang, product, forecast_year()), g["expires"], card)
+        mailer.send(DB_PATH, email, "gift", subject, html)
+        bg.add_task(capi.send, "Purchase", f"pur_{session_id}", f"{emails.SITE}/{lang}/{GIFT_SLUG[lang]}/", email,
+                    json.loads(prow[0]) if prow and prow[0] else {}, minor / 100, cur, product)
+    return out
+
+
+class GiftIn(BaseModel):
+    lang: str = "en"
+    email: str
+    product: str = "natal"
+    toName: str = Field("", max_length=40)
+    fromName: str = Field("", max_length=40)
+    message: str = Field("", max_length=300)
+    track: TrackIn | None = None
+
+
+@app.post("/api/gift")
+def buy_gift(body: GiftIn, request: Request):
+    """Start buying a gift: an unpaid code and a Stripe Checkout; the code turns active once paid."""
+    guard.per_ip(DB_PATH, request, "gift", 10, 600)
+    if not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", body.email):
+        raise HTTPException(422, "invalid email")
+    if body.product not in gifts.PRODUCTS:
+        raise HTTPException(422, "unknown product")
+    if not pay.enabled():
+        raise HTTPException(402, "payment required")
+    lang = _lang(body.lang)
+    with db() as con:
+        code = gifts.create(con, lang, body.email, body.product, body.toName.strip(), body.fromName.strip(), body.message.strip())
+    page = f"{emails.SITE}/{lang}/{GIFT_SLUG[lang]}/"
+    url = _checkout(code, lang, body.email, body.product, "gift", body.product, "", _track(body.track, request),
+                    success_url=page + "?paid={CHECKOUT_SESSION_ID}", cancel_url=page + "?cancel=1")
+    return {"checkout": url}
+
+
+@app.get("/api/gift/{code}")
+def gift_card(code: str, request: Request):
+    """Details for the printable gift card (the code itself is the key)."""
+    guard.per_ip(DB_PATH, request, "giftcard", 60, 600)
+    with db() as con:
+        g = gifts.info(con, code)
+    if not g or g["status"] == "unpaid":
+        raise HTTPException(404, "unknown gift")
+    return g
 
 
 @app.get("/api/checkout/confirm")

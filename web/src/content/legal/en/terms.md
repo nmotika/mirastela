@@ -31,6 +31,8 @@ All prices are shown in the currency displayed before you place the order and in
 
 Payments are processed by our payment partner **Stripe**, through its Link service, which acts as the reseller (merchant of record) for purchases on Mirastela. Stripe handles the payment, sales tax and the receipt, and its terms also apply to the payment. Your card details are entered only on Stripe's pages and are never seen or stored by us. Your bank statement may show the purchase as "LINK.COM* MIRASTELA".
 
+**Gift codes:** you can buy a birth chart or the bundle for someone else. You get a one-time code valid for 12 months from purchase. We supply the product when the recipient uses the code and enters their details. As long as the code has not been used, you can withdraw from the purchase within 14 days and we refund the full amount. The code cannot be exchanged for cash.
+
 ## 6. Delivery
 
 Digital products are prepared automatically after payment. You receive a link to your report by email, usually within a few minutes, and you can also open it in your browser. If you have not received anything within 24 hours, please check your spam folder and then write to us.

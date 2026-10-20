@@ -9,7 +9,7 @@ W każdej sprawie dotyczącej Twoich danych napisz na adres [hello@mirastela.com
 
 - **Podane przez Ciebie dane urodzenia:** data, godzina i miejsce urodzenia, imię oraz odpowiedzi w kwestionariuszu (obszary zainteresowań, sytuacja uczuciowa).
 - **Adres e-mail**, abyśmy mogli wysyłać Ci podsumowanie, raporty i horoskopy, oraz Twoja decyzja dotycząca e-maili marketingowych.
-- **Podane przez Ciebie dane innych osób:** imię i dane urodzenia partnera lub dziecka, gdy zamawiasz takie raporty. Zanim je podasz, poinformuj o tym tę osobę. Jej dane wykorzystujemy wyłącznie do zamówionego raportu, a ona sama może skorzystać z tych samych praw co Ty, pisząc na adres hello@mirastela.com.
+- **Podane przez Ciebie dane innych osób:** imię i dane urodzenia partnera lub dziecka, gdy zamawiasz takie raporty. Zanim je podasz, poinformuj o tym tę osobę. Jej dane wykorzystujemy wyłącznie do zamówionego raportu, a ona sama może skorzystać z tych samych praw co Ty, pisząc na adres hello@mirastela.com. Przy zakupie prezentu zapisujemy też Twój e-mail, imię obdarowanej osoby i życzenia, jeśli je podasz.
 - **Zamówienia i subskrypcje:** co kupujesz, kiedy, w jakiej wersji językowej oraz status Twojej subskrypcji.
 - **Dane techniczne:** adres IP i podstawowe informacje o przeglądarce zapisywane w logach serwera i logach bezpieczeństwa. Przy zgłoszeniu zapisujemy też źródło wizyty (stronę, z której przyszedłeś lub przyszłaś, oraz oznaczenia kampanii w linku), aby wiedzieć, które kanały przyprowadzają klientów (prawnie uzasadniony interes).
 - **Ankieta dla testerów:** odpowiedzi są przechowywane anonimowo, bez Twojego adresu e-mail.

@@ -31,6 +31,8 @@ Sve cijene prikazane su u valuti tvoje jezične verzije i uključuju PDV. Vrijed
 
 Plaćanja obrađuje naš partner za plaćanje **Stripe**, putem svoje usluge Link, koji za kupnje na Mirasteli djeluje kao preprodavač (merchant of record). Stripe obrađuje plaćanje, porez na promet i račun, a na plaćanje se primjenjuju i njegovi uvjeti. Podatke o kartici upisuješ isključivo na Stripeovim stranicama i mi ih nikada ne vidimo niti pohranjujemo. Na izvodu iz banke kupnja se može prikazati kao „LINK.COM* MIRASTELA”.
 
+**Poklon kodovi:** možeš kupiti natalnu kartu ili paket za drugu osobu. Dobivaš jednokratni kod koji vrijedi 12 mjeseci od kupnje. Proizvod isporučujemo kad primatelj iskoristi kod i upiše svoje podatke. Dok kod nije iskorišten, od kupnje možeš odustati u roku od 14 dana i vraćamo ti cijeli iznos. Kod se ne može zamijeniti za gotovinu.
+
 ## 6. Isporuka
 
 Digitalni proizvodi pripremaju se automatski nakon plaćanja. Poveznicu na svoj izvještaj dobivaš e-mailom, obično u roku od nekoliko minuta, a možeš ga otvoriti i u pregledniku. Ako u roku od 24 sata ništa ne primiš, provjeri mapu neželjene pošte, a zatim nam se javi.

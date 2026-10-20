@@ -33,6 +33,8 @@ Alle Preise werden in der Währung deiner Sprachversion angezeigt und enthalten 
 
 Zahlungen wickelt unser Zahlungspartner **Stripe** über seinen Dienst Link ab, der bei Käufen auf Mirastela als Wiederverkäufer (Merchant of Record) auftritt. Stripe übernimmt die Zahlung, die Umsatzsteuer und den Beleg, und für die Zahlung gelten auch seine Bedingungen. Deine Kartendaten gibst du nur auf den Seiten von Stripe ein, wir sehen oder speichern sie nie. Auf deinem Kontoauszug kann der Kauf als „LINK.COM* MIRASTELA“ erscheinen.
 
+**Geschenkcodes:** Du kannst ein Geburtshoroskop oder das Paket für eine andere Person kaufen. Du erhältst einen einmal einlösbaren Code, der 12 Monate ab Kauf gültig ist. Wir stellen das Produkt bereit, wenn die beschenkte Person den Code einlöst und ihre Daten eingibt. Solange der Code nicht eingelöst ist, kannst du innerhalb von 14 Tagen vom Kauf zurücktreten und wir erstatten den vollen Betrag. Eine Barauszahlung ist nicht möglich.
+
 ## 6. Lieferung
 
 Digitale Produkte werden nach der Zahlung automatisch erstellt. Du erhältst einen Link zu deiner Auswertung per E-Mail, meist innerhalb weniger Minuten, und kannst sie auch im Browser öffnen. Wenn du nach 24 Stunden nichts erhalten hast, schau bitte in deinen Spam-Ordner und schreib uns dann.

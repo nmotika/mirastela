@@ -9,7 +9,7 @@ Az adataiddal kapcsolatos bármilyen kérdéssel írj a [hello@mirastela.com](ma
 
 - **Az általad megadott születési adatok:** a születés dátuma, ideje és helye, a keresztneved, valamint a kérdőívben adott válaszaid (érdeklődési területek, párkapcsolati helyzet).
 - **E-mail-cím**, hogy elküldhessük az összefoglalódat, a jelentéseidet és a horoszkópjaidat, valamint a marketing e-mailekkel kapcsolatos döntésed.
-- **Más személyek általad megadott adatai:** a párod vagy a gyermeked keresztneve és születési adatai, ha ilyen jelentést rendelsz. Mielőtt megadod őket, tájékoztasd erről az érintettet. Az adatait csak a megrendelt jelentéshez használjuk, és ugyanazokat a jogokat gyakorolhatja, mint te, ha ír nekünk a hello@mirastela.com címre.
+- **Más személyek általad megadott adatai:** a párod vagy a gyermeked keresztneve és születési adatai, ha ilyen jelentést rendelsz. Mielőtt megadod őket, tájékoztasd erről az érintettet. Az adatait csak a megrendelt jelentéshez használjuk, és ugyanazokat a jogokat gyakorolhatja, mint te, ha ír nekünk a hello@mirastela.com címre. Ajándék vásárlásakor az e-mail-címedet, a megajándékozott nevét és az üzenetet is tároljuk, ha megadod őket.
 - **Rendelések és előfizetések:** mit vásároltál, mikor, milyen nyelven, és milyen állapotú az előfizetésed.
 - **Technikai adatok:** IP-cím és a böngésződre vonatkozó alapvető információk a szerver- és biztonsági naplókban. Feliratkozáskor a látogatás forrását is elmentjük (az oldalt, ahonnan érkeztél, és a link kampánycímkéit), hogy tudjuk, mely csatornák hoznak vásárlókat (jogos érdek).
 - **Tesztelői kérdőív:** a válaszokat anonim módon, az e-mail-címed nélkül tároljuk.

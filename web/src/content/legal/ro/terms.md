@@ -31,6 +31,8 @@ Toate prețurile sunt afișate în moneda versiunii tale de limbă și includ TV
 
 Plățile sunt procesate de partenerul nostru de plăți **Stripe**, prin serviciul său Link, care acționează ca revânzător (merchant of record) pentru achizițiile de pe Mirastela. Stripe se ocupă de plată, de taxele aferente vânzării și de chitanță, iar termenii săi se aplică și plății. Datele cardului tău se introduc doar pe paginile Stripe și nu sunt niciodată văzute sau stocate de noi. Pe extrasul de cont, achiziția poate apărea ca „LINK.COM* MIRASTELA”.
 
+**Coduri cadou:** poți cumpăra harta natală sau pachetul pentru altă persoană. Primești un cod de unică folosință, valabil 12 luni de la cumpărare. Furnizăm produsul când persoana care primește cadoul folosește codul și își introduce datele. Cât timp codul nu a fost folosit, te poți retrage din cumpărare în 14 zile și îți returnăm întreaga sumă. Codul nu poate fi schimbat pe bani.
+
 ## 6. Livrare
 
 Produsele digitale sunt pregătite automat după plată. Primești pe e-mail un link către raportul tău, de obicei în câteva minute, și îl poți deschide și în browser. Dacă nu ai primit nimic în 24 de ore, verifică dosarul Spam, apoi scrie-ne.

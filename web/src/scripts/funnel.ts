@@ -27,6 +27,7 @@ interface State {
   sub?: string; cal?: string; plan?: 'natal' | 'bundle'; pMode?: 'partner' | 'child';
   up?: 'partner' | 'forecast'; // add-on chosen on the account page
   disc?: { code: string; pct: number }; // discount code (not free): lower prices on one-time purchases
+  gift?: { code: string; product: 'natal' | 'bundle' }; // gift code: this product free, add-ons paid as usual
 }
 
 const data = JSON.parse(document.getElementById('funnel-data')!.textContent!);
@@ -537,12 +538,20 @@ function P(key: PriceKey): string {
 const offerPrice = () => P(state.plan === 'bundle' ? 'bundle' : 'natal');
 function syncPlan() {
   planRadios.forEach((r) => (r.checked = r.value === (state.plan ?? 'natal')));
-  if (!state.coupon) $('oBuy').textContent = D.offer.cta.replace('{price}', offerPrice());
+  if (!state.coupon && !state.gift) $('oBuy').textContent = D.offer.cta.replace('{price}', offerPrice());
 }
 planRadios.forEach((r) => r.addEventListener('change', () => { state.plan = r.value as 'natal' | 'bundle'; save(); syncPlan(); }));
 function applyCouponUi() {
   syncPlan();
   syncWaivers();
+  if (state.gift) {
+    planRadios.forEach((r) => { r.disabled = r.value !== state.gift!.product; });
+    $('cOk').textContent = fill(D.coupon.applied, { code: state.gift.code });
+    $('cOk').hidden = false;
+    $('cBox').hidden = true;
+    $('oBuy').textContent = D.coupon.claim;
+    return;
+  }
   $('pNatal').textContent = P('natal');
   $('pBundle').textContent = P('bundle');
   if (state.disc) {
@@ -562,15 +571,20 @@ $('cForm').addEventListener('submit', async (e) => {
   const code = $<HTMLInputElement>('cInput').value.trim().toUpperCase();
   if (!code) return;
   let pct = 0;
-  try { pct = (await api<{ valid: boolean; percent?: number }>('/api/coupon', { code })).percent ?? 0; } catch { /* treat as invalid */ }
+  let gift: 'natal' | 'bundle' | undefined;
+  try {
+    const r = await api<{ valid: boolean; percent?: number; gift?: 'natal' | 'bundle' }>('/api/coupon', { code });
+    pct = r.percent ?? 0; gift = r.gift;
+  } catch { /* treat as invalid */ }
   $('cErr').hidden = pct > 0;
-  if (pct >= 100) { state.coupon = code; state.disc = undefined; }
+  if (gift) { state.gift = { code, product: gift }; state.plan = gift; state.coupon = undefined; state.disc = undefined; }
+  else if (pct >= 100) { state.coupon = code; state.disc = undefined; }
   else if (pct > 0) state.disc = { code, pct };
   if (pct > 0) { save(); applyCouponUi(); }
 });
 /** The withdrawal waiver must be ticked before any paid checkout (Managed Payments has no checkbox of its own). */
 function consented(id: string): boolean {
-  if (state.coupon) return true;
+  if (state.coupon || (id === 'wOffer' && state.gift)) return true;
   const c = $<HTMLInputElement>(id);
   const box = $(`${id}Box`);
   box.classList.toggle('err', !c.checked);
@@ -578,7 +592,7 @@ function consented(id: string): boolean {
   return true;
 }
 const waiverBoxes = ['wOffer', 'wUp', 'wKid', 'wSub'];
-function syncWaivers() { waiverBoxes.forEach((id) => { $(`${id}Box`).hidden = !!state.coupon; }); }
+function syncWaivers() { waiverBoxes.forEach((id) => { $(`${id}Box`).hidden = !!state.coupon || (id === 'wOffer' && !!state.gift); }); }
 waiverBoxes.forEach((id) => $<HTMLInputElement>(id).addEventListener('change', () => $(`${id}Box`).classList.remove('err')));
 /** Leave for Stripe Checkout; the state stays in sessionStorage for the way back (?paid=...). */
 function toCheckout(url: string, value?: string) {
@@ -603,7 +617,7 @@ $('oBuy').addEventListener('click', async () => {
     if (!state.token) {
       const res = await api<{ token: string; checkout?: string }>('/api/order', {
         lang, email: state.email, name: state.name ?? '', date: state.date, time: state.time ?? null,
-        cityId: state.city!.id, focus: state.focus, status: state.status ?? '', coupon: state.coupon ?? state.disc?.code ?? '',
+        cityId: state.city!.id, focus: state.focus, status: state.status ?? '', coupon: state.gift?.code ?? state.coupon ?? state.disc?.code ?? '',
         bundle: state.plan === 'bundle', consent: true, track: trackInfo(),
       });
       state.up = undefined;
@@ -881,7 +895,7 @@ if (orderToken) {
   // With add=partner|forecast|child|sub: buy that add-on for an existing order.
   const add = params.get('add');
   let step: Step = 'pdata';
-  Object.assign(state, { token: orderToken, plan: 'bundle', pMode: 'partner', up: undefined, coupon: undefined, disc: undefined });
+  Object.assign(state, { token: orderToken, plan: 'bundle', pMode: 'partner', up: undefined, coupon: undefined, disc: undefined, gift: undefined });
   if (add === 'partner' || add === 'forecast') { Object.assign(state, { plan: 'natal', up: add }); step = 'upsell'; }
   else if (add === 'child') { state.plan = 'natal'; step = 'kid'; }
   else if (add === 'sub') step = 'sub';

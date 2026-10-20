@@ -1,6 +1,7 @@
 import { LOCALES, type Lang } from '../i18n/config';
 import { t } from '../i18n';
 import { SEO } from '../i18n/lang/seo';
+import { GIFT } from '../i18n/lang/gift';
 import { SIGN_KEYS, page, hasAny, pairKey, pairSlug, type Kind } from '../lib/seo';
 
 const SITE = 'https://mirastela.com';
@@ -21,6 +22,7 @@ export function GET() {
   const evergreen: Partial<Record<Lang, string>>[] = [];
   const hub = (k: Kind | 'calc') => evergreen.push(Object.fromEntries(LOCALES.filter((l) => k === 'calc' || hasAny(k, l)).map((l) => [l, `${SEO[l].slugs[k]}/`])));
   (['year', 'signs', 'compat', 'calc'] as const).forEach(hub);
+  evergreen.push(Object.fromEntries(LOCALES.map((l) => [l, `${GIFT[l].slug}/`])));
   for (let i = 0; i < 12; i++) {
     for (const k of ['year', 'signs'] as const) {
       evergreen.push(Object.fromEntries(LOCALES.filter((l) => page(k, l, SIGN_KEYS[i])).map((l) => [l, `${SEO[l].slugs[k]}/${t(l).horo.signSlugs[i]}/`])));

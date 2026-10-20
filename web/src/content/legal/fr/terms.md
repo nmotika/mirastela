@@ -31,6 +31,8 @@ Tous les prix sont indiqués dans la devise de ta version linguistique et inclue
 
 Les paiements sont traités par notre partenaire de paiement **Stripe**, via son service Link, qui agit comme revendeur (merchant of record) pour les achats effectués sur Mirastela. Stripe se charge du paiement, de la taxe sur les ventes et du reçu, et ses conditions s’appliquent également au paiement. Tu saisis tes données de carte uniquement sur les pages de Stripe : nous ne les voyons et ne les conservons jamais. Sur ton relevé bancaire, l’achat peut apparaître sous le nom « LINK.COM* MIRASTELA ».
 
+**Codes cadeaux :** tu peux acheter un thème astral ou le pack pour une autre personne. Tu reçois un code utilisable une fois, valable 12 mois à compter de l’achat. Nous fournissons le produit lorsque la personne utilise le code et saisit ses données. Tant que le code n’a pas été utilisé, tu peux te rétracter dans les 14 jours et nous te remboursons la totalité. Le code ne peut pas être échangé contre de l’argent.
+
 ## 6. Livraison
 
 Les produits numériques sont préparés automatiquement après le paiement. Tu reçois par e-mail un lien vers ton rapport, en général en quelques minutes, et tu peux aussi l’ouvrir dans ton navigateur. Si tu n’as rien reçu dans les 24 heures, vérifie ton dossier de spam, puis écris-nous.

@@ -11,7 +11,7 @@ Bei allen Fragen zu deinen Daten schreib an [hello@mirastela.com](mailto:hello@m
 
 - **Geburtsdaten, die du eingibst:** Datum, Uhrzeit und Ort der Geburt, dein Vorname und deine Antworten im Fragebogen (Interessenbereiche, Beziehungsstatus).
 - **E-Mail-Adresse**, damit wir dir deine Zusammenfassung, Auswertungen und Horoskope schicken können, sowie deine Entscheidung zu Werbe-E-Mails.
-- **Daten anderer Personen, die du eingibst:** Vorname und Geburtsdaten eines Partners oder eines Kindes, wenn du diese Auswertungen bestellst. Bevor du sie eingibst, informiere bitte die betroffene Person. Wir verwenden ihre Daten nur für die bestellte Auswertung, und sie kann dieselben Rechte wie du ausüben, indem sie an hello@mirastela.com schreibt.
+- **Daten anderer Personen, die du eingibst:** Vorname und Geburtsdaten eines Partners oder eines Kindes, wenn du diese Auswertungen bestellst. Bevor du sie eingibst, informiere bitte die betroffene Person. Wir verwenden ihre Daten nur für die bestellte Auswertung, und sie kann dieselben Rechte wie du ausüben, indem sie an hello@mirastela.com schreibt. Beim Kauf eines Geschenks speichern wir außerdem deine E-Mail-Adresse, den Namen der beschenkten Person und den Gruß, falls du sie angibst.
 - **Bestellungen und Abos:** was du wann und in welcher Sprache gekauft hast und den Status deines Abos.
 - **Technische Daten:** IP-Adresse und grundlegende Angaben zu deinem Browser in Server- und Sicherheitsprotokollen. Bei der Anmeldung speichern wir außerdem die Quelle deines Besuchs (die Website, von der du kamst, und die Kampagnen-Kennzeichen im Link), damit wir wissen, welche Kanäle Kunden bringen (berechtigtes Interesse).
 - **Testerfragebogen:** Die Antworten werden anonym gespeichert, ohne deine E-Mail-Adresse.

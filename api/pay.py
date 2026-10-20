@@ -84,7 +84,8 @@ def line_item(lang: str, key: str, year: int, pct: int = 0) -> dict:
     return {"price_data": pd, "quantity": 1}
 
 
-def create_session(lang: str, email: str, key: str, year: int, metadata: dict, cancel_step: str, pct: int = 0) -> dict:
+def create_session(lang: str, email: str, key: str, year: int, metadata: dict, cancel_step: str, pct: int = 0,
+                   success_url: str | None = None, cancel_url: str | None = None) -> dict:
     """Hosted Checkout for one product, pct percent off (one-time purchases only). Returns {"id", "url"}."""
     stripe = _stripe()
     sub = key.startswith("sub")
@@ -94,8 +95,8 @@ def create_session(lang: str, email: str, key: str, year: int, metadata: dict, c
         "line_items": [line_item(lang, key, year, pct)],
         "customer_email": email,
         "locale": lang,
-        "success_url": f"{SITE}/{lang}/start/?paid={{CHECKOUT_SESSION_ID}}",
-        "cancel_url": f"{SITE}/{lang}/start/?cancel=1#{cancel_step}",
+        "success_url": success_url or f"{SITE}/{lang}/start/?paid={{CHECKOUT_SESSION_ID}}",
+        "cancel_url": cancel_url or f"{SITE}/{lang}/start/?cancel=1#{cancel_step}",
         "metadata": metadata,
         "allow_promotion_codes": False,
     }

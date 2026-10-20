@@ -9,7 +9,7 @@ Za vsa vprašanja o svojih podatkih nam piši na [hello@mirastela.com](mailto:he
 
 - **Podatke o rojstvu, ki jih vneseš:** datum, uro in kraj rojstva, ime ter odgovore v vprašalniku (področja zanimanja, status zveze).
 - **E-poštni naslov**, da ti lahko pošljemo povzetek, poročila in horoskope, ter tvojo izbiro glede trženjskih sporočil.
-- **Podatke drugih oseb, ki jih vneseš:** ime in podatke o rojstvu partnerja ali otroka, ko naročiš ta poročila. Preden jih vneseš, o tem obvesti to osebo. Njene podatke uporabljamo samo za naročeno poročilo, ona pa lahko uveljavlja enake pravice kot ti, tako da nam piše na hello@mirastela.com.
+- **Podatke drugih oseb, ki jih vneseš:** ime in podatke o rojstvu partnerja ali otroka, ko naročiš ta poročila. Preden jih vneseš, o tem obvesti to osebo. Njene podatke uporabljamo samo za naročeno poročilo, ona pa lahko uveljavlja enake pravice kot ti, tako da nam piše na hello@mirastela.com. Pri nakupu darila shranimo tudi tvoj e-poštni naslov, ime obdarovanca in voščilo, če jih vneseš.
 - **Naročila in naročnine:** kaj si kupil oziroma kupila, kdaj, v katerem jeziku in status tvoje naročnine.
 - **Tehnične podatke:** naslov IP in osnovne podatke o brskalniku v strežniških in varnostnih dnevnikih. Ob prijavi shranimo tudi vir obiska (stran, s katere si prišel oziroma prišla, in oznake kampanje v povezavi), da vemo, kateri kanali pripeljejo kupce (zakoniti interes).
 - **Vprašalnik za preizkuševalce:** odgovori se shranjujejo anonimno, brez tvojega e-poštnega naslova.

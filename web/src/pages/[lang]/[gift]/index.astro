@@ -1,0 +1,81 @@
+---
+// Gift page: buy a natal chart or the bundle for someone else; after payment, the printable card.
+import Base from '../../../layouts/Base.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import { LOCALES, INTL, PRICE, UPSELL, formatPrice, type Lang } from '../../../i18n/config';
+import { t } from '../../../i18n';
+import { GIFT } from '../../../i18n/lang/gift';
+import '../../../styles/horo.css';
+import '../../../styles/seo.css';
+import '../../../styles/gift.css';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang, gift: GIFT[lang].slug } }));
+}
+const lang = Astro.params.lang as Lang;
+const G = GIFT[lang];
+const d = t(lang);
+const paths = Object.fromEntries(LOCALES.map((l) => [l, `${GIFT[l].slug}/`])) as Record<Lang, string>;
+const pNatal = formatPrice(lang);
+const pBundle = formatPrice(lang, { amount: UPSELL[lang].bundle, currency: PRICE[lang].currency });
+const clientData = JSON.stringify({ lang, intl: INTL[lang], g: G, prices: { natal: pNatal, bundle: pBundle }, names: { natal: G.natal, bundle: G.bundle } });
+---
+<Base lang={lang} path={paths[lang]} paths={paths} title={G.title} description={G.desc}>
+  <div class="wrap"><Header lang={lang} path={paths[lang]} paths={paths} /></div>
+  <main class="horo hwrap seo gift">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href={`/${lang}/`}>Mirastela</a> / {G.nav}</nav>
+
+    <section id="buyView">
+      <section class="hh">
+        <h1 class="sf">{G.h1}</h1>
+        <p class="mu">{G.intro}</p>
+      </section>
+      <p class="note gerr" id="gCancel" hidden>{G.cancelled}</p>
+      <form id="gForm" class="calcf" novalidate>
+        <fieldset class="gplans">
+          <legend class="vh">{G.h1}</legend>
+          <label class="gplan"><input type="radio" name="gp" value="natal" checked />
+            <span><strong>{G.natal}</strong><small>{G.natalText}</small></span><b>{pNatal}</b></label>
+          <label class="gplan"><input type="radio" name="gp" value="bundle" />
+            <span><strong>{G.bundle}</strong><small>{G.bundleText}</small></span><b>{pBundle}</b></label>
+        </fieldset>
+        <div class="row2">
+          <label><span>{G.toName} <em>({G.optional})</em></span><input type="text" id="gTo" maxlength="40" /></label>
+          <label><span>{G.fromName} <em>({G.optional})</em></span><input type="text" id="gFrom" maxlength="40" /></label>
+        </div>
+        <label><span>{G.message} <em>({G.optional})</em></span><textarea id="gMsg" maxlength="300" rows="3" placeholder={G.messagePh}></textarea></label>
+        <label>{G.email}<input type="email" id="gEmail" required autocomplete="email" /><small class="mu">{G.emailHint}</small></label>
+        <p class="err" id="gErr" hidden>{G.err}</p>
+        <button type="submit" class="btn" id="gBuy">{G.buy.replace('{price}', pNatal)}</button>
+        <p class="mu small">{G.legal} <a href={`/${lang}/terms/`}>{d.footer.terms}</a></p>
+      </form>
+      <section class="about">
+        <h2 class="sf">{G.stepsTitle}</h2>
+        <ol class="gsteps">{G.steps.map((s) => <li>{s}</li>)}</ol>
+      </section>
+    </section>
+
+    <section id="doneView" hidden>
+      <section class="hh"><h1 class="sf">{G.doneTitle}</h1><p class="mu">{G.doneText}</p></section>
+      <div class="gcard" id="gCard">
+        <div class="gstar" aria-hidden="true">✦</div>
+        <p class="gk">Mirastela</p>
+        <h2 class="sf" id="cTitle">{G.cardTitle}</h2>
+        <p class="sf gfor" id="cFor" hidden></p>
+        <p class="gmsg" id="cMsg" hidden></p>
+        <p class="gfrom" id="cFrom" hidden></p>
+        <div class="gcode"><small>{G.code}</small><b id="cCode"></b><small id="cProduct"></small></div>
+        <p class="ghow">{G.howTo}</p>
+        <p class="gvalid" id="cValid"></p>
+      </div>
+      <div class="gacts">
+        <button type="button" class="btn" id="gPrint">{G.print}</button>
+        <button type="button" class="no" id="gDown">{G.download}</button>
+      </div>
+    </section>
+  </main>
+  <Footer lang={lang} path={paths[lang]} paths={paths} />
+  <script type="application/json" id="gift-data" set:html={clientData} />
+  <script src="../../../scripts/gift.ts"></script>
+</Base>

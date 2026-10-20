@@ -9,7 +9,7 @@ S jakýmkoli dotazem ohledně svých údajů nám napiš na [hello@mirastela.com
 
 - **Údaje o narození, které zadáš:** datum, čas a místo narození, tvé křestní jméno a tvé odpovědi v dotazníku (oblasti zájmu, vztahový stav).
 - **E-mailová adresa**, abychom ti mohli posílat shrnutí, zprávy a horoskopy, a tvá volba ohledně marketingových e-mailů.
-- **Údaje jiných osob, které zadáš:** křestní jméno a údaje o narození partnera, partnerky nebo dítěte, když si objednáš tyto zprávy. Než je zadáš, dej o tom té osobě vědět. Její údaje používáme jen pro objednanou zprávu a může uplatnit stejná práva jako ty, když nám napíše na hello@mirastela.com.
+- **Údaje jiných osob, které zadáš:** křestní jméno a údaje o narození partnera, partnerky nebo dítěte, když si objednáš tyto zprávy. Než je zadáš, dej o tom té osobě vědět. Její údaje používáme jen pro objednanou zprávu a může uplatnit stejná práva jako ty, když nám napíše na hello@mirastela.com. Při nákupu dárku ukládáme také tvůj e-mail, jméno obdarovaného a přání, pokud je zadáš.
 - **Objednávky a předplatné:** co sis koupil nebo koupila, kdy, v jakém jazyce a stav tvého předplatného.
 - **Technické údaje:** IP adresa a základní informace o tvém prohlížeči v serverových a bezpečnostních záznamech (lozích). Při registraci ukládáme také zdroj návštěvy (web, ze kterého jsi přišel nebo přišla, a označení kampaně v odkazu), abychom věděli, které kanály přivádějí zákazníky (oprávněný zájem).
 - **Dotazník pro testery:** odpovědi ukládáme anonymně, bez tvé e-mailové adresy.

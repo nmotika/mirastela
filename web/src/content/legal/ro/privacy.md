@@ -9,7 +9,7 @@ Pentru orice întrebare despre datele tale, scrie-ne la [hello@mirastela.com](ma
 
 - **Datele de naștere pe care le introduci:** data, ora și locul nașterii, prenumele tău și răspunsurile din chestionar (domenii de interes, situația sentimentală).
 - **Adresa de e-mail**, ca să îți putem trimite rezumatul, rapoartele și horoscoapele, precum și alegerea ta privind e-mailurile de marketing.
-- **Datele altor persoane pe care le introduci:** prenumele și datele de naștere ale partenerului sau ale unui copil, când comanzi aceste rapoarte. Înainte să le introduci, anunță persoana respectivă. Folosim datele ei doar pentru raportul comandat, iar ea își poate exercita aceleași drepturi ca tine scriindu-ne la hello@mirastela.com.
+- **Datele altor persoane pe care le introduci:** prenumele și datele de naștere ale partenerului sau ale unui copil, când comanzi aceste rapoarte. Înainte să le introduci, anunță persoana respectivă. Folosim datele ei doar pentru raportul comandat, iar ea își poate exercita aceleași drepturi ca tine scriindu-ne la hello@mirastela.com. La cumpărarea unui cadou salvăm și e-mailul tău, numele destinatarului și urarea, dacă le introduci.
 - **Comenzi și abonamente:** ce ai cumpărat, când, în ce limbă și starea abonamentului tău.
 - **Date tehnice:** adresa IP și informații de bază despre browserul tău, în jurnalele serverului și de securitate. La înscriere salvăm și sursa vizitei (site-ul de pe care ai venit și etichetele de campanie din link), ca să știm ce canale ne aduc clienți (interes legitim).
 - **Chestionarul pentru testeri:** răspunsurile sunt stocate anonim, fără adresa ta de e-mail.

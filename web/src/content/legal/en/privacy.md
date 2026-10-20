@@ -9,7 +9,7 @@ For any question about your data, write to [hello@mirastela.com](mailto:hello@mi
 
 - **Birth data you enter:** date, time and place of birth, your first name, and your answers in the questionnaire (areas of interest, relationship status).
 - **Email address**, so we can send you your summary, reports and horoscopes, and your choice about marketing emails.
-- **Data of other people you enter:** the first name and birth data of a partner or a child, when you order those reports. Before you enter them, let that person know. We use their data only for the report you ordered, and they can exercise the same rights as you by writing to hello@mirastela.com.
+- **Data of other people you enter:** the first name and birth data of a partner or a child, when you order those reports. Before you enter them, let that person know. We use their data only for the report you ordered, and they can exercise the same rights as you by writing to hello@mirastela.com. When you buy a gift we also store your email, the recipient's name and the message, if you enter them.
 - **Orders and subscriptions:** what you bought, when, in which language, and the status of your subscription.
 - **Technical data:** IP address and basic information about your browser in server and security logs. When you sign up we also save the source of your visit (the site you came from and the campaign tags in the link), so we know which channels bring customers (legitimate interest).
 - **Tester questionnaire:** answers are stored anonymously, without your email address.

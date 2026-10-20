@@ -31,6 +31,8 @@ Wszystkie ceny podajemy w walucie Twojej wersji językowej i zawierają one poda
 
 Płatności obsługuje nasz partner płatniczy **Stripe**, za pośrednictwem usługi Link, który przy zakupach w Mirastela działa jako odsprzedawca (merchant of record). Stripe przeprowadza płatność, rozlicza podatek od sprzedaży i wystawia potwierdzenie zakupu, a do płatności mają zastosowanie również jego warunki. Dane karty wpisujesz wyłącznie na stronach Stripe, a my nigdy ich nie widzimy ani nie przechowujemy. Na wyciągu bankowym zakup może być widoczny jako „LINK.COM* MIRASTELA”.
 
+**Kody prezentowe:** możesz kupić kosmogram lub pakiet dla innej osoby. Otrzymujesz jednorazowy kod ważny 12 miesięcy od zakupu. Produkt dostarczamy, gdy obdarowana osoba użyje kodu i poda swoje dane. Dopóki kod nie zostanie użyty, możesz odstąpić od zakupu w ciągu 14 dni, a my zwrócimy całą kwotę. Kodu nie można wymienić na gotówkę.
+
 ## 6. Dostawa
 
 Produkty cyfrowe są przygotowywane automatycznie po dokonaniu płatności. Link do raportu otrzymasz e-mailem, zwykle w ciągu kilku minut. Raport możesz też otworzyć w przeglądarce. Jeśli w ciągu 24 godzin nic nie otrzymasz, sprawdź folder ze spamem, a następnie napisz do nas.

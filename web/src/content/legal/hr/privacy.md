@@ -9,7 +9,7 @@ Za sva pitanja o svojim podacima piši na [hello@mirastela.com](mailto:hello@mir
 
 - **Podaci o rođenju koje upišeš:** datum, vrijeme i mjesto rođenja, tvoje ime te tvoji odgovori u upitniku (područja interesa, ljubavni status).
 - **E-mail adresa**, kako bismo ti mogli poslati sažetak, izvještaje i horoskope, te tvoj odabir u vezi s marketinškim e-mailovima.
-- **Podaci drugih osoba koje upišeš:** ime i podaci o rođenju partnera ili djeteta, kad naručiš te izvještaje. Prije nego što ih upišeš, obavijesti tu osobu. Njezine podatke koristimo samo za izvještaj koji si naručio/la, a ona može ostvariti ista prava kao i ti tako da nam piše na hello@mirastela.com.
+- **Podaci drugih osoba koje upišeš:** ime i podaci o rođenju partnera ili djeteta, kad naručiš te izvještaje. Prije nego što ih upišeš, obavijesti tu osobu. Njezine podatke koristimo samo za izvještaj koji si naručio/la, a ona može ostvariti ista prava kao i ti tako da nam piše na hello@mirastela.com. Kod kupnje poklona spremamo i tvoj e-mail, ime primatelja i čestitku, ako ih upišeš.
 - **Narudžbe i pretplate:** što si kupio/la, kada, na kojem jeziku te status tvoje pretplate.
 - **Tehnički podaci:** IP adresa i osnovne informacije o tvom pregledniku u zapisima poslužitelja i sigurnosnim zapisima. Uz prijavu spremamo i izvor posjeta (stranicu s koje si došao/la i oznake kampanje u poveznici), kako bismo znali koji kanali dovode kupce (legitimni interes).
 - **Upitnik za testere:** odgovori se pohranjuju anonimno, bez tvoje e-mail adrese.

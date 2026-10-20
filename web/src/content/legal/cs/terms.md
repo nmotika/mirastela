@@ -31,6 +31,8 @@ Všechny ceny jsou uvedeny v měně tvé jazykové verze a zahrnují DPH. Platí
 
 Platby zpracovává náš platební partner **Stripe**, prostřednictvím své služby Link, který při nákupech na Mirastele vystupuje jako přeprodejce (merchant of record). Stripe zajišťuje platbu, daň z prodeje a doklad o nákupu a na platbu se vztahují i jeho podmínky. Údaje o kartě zadáváš pouze na stránkách Stripe, my je nikdy nevidíme ani neukládáme. Na výpisu z banky se nákup může zobrazit jako „LINK.COM* MIRASTELA“.
 
+**Dárkové kódy:** natální horoskop nebo balíček můžeš koupit pro jinou osobu. Dostaneš jednorázový kód platný 12 měsíců od nákupu. Produkt dodáme, když obdarovaný kód použije a zadá své údaje. Dokud kód není použitý, můžeš od nákupu odstoupit do 14 dnů a vrátíme ti celou částku. Kód nelze vyměnit za peníze.
+
 ## 6. Dodání
 
 Digitální produkty se po zaplacení připravují automaticky. Odkaz na zprávu dostaneš e-mailem, obvykle během několika minut, a zprávu můžeš otevřít i v prohlížeči. Pokud do 24 hodin nic nedostaneš, zkontroluj složku se spamem a pak nám napiš.

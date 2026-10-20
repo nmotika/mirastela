@@ -31,6 +31,8 @@ Vse cene so prikazane v valuti tvoje jezikovne različice in vključujejo DDV. V
 
 Plačila obdeluje naš plačilni partner **Stripe**, prek svoje storitve Link, ki pri nakupih na Mirasteli nastopa kot preprodajalec (merchant of record). Stripe izvede plačilo, obračuna davek in izda račun, za plačilo pa veljajo tudi njegovi pogoji. Podatke o kartici vneseš le na Stripovih straneh, mi jih nikoli ne vidimo in ne shranjujemo. Na bančnem izpisku je nakup lahko prikazan kot "LINK.COM* MIRASTELA".
 
+**Darilne kode:** natalno karto ali paket lahko kupiš za drugo osebo. Dobiš enkratno kodo, ki velja 12 mesecev od nakupa. Izdelek dobavimo, ko obdarovanec porabi kodo in vnese svoje podatke. Dokler koda ni porabljena, lahko od nakupa odstopiš v 14 dneh in vrnemo ti celoten znesek. Kode ni mogoče zamenjati za gotovino.
+
 ## 6. Dostava
 
 Digitalni izdelki se po plačilu pripravijo samodejno. Povezavo do poročila prejmeš po e-pošti, običajno v nekaj minutah, odpreš pa ga lahko tudi v brskalniku. Če v 24 urah ne prejmeš ničesar, preveri mapo z neželeno pošto in nam nato piši.

@@ -31,6 +31,8 @@ Tutti i prezzi sono indicati nella valuta della tua versione linguistica e inclu
 
 I pagamenti sono gestiti dal nostro partner di pagamento **Stripe**, tramite il suo servizio Link, che agisce come rivenditore (merchant of record) per gli acquisti su Mirastela. Stripe si occupa del pagamento, delle imposte sulle vendite e della ricevuta, e al pagamento si applicano anche i suoi termini. I dati della tua carta vengono inseriti solo sulle pagine di Stripe e noi non li vediamo né li conserviamo mai. Sull’estratto conto l’acquisto può comparire come "LINK.COM* MIRASTELA".
 
+**Codici regalo:** puoi acquistare un tema natale o il pacchetto per un’altra persona. Ricevi un codice valido una sola volta per 12 mesi dall’acquisto. Forniamo il prodotto quando chi lo riceve usa il codice e inserisce i propri dati. Finché il codice non è stato usato, puoi recedere dall’acquisto entro 14 giorni e ti rimborsiamo l’intero importo. Il codice non può essere convertito in denaro.
+
 ## 6. Consegna
 
 I prodotti digitali vengono preparati automaticamente dopo il pagamento. Ricevi via email un link al tuo report, di solito entro pochi minuti, e puoi aprirlo anche nel browser. Se entro 24 ore non hai ricevuto nulla, controlla la cartella spam e poi scrivici.

@@ -31,6 +31,8 @@ Minden árat a nyelvi változatodnak megfelelő pénznemben tüntetünk fel, és
 
 A fizetéseket partnerünk, a **Stripe** kezeli Link nevű szolgáltatásán keresztül, amely a Mirastelán történő vásárlások esetében viszonteladóként (merchant of record) jár el. A Stripe intézi a fizetést, a forgalmi adót és a nyugtát, és a fizetésre az ő feltételei is vonatkoznak. A kártyaadataidat kizárólag a Stripe oldalain adod meg, mi soha nem látjuk és nem tároljuk őket. A bankszámlakivonatodon a vásárlás „LINK.COM* MIRASTELA” megnevezéssel jelenhet meg.
 
+**Ajándékkódok:** a születési képletet vagy a csomagot más számára is megvásárolhatod. Egyszer használható kódot kapsz, amely a vásárlástól számított 12 hónapig érvényes. A terméket akkor szolgáltatjuk, amikor a megajándékozott felhasználja a kódot és megadja az adatait. Amíg a kódot nem használták fel, 14 napon belül elállhatsz a vásárlástól, és a teljes összeget visszatérítjük. A kód nem váltható készpénzre.
+
 ## 6. Teljesítés
 
 A digitális termékek a fizetés után automatikusan elkészülnek. A jelentésedre mutató linket e-mailben kapod meg, általában néhány percen belül, és a böngésződben is megnyithatod. Ha 24 órán belül nem kaptál semmit, nézd meg a spam mappát, majd írj nekünk.
