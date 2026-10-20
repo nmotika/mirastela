@@ -274,10 +274,9 @@ def publish():
         print("nothing generated yet, nothing to publish")
         return
     git("add", str(OUT), check=True)
-    if git("diff", "--cached", "--quiet").returncode == 0:
-        print("nothing new to publish")
-        return
-    git("-c", "user.name=Mirastela server", "-c", "user.email=hello@mirastela.com", "commit", "-q", "-m", "SEO pages: generated content", check=True)
+    if git("diff", "--cached", "--quiet").returncode != 0:
+        git("-c", "user.name=Mirastela server", "-c", "user.email=hello@mirastela.com", "commit", "-q", "-m", "SEO pages: generated content", check=True)
+    # Also push commits left over from an earlier publish whose push failed.
     remote = os.environ.get("MIRASTELA_GIT_REMOTE", "git@github.com:nmotika/mirastela.git")
     git("-c", "user.name=Mirastela server", "-c", "user.email=hello@mirastela.com", "pull", "-q", "--rebase", remote, "main", check=True)
     git("push", "-q", remote, "HEAD:main", check=True)
