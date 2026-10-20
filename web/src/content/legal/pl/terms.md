@@ -3,7 +3,7 @@
 ## 1. Kim jesteśmy
 
 Serwis Mirastela (mirastela.com) prowadzi **Something Digital d.o.o.**, Gračanska cesta 127c, 10000 Zagreb, Chorwacja, OIB (numer identyfikacji podatkowej) 50480964887, wpisana do rejestru Sądu Handlowego w Zagrzebiu (Trgovački sud u Zagrebu) pod numerem MBS 081340425, reprezentowana przez dyrektor Brankę Bebić („my”, „nas”).
-Kontakt: [hello@mirastela.com](mailto:hello@mirastela.com).
+Kontakt: [hello@mirastela.com](mailto:hello@mirastela.com), tel. +385 98 771 117 (najszybciej odpowiadamy e-mailowo).
 
 Niniejszy regulamin dotyczy wszystkich osób korzystających z mirastela.com oraz każdego zakupu dokonanego w serwisie. Składając zamówienie, potwierdzasz, że regulamin został przez Ciebie przeczytany i że go akceptujesz.
 

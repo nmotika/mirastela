@@ -3,7 +3,7 @@
 ## 1. Cine suntem
 
 Mirastela (mirastela.com) este operat de **Something Digital d.o.o.**, Gračanska cesta 127c, 10000 Zagreb, Croația, OIB (cod fiscal) 50480964887 („noi”).
-Contact: [hello@mirastela.com](mailto:hello@mirastela.com).
+Contact: [hello@mirastela.com](mailto:hello@mirastela.com), tel. +385 98 771 117 (răspundem cel mai repede pe e-mail).
 
 Acești termeni se aplică tuturor celor care folosesc mirastela.com și fiecărei achiziții făcute pe site. Prin plasarea unei comenzi confirmi că i-ai citit și că îi accepți.
 

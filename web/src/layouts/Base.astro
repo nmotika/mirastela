@@ -14,6 +14,7 @@ const site = 'https://mirastela.com';
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>{title}</title>
   <meta name="description" content={description} />
+  <meta name="format-detection" content="telephone=no" />
   {noindex && <meta name="robots" content="noindex" />}
   <link rel="canonical" href={`${site}/${lang}/${at(lang)}`} />
   {LOCALES.map((l) => <link rel="alternate" hreflang={l} href={`${site}/${l}/${at(l)}`} />)}

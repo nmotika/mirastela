@@ -3,7 +3,7 @@
 ## 1. Tko smo
 
 Mirastelom (mirastela.com) upravlja **Something Digital d.o.o.**, Gračanska cesta 127c, 10000 Zagreb, Hrvatska, OIB 50480964887 („mi”, „nas”).
-Kontakt: [hello@mirastela.com](mailto:hello@mirastela.com).
+Kontakt: [hello@mirastela.com](mailto:hello@mirastela.com), tel. +385 98 771 117 (najbrže odgovaramo e-mailom).
 
 Ovi uvjeti vrijede za sve koji koriste mirastela.com i za svaku kupnju na njoj. Slanjem narudžbe potvrđuješ da si ih pročitao/la i da ih prihvaćaš.
 

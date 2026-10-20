@@ -3,7 +3,7 @@
 ## 1. Kik vagyunk
 
 A Mirastela (mirastela.com) üzemeltetője a **Something Digital d.o.o.**, Gračanska cesta 127c, 10000 Zagreb, Horvátország, OIB (adószám) 50480964887 („mi”).
-Kapcsolat: [hello@mirastela.com](mailto:hello@mirastela.com).
+Kapcsolat: [hello@mirastela.com](mailto:hello@mirastela.com), tel.: +385 98 771 117 (e-mailben válaszolunk a leggyorsabban).
 
 Ezek a feltételek mindenkire vonatkoznak, aki a mirastela.com oldalt használja, és minden ott leadott vásárlásra. A rendelés leadásával megerősíted, hogy elolvastad és elfogadod őket.
 

@@ -5,7 +5,7 @@
 ## 1. Wer wir sind
 
 Mirastela (mirastela.com) wird betrieben von **Something Digital d.o.o.**, Gračanska cesta 127c, 10000 Zagreb, Kroatien, OIB (Steuernummer) 50480964887 („wir“, „uns“).
-Kontakt: [hello@mirastela.com](mailto:hello@mirastela.com).
+Kontakt: [hello@mirastela.com](mailto:hello@mirastela.com), Telefon +385 98 771 117 (am schnellsten antworten wir per E-Mail).
 
 Diese Bedingungen gelten für alle, die mirastela.com nutzen, und für jeden Kauf auf der Website. Mit deiner Bestellung bestätigst du, dass du sie gelesen hast und akzeptierst.
 
@@ -125,6 +125,7 @@ Registergericht: Handelsgericht Zagreb (Trgovački sud u Zagrebu)
 Registernummer (MBS): 081340425  
 OIB (kroatische Steuernummer): 50480964887
 
-Kontakt: [hello@mirastela.com](mailto:hello@mirastela.com)
+Kontakt: [hello@mirastela.com](mailto:hello@mirastela.com)  
+Telefon: +385 98 771 117
 
 Verantwortlich für den Inhalt: Branka Bebić, Anschrift wie oben.

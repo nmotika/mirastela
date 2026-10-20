@@ -3,7 +3,7 @@
 ## 1. Chi siamo
 
 Mirastela (mirastela.com) è gestita da **Something Digital d.o.o.**, Gračanska cesta 127c, 10000 Zagabria, Croazia, OIB (codice fiscale) 50480964887 ("noi").
-Contatto: [hello@mirastela.com](mailto:hello@mirastela.com).
+Contatto: [hello@mirastela.com](mailto:hello@mirastela.com), tel. +385 98 771 117 (rispondiamo più rapidamente via email).
 
 Questi termini si applicano a chiunque utilizzi mirastela.com e a ogni acquisto effettuato sul sito. Effettuando un ordine confermi di averli letti e di accettarli.
 

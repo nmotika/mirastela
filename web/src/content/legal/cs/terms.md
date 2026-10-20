@@ -3,7 +3,7 @@
 ## 1. Kdo jsme
 
 Mirastelu (mirastela.com) provozuje společnost **Something Digital d.o.o.**, Gračanska cesta 127c, 10000 Zagreb, Chorvatsko, OIB (daňové identifikační číslo) 50480964887 („my“).
-Kontakt: [hello@mirastela.com](mailto:hello@mirastela.com).
+Kontakt: [hello@mirastela.com](mailto:hello@mirastela.com), tel. +385 98 771 117 (nejrychleji odpovídáme e-mailem).
 
 Tyto obchodní podmínky platí pro každého, kdo používá mirastela.com, a pro každý nákup na tomto webu. Odesláním objednávky potvrzuješ, že sis je přečetl nebo přečetla a souhlasíš s nimi.
 

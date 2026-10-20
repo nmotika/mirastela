@@ -3,7 +3,7 @@
 ## 1. Who we are
 
 Mirastela (mirastela.com) is operated by **Something Digital d.o.o.**, Gračanska cesta 127c, 10000 Zagreb, Croatia, OIB (tax ID) 50480964887 ("we", "us").
-Contact: [hello@mirastela.com](mailto:hello@mirastela.com).
+Contact: [hello@mirastela.com](mailto:hello@mirastela.com), phone +385 98 771 117 (email is the fastest way to reach us).
 
 These terms apply to everyone who uses mirastela.com and to every purchase made on it. By placing an order you confirm that you have read and accept them.
 
