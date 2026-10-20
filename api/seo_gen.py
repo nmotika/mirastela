@@ -53,12 +53,14 @@ def _s(props: list[str], extra: dict | None = None) -> dict:
     return {"type": "object", "required": list(p), "properties": p}
 
 
-FAQ = {"type": "array", "minItems": 3, "maxItems": 4, "items": _s(["q", "a"])}
+# The FAQ as flat text fields (q1, a1, ...): models skip nested arrays more often than plain strings.
+FAQ_KEYS = ["q1", "a1", "q2", "a2", "q3", "a3"]
 SCHEMAS = {
-    "year": _s(["summary", "overview", "love", "work", "money", "growth", "dates", "advice"], {"faq": FAQ}),
-    "signs": _s(["summary", "personality", "strengths", "challenges", "love", "work", "friendship", "advice"], {"faq": FAQ}),
-    "compat": _s(["summary", "overall", "love", "sex", "friendship", "work", "challenges", "advice"], {"faq": FAQ}),
+    "year": _s(["summary", "overview", "love", "work", "money", "growth", "dates", "advice"] + FAQ_KEYS),
+    "signs": _s(["summary", "personality", "strengths", "challenges", "love", "work", "friendship", "advice"] + FAQ_KEYS),
+    "compat": _s(["summary", "overall", "love", "sex", "friendship", "work", "challenges", "advice"] + FAQ_KEYS),
 }
+TEXT_KEYS = {k: [x for x in v["required"] if x not in FAQ_KEYS] for k, v in SCHEMAS.items()}
 # Minimum length (characters) of the longest fields, so a lazy or cut-off answer is retried.
 MIN_LEN = {"year": ("overview", 600), "signs": ("personality", 600), "compat": ("overall", 500)}
 
@@ -84,7 +86,7 @@ Fields:
 - love: about 150 words. work: about 150 words. money: about 100 words (general tendencies only). growth: about 120 words (personal growth and wellbeing in general, no health predictions).
 - dates: about 150 words on the key periods of the year with their dates written out in {report.LANG_NAME[lang]} (Mercury retrogrades, eclipses, Jupiter's sign change, Mars periods that matter most for this sign).
 - advice: 2 or 3 sentences, the one thing to remember for {YEAR}.
-- faq: 3 or 4 short questions people search for about {report.SIGNS_EN[i]} in {YEAR} (love, money, best months, luck), each answered in 2 or 3 sentences.
+- q1/a1, q2/a2, q3/a3: 3 short questions people search for about {report.SIGNS_EN[i]} in {YEAR} (love, money, best months, luck), each answered in 2 or 3 sentences.
 Base everything on these computed facts and the areas of life given for each (never invent other positions or dates):
 {yearsky.year_text(_year_facts(), i)}
 Sign facts: {sign_facts(i)}
@@ -98,7 +100,7 @@ Fields:
 - personality: 3 paragraphs, about 280 words: core nature, how element, modality and ruler shape it, how it shows in everyday life.
 - strengths: about 120 words. challenges: about 120 words, kind but honest. love: about 160 words (as a partner, what they need, what they give). work: about 140 words (working style, environments where they thrive, not specific job guarantees). friendship: about 100 words.
 - advice: 2 or 3 sentences.
-- faq: 3 or 4 short questions people search for about this sign (dates, best match, character, element), each answered in 2 or 3 sentences. The Sun is in {report.SIGNS_EN[i]} roughly {_dates(i)} (exact dates shift by a day in some years).
+- q1/a1, q2/a2, q3/a3: 3 short questions people search for about this sign (dates, best match, character, element), each answered in 2 or 3 sentences. The Sun is in {report.SIGNS_EN[i]} roughly {_dates(i)} (exact dates shift by a day in some years).
 Mention once, naturally, that the Sun sign is only one part of the birth chart, and that the Moon sign and Ascendant (which need the birth time and place) complete the picture.
 Sign facts: {sign_facts(i)}
 """
@@ -110,7 +112,7 @@ Fields:
 - summary: 2 sentences (max 300 characters); used as the page description.
 - overall: 3 paragraphs, about 230 words: what draws them together, how their elements and modalities interact, the overall dynamic.
 - love: about 150 words. sex: about 80 words, tasteful, about intimacy and closeness, nothing explicit. friendship: about 90 words. work: about 90 words (as colleagues). challenges: about 120 words, honest. advice: 3 sentences for this couple.
-- faq: 3 or 4 short questions people search for about this pair (are they a good match, in marriage, in bed, who adapts more), each answered in 2 or 3 sentences.
+- q1/a1, q2/a2, q3/a3: 3 short questions people search for about this pair (are they a good match, in marriage, in bed, who adapts more), each answered in 2 or 3 sentences.
 Be balanced: no pair is doomed and none is perfect. Say clearly, once, that real compatibility depends on the whole birth charts of both people (Moon, Venus, Mars, Ascendant), not only the Sun signs.
 Facts: {sign_facts(a)}. {sign_facts(b)}. Relationship between the signs: {rel}.
 """
@@ -161,23 +163,17 @@ def save(kind: str, lang: str, data: dict):
 def check(kind: str, lang: str, out) -> tuple[dict | None, str | None]:
     if not isinstance(out, dict):
         return None, "no object"
-    if isinstance(out.get("faq"), str):  # sometimes passed as a JSON string
-        try:
-            out["faq"] = report.parse_json(out["faq"])
-        except Exception:
-            pass
-    if isinstance(out.get("faq"), dict):  # or as {"questions": [...]}
-        out["faq"] = next((v for v in out["faq"].values() if isinstance(v, list)), [])
-    for k in SCHEMAS[kind]["required"]:
-        if k == "faq":
-            if not isinstance(out.get("faq"), list) or len(out["faq"]) < 3:
-                return None, "faq"
-        elif not isinstance(out.get(k), str) or len(out[k].strip()) < 40:
+    for k in TEXT_KEYS[kind]:
+        if not isinstance(out.get(k), str) or len(out[k].strip()) < 40:
             return None, f"missing {k}"
+    faq = [{"q": str(out.get(f"q{n}", "")).strip(), "a": str(out.get(f"a{n}", "")).strip()} for n in (1, 2, 3)]
+    faq = [f for f in faq if len(f["q"]) > 5 and len(f["a"]) > 20]
+    if len(faq) < 2:
+        return None, "faq"
     field, n = MIN_LEN[kind]
     if len(out[field]) < n:
         return None, f"{field} too short"
-    text = " ".join(str(out[k]) for k in SCHEMAS[kind]["required"] if k != "faq")
+    text = " ".join(str(out[k]) for k in TEXT_KEYS[kind])
     why = report.daily_problem(lang, {"general": text})
     if why:
         return None, why
@@ -185,8 +181,8 @@ def check(kind: str, lang: str, out) -> tuple[dict | None, str | None]:
         for k in out:
             if isinstance(out[k], str):
                 out[k] = out[k].replace(" — ", ", ").replace(" – ", ", ").replace("—", ", ").replace("–", "-")
-    clean = {k: out[k].strip() for k in SCHEMAS[kind]["required"] if k != "faq"}
-    clean["faq"] = [{"q": str(f.get("q", "")).strip(), "a": str(f.get("a", "")).strip()} for f in out["faq"] if isinstance(f, dict)]
+    clean = {k: out[k].strip() for k in TEXT_KEYS[kind]}
+    clean["faq"] = faq
     return clean, None
 
 
@@ -294,7 +290,7 @@ if __name__ == "__main__":
         kind = args[0] if args else "signs"
         it = items(kind)[0]
         out = report.tool_input(report.client().messages.create(**report.json_params(prompt(kind, "pl", it), SCHEMAS[kind], report._model(False), 6000)))
-        print(check(kind, "pl", out)[1] or "ok", "| faq:", type(out.get("faq")).__name__, json.dumps(out.get("faq"), ensure_ascii=False)[:300])
+        print(check(kind, "pl", out)[1] or "ok", "| keys:", sorted(out), "| q1:", str(out.get("q1"))[:120])
     elif cmd == "publish":
         publish()
     elif cmd == "redo":
