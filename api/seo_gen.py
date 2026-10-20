@@ -279,7 +279,7 @@ def publish():
         return
     git("-c", "user.name=Mirastela server", "-c", "user.email=hello@mirastela.com", "commit", "-q", "-m", "SEO pages: generated content", check=True)
     remote = os.environ.get("MIRASTELA_GIT_REMOTE", "git@github.com:nmotika/mirastela.git")
-    git("pull", "-q", "--rebase", remote, "main", check=True)
+    git("-c", "user.name=Mirastela server", "-c", "user.email=hello@mirastela.com", "pull", "-q", "--rebase", remote, "main", check=True)
     git("push", "-q", remote, "HEAD:main", check=True)
     print("published: Cloudflare is building the site")
 
