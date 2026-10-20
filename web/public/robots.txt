@@ -2,6 +2,5 @@ User-agent: *
 Disallow: /api/
 Disallow: /*/start/
 Disallow: /*/report/
-Disallow: /hr/upitnik/
 
 Sitemap: https://mirastela.com/sitemap.xml

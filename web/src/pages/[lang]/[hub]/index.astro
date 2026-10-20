@@ -1,0 +1,112 @@
+---
+// Hubs of the evergreen pages (yearly forecast, signs, compatibility) and the Ascendant calculator.
+import Base from '../../../layouts/Base.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import { LOCALES, type Lang } from '../../../i18n/config';
+import { t, fill } from '../../../i18n';
+import { SEO } from '../../../i18n/lang/seo';
+import { SIGN_GLYPHS, signRangeShort } from '../../../scripts/zodiac';
+import { SIGN_KEYS, page, hasAny, pairKey, signSlug, pairSlug, ldJson, crumbsLd } from '../../../lib/seo';
+import '../../../styles/horo.css';
+import '../../../styles/seo.css';
+
+type Hub = 'year' | 'signs' | 'compat' | 'calc';
+export function getStaticPaths() {
+  return LOCALES.flatMap((lang) => (['year', 'signs', 'compat', 'calc'] as Hub[])
+    .filter((kind) => kind === 'calc' || hasAny(kind, lang))
+    .map((kind) => ({ params: { lang, hub: SEO[lang].slugs[kind] }, props: { kind } })));
+}
+const lang = Astro.params.lang as Lang;
+const { kind } = Astro.props as { kind: Hub };
+const S = SEO[lang];
+const d = t(lang);
+const signs = d.astro.signs;
+const alts = LOCALES.filter((l) => kind === 'calc' || hasAny(kind, l));
+const paths = Object.fromEntries(LOCALES.map((l) => [l, alts.includes(l) ? `${SEO[l].slugs[kind]}/` : ''])) as Record<Lang, string>;
+const H = kind === 'calc' ? null : S[kind];
+const title = kind === 'calc' ? S.calc.title : H!.hubTitle;
+const desc = kind === 'calc' ? S.calc.desc : H!.hubDesc;
+const h1 = kind === 'calc' ? S.calc.h1 : H!.hubH1;
+const nav = kind === 'calc' ? S.calc.nav : H!.nav;
+const ld = ldJson([crumbsLd([['Mirastela', `/${lang}/`], [nav, `/${lang}/${paths[lang]}`]])]);
+const calcData = JSON.stringify({ lang, s: S.calc, astro: { signs, signIn: d.astro.signIn, traits: d.astro.traits }, p1: d.teaser.p1, start: `/${lang}/start/` });
+const hubLink = (i: number) => kind === 'compat' ? '' : (page(kind as 'year' | 'signs', lang, SIGN_KEYS[i]) ? `/${lang}/${S.slugs[kind]}/${signSlug(lang, i)}/` : '');
+const pairData = kind === 'compat' ? JSON.stringify(Object.fromEntries(
+  [...Array(12).keys()].flatMap((i) => [...Array(12).keys()].filter((j) => j >= i && page('compat', lang, pairKey(i, j))).map((j) => [`${i}-${j}`, `/${lang}/${S.slugs.compat}/${pairSlug(lang, i, j)}/`])),
+)) : '{}';
+---
+<Base lang={lang} path={paths[lang]} paths={paths} alts={alts} title={title} description={desc}>
+  <script slot="head" type="application/ld+json" set:html={ld} />
+  <div class="wrap"><Header lang={lang} path={paths[lang]} paths={paths} /></div>
+  <main class="horo hwrap seo">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href={`/${lang}/`}>Mirastela</a> / {nav}</nav>
+    <section class="hh">
+      <h1 class="sf">{h1}</h1>
+      <p class="mu">{kind === 'calc' ? S.calc.intro : H!.hubIntro}</p>
+    </section>
+
+    {(kind === 'year' || kind === 'signs') && (
+      <nav class="zgrid" aria-label={h1}>
+        {signs.map((s, i) => {
+          const href = hubLink(i);
+          return href
+            ? <a href={href} class="zc"><span class="g gl" aria-hidden="true">{SIGN_GLYPHS[i]}</span><b>{s}</b><small>{signRangeShort(i)}</small></a>
+            : <span class="zc soon"><span class="g gl" aria-hidden="true">{SIGN_GLYPHS[i]}</span><b>{s}</b><small>{S.soon}</small></span>;
+        })}
+      </nav>
+    )}
+
+    {kind === 'compat' && (
+      <>
+        <form class="pairpick" id="pairForm">
+          <label>{S.compat.pickA}<select id="pa">{signs.map((s, i) => <option value={i}>{SIGN_GLYPHS[i]} {s}</option>)}</select></label>
+          <label>{S.compat.pickB}<select id="pb">{signs.map((s, i) => <option value={i} selected={i === 6}>{SIGN_GLYPHS[i]} {s}</option>)}</select></label>
+          <button type="submit" class="btn">{S.compat.go}</button>
+        </form>
+        {signs.map((s, i) => (
+          <section class="rel">
+            <h2>{fill(S.compat.with, { sign: s })}</h2>
+            <nav class="ctable">
+              {[...Array(12).keys()].filter((j) => page('compat', lang, pairKey(i, j))).map((j) => (
+                <a href={`/${lang}/${S.slugs.compat}/${pairSlug(lang, i, j)}/`}><span class="gl" aria-hidden="true">{SIGN_GLYPHS[i]}{SIGN_GLYPHS[j]}</span>{s} + {signs[j]}</a>
+              ))}
+            </nav>
+          </section>
+        ))}
+        <script type="application/json" id="pair-data" set:html={pairData} />
+      </>
+    )}
+
+    {kind === 'calc' && (
+      <>
+        <form class="calcf" id="calcForm" novalidate>
+          <div class="row2">
+            <label>{S.calc.date}<input type="date" id="cDate" required min="1900-01-01" /></label>
+            <label>{S.calc.time}<input type="time" id="cTime" /></label>
+          </div>
+          <label class="chk"><input type="checkbox" id="cNoTime" />{S.calc.noTime}</label>
+          <label>{S.calc.place}<input type="text" id="cPlace" autocomplete="off" placeholder={S.calc.placeHint} role="combobox" aria-expanded="false" aria-controls="cList" /></label>
+          <div class="opts" id="cList" role="listbox" hidden></div>
+          <p class="err" id="cErr" hidden></p>
+          <button type="submit" class="btn" id="cGo">{S.calc.btn}</button>
+        </form>
+        <div class="cres" id="cRes" aria-live="polite" hidden></div>
+        <section class="about">
+          <h2 class="sf">{S.calc.aboutTitle}</h2>
+          <p class="mu">{S.calc.about}</p>
+        </section>
+        <script type="application/json" id="calc-data" set:html={calcData} />
+      </>
+    )}
+
+    <section class="pcta">
+      <p class="ek">{d.horo.ctaEyebrow}</p>
+      <h2 class="sf">{S.ctaTitle}</h2>
+      <p>{S.ctaText}</p>
+      <a href={`/${lang}/start/`} class="btn">{S.ctaBtn}</a>
+    </section>
+  </main>
+  <Footer lang={lang} path={paths[lang]} paths={paths} />
+  <script src="../../../scripts/hubs.ts"></script>
+</Base>

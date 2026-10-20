@@ -2,8 +2,9 @@
 import '../styles/global.css';
 import Consent from '../components/Consent.astro';
 import { LOCALES, INTL, type Lang } from '../i18n/config';
-interface Props { lang: Lang; path: string; paths?: Record<Lang, string>; title: string; description: string; noindex?: boolean }
-const { lang, path, paths, title, description, noindex } = Astro.props;
+interface Props { lang: Lang; path: string; paths?: Record<Lang, string>; title: string; description: string; noindex?: boolean; alts?: Lang[] }
+const { lang, path, paths, title, description, noindex, alts } = Astro.props;
+const altLangs: readonly Lang[] = alts ?? LOCALES; // languages this page exists in (generated pages may lag in some)
 const at = (l: Lang) => paths?.[l] ?? path; // localized slugs differ per language
 const site = 'https://mirastela.com';
 ---
@@ -17,14 +18,15 @@ const site = 'https://mirastela.com';
   <meta name="format-detection" content="telephone=no" />
   {noindex && <meta name="robots" content="noindex" />}
   <link rel="canonical" href={`${site}/${lang}/${at(lang)}`} />
-  {LOCALES.map((l) => <link rel="alternate" hreflang={l} href={`${site}/${l}/${at(l)}`} />)}
-  <link rel="alternate" hreflang="x-default" href={`${site}/en/${at('en')}`} />
+  {altLangs.map((l) => <link rel="alternate" hreflang={l} href={`${site}/${l}/${at(l)}`} />)}
+  {altLangs.includes('en') && <link rel="alternate" hreflang="x-default" href={`${site}/en/${at('en')}`} />}
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <meta name="theme-color" content="#0B1020" />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <slot name="head" />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Noto+Sans+Symbols&display=swap" rel="stylesheet" />
 </head>
 <body>

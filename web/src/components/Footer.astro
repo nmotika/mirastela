@@ -2,14 +2,24 @@
 import Logo from './Logo.astro';
 import { t } from '../i18n';
 import { LOCALES, LANG_NAMES, type Lang } from '../i18n/config';
+import { SEO } from '../i18n/lang/seo';
+import { hasAny } from '../lib/seo';
 interface Props { lang: Lang; path: string; paths?: Record<Lang, string> }
 const { lang, path, paths } = Astro.props;
 const d = t(lang);
 const F = d.footer;
+const S = SEO[lang];
+const astro = [
+  ...(['year', 'signs', 'compat'] as const).filter((k) => hasAny(k, lang)).map((k) => [S[k].nav, `/${lang}/${S.slugs[k]}/`]),
+  [S.calc.nav, `/${lang}/${S.slugs.calc}/`],
+];
 ---
 <footer class="site-foot">
   <div class="wrap cols">
     <a href={`/${lang}/`} class="logo" aria-label={d.ui.home}><Logo size={24} /><span style="font-size:20px">Mirastela</span></a>
+    <nav class="foot-links" aria-label={S.navTitle}>
+      {astro.map(([label, href]) => <a href={href}>{label}</a>)}
+    </nav>
     <nav class="foot-links" aria-label="Info">
       <a href={`/${lang}/${d.horo.slug}/`}>{d.horo.nav}</a>
       <a href={`/${lang}/account/`}>{d.account.nav}</a>

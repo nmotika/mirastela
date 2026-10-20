@@ -1,0 +1,95 @@
+---
+// Generated evergreen pages: yearly forecast per sign, sign profile, compatibility of two signs.
+import SeoArticle from '../../../components/SeoArticle.astro';
+import { LOCALES, type Lang } from '../../../i18n/config';
+import { t, fill } from '../../../i18n';
+import { SEO } from '../../../i18n/lang/seo';
+import { SIGN_GLYPHS, signRangeShort } from '../../../scripts/zodiac';
+import { SIGN_KEYS, page, langsWith, pairKey, signSlug, pairSlug, pathsFor, type Kind, type Page } from '../../../lib/seo';
+
+const RULERS = [['mars'], ['venus'], ['mercury'], ['moon'], ['sun'], ['mercury'], ['venus'], ['pluto', 'mars'], ['jupiter'], ['saturn'], ['uranus', 'saturn'], ['neptune', 'jupiter']];
+
+export function getStaticPaths() {
+  const out = [];
+  for (const lang of LOCALES) {
+    const S = SEO[lang];
+    for (let i = 0; i < 12; i++) {
+      if (page('year', lang, SIGN_KEYS[i])) out.push({ params: { lang, hub: S.slugs.year, item: signSlug(lang, i) }, props: { kind: 'year', a: i, b: i } });
+      if (page('signs', lang, SIGN_KEYS[i])) out.push({ params: { lang, hub: S.slugs.signs, item: signSlug(lang, i) }, props: { kind: 'signs', a: i, b: i } });
+      for (let j = i; j < 12; j++) {
+        if (page('compat', lang, pairKey(i, j))) out.push({ params: { lang, hub: S.slugs.compat, item: pairSlug(lang, i, j) }, props: { kind: 'compat', a: i, b: j } });
+      }
+    }
+  }
+  return out;
+}
+
+const lang = Astro.params.lang as Lang;
+const { kind, a, b } = Astro.props as { kind: Kind; a: number; b: number };
+const S = SEO[lang];
+const d = t(lang);
+const signs = d.astro.signs;
+const key = kind === 'compat' ? pairKey(a, b) : SIGN_KEYS[a];
+const P = page(kind, lang, key) as Page;
+const sub = (l: Lang) => (kind === 'compat' ? pairSlug(l, a, b) : signSlug(l, a));
+const paths = pathsFor(kind, sub, key);
+const alts = langsWith(kind, key);
+const hubUrl = `/${lang}/${S.slugs[kind]}/`;
+const home: [string, string] = ['Mirastela', `/${lang}/`];
+
+let title = '', h1 = '', hubName = '', sections: { h: string; text: string }[] = [];
+if (kind === 'year') {
+  title = fill(S.year.title, { sign: signs[a] }); h1 = fill(S.year.h1, { sign: signs[a] }); hubName = S.year.nav;
+  sections = (['overview', 'love', 'work', 'money', 'growth', 'dates', 'advice'] as const).map((k) => ({ h: S.year.h[k], text: P[k] }));
+} else if (kind === 'signs') {
+  title = fill(S.signs.title, { sign: signs[a] }); h1 = fill(S.signs.h1, { sign: signs[a] }); hubName = S.signs.nav;
+  sections = (['personality', 'strengths', 'challenges', 'love', 'work', 'friendship', 'advice'] as const).map((k) => ({ h: S.signs.h[k], text: P[k] }));
+} else {
+  title = fill(S.compat.title, { a: signs[a], b: signs[b] }); h1 = fill(S.compat.h1, { a: signs[a], b: signs[b] }); hubName = S.compat.nav;
+  sections = (['overall', 'love', 'sex', 'friendship', 'work', 'challenges', 'advice'] as const).map((k) => ({ h: S.compat.h[k], text: P[k] }));
+}
+const glyphs = kind === 'compat' ? [SIGN_GLYPHS[a], SIGN_GLYPHS[b]] : [SIGN_GLYPHS[a]];
+const crumbs: [string, string][] = [home, [hubName, hubUrl], [kind === 'compat' ? `${signs[a]} + ${signs[b]}` : signs[a], `/${lang}/${paths[lang]}`]];
+
+// Related links: other pages about the same sign(s) that exist in this language.
+const rel: { href: string; label: string; g: string }[] = [];
+const signA = SIGN_KEYS[a];
+if (kind !== 'year' && page('year', lang, signA)) rel.push({ href: `/${lang}/${S.slugs.year}/${signSlug(lang, a)}/`, label: fill(S.year.h1, { sign: signs[a] }), g: SIGN_GLYPHS[a] });
+if (kind !== 'signs' && page('signs', lang, signA)) rel.push({ href: `/${lang}/${S.slugs.signs}/${signSlug(lang, a)}/`, label: fill(S.signs.h1, { sign: signs[a] }), g: SIGN_GLYPHS[a] });
+if (kind === 'compat' && a !== b && page('signs', lang, SIGN_KEYS[b])) rel.push({ href: `/${lang}/${S.slugs.signs}/${signSlug(lang, b)}/`, label: fill(S.signs.h1, { sign: signs[b] }), g: SIGN_GLYPHS[b] });
+rel.push({ href: `/${lang}/${d.horo.slug}/${signSlug(lang, a)}/`, label: fill(d.horo.signH1, { sign: signs[a] }), g: SIGN_GLYPHS[a] });
+const matches = kind === 'signs' ? [...Array(12).keys()].map((j) => ({ j, ok: !!page('compat', lang, pairKey(a, j)) })) : [];
+const yearSigns = kind === 'year' ? [...Array(12).keys()].filter((j) => j !== a && page('year', lang, SIGN_KEYS[j])) : [];
+---
+<SeoArticle lang={lang} paths={paths} alts={alts} title={title} description={P.summary} h1={h1} crumbs={crumbs} glyphs={glyphs} lead={P.summary} sections={sections} faq={P.faq}>
+  {kind === 'signs' && (
+    <dl class="facts" slot="facts">
+      <div><dt>{S.signs.facts.dates}</dt><dd>{signRangeShort(a)}</dd></div>
+      <div><dt>{S.signs.facts.element}</dt><dd>{S.signs.elements[a % 4]}</dd></div>
+      <div><dt>{S.signs.facts.modality}</dt><dd>{S.signs.modalities[a % 3]}</dd></div>
+      <div><dt>{S.signs.facts.ruler}</dt><dd>{RULERS[a].map((p) => d.astro.planets[p]).join(', ')}</dd></div>
+    </dl>
+  )}
+  <div slot="related">
+    {kind === 'signs' && (
+      <section class="rel">
+        <h2>{fill(S.signs.h.matches, { sign: signs[a] })}</h2>
+        <nav class="ctable">
+          {matches.map(({ j, ok }) => ok
+            ? <a href={`/${lang}/${S.slugs.compat}/${pairSlug(lang, a, j)}/`}><span class="gl" aria-hidden="true">{SIGN_GLYPHS[a]}{SIGN_GLYPHS[j]}</span>{signs[a]} + {signs[j]}</a>
+            : <span class="soon" />)}
+        </nav>
+      </section>
+    )}
+    <section class="rel">
+      <h2>{S.readAlso}</h2>
+      <nav class="pills">{rel.map((r) => <a href={r.href} class="sgp"><span class="gl" aria-hidden="true">{r.g}</span>{r.label}</a>)}</nav>
+    </section>
+    {kind === 'year' && yearSigns.length > 0 && (
+      <section class="rel">
+        <h2>{S.year.hubH1}</h2>
+        <nav class="pills">{yearSigns.map((j) => <a href={`/${lang}/${S.slugs.year}/${signSlug(lang, j)}/`} class="sgp"><span class="gl" aria-hidden="true">{SIGN_GLYPHS[j]}</span>{signs[j]}</a>)}</nav>
+      </section>
+    )}
+  </div>
+</SeoArticle>

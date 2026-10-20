@@ -1,0 +1,53 @@
+---
+// Frame for the generated evergreen pages: header, breadcrumbs, title, sections, FAQ, call to action.
+import Base from '../layouts/Base.astro';
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+import type { Lang } from '../i18n/config';
+import { SEO } from '../i18n/lang/seo';
+import { paragraphs, ldJson, faqLd, crumbsLd, articleLd, type Faq } from '../lib/seo';
+import '../styles/horo.css';
+import '../styles/seo.css';
+
+interface Props {
+  lang: Lang; paths: Record<Lang, string>; alts: Lang[]; title: string; description: string; h1: string;
+  crumbs: [string, string][]; glyphs: string[]; lead?: string; sections: { h: string; text: string }[]; faq?: Faq[];
+}
+const { lang, paths, alts, title, description, h1, crumbs, glyphs, lead, sections, faq = [] } = Astro.props;
+const S = SEO[lang];
+const url = `/${lang}/${paths[lang]}`;
+const ld = ldJson([articleLd(h1, description, url, lang), crumbsLd(crumbs), ...(faq.length ? [faqLd(faq)] : [])]);
+---
+<Base lang={lang} path={paths[lang]} paths={paths} alts={alts} title={title} description={description}>
+  <script slot="head" type="application/ld+json" set:html={ld} />
+  <div class="wrap"><Header lang={lang} path={paths[lang]} paths={paths} /></div>
+  <main class="horo hwrap seo">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      {crumbs.map(([name, href], i) => i < crumbs.length - 1 ? <><a href={href}>{name}</a> / </> : <span>{name}</span>)}
+    </nav>
+    <section class="shead">
+      <div class="sg-circle" class:list={[{ two: glyphs.length > 1 }]}>{glyphs.map((g) => <span class="gl" aria-hidden="true">{g}</span>)}</div>
+      <h1 class="sf">{h1}</h1>
+    </section>
+    {lead && <p class="lead sf">{lead}</p>}
+    <slot name="facts" />
+    <article class="hread ready sart">
+      {sections.filter((s) => s.text).map((s) => (
+        <div class="rd"><h2>{s.h}</h2>{paragraphs(s.text).map((p) => <p>{p}</p>)}</div>
+      ))}
+    </article>
+    <section class="bcta">
+      <h2 class="sf">{S.ctaTitle}</h2>
+      <p class="mu">{S.ctaText}</p>
+      <a href={`/${lang}/start/`} class="btn">{S.ctaBtn}</a>
+    </section>
+    {faq.length > 0 && (
+      <section class="faq">
+        <h2 class="sf">{S.faq}</h2>
+        {faq.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}
+      </section>
+    )}
+    <slot name="related" />
+  </main>
+  <Footer lang={lang} path={paths[lang]} paths={paths} />
+</Base>
