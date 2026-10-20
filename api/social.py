@@ -406,8 +406,26 @@ def evening(day: date, langs=None, publish_now: bool = True):
 GRAPH = "https://graph.facebook.com/v21.0"
 
 
+_TOKEN: list[str] = []
+
+
+def _token() -> str:
+    """META_PAGE_TOKEN may hold the system-user token or the page token; posting needs the page token."""
+    if not _TOKEN:
+        tok, page = os.environ["META_PAGE_TOKEN"], os.environ.get("META_PAGE_ID")
+        if page:
+            try:
+                q = urllib.parse.urlencode({"fields": "access_token", "access_token": tok})
+                with urllib.request.urlopen(f"{GRAPH}/{page}?{q}", timeout=60) as r:
+                    tok = json.loads(r.read()).get("access_token") or tok
+            except urllib.error.HTTPError:
+                pass
+        _TOKEN.append(tok)
+    return _TOKEN[0]
+
+
 def _graph(path: str, params: dict, method: str = "POST") -> dict:
-    params = {**params, "access_token": os.environ["META_PAGE_TOKEN"]}
+    params = {**params, "access_token": _token()}
     data = urllib.parse.urlencode(params).encode()
     url = f"{GRAPH}/{path}" if method == "POST" else f"{GRAPH}/{path}?{data.decode()}"
     req = urllib.request.Request(url, data=data if method == "POST" else None, method=method)
