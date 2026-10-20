@@ -161,6 +161,13 @@ def save(kind: str, lang: str, data: dict):
 def check(kind: str, lang: str, out) -> tuple[dict | None, str | None]:
     if not isinstance(out, dict):
         return None, "no object"
+    if isinstance(out.get("faq"), str):  # sometimes passed as a JSON string
+        try:
+            out["faq"] = report.parse_json(out["faq"])
+        except Exception:
+            pass
+    if isinstance(out.get("faq"), dict):  # or as {"questions": [...]}
+        out["faq"] = next((v for v in out["faq"].values() if isinstance(v, list)), [])
     for k in SCHEMAS[kind]["required"]:
         if k == "faq":
             if not isinstance(out.get("faq"), list) or len(out["faq"]) < 3:
@@ -287,7 +294,7 @@ if __name__ == "__main__":
         kind = args[0] if args else "signs"
         it = items(kind)[0]
         out = report.tool_input(report.client().messages.create(**report.json_params(prompt(kind, "pl", it), SCHEMAS[kind], report._model(False), 6000)))
-        print(check(kind, "pl", out)[1] or "ok", json.dumps(out, ensure_ascii=False)[:600])
+        print(check(kind, "pl", out)[1] or "ok", "| faq:", type(out.get("faq")).__name__, json.dumps(out.get("faq"), ensure_ascii=False)[:300])
     elif cmd == "publish":
         publish()
     elif cmd == "redo":
