@@ -195,53 +195,67 @@ def missing(kinds) -> list[tuple[str, str, object]]:
     return out
 
 
+PENDING = OUT / ".pending-batch"  # a submitted batch not collected yet (survives a crash or restart)
+
+
+def _wait_collect(client, batch_id: str) -> int:
+    """Wait for a batch, save every page that passes the checks, return how many were saved."""
+    while True:
+        b = client.messages.batches.retrieve(batch_id)
+        if b.processing_status == "ended":
+            break
+        c = b.request_counts
+        print(f"  waiting: {c.succeeded} done, {c.processing} processing, {c.errored} errors", flush=True)
+        time.sleep(60)
+    results: dict[tuple[str, str], dict] = {}
+    bad = 0
+    for r in client.messages.batches.results(batch_id):
+        kind, lang, k = r.custom_id.split("_", 2)  # custom_id = kind_lang_key
+        clean, why = (None, r.result.type)
+        if r.result.type == "errored":
+            err = getattr(r.result, "error", None)
+            why = f"errored: {getattr(getattr(err, 'error', err), 'message', err)}"
+        if r.result.type == "succeeded":
+            try:
+                clean, why = check(kind, lang, report.tool_input(r.result.message))
+            except Exception as e:
+                why = repr(e)[:200]
+        if clean:
+            results.setdefault((kind, lang), {})[k] = clean
+        else:
+            bad += 1
+            print("  rejected", kind, lang, k, why, flush=True)
+    for (kind, lang), new in results.items():
+        data = load(kind, lang)
+        data.update(new)
+        save(kind, lang, data)
+    PENDING.unlink(missing_ok=True)
+    saved = sum(len(v) for v in results.values())
+    print(f"  batch {batch_id}: saved {saved}, rejected {bad}", flush=True)
+    return saved
+
+
 def run(kinds):
+    """Only pages that are missing are requested, and a batch left over from an interrupted run is
+    collected first, so nothing that is done (or already paid for) is requested again."""
     client = report.client()
     model = report._model(False)
+    if PENDING.exists():
+        bid = PENDING.read_text().strip()
+        print("collecting the batch from the previous run:", bid, flush=True)
+        _wait_collect(client, bid)
     for rnd in range(3):
         todo = missing(kinds)
         print(f"round {rnd + 1}: {len(todo)} pages to write", flush=True)
         if not todo:
             break
-        reqs, index = [], {}
-        for n, (kind, lang, it) in enumerate(todo):
-            cid = f"r{n}"
-            index[cid] = (kind, lang, it)
-            reqs.append({"custom_id": cid, "params": report.json_params(prompt(kind, lang, it), SCHEMAS[kind], model, 12000)})
+        reqs = [{"custom_id": f"{kind}_{lang}_{key(kind, it)}",
+                 "params": report.json_params(prompt(kind, lang, it), SCHEMAS[kind], model, 12000)} for kind, lang, it in todo]
         batch = client.messages.batches.create(requests=reqs)
+        OUT.mkdir(parents=True, exist_ok=True)
+        PENDING.write_text(batch.id)
         print("batch", batch.id, "submitted", flush=True)
-        while True:
-            b = client.messages.batches.retrieve(batch.id)
-            if b.processing_status == "ended":
-                break
-            c = b.request_counts
-            print(f"  waiting: {c.succeeded} done, {c.processing} processing, {c.errored} errors", flush=True)
-            time.sleep(60)
-        results: dict[tuple[str, str], dict] = {}
-        bad = 0
-        for r in client.messages.batches.results(batch.id):
-            kind, lang, it = index[r.custom_id]
-            clean, why = (None, r.result.type)
-            if r.result.type == "errored":
-                err = getattr(r.result, "error", None)
-                why = f"errored: {getattr(getattr(err, 'error', err), 'message', err)}"
-            if r.result.type == "succeeded":
-                try:
-                    clean, why = check(kind, lang, report.tool_input(r.result.message))
-                except Exception as e:
-                    why = repr(e)[:200]
-            if clean:
-                results.setdefault((kind, lang), {})[key(kind, it)] = clean
-            else:
-                bad += 1
-                print("  rejected", kind, lang, key(kind, it), why, flush=True)
-        for (kind, lang), new in results.items():
-            data = load(kind, lang)
-            data.update(new)
-            save(kind, lang, data)
-        saved = sum(len(v) for v in results.values())
-        print(f"round {rnd + 1}: saved {saved}, rejected {bad}", flush=True)
-        if not saved:  # every request failed: the same request would fail again, so stop and show why
+        if not _wait_collect(client, batch.id):  # every request failed: the same request would fail again
             print("nothing was saved in this round, stopping (see the reasons above)", flush=True)
             break
     status(kinds)
