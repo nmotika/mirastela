@@ -1,4 +1,4 @@
-*Ultima actualizare: 19 octombrie 2026*
+*Ultima actualizare: 20 octombrie 2026*
 
 ## 1. Cine răspunde de datele tale
 
@@ -9,7 +9,7 @@ Pentru orice întrebare despre datele tale, scrie-ne la [hello@mirastela.com](ma
 
 - **Datele de naștere pe care le introduci:** data, ora și locul nașterii, prenumele tău și răspunsurile din chestionar (domenii de interes, situația sentimentală).
 - **Adresa de e-mail**, ca să îți putem trimite rezumatul, rapoartele și horoscoapele, precum și alegerea ta privind e-mailurile de marketing.
-- **Datele altor persoane pe care le introduci:** prenumele și datele de naștere ale partenerului sau ale unui copil, când comanzi aceste rapoarte.
+- **Datele altor persoane pe care le introduci:** prenumele și datele de naștere ale partenerului sau ale unui copil, când comanzi aceste rapoarte. Înainte să le introduci, anunță persoana respectivă. Folosim datele ei doar pentru raportul comandat, iar ea își poate exercita aceleași drepturi ca tine scriindu-ne la hello@mirastela.com.
 - **Comenzi și abonamente:** ce ai cumpărat, când, în ce limbă și starea abonamentului tău.
 - **Date tehnice:** adresa IP și informații de bază despre browserul tău, în jurnalele serverului și de securitate.
 - **Chestionarul pentru testeri:** răspunsurile sunt stocate anonim, fără adresa ta de e-mail.
@@ -26,6 +26,7 @@ Nu primim și nu stocăm datele cardului tău. Acestea se introduc doar la Strip
 | Securitate, prevenirea abuzurilor, remedierea erorilor | Interes legitim, art. 6 alin. (1) lit. (f) |
 | Măsurarea rezultatelor reclamelor noastre pe Facebook și Instagram (pixelul Meta și Conversions API) | Consimțământul tău, art. 6 alin. (1) lit. (a), dat în bannerul de cookie-uri, pe care îl poți retrage oricând din „Setări cookie” |
 | Statistici despre vizitarea site-ului (Google Analytics) | Consimțământul tău, art. 6 alin. (1) lit. (a), dat în bannerul de cookie-uri, pe care îl poți retrage oricând din „Setări cookie” |
+| Statistici anonime despre vizite, fără cookie-uri (Cloudflare Web Analytics) | Interes legitim, art. 6 alin. (1) lit. (f) |
 | Păstrarea evidențelor contabile | Obligație legală, art. 6 alin. (1) lit. (c) |
 
 Datele de naștere nu sunt o categorie specială de date conform GDPR, dar le tratăm cu grijă: sunt folosite doar pentru calcularea hărților și scrierea textelor tale.
@@ -35,7 +36,7 @@ Datele de naștere nu sunt o categorie specială de date conform GDPR, dar le tr
 Folosim furnizori de servicii aleși cu atenție, obligați prin acorduri de prelucrare a datelor:
 
 - **Hetzner Online GmbH** (Germania): serverele pe care rulează aplicația și baza de date.
-- **Cloudflare, Inc.**: livrarea și protecția site-ului.
+- **Cloudflare, Inc.**: livrarea și protecția site-ului. Folosim și Cloudflare Web Analytics: statistici anonime despre vizite, fără cookie-uri (paginile vizitate, site-ul de pe care vii, tipul de browser și de dispozitiv, țara), fără stocarea adresei tale IP.
 - **Anthropic PBC**: inteligența artificială care scrie textele. Îi trimitem harta calculată, prenumele tău și limba, dar nu și adresa ta de e-mail.
 - **Resend**: trimiterea e-mailurilor.
 - **Stripe** (Link): plăți. Pentru achiziții, Stripe acționează prin serviciul Link ca revânzător (merchant of record) și prelucrează datele de plată ca operator independent, conform propriei politici de confidențialitate.

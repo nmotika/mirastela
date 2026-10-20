@@ -1,4 +1,4 @@
-*Last updated: 19 October 2026*
+*Last updated: 20 October 2026*
 
 ## 1. Who is responsible for your data
 
@@ -9,7 +9,7 @@ For any question about your data, write to [hello@mirastela.com](mailto:hello@mi
 
 - **Birth data you enter:** date, time and place of birth, your first name, and your answers in the questionnaire (areas of interest, relationship status).
 - **Email address**, so we can send you your summary, reports and horoscopes, and your choice about marketing emails.
-- **Data of other people you enter:** the first name and birth data of a partner or a child, when you order those reports.
+- **Data of other people you enter:** the first name and birth data of a partner or a child, when you order those reports. Before you enter them, let that person know. We use their data only for the report you ordered, and they can exercise the same rights as you by writing to hello@mirastela.com.
 - **Orders and subscriptions:** what you bought, when, in which language, and the status of your subscription.
 - **Technical data:** IP address and basic information about your browser in server and security logs.
 - **Tester questionnaire:** answers are stored anonymously, without your email address.
@@ -26,6 +26,7 @@ We do not receive or store your card details. They are entered only with Stripe.
 | Security, preventing abuse, fixing errors | Legitimate interest, Art. 6(1)(f) |
 | Measuring the results of our ads on Facebook and Instagram (Meta pixel and Conversions API) | Your consent, Art. 6(1)(a), given in the cookie banner, which you can withdraw at any time with "Cookie settings" |
 | Site statistics (Google Analytics) | Your consent, Art. 6(1)(a), given in the cookie banner, which you can withdraw at any time with "Cookie settings" |
+| Anonymous visit statistics without cookies (Cloudflare Web Analytics) | Legitimate interest, Art. 6(1)(f) |
 | Keeping accounting records | Legal obligation, Art. 6(1)(c) |
 
 Birth data is not a special category of data under the GDPR, but we treat it with care: it is used only to calculate charts and write your texts.
@@ -35,7 +36,7 @@ Birth data is not a special category of data under the GDPR, but we treat it wit
 We use carefully chosen service providers, bound by data processing agreements:
 
 - **Hetzner Online GmbH** (Germany): servers where the application and database run.
-- **Cloudflare, Inc.**: delivery and protection of the website.
+- **Cloudflare, Inc.**: delivery and protection of the website. We also use Cloudflare Web Analytics: anonymous visit statistics without cookies (pages visited, the site you came from, browser and device type, country), without storing your IP address.
 - **Anthropic PBC**: artificial intelligence that writes the texts. We send it the calculated chart, your first name and the language, but not your email address.
 - **Resend**: sending emails.
 - **Stripe** (Link): payments. For purchases, Stripe acts through its Link service as the reseller (merchant of record) and processes payment data as an independent controller under its own privacy policy.

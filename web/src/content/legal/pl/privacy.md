@@ -1,4 +1,4 @@
-*Ostatnia aktualizacja: 19 października 2026*
+*Ostatnia aktualizacja: 20 października 2026*
 
 ## 1. Kto odpowiada za Twoje dane
 
@@ -9,7 +9,7 @@ W każdej sprawie dotyczącej Twoich danych napisz na adres [hello@mirastela.com
 
 - **Podane przez Ciebie dane urodzenia:** data, godzina i miejsce urodzenia, imię oraz odpowiedzi w kwestionariuszu (obszary zainteresowań, sytuacja uczuciowa).
 - **Adres e-mail**, abyśmy mogli wysyłać Ci podsumowanie, raporty i horoskopy, oraz Twoja decyzja dotycząca e-maili marketingowych.
-- **Podane przez Ciebie dane innych osób:** imię i dane urodzenia partnera lub dziecka, gdy zamawiasz takie raporty.
+- **Podane przez Ciebie dane innych osób:** imię i dane urodzenia partnera lub dziecka, gdy zamawiasz takie raporty. Zanim je podasz, poinformuj o tym tę osobę. Jej dane wykorzystujemy wyłącznie do zamówionego raportu, a ona sama może skorzystać z tych samych praw co Ty, pisząc na adres hello@mirastela.com.
 - **Zamówienia i subskrypcje:** co kupujesz, kiedy, w jakiej wersji językowej oraz status Twojej subskrypcji.
 - **Dane techniczne:** adres IP i podstawowe informacje o przeglądarce zapisywane w logach serwera i logach bezpieczeństwa.
 - **Ankieta dla testerów:** odpowiedzi są przechowywane anonimowo, bez Twojego adresu e-mail.
@@ -24,8 +24,9 @@ Nie otrzymujemy ani nie przechowujemy danych Twojej karty. Wpisujesz je wyłącz
 | Wysyłanie bezpłatnego podsumowania i e-maili serwisowych dotyczących zamówień | Wykonanie umowy i działania przed jej zawarciem, art. 6 ust. 1 lit. b |
 | Niezamówione przez Ciebie e-maile z horoskopami i ofertami | Twoja zgoda, art. 6 ust. 1 lit. a, którą możesz wycofać w każdej chwili |
 | Bezpieczeństwo, zapobieganie nadużyciom, usuwanie błędów | Prawnie uzasadniony interes, art. 6 ust. 1 lit. f |
-| Mierzenie skuteczności naszych reklam na Facebooku i Instagramie (piksel Meta i Conversions API) | Twoja zgoda, art. 6 ust. 1 lit. a, wyrażona w banerze cookies, którą możesz wycofać w każdej chwili w „Ustawienia cookies” |
-| Statystyki odwiedzin strony (Google Analytics) | Twoja zgoda, art. 6 ust. 1 lit. a, wyrażona w banerze cookies, którą możesz wycofać w każdej chwili w „Ustawienia cookies” |
+| Mierzenie skuteczności naszych reklam na Facebooku i Instagramie (piksel Meta i Conversions API) | Twoja zgoda, art. 6 ust. 1 lit. a, wyrażona w banerze cookies, którą możesz wycofać w każdej chwili w „Ustawienia plików cookie” |
+| Statystyki odwiedzin strony (Google Analytics) | Twoja zgoda, art. 6 ust. 1 lit. a, wyrażona w banerze cookies, którą możesz wycofać w każdej chwili w „Ustawienia plików cookie” |
+| Anonimowe statystyki odwiedzin bez plików cookie (Cloudflare Web Analytics) | Prawnie uzasadniony interes, art. 6 ust. 1 lit. f |
 | Prowadzenie dokumentacji księgowej | Obowiązek prawny, art. 6 ust. 1 lit. c |
 
 Dane urodzenia nie należą do szczególnych kategorii danych w rozumieniu RODO, ale traktujemy je z należytą starannością: wykorzystujemy je wyłącznie do obliczania kosmogramów i pisania Twoich tekstów.
@@ -35,7 +36,7 @@ Dane urodzenia nie należą do szczególnych kategorii danych w rozumieniu RODO,
 Korzystamy ze starannie wybranych usługodawców, którzy jako podmioty przetwarzające są związani umowami powierzenia przetwarzania danych:
 
 - **Hetzner Online GmbH** (Niemcy): serwery, na których działają aplikacja i baza danych.
-- **Cloudflare, Inc.**: dostarczanie i ochrona strony internetowej.
+- **Cloudflare, Inc.**: dostarczanie i ochrona strony internetowej. Korzystamy też z Cloudflare Web Analytics: anonimowe statystyki odwiedzin bez plików cookie (odwiedzane strony, strona, z której przychodzisz, typ przeglądarki i urządzenia, kraj), bez zapisywania Twojego adresu IP.
 - **Anthropic PBC**: sztuczna inteligencja, która pisze teksty. Przekazujemy jej obliczony kosmogram, Twoje imię i język, ale nie Twój adres e-mail.
 - **Resend**: wysyłka e-maili.
 - **Stripe** (Link): płatności. Przy zakupach Stripe za pośrednictwem usługi Link działa jako odsprzedawca (merchant of record) i przetwarza dane dotyczące płatności jako niezależny administrator danych, zgodnie z własną polityką prywatności.

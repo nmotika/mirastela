@@ -13,7 +13,7 @@ export interface Shop {
   waiver: string; waiverTerms: string; waiverErr: string; payPending: string; stmt: string;
   seniorBullet: string; kidTitleG: string; doneWhere: string; incPlain: string;
   ckText: string; ckAll: string; ckNecessary: string; ckMore: string; ckSettings: string;
-  statusSkip: string; captchaErr: string; hourLabel: string; minLabel: string;
+  statusSkip: string; captchaErr: string; hourLabel: string; minLabel: string; pPriv: string;
 }
 
 export const SHOP: Record<Lang, Shop> = {
@@ -33,7 +33,7 @@ export const SHOP: Record<Lang, Shop> = {
     doneWhere: 'Wszystkie raporty, także te, które jeszcze się przygotowują, znajdziesz też na stronie „Moje raporty”.',
     incPlain: 'Krótkie podsumowanie prostym językiem i słowniczek pojęć',
     ckText: "Używamy plików cookie niezbędnych do działania strony. Za Twoją zgodą także cookies reklamowych (Meta, Google), aby mierzyć skuteczność reklam.", ckAll: "Akceptuję wszystkie", ckNecessary: "Tylko niezbędne", ckMore: "Więcej", ckSettings: "Ustawienia plików cookie",
-    statusSkip: "Wolę nie mówić", captchaErr: "Nie udało się potwierdzić, że nie jesteś botem. Odśwież stronę i spróbuj ponownie.", hourLabel: "Godzina", minLabel: "Minuty",
+    statusSkip: "Wolę nie mówić", captchaErr: "Nie udało się potwierdzić, że nie jesteś botem. Odśwież stronę i spróbuj ponownie.", hourLabel: "Godzina", minLabel: "Minuty", pPriv: "Używamy tych danych wyłącznie do tego raportu. Jeśli to dane osoby dorosłej, daj jej znać.",
   },
   hr: {
     planNatal: 'Natalna karta', planBundle: 'Paket: natalna karta, slaganje i prognoza {year}', bundleWas: 'zasebno {price}', bundleBadge: 'Najbolja vrijednost',
@@ -51,7 +51,7 @@ export const SHOP: Record<Lang, Shop> = {
     doneWhere: 'Sve izvještaje, i one koji se još pripremaju, nalaziš i na stranici „Moji izvještaji”.',
     incPlain: 'Kratki sažetak jednostavnim riječima i tumač pojmova',
     ckText: "Koristimo kolačiće nužne za rad stranice. Uz tvoju privolu i oglasne kolačiće (Meta, Google), da mjerimo uspješnost oglasa.", ckAll: "Prihvaćam sve", ckNecessary: "Samo nužni", ckMore: "Više", ckSettings: "Postavke kolačića",
-    statusSkip: "Ne želim reći", captchaErr: "Nismo uspjeli potvrditi da nisi bot. Osvježi stranicu i pokušaj ponovno.", hourLabel: "Sat", minLabel: "Minute",
+    statusSkip: "Ne želim reći", captchaErr: "Nismo uspjeli potvrditi da nisi bot. Osvježi stranicu i pokušaj ponovno.", hourLabel: "Sat", minLabel: "Minute", pPriv: "Ove podatke koristimo samo za ovaj izvještaj. Ako su to podaci odrasle osobe, javi joj to.",
   },
   sl: {
     planNatal: 'Natalna karta', planBundle: 'Paket: natalna karta, ujemanje in napoved {year}', bundleWas: 'posamično {price}', bundleBadge: 'Najboljša vrednost',
@@ -69,7 +69,7 @@ export const SHOP: Record<Lang, Shop> = {
     doneWhere: 'Vsa poročila, tudi tista, ki se še pripravljajo, najdeš tudi na strani »Moja poročila«.',
     incPlain: 'Kratek povzetek s preprostimi besedami in slovarček pojmov',
     ckText: "Uporabljamo piškotke, nujne za delovanje strani. S tvojim soglasjem tudi oglaševalske piškotke (Meta, Google) za merjenje uspešnosti oglasov.", ckAll: "Sprejmem vse", ckNecessary: "Samo nujni", ckMore: "Več", ckSettings: "Nastavitve piškotkov",
-    statusSkip: "Raje ne povem", captchaErr: "Nismo mogli potrditi, da nisi bot. Osveži stran in poskusi znova.", hourLabel: "Ura", minLabel: "Minute",
+    statusSkip: "Raje ne povem", captchaErr: "Nismo mogli potrditi, da nisi bot. Osveži stran in poskusi znova.", hourLabel: "Ura", minLabel: "Minute", pPriv: "Te podatke uporabimo samo za to poročilo. Če so to podatki odrasle osebe, ji to povej.",
   },
   ro: {
     planNatal: 'Harta natală', planBundle: 'Pachet: harta natală, compatibilitate și prognoza {year}', bundleWas: 'separat {price}', bundleBadge: 'Cea mai bună valoare',
@@ -87,7 +87,7 @@ export const SHOP: Record<Lang, Shop> = {
     doneWhere: 'Toate rapoartele, inclusiv cele care încă se pregătesc, le găsești și pe pagina „Rapoartele mele”.',
     incPlain: 'Un rezumat scurt, pe înțelesul tuturor, și un glosar de termeni',
     ckText: "Folosim cookie-uri necesare funcționării site-ului. Cu acordul tău, și cookie-uri de publicitate (Meta, Google), pentru a măsura eficiența reclamelor.", ckAll: "Accept toate", ckNecessary: "Doar necesare", ckMore: "Detalii", ckSettings: "Setări cookie",
-    statusSkip: "Prefer să nu spun", captchaErr: "Nu am putut confirma că nu ești un bot. Reîncarcă pagina și încearcă din nou.", hourLabel: "Ora", minLabel: "Minutele",
+    statusSkip: "Prefer să nu spun", captchaErr: "Nu am putut confirma că nu ești un bot. Reîncarcă pagina și încearcă din nou.", hourLabel: "Ora", minLabel: "Minutele", pPriv: "Folosim aceste date doar pentru acest raport. Dacă sunt datele unui adult, anunță-l.",
   },
   cs: {
     planNatal: 'Natální horoskop', planBundle: 'Balíček: natální horoskop, partnerský soulad a předpověď {year}', bundleWas: 'samostatně {price}', bundleBadge: 'Nejlepší hodnota',
@@ -105,7 +105,7 @@ export const SHOP: Record<Lang, Shop> = {
     doneWhere: 'Všechny zprávy, i ty, které se ještě připravují, najdeš také na stránce „Moje zprávy“.',
     incPlain: 'Krátké shrnutí jednoduchými slovy a slovníček pojmů',
     ckText: "Používáme cookies nezbytné pro fungování webu. S tvým souhlasem také reklamní cookies (Meta, Google) pro měření úspěšnosti reklam.", ckAll: "Přijmout vše", ckNecessary: "Jen nezbytné", ckMore: "Více", ckSettings: "Nastavení cookies",
-    statusSkip: "Nechci uvádět", captchaErr: "Nepodařilo se ověřit, že nejsi robot. Obnov stránku a zkus to znovu.", hourLabel: "Hodina", minLabel: "Minuty",
+    statusSkip: "Nechci uvádět", captchaErr: "Nepodařilo se ověřit, že nejsi robot. Obnov stránku a zkus to znovu.", hourLabel: "Hodina", minLabel: "Minuty", pPriv: "Tyto údaje použijeme jen pro tuto zprávu. Pokud jde o dospělou osobu, dej jí vědět.",
   },
   hu: {
     planNatal: 'Születési horoszkóp', planBundle: 'Csomag: születési horoszkóp, párkapcsolati összhang és {year}. évi előrejelzés', bundleWas: 'külön {price}', bundleBadge: 'Legjobb ár-érték',
@@ -123,7 +123,7 @@ export const SHOP: Record<Lang, Shop> = {
     doneWhere: 'Minden jelentésedet, a még készülőket is, megtalálod a „Jelentéseim” oldalon is.',
     incPlain: 'Rövid, közérthető összefoglaló és fogalomtár',
     ckText: "A weboldal működéséhez szükséges sütiket használunk. Hozzájárulásoddal hirdetési sütiket is (Meta, Google), a hirdetések eredményességének méréséhez.", ckAll: "Mindet elfogadom", ckNecessary: "Csak a szükségesek", ckMore: "Részletek", ckSettings: "Süti beállítások",
-    statusSkip: "Nem szeretném megadni", captchaErr: "Nem sikerült ellenőrizni, hogy nem vagy robot. Frissítsd az oldalt, és próbáld újra.", hourLabel: "Óra", minLabel: "Perc",
+    statusSkip: "Nem szeretném megadni", captchaErr: "Nem sikerült ellenőrizni, hogy nem vagy robot. Frissítsd az oldalt, és próbáld újra.", hourLabel: "Óra", minLabel: "Perc", pPriv: "Ezeket az adatokat csak ehhez a jelentéshez használjuk. Ha felnőtt adatait adod meg, szólj neki.",
   },
   en: {
     planNatal: 'Natal chart', planBundle: 'Bundle: natal chart, compatibility and {year} forecast', bundleWas: 'separately {price}', bundleBadge: 'Best value',
@@ -141,7 +141,7 @@ export const SHOP: Record<Lang, Shop> = {
     doneWhere: 'You will also find all your reports, including those still being written, on the "My reports" page.',
     incPlain: 'A short summary in plain words and a glossary of terms',
     ckText: "We use cookies that the site needs to work. With your consent, also advertising cookies (Meta, Google) to measure how our ads perform.", ckAll: "Accept all", ckNecessary: "Necessary only", ckMore: "More", ckSettings: "Cookie settings",
-    statusSkip: "Prefer not to say", captchaErr: "We could not confirm that you are not a bot. Refresh the page and try again.", hourLabel: "Hour", minLabel: "Minutes",
+    statusSkip: "Prefer not to say", captchaErr: "We could not confirm that you are not a bot. Refresh the page and try again.", hourLabel: "Hour", minLabel: "Minutes", pPriv: "We use these details only for this report. If they belong to an adult, let them know.",
   },
   de: {
     planNatal: 'Geburtshoroskop', planBundle: 'Paket: Geburtshoroskop, Partnerhoroskop und Prognose {year}', bundleWas: 'einzeln {price}', bundleBadge: 'Bestes Angebot',
@@ -159,7 +159,7 @@ export const SHOP: Record<Lang, Shop> = {
     doneWhere: 'Alle Auswertungen, auch die noch entstehenden, findest du auch unter „Meine Auswertungen“.',
     incPlain: 'Eine kurze Zusammenfassung in einfachen Worten und ein Begriffslexikon',
     ckText: 'Wir verwenden Cookies, die für den Betrieb der Website nötig sind. Mit deiner Einwilligung auch Werbe-Cookies (Meta, Google), um den Erfolg unserer Anzeigen zu messen.', ckAll: 'Alle akzeptieren', ckNecessary: 'Nur notwendige', ckMore: 'Mehr', ckSettings: 'Cookie-Einstellungen',
-    statusSkip: "Möchte ich nicht sagen", captchaErr: "Wir konnten nicht bestätigen, dass du kein Bot bist. Lade die Seite neu und versuche es noch einmal.", hourLabel: "Stunde", minLabel: "Minuten",
+    statusSkip: "Möchte ich nicht sagen", captchaErr: "Wir konnten nicht bestätigen, dass du kein Bot bist. Lade die Seite neu und versuche es noch einmal.", hourLabel: "Stunde", minLabel: "Minuten", pPriv: "Wir verwenden diese Daten nur für diese Auswertung. Wenn es um eine erwachsene Person geht, sag ihr Bescheid.",
 },
   fr: {
     planNatal: 'Thème astral', planBundle: 'Pack : thème astral, compatibilité et prévisions {year}', bundleWas: 'séparément {price}', bundleBadge: 'Meilleure offre',
@@ -177,7 +177,7 @@ export const SHOP: Record<Lang, Shop> = {
     doneWhere: 'Tous tes rapports, même ceux en préparation, sont aussi sur la page « Mes rapports ».',
     incPlain: 'Un résumé court en mots simples et un lexique des termes',
     ckText: 'Nous utilisons les cookies nécessaires au fonctionnement du site. Avec ton accord, aussi des cookies publicitaires (Meta, Google) pour mesurer l’efficacité de nos annonces.', ckAll: 'Tout accepter', ckNecessary: 'Uniquement nécessaires', ckMore: 'En savoir plus', ckSettings: 'Paramètres des cookies',
-    statusSkip: "Je préfère ne pas répondre", captchaErr: "Nous n’avons pas pu confirmer que tu n’es pas un robot. Recharge la page et réessaie.", hourLabel: "Heure", minLabel: "Minutes",
+    statusSkip: "Je préfère ne pas répondre", captchaErr: "Nous n’avons pas pu confirmer que tu n’es pas un robot. Recharge la page et réessaie.", hourLabel: "Heure", minLabel: "Minutes", pPriv: "Nous utilisons ces données uniquement pour ce rapport. S’il s’agit d’un adulte, préviens-le.",
   },
   it: {
     planNatal: 'Tema natale', planBundle: 'Pacchetto: tema natale, affinità e previsione {year}', bundleWas: 'separatamente {price}', bundleBadge: 'Il più conveniente',
@@ -195,6 +195,6 @@ export const SHOP: Record<Lang, Shop> = {
     doneWhere: 'Tutti i tuoi report, anche quelli in preparazione, li trovi anche nella pagina «I miei report».',
     incPlain: 'Un breve riassunto con parole semplici e un glossario dei termini',
     ckText: 'Usiamo i cookie necessari al funzionamento del sito. Con il tuo consenso, anche cookie pubblicitari (Meta, Google) per misurare l’efficacia dei nostri annunci.', ckAll: 'Accetto tutti', ckNecessary: 'Solo necessari', ckMore: 'Dettagli', ckSettings: 'Impostazioni cookie',
-    statusSkip: "Preferisco non dirlo", captchaErr: "Non siamo riusciti a confermare che non sei un bot. Ricarica la pagina e riprova.", hourLabel: "Ora", minLabel: "Minuti",
+    statusSkip: "Preferisco non dirlo", captchaErr: "Non siamo riusciti a confermare che non sei un bot. Ricarica la pagina e riprova.", hourLabel: "Ora", minLabel: "Minuti", pPriv: "Usiamo questi dati solo per questo report. Se si tratta di un adulto, avvisalo.",
   },
 };

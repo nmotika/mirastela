@@ -1,4 +1,4 @@
-*Zadnje ažuriranje: 19. listopada 2026.*
+*Zadnje ažuriranje: 20. listopada 2026.*
 
 ## 1. Tko je odgovoran za tvoje podatke
 
@@ -9,7 +9,7 @@ Za sva pitanja o svojim podacima piši na [hello@mirastela.com](mailto:hello@mir
 
 - **Podaci o rođenju koje upišeš:** datum, vrijeme i mjesto rođenja, tvoje ime te tvoji odgovori u upitniku (područja interesa, ljubavni status).
 - **E-mail adresa**, kako bismo ti mogli poslati sažetak, izvještaje i horoskope, te tvoj odabir u vezi s marketinškim e-mailovima.
-- **Podaci drugih osoba koje upišeš:** ime i podaci o rođenju partnera ili djeteta, kad naručiš te izvještaje.
+- **Podaci drugih osoba koje upišeš:** ime i podaci o rođenju partnera ili djeteta, kad naručiš te izvještaje. Prije nego što ih upišeš, obavijesti tu osobu. Njezine podatke koristimo samo za izvještaj koji si naručio/la, a ona može ostvariti ista prava kao i ti tako da nam piše na hello@mirastela.com.
 - **Narudžbe i pretplate:** što si kupio/la, kada, na kojem jeziku te status tvoje pretplate.
 - **Tehnički podaci:** IP adresa i osnovne informacije o tvom pregledniku u zapisima poslužitelja i sigurnosnim zapisima.
 - **Upitnik za testere:** odgovori se pohranjuju anonimno, bez tvoje e-mail adrese.
@@ -26,6 +26,7 @@ Podatke o tvojoj kartici ne primamo niti pohranjujemo. Upisuješ ih isključivo 
 | Sigurnost, sprečavanje zlouporabe, ispravljanje pogrešaka | Legitimni interes, čl. 6. st. 1. t. (f) |
 | Mjerenje rezultata naših oglasa na Facebooku i Instagramu (Meta piksel i Conversions API) | Tvoja privola, čl. 6. st. 1. t. (a), dana u banneru za kolačiće, koju možeš povući u bilo kojem trenutku putem „Postavke kolačića” |
 | Statistika posjećenosti stranice (Google Analytics) | Tvoja privola, čl. 6. st. 1. t. (a), dana u banneru za kolačiće, koju možeš povući u bilo kojem trenutku putem „Postavke kolačića” |
+| Anonimna statistika posjeta bez kolačića (Cloudflare Web Analytics) | Legitimni interes, čl. 6. st. 1. t. (f) |
 | Vođenje računovodstvene evidencije | Pravna obveza, čl. 6. st. 1. t. (c) |
 
 Podaci o rođenju nisu posebna kategorija podataka prema GDPR-u, ali s njima postupamo pažljivo: koriste se isključivo za izračun karata i pisanje tvojih tekstova.
@@ -35,7 +36,7 @@ Podaci o rođenju nisu posebna kategorija podataka prema GDPR-u, ali s njima pos
 Koristimo pažljivo odabrane pružatelje usluga, obvezane ugovorima o obradi podataka:
 
 - **Hetzner Online GmbH** (Njemačka): poslužitelji na kojima rade aplikacija i baza podataka.
-- **Cloudflare, Inc.**: isporuka i zaštita web stranice.
+- **Cloudflare, Inc.**: isporuka i zaštita web stranice. Koristimo i Cloudflare Web Analytics: anonimnu statistiku posjeta bez kolačića (posjećene stranice, stranica s koje dolaziš, vrsta preglednika i uređaja, država), bez pohrane tvoje IP adrese.
 - **Anthropic PBC**: umjetna inteligencija koja piše tekstove. Šaljemo joj izračunatu kartu, tvoje ime i jezik, ali ne i tvoju e-mail adresu.
 - **Resend**: slanje e-mailova.
 - **Stripe** (Link): plaćanja. Za kupnje Stripe putem usluge Link djeluje kao preprodavač (merchant of record) i obrađuje podatke o plaćanju kao samostalni voditelj obrade, prema vlastitim pravilima privatnosti.

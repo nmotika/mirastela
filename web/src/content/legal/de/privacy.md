@@ -1,4 +1,4 @@
-*Stand: 19. Oktober 2026*
+*Stand: 20. Oktober 2026*
 
 <!-- ENTWURF: vor dem Start von einer muttersprachlichen Lektorin oder einem Lektor prüfen lassen. -->
 
@@ -11,7 +11,7 @@ Bei allen Fragen zu deinen Daten schreib an [hello@mirastela.com](mailto:hello@m
 
 - **Geburtsdaten, die du eingibst:** Datum, Uhrzeit und Ort der Geburt, dein Vorname und deine Antworten im Fragebogen (Interessenbereiche, Beziehungsstatus).
 - **E-Mail-Adresse**, damit wir dir deine Zusammenfassung, Auswertungen und Horoskope schicken können, sowie deine Entscheidung zu Werbe-E-Mails.
-- **Daten anderer Personen, die du eingibst:** Vorname und Geburtsdaten eines Partners oder eines Kindes, wenn du diese Auswertungen bestellst.
+- **Daten anderer Personen, die du eingibst:** Vorname und Geburtsdaten eines Partners oder eines Kindes, wenn du diese Auswertungen bestellst. Bevor du sie eingibst, informiere bitte die betroffene Person. Wir verwenden ihre Daten nur für die bestellte Auswertung, und sie kann dieselben Rechte wie du ausüben, indem sie an hello@mirastela.com schreibt.
 - **Bestellungen und Abos:** was du wann und in welcher Sprache gekauft hast und den Status deines Abos.
 - **Technische Daten:** IP-Adresse und grundlegende Angaben zu deinem Browser in Server- und Sicherheitsprotokollen.
 - **Testerfragebogen:** Die Antworten werden anonym gespeichert, ohne deine E-Mail-Adresse.
@@ -28,6 +28,7 @@ Deine Kartendaten erhalten und speichern wir nicht. Du gibst sie nur bei Stripe 
 | Sicherheit, Schutz vor Missbrauch, Fehlerbehebung | Berechtigtes Interesse, Art. 6 Abs. 1 lit. f |
 | Messung der Ergebnisse unserer Anzeigen auf Facebook und Instagram (Meta-Pixel und Conversions API) | Deine Einwilligung, Art. 6 Abs. 1 lit. a, erteilt im Cookie-Banner, die du jederzeit über „Cookie-Einstellungen“ widerrufen kannst |
 | Website-Statistik (Google Analytics) | Deine Einwilligung, Art. 6 Abs. 1 lit. a, erteilt im Cookie-Banner, die du jederzeit über „Cookie-Einstellungen“ widerrufen kannst |
+| Anonyme Besuchsstatistik ohne Cookies (Cloudflare Web Analytics) | Berechtigtes Interesse, Art. 6 Abs. 1 lit. f |
 | Führung der Buchhaltungsunterlagen | Rechtliche Verpflichtung, Art. 6 Abs. 1 lit. c |
 
 Geburtsdaten sind nach der DSGVO keine besondere Kategorie personenbezogener Daten, wir gehen aber sorgfältig mit ihnen um: Sie dienen nur dazu, Horoskope zu berechnen und deine Texte zu schreiben.
@@ -37,7 +38,7 @@ Geburtsdaten sind nach der DSGVO keine besondere Kategorie personenbezogener Dat
 Wir arbeiten mit sorgfältig ausgewählten Dienstleistern, die an Auftragsverarbeitungsverträge gebunden sind:
 
 - **Hetzner Online GmbH** (Deutschland): Server, auf denen Anwendung und Datenbank laufen.
-- **Cloudflare, Inc.**: Auslieferung und Schutz der Website.
+- **Cloudflare, Inc.**: Auslieferung und Schutz der Website. Außerdem nutzen wir Cloudflare Web Analytics: anonyme Besuchsstatistiken ohne Cookies (aufgerufene Seiten, von welcher Seite du kommst, Browser- und Gerätetyp, Land), ohne Speicherung deiner IP-Adresse.
 - **Anthropic PBC**: künstliche Intelligenz, die die Texte schreibt. Wir übermitteln das berechnete Horoskop, deinen Vornamen und die Sprache, aber nicht deine E-Mail-Adresse.
 - **Resend**: Versand von E-Mails.
 - **Stripe** (Link): Zahlungen. Bei Käufen tritt Stripe über seinen Dienst Link als Wiederverkäufer (Merchant of Record) auf und verarbeitet Zahlungsdaten als eigenständig Verantwortlicher nach seiner eigenen Datenschutzerklärung.

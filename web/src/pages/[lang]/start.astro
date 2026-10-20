@@ -329,6 +329,7 @@ const clientData = JSON.stringify({
             <input id="upPlace" class="inp" autocomplete="off" role="combobox" aria-controls="upList" aria-expanded="false" /></div>
           <div id="upList" class="opts" role="listbox" hidden></div></div>
       </div>
+      <p class="mu small ppriv">{SH.pPriv} <a href={`/${lang}/privacy/`} target="_blank" rel="noopener">{d.footer.privacy}</a></p>
       <p class="ferr" id="pdErr" hidden>{d.ui.error}</p>
       <div class="dock flow"><button type="button" class="btn" id="pdGo" disabled>{U2.pformCta}</button>
         <button type="button" class="no" id="pdLater" hidden>{SH.later}</button></div>

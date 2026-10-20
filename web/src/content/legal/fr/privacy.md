@@ -1,4 +1,4 @@
-*Dernière mise à jour : 19 octobre 2026*
+*Dernière mise à jour : 20 octobre 2026*
 
 ## 1. Qui est responsable de tes données
 
@@ -9,7 +9,7 @@ Pour toute question sur tes données, écris à [hello@mirastela.com](mailto:hel
 
 - **Les données de naissance que tu saisis :** date, heure et lieu de naissance, ton prénom et tes réponses au questionnaire (domaines d’intérêt, situation amoureuse).
 - **Ton adresse e-mail**, pour t’envoyer ton résumé, tes rapports et tes horoscopes, ainsi que ton choix concernant les e-mails marketing.
-- **Les données d’autres personnes que tu saisis :** le prénom et les données de naissance d’un ou d’une partenaire ou d’un enfant, lorsque tu commandes ces rapports.
+- **Les données d’autres personnes que tu saisis :** le prénom et les données de naissance d’un ou d’une partenaire ou d’un enfant, lorsque tu commandes ces rapports. Avant de les saisir, informes-en la personne concernée. Nous utilisons ses données uniquement pour le rapport commandé, et elle peut exercer les mêmes droits que toi en écrivant à hello@mirastela.com.
 - **Commandes et abonnements :** ce que tu as acheté, quand, dans quelle langue, et le statut de ton abonnement.
 - **Données techniques :** adresse IP et informations de base sur ton navigateur dans les journaux du serveur et de sécurité.
 - **Questionnaire des testeurs :** les réponses sont enregistrées de façon anonyme, sans ton adresse e-mail.
@@ -26,6 +26,7 @@ Nous ne recevons ni ne conservons tes données de carte. Tu les saisis uniquemen
 | Sécurité, prévention des abus, correction des erreurs | Intérêt légitime, art. 6, par. 1, point f |
 | Mesure des résultats de nos publicités sur Facebook et Instagram (pixel Meta et API Conversions) | Ton consentement, art. 6, par. 1, point a, donné dans le bandeau cookies, que tu peux retirer à tout moment via « Paramètres des cookies » |
 | Statistiques du site (Google Analytics) | Ton consentement, art. 6, par. 1, point a, donné dans le bandeau cookies, que tu peux retirer à tout moment via « Paramètres des cookies » |
+| Statistiques de visite anonymes, sans cookies (Cloudflare Web Analytics) | Intérêt légitime, art. 6, par. 1, point f |
 | Tenue des registres comptables | Obligation légale, art. 6, par. 1, point c |
 
 Les données de naissance ne constituent pas une catégorie particulière de données au sens du RGPD, mais nous les traitons avec soin : elles servent uniquement à calculer les thèmes et à rédiger tes textes.
@@ -35,7 +36,7 @@ Les données de naissance ne constituent pas une catégorie particulière de don
 Nous faisons appel à des prestataires soigneusement choisis, liés par des contrats de sous-traitance :
 
 - **Hetzner Online GmbH** (Allemagne) : serveurs sur lesquels fonctionnent l’application et la base de données.
-- **Cloudflare, Inc.** : diffusion et protection du site.
+- **Cloudflare, Inc.** : diffusion et protection du site. Nous utilisons aussi Cloudflare Web Analytics : des statistiques de visite anonymes, sans cookies (pages consultées, site d’origine, type de navigateur et d’appareil, pays), sans enregistrer ton adresse IP.
 - **Anthropic PBC** : intelligence artificielle qui rédige les textes. Nous lui transmettons le thème calculé, ton prénom et la langue, mais pas ton adresse e-mail.
 - **Resend** : envoi des e-mails.
 - **Stripe** (Link) : paiements. Pour les achats, Stripe agit via son service Link comme revendeur (merchant of record) et traite les données de paiement en tant que responsable de traitement indépendant, conformément à sa propre politique de confidentialité.

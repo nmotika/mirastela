@@ -1,4 +1,4 @@
-*Utolsó frissítés: 2026. október 19.*
+*Utolsó frissítés: 2026. október 20.*
 
 ## 1. Ki felel az adataidért
 
@@ -9,7 +9,7 @@ Az adataiddal kapcsolatos bármilyen kérdéssel írj a [hello@mirastela.com](ma
 
 - **Az általad megadott születési adatok:** a születés dátuma, ideje és helye, a keresztneved, valamint a kérdőívben adott válaszaid (érdeklődési területek, párkapcsolati helyzet).
 - **E-mail-cím**, hogy elküldhessük az összefoglalódat, a jelentéseidet és a horoszkópjaidat, valamint a marketing e-mailekkel kapcsolatos döntésed.
-- **Más személyek általad megadott adatai:** a párod vagy a gyermeked keresztneve és születési adatai, ha ilyen jelentést rendelsz.
+- **Más személyek általad megadott adatai:** a párod vagy a gyermeked keresztneve és születési adatai, ha ilyen jelentést rendelsz. Mielőtt megadod őket, tájékoztasd erről az érintettet. Az adatait csak a megrendelt jelentéshez használjuk, és ugyanazokat a jogokat gyakorolhatja, mint te, ha ír nekünk a hello@mirastela.com címre.
 - **Rendelések és előfizetések:** mit vásároltál, mikor, milyen nyelven, és milyen állapotú az előfizetésed.
 - **Technikai adatok:** IP-cím és a böngésződre vonatkozó alapvető információk a szerver- és biztonsági naplókban.
 - **Tesztelői kérdőív:** a válaszokat anonim módon, az e-mail-címed nélkül tároljuk.
@@ -26,6 +26,7 @@ A kártyaadataidat nem kapjuk meg és nem tároljuk. Ezeket kizárólag a Stripe
 | Biztonság, a visszaélések megelőzése, hibák javítása | Jogos érdek, 6. cikk (1) bekezdés f) pont |
 | Facebookon és Instagramon futó hirdetéseink eredményeinek mérése (Meta pixel és Conversions API) | A hozzájárulásod, 6. cikk (1) bekezdés a) pont, amelyet a sütibannerben adsz meg, és bármikor visszavonhatsz a „Süti beállítások” alatt |
 | Az oldal látogatottsági statisztikája (Google Analytics) | A hozzájárulásod, 6. cikk (1) bekezdés a) pont, amelyet a sütibannerben adsz meg, és bármikor visszavonhatsz a „Süti beállítások” alatt |
+| Sütik nélküli, anonim látogatási statisztika (Cloudflare Web Analytics) | Jogos érdek, 6. cikk (1) bekezdés f) pont |
 | Számviteli nyilvántartások vezetése | Jogi kötelezettség, 6. cikk (1) bekezdés c) pont |
 
 A születési adatok a GDPR szerint nem tartoznak a személyes adatok különleges kategóriáiba, de gondosan bánunk velük: kizárólag a képletek kiszámításához és a szövegeid megírásához használjuk őket.
@@ -35,7 +36,7 @@ A születési adatok a GDPR szerint nem tartoznak a személyes adatok különleg
 Gondosan kiválasztott szolgáltatókat veszünk igénybe, akiket adatfeldolgozási szerződés köt:
 
 - **Hetzner Online GmbH** (Németország): szerverek, amelyeken az alkalmazás és az adatbázis fut.
-- **Cloudflare, Inc.**: a weboldal kiszolgálása és védelme.
+- **Cloudflare, Inc.**: a weboldal kiszolgálása és védelme. A Cloudflare Web Analytics szolgáltatást is használjuk: sütik nélküli, anonim látogatási statisztika (megtekintett oldalak, honnan érkeztél, böngésző- és eszköztípus, ország), az IP-címed tárolása nélkül.
 - **Anthropic PBC**: a szövegeket író mesterséges intelligencia. Elküldjük neki a kiszámított képletet, a keresztnevedet és a nyelvet, az e-mail-címedet azonban nem.
 - **Resend**: e-mailek küldése.
 - **Stripe** (Link): fizetések. A vásárlások esetében a Stripe a Link szolgáltatáson keresztül viszonteladóként (merchant of record) jár el, és a fizetési adatokat önálló adatkezelőként, saját adatvédelmi szabályzata szerint kezeli.

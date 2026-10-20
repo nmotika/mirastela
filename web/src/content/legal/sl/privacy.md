@@ -1,4 +1,4 @@
-*Zadnja posodobitev: 19. oktober 2026*
+*Zadnja posodobitev: 20. oktober 2026*
 
 ## 1. Kdo je odgovoren za tvoje podatke
 
@@ -9,7 +9,7 @@ Za vsa vprašanja o svojih podatkih nam piši na [hello@mirastela.com](mailto:he
 
 - **Podatke o rojstvu, ki jih vneseš:** datum, uro in kraj rojstva, ime ter odgovore v vprašalniku (področja zanimanja, status zveze).
 - **E-poštni naslov**, da ti lahko pošljemo povzetek, poročila in horoskope, ter tvojo izbiro glede trženjskih sporočil.
-- **Podatke drugih oseb, ki jih vneseš:** ime in podatke o rojstvu partnerja ali otroka, ko naročiš ta poročila.
+- **Podatke drugih oseb, ki jih vneseš:** ime in podatke o rojstvu partnerja ali otroka, ko naročiš ta poročila. Preden jih vneseš, o tem obvesti to osebo. Njene podatke uporabljamo samo za naročeno poročilo, ona pa lahko uveljavlja enake pravice kot ti, tako da nam piše na hello@mirastela.com.
 - **Naročila in naročnine:** kaj si kupil oziroma kupila, kdaj, v katerem jeziku in status tvoje naročnine.
 - **Tehnične podatke:** naslov IP in osnovne podatke o brskalniku v strežniških in varnostnih dnevnikih.
 - **Vprašalnik za preizkuševalce:** odgovori se shranjujejo anonimno, brez tvojega e-poštnega naslova.
@@ -26,6 +26,7 @@ Podatkov o tvoji kartici ne prejemamo in ne shranjujemo. Vneseš jih le pri Stri
 | Varnost, preprečevanje zlorab, odpravljanje napak | Zakoniti interes, člen 6(1)(f) |
 | Merjenje rezultatov naših oglasov na Facebooku in Instagramu (Meta piksel in Conversions API) | Tvoja privolitev, člen 6(1)(a), dana v pasici za piškotke, ki jo lahko kadar koli prekličeš v „Nastavitve piškotkov” |
 | Statistika obiskov strani (Google Analytics) | Tvoja privolitev, člen 6(1)(a), dana v pasici za piškotke, ki jo lahko kadar koli prekličeš v „Nastavitve piškotkov” |
+| Anonimna statistika obiskov brez piškotkov (Cloudflare Web Analytics) | Zakoniti interes, člen 6(1)(f) |
 | Vodenje računovodskih evidenc | Zakonska obveznost, člen 6(1)(c) |
 
 Podatki o rojstvu po Splošni uredbi o varstvu podatkov niso posebna vrsta podatkov, vendar z njimi ravnamo skrbno: uporabljamo jih le za izračun kart in pisanje tvojih besedil.
@@ -35,7 +36,7 @@ Podatki o rojstvu po Splošni uredbi o varstvu podatkov niso posebna vrsta podat
 Uporabljamo skrbno izbrane ponudnike storitev, ki jih zavezujejo pogodbe o obdelavi podatkov:
 
 - **Hetzner Online GmbH** (Nemčija): strežniki, na katerih tečeta aplikacija in podatkovna baza.
-- **Cloudflare, Inc.**: dostava in zaščita spletnega mesta.
+- **Cloudflare, Inc.**: dostava in zaščita spletnega mesta. Uporabljamo tudi Cloudflare Web Analytics: anonimno statistiko obiskov brez piškotkov (obiskane strani, stran, s katere prihajaš, vrsta brskalnika in naprave, država), brez shranjevanja tvojega naslova IP.
 - **Anthropic PBC**: umetna inteligenca, ki piše besedila. Pošljemo ji izračunano karto, tvoje ime in jezik, ne pa tudi tvojega e-poštnega naslova.
 - **Resend**: pošiljanje e-pošte.
 - **Stripe** (Link): plačila. Pri nakupih Stripe prek storitve Link nastopa kot preprodajalec (merchant of record) in plačilne podatke obdeluje kot samostojni upravljavec v skladu s svojo politiko zasebnosti.

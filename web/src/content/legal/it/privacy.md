@@ -1,4 +1,4 @@
-*Ultimo aggiornamento: 19 ottobre 2026*
+*Ultimo aggiornamento: 20 ottobre 2026*
 
 ## 1. Chi è responsabile dei tuoi dati
 
@@ -9,7 +9,7 @@ Per qualsiasi domanda sui tuoi dati, scrivi a [hello@mirastela.com](mailto:hello
 
 - **Dati di nascita che inserisci:** data, ora e luogo di nascita, il tuo nome e le risposte al questionario (aree di interesse, situazione sentimentale).
 - **Indirizzo email**, per inviarti il riassunto, i report e gli oroscopi, e la tua scelta sulle email promozionali.
-- **Dati di altre persone che inserisci:** il nome e i dati di nascita di un partner o di un figlio, quando ordini quei report.
+- **Dati di altre persone che inserisci:** il nome e i dati di nascita di un partner o di un figlio, quando ordini quei report. Prima di inserirli, informa la persona interessata. Usiamo i suoi dati solo per il report ordinato, e può esercitare gli stessi diritti che hai tu scrivendo a hello@mirastela.com.
 - **Ordini e abbonamenti:** che cosa hai acquistato, quando, in quale lingua e lo stato del tuo abbonamento.
 - **Dati tecnici:** indirizzo IP e informazioni di base sul tuo browser nei log del server e di sicurezza.
 - **Questionario per i tester:** le risposte vengono conservate in forma anonima, senza il tuo indirizzo email.
@@ -26,6 +26,7 @@ Non riceviamo né conserviamo i dati della tua carta. Li inserisci solo presso S
 | Sicurezza, prevenzione degli abusi, correzione degli errori | Legittimo interesse, art. 6, par. 1, lett. f |
 | Misurazione dei risultati dei nostri annunci su Facebook e Instagram (pixel di Meta e Conversions API) | Il tuo consenso, art. 6, par. 1, lett. a, dato nel banner dei cookie, che puoi revocare in qualsiasi momento con "Impostazioni cookie" |
 | Statistiche del sito (Google Analytics) | Il tuo consenso, art. 6, par. 1, lett. a, dato nel banner dei cookie, che puoi revocare in qualsiasi momento con "Impostazioni cookie" |
+| Statistiche anonime sulle visite, senza cookie (Cloudflare Web Analytics) | Legittimo interesse, art. 6, par. 1, lett. f |
 | Tenuta della contabilità | Obbligo di legge, art. 6, par. 1, lett. c |
 
 I dati di nascita non rientrano nelle categorie particolari di dati ai sensi del GDPR, ma li trattiamo con cura: li usiamo solo per calcolare i temi e scrivere i tuoi testi.
@@ -35,7 +36,7 @@ I dati di nascita non rientrano nelle categorie particolari di dati ai sensi del
 Ci avvaliamo di fornitori scelti con attenzione e vincolati da accordi sul trattamento dei dati:
 
 - **Hetzner Online GmbH** (Germania): server su cui girano l’applicazione e il database.
-- **Cloudflare, Inc.**: distribuzione e protezione del sito.
+- **Cloudflare, Inc.**: distribuzione e protezione del sito. Usiamo anche Cloudflare Web Analytics: statistiche anonime sulle visite, senza cookie (pagine visitate, sito di provenienza, tipo di browser e dispositivo, Paese), senza memorizzare il tuo indirizzo IP.
 - **Anthropic PBC**: intelligenza artificiale che scrive i testi. Le inviamo il tema calcolato, il tuo nome e la lingua, ma non il tuo indirizzo email.
 - **Resend**: invio delle email.
 - **Stripe** (Link): pagamenti. Per gli acquisti, Stripe agisce tramite il suo servizio Link come rivenditore (merchant of record) e tratta i dati di pagamento come titolare autonomo secondo la propria informativa sulla privacy.

@@ -1,4 +1,4 @@
-*Poslední aktualizace: 19. října 2026*
+*Poslední aktualizace: 20. října 2026*
 
 ## 1. Kdo odpovídá za tvé údaje
 
@@ -9,7 +9,7 @@ S jakýmkoli dotazem ohledně svých údajů nám napiš na [hello@mirastela.com
 
 - **Údaje o narození, které zadáš:** datum, čas a místo narození, tvé křestní jméno a tvé odpovědi v dotazníku (oblasti zájmu, vztahový stav).
 - **E-mailová adresa**, abychom ti mohli posílat shrnutí, zprávy a horoskopy, a tvá volba ohledně marketingových e-mailů.
-- **Údaje jiných osob, které zadáš:** křestní jméno a údaje o narození partnera, partnerky nebo dítěte, když si objednáš tyto zprávy.
+- **Údaje jiných osob, které zadáš:** křestní jméno a údaje o narození partnera, partnerky nebo dítěte, když si objednáš tyto zprávy. Než je zadáš, dej o tom té osobě vědět. Její údaje používáme jen pro objednanou zprávu a může uplatnit stejná práva jako ty, když nám napíše na hello@mirastela.com.
 - **Objednávky a předplatné:** co sis koupil nebo koupila, kdy, v jakém jazyce a stav tvého předplatného.
 - **Technické údaje:** IP adresa a základní informace o tvém prohlížeči v serverových a bezpečnostních záznamech (lozích).
 - **Dotazník pro testery:** odpovědi ukládáme anonymně, bez tvé e-mailové adresy.
@@ -26,6 +26,7 @@ S jakýmkoli dotazem ohledně svých údajů nám napiš na [hello@mirastela.com
 | Bezpečnost, prevence zneužití, oprava chyb | Oprávněný zájem, čl. 6 odst. 1 písm. f) |
 | Měření výsledků našich reklam na Facebooku a Instagramu (Meta pixel a Conversions API) | Tvůj souhlas, čl. 6 odst. 1 písm. a), udělený v liště cookies, který můžeš kdykoli odvolat v „Nastavení cookies” |
 | Statistika návštěvnosti webu (Google Analytics) | Tvůj souhlas, čl. 6 odst. 1 písm. a), udělený v liště cookies, který můžeš kdykoli odvolat v „Nastavení cookies” |
+| Anonymní statistika návštěvnosti bez cookies (Cloudflare Web Analytics) | Oprávněný zájem, čl. 6 odst. 1 písm. f) |
 | Vedení účetních záznamů | Právní povinnost, čl. 6 odst. 1 písm. c) |
 
 Údaje o narození nejsou zvláštní kategorií osobních údajů podle obecného nařízení o ochraně osobních údajů (GDPR), přesto s nimi zacházíme pečlivě: používáme je pouze k výpočtu horoskopů a psaní tvých textů.
@@ -35,7 +36,7 @@ S jakýmkoli dotazem ohledně svých údajů nám napiš na [hello@mirastela.com
 Využíváme pečlivě vybrané poskytovatele služeb, kteří jsou vázáni smlouvami o zpracování osobních údajů:
 
 - **Hetzner Online GmbH** (Německo): servery, na kterých běží aplikace a databáze.
-- **Cloudflare, Inc.**: doručování a ochrana webu.
+- **Cloudflare, Inc.**: doručování a ochrana webu. Používáme také Cloudflare Web Analytics: anonymní statistiku návštěvnosti bez cookies (navštívené stránky, odkud přicházíš, typ prohlížeče a zařízení, země), bez ukládání tvé IP adresy.
 - **Anthropic PBC**: umělá inteligence, která píše texty. Posíláme jí vypočtený horoskop, tvé křestní jméno a jazyk, ale ne tvou e-mailovou adresu.
 - **Resend**: odesílání e-mailů.
 - **Stripe** (Link): platby. Při nákupech vystupuje Stripe prostřednictvím služby Link jako přeprodejce (merchant of record) a zpracovává platební údaje jako samostatný správce podle svých vlastních zásad ochrany osobních údajů.

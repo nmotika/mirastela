@@ -13,7 +13,7 @@ Poniższe są niezbędne do działania strony i nie wymagają Twojej zgody.
 
 ## Analityka i reklama
 
-Dopiero gdy w banerze cookies klikniesz „Akceptuję wszystkie”, wczytujemy piksel Meta, który mierzy skuteczność naszych reklam na Facebooku i Instagramie (na przykład czy osoba, która zobaczyła reklamę, kupiła później raport). Przy wyborze „Tylko niezbędne” nic nie jest wczytywane. Swój wybór możesz zmienić w każdej chwili linkiem „Ustawienia cookies” na dole każdej strony.
+Dopiero gdy w banerze cookies klikniesz „Akceptuję wszystkie”, wczytujemy piksel Meta, który mierzy skuteczność naszych reklam na Facebooku i Instagramie (na przykład czy osoba, która zobaczyła reklamę, kupiła później raport). Przy wyborze „Tylko niezbędne” nic nie jest wczytywane. Swój wybór możesz zmienić w każdej chwili linkiem „Ustawienia plików cookie” na dole każdej strony.
 
 Wczytujemy też Google Analytics, które pokazuje, jak odwiedzający korzystają ze strony (jakie strony otwierają, w którym miejscu porzucają kwestionariusz, ile osób kupuje). Google otrzymuje Twój adres IP, który skraca, oraz dane przeglądarki, ale nie Twój e-mail ani dane urodzenia.
 
