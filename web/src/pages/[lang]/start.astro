@@ -200,6 +200,7 @@ const clientData = JSON.stringify({
             <h1 class="sf q ot">{O.title}</h1>
             <p class="mu small" id="oWho"></p>
             <div class="chips" id="oChips"></div>
+            <button type="button" class="sharebtn" id="oShare" hidden>{SH.shareBtn}</button>
             <p class="mu small" id="oNoTime" hidden>{O.noTimeNote}</p>
           </div>
           <article class="excerpt">
@@ -400,6 +401,7 @@ const clientData = JSON.stringify({
       </div>
       <div class="qh"><p class="ey">{Dn.eyebrow}</p><h1 class="sf q">{Dn.title}</h1><p class="lead mu" id="dDesc"></p><p class="mu small" id="dStmt" hidden>{SH.stmt}</p><p class="mu small"><a href={`/${lang}/account/`}>{SH.doneWhere}</a></p></div>
       <p class="note" id="dSub" hidden>{Dn.subOn}</p>
+      <button type="button" class="sharebtn" id="dShare" hidden>{SH.shareBtn}</button>
       <div class="calbox" id="dCal" hidden>
         <p class="sf">{SH.calAddTitle}</p>
         <p class="mu">{SH.calAddText}</p>
@@ -633,6 +635,9 @@ const clientData = JSON.stringify({
   .oplans .plan { min-height: 64px; padding: 14px; }
   .oplans .pp strong { font-size: 19px; }
   .pnote { margin-top: 4px; color: var(--gold); font-size: 14px; }
+  .sharebtn { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; min-height: 44px; padding: 0 16px; margin-top: 4px; border-radius: 999px; border: 1px solid var(--gold); background: transparent; color: var(--gold); font: 600 14px var(--sans); cursor: pointer; }
+  .sharebtn::before { content: '↗'; }
+  .sharebtn:disabled { opacity: .6; }
   .plan input { width: 22px; height: 22px; margin: 0; accent-color: var(--gold); flex: none; }
   .badge { position: absolute; top: -11px; right: 14px; padding: 3px 10px; border-radius: 999px; background: var(--gold); color: var(--bg); font: 700 12px/1.4 var(--sans); letter-spacing: .04em; }
   .pn { flex: 1; display: flex; flex-direction: column; }

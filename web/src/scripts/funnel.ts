@@ -3,6 +3,7 @@ import { CUSP } from './cusp';
 import { fill, huArticle } from '../i18n/fill';
 import { SIGN_GLYPHS } from './zodiac';
 import { fbTrack, trackInfo, sourceInfo } from './track';
+import { shareBigThree } from './share';
 import { captcha, type Captcha } from './captcha';
 
 type Step = 'date' | 'time' | 'place' | 'name' | 'focus' | 'status' | 'calc' | 'email' | 'offer' | 'upsell' | 'pdata' | 'kid' | 'sub' | 'done';
@@ -498,6 +499,7 @@ function renderOffer() {
   const sun = c.planets[0], moon = c.planets[1];
   $('oWho').textContent = who();
   chipsInto($('oChips'), c);
+  $('oShare').hidden = false;
   $('oNoTime').hidden = c.timeKnown;
   const vars = {
     signIn: A.signIn[sun.signIndex], trait: A.traits[sun.signIndex],
@@ -788,6 +790,7 @@ function renderDone() {
   $('dDesc').textContent = fill(D.done.desc, { email: state.email ?? '' });
   $('dStmt').hidden = !!state.coupon; // paid through Stripe: say how the charge looks on the statement
   $('dSub').hidden = !state.sub;
+  $('dShare').hidden = !state.chart;
   $<HTMLAnchorElement>('dOpen').href = reportUrl();
   $('dCal').hidden = !state.cal;
   if (state.cal) {
@@ -887,3 +890,23 @@ if (orderToken) {
   show(step, false);
 } else if (paidSession) returnFromCheckout(paidSession);
 else if (resumeToken) resume(resumeToken).then(restore); else restore();
+
+/* ---------- share card (Sun, Moon, Ascendant) for stories ---------- */
+async function shareCard(btn: HTMLButtonElement) {
+  const c = state.chart;
+  if (!c) return;
+  const A = D.astro, SHp = D.shop;
+  const rows = [
+    { label: A.planets.sun, sign: A.signs[c.planets[0].signIndex], glyph: c.planets[0].signIndex },
+    { label: A.planets.moon, sign: A.signs[c.planets[1].signIndex], glyph: c.planets[1].signIndex },
+  ];
+  if (c.timeKnown && c.angles) rows.push({ label: A.asc, sign: A.signs[c.angles.asc.signIndex], glyph: c.angles.asc.signIndex });
+  btn.disabled = true;
+  try {
+    const how = await shareBigThree({ title: rows.length === 3 ? SHp.shareTitle : SHp.shareTitle2, footer: 'mirastela.com', rows },
+      SHp.shareText, `https://mirastela.com/${lang}/`);
+    if (how !== 'cancelled') window.gtag?.('event', 'share', { method: how, content_type: 'big_three' });
+  } catch { /* drawing failed: nothing to share */ }
+  btn.disabled = false;
+}
+['oShare', 'dShare'].forEach((id) => $<HTMLButtonElement>(id).addEventListener('click', (e) => shareCard(e.currentTarget as HTMLButtonElement)));
