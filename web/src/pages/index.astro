@@ -1,30 +1,63 @@
 ---
-// Root: send visitors to their language, Polish by default.
+// Root: the language choice. Visitors whose browser language we support are sent there at the edge
+// (functions/_middleware.js); everyone else, search engines included, gets this page (x-default).
+import { LOCALES, LANG_NAMES, INTL } from '../i18n/config';
+import { t } from '../i18n';
+import { SEO } from '../i18n/lang/seo';
+import '../styles/global.css';
+const site = 'https://mirastela.com';
+const en = t('en');
+const items = LOCALES.map((l) => ({ l, name: LANG_NAMES[l], h1: t(l).landing.h1, desc: t(l).meta.description }));
+const org = JSON.stringify({ '@context': 'https://schema.org', '@type': 'Organization', name: 'Mirastela', url: `${site}/`, logo: `${site}/favicon.svg`,
+  email: 'hello@mirastela.com', legalName: 'Something Digital d.o.o.',
+  address: { '@type': 'PostalAddress', streetAddress: 'Gračanska cesta 127c', postalCode: '10000', addressLocality: 'Zagreb', addressCountry: 'HR' } });
 ---
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mirastela</title>
-  <meta http-equiv="refresh" content="2; url=/pl/" />
-  <link rel="canonical" href="https://mirastela.com/pl/" />
-  <script is:inline>
-    (function () {
-      var supported = ['pl', 'hr', 'sl', 'ro', 'cs', 'hu', 'de', 'fr', 'it', 'en'];
-      var langs = navigator.languages || [navigator.language || 'pl'];
-      for (var i = 0; i < langs.length; i++) {
-        var l = String(langs[i]).toLowerCase().slice(0, 2);
-        if (l === 'sk') l = 'cs';
-        if (l === 'bs' || l === 'sr') l = 'hr';
-        if (supported.indexOf(l) !== -1) { location.replace('/' + l + '/'); return; }
-      }
-      location.replace('/pl/');
-    })();
-  </script>
-  <style>body{background:#0B1020;color:#F3EEE3;font-family:system-ui,sans-serif;padding:24px}a{color:#D9B26A}</style>
+  <title>Mirastela · Personal natal chart in your language</title>
+  <meta name="description" content="Mirastela calculates your natal chart from your date, time and place of birth and explains it in plain words, in ten European languages. The first summary is free." />
+  <link rel="canonical" href={`${site}/`} />
+  {LOCALES.map((l) => <link rel="alternate" hreflang={l} href={`${site}/${l}/`} />)}
+  <link rel="alternate" hreflang="x-default" href={`${site}/`} />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <meta name="theme-color" content="#0B1020" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Mirastela" />
+  <meta property="og:url" content={`${site}/`} />
+  <meta property="og:title" content="Mirastela · Personal natal chart in your language" />
+  <meta property="og:description" content="Your natal chart from your date, time and place of birth, explained in plain words. The first summary is free." />
+  <meta property="og:image" content={`${site}/og/en.jpg`} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script type="application/ld+json" set:html={org} />
+  <style>
+    .root { max-width: 760px; margin: 0 auto; padding: 40px 20px 60px; display: flex; flex-direction: column; gap: 18px; }
+    .root h1 { font-size: 40px; line-height: 1.1; }
+    .root .langs { display: grid; gap: 10px; margin-top: 8px; }
+    .root .langs a { display: flex; flex-direction: column; gap: 4px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); color: var(--ink); text-decoration: none; }
+    .root .langs a:hover { border-color: var(--gold); }
+    .root .langs b { color: var(--gold); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; }
+    .root .langs span { font-family: var(--serif); font-size: 21px; }
+    .root .langs small { color: var(--muted); font-size: 14px; }
+    .root footer { margin-top: 24px; color: var(--muted); font-size: 14px; display: flex; flex-wrap: wrap; gap: 6px 18px; }
+    @media (min-width: 760px) { .root .langs { grid-template-columns: 1fr 1fr; } .root h1 { font-size: 52px; } }
+  </style>
 </head>
 <body>
-  <p><a href="/pl/">Polski</a> · <a href="/hr/">Hrvatski</a> · <a href="/sl/">Slovenščina</a> · <a href="/ro/">Română</a> · <a href="/cs/">Čeština</a> · <a href="/hu/">Magyar</a> · <a href="/en/">English</a></p>
+  <main class="root">
+    <p class="ey">Mirastela</p>
+    <h1 class="sf">Your personal natal chart, in your language</h1>
+    <p class="mu">Mirastela calculates the positions of the Sun, the Moon and the planets at the moment you were born and explains what they say about you, in plain words. The first summary is free. Choose your language:</p>
+    <nav class="langs" aria-label="Languages">
+      {items.map((x) => <a href={`/${x.l}/`} hreflang={x.l} lang={INTL[x.l]}><b>{x.name}</b><span>{x.h1}</span><small>{x.desc}</small></a>)}
+    </nav>
+    <footer>
+      <a href="/en/privacy/">{en.footer.privacy}</a><a href="/en/terms/">{en.footer.terms}</a><a href="/en/cookies/">{en.footer.cookies}</a>
+      <a href={`/en/${SEO.en.slugs.calc}/`}>{SEO.en.calc.nav}</a><a href="mailto:hello@mirastela.com">hello@mirastela.com</a>
+      <span>Something Digital d.o.o., Zagreb, Croatia</span>
+    </footer>
+  </main>
 </body>
 </html>

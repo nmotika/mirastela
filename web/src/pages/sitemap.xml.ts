@@ -16,8 +16,10 @@ export function GET() {
   const urls = groups.flatMap((g) => LOCALES.map((l) => {
     const alts = LOCALES.map((a) => `<xhtml:link rel="alternate" hreflang="${a}" href="${SITE}/${a}/${g[a]}"/>`).join('');
     const daily = g[l] !== '';
-    return `<url><loc>${SITE}/${l}/${g[l]}</loc>${daily ? '<changefreq>daily</changefreq>' : ''}${alts}<xhtml:link rel="alternate" hreflang="x-default" href="${SITE}/en/${g.en}"/></url>`;
+    const xdef = g.en === '' ? `${SITE}/` : `${SITE}/en/${g.en}`;
+    return `<url><loc>${SITE}/${l}/${g[l]}</loc>${daily ? '<changefreq>daily</changefreq>' : ''}${alts}<xhtml:link rel="alternate" hreflang="x-default" href="${xdef}"/></url>`;
   }));
+  urls.unshift(`<url><loc>${SITE}/</loc>${LOCALES.map((a) => `<xhtml:link rel="alternate" hreflang="${a}" href="${SITE}/${a}/"/>`).join('')}<xhtml:link rel="alternate" hreflang="x-default" href="${SITE}/"/></url>`);
   // Evergreen pages: only languages where the page exists are listed as alternates.
   const evergreen: Partial<Record<Lang, string>>[] = [];
   const hub = (k: Kind | 'calc') => evergreen.push(Object.fromEntries(LOCALES.filter((l) => k === 'calc' || hasAny(k, l)).map((l) => [l, `${SEO[l].slugs[k]}/`])));

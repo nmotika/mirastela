@@ -21,8 +21,15 @@ const icons = [
 const marks = ['☉︎ ☽︎ ↑', '☿︎ ♀︎ ♂︎', '△ □ ☍', 'PDF'];
 const start = `/${lang}/start/`;
 const arrow = '<path d="M5 12h14M13 6l6 6-6 6"/>';
+const org = JSON.stringify([
+  { '@context': 'https://schema.org', '@type': 'Organization', name: 'Mirastela', url: 'https://mirastela.com/', logo: 'https://mirastela.com/favicon.svg',
+    email: 'hello@mirastela.com', legalName: 'Something Digital d.o.o.',
+    address: { '@type': 'PostalAddress', streetAddress: 'Gračanska cesta 127c', postalCode: '10000', addressLocality: 'Zagreb', addressCountry: 'HR' } },
+  { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Mirastela', url: `https://mirastela.com/${lang}/`, inLanguage: lang },
+]);
 ---
 <Base lang={lang} path="" title={d.meta.title} description={d.meta.description}>
+  <script slot="head" type="application/ld+json" set:html={org} />
   <div class="wrap"><Header lang={lang} path="" /></div>
   <main class="land">
     <section class="wrap hero">

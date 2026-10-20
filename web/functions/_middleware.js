@@ -30,13 +30,29 @@ async function daily(env, lang, ctx) {
   return data;
 }
 
+const SUPPORTED = ['pl', 'hr', 'sl', 'ro', 'cs', 'hu', 'de', 'fr', 'it', 'en'];
+const ALIAS = { sk: 'cs', bs: 'hr', sr: 'hr' };
+function pickLang(header) {
+  for (const part of header.split(',')) {
+    const code = part.trim().split(';')[0].slice(0, 2).toLowerCase();
+    const l = ALIAS[code] || code;
+    if (SUPPORTED.includes(l)) return l;
+  }
+  return null;
+}
+
 export async function onRequest(context) {
   const { request, next, env } = context;
   const url = new URL(request.url);
-  if (url.hostname.endsWith('.pages.dev')) {
+  if (url.hostname.endsWith('.pages.dev') || url.hostname.startsWith('www.')) {
     url.hostname = 'mirastela.com';
     url.port = '';
     return Response.redirect(url.toString(), 301);
+  }
+  // Root: send visitors to their browser language; others (and crawlers) get the language list.
+  if (url.pathname === '/' && request.method === 'GET') {
+    const lang = pickLang(request.headers.get('accept-language') || '');
+    if (lang) return new Response(null, { status: 302, headers: { Location: `/${lang}/${url.search}`, Vary: 'Accept-Language', 'Cache-Control': 'private, no-store' } });
   }
   const m = request.method === 'GET' && HORO.exec(url.pathname);
   if (!m) return next();
