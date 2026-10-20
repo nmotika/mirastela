@@ -253,6 +253,9 @@ def publish():
     known = os.environ.get("MIRASTELA_KNOWN_HOSTS", "/var/lib/mirastela/known_hosts")
     env = {**os.environ, "GIT_SSH_COMMAND": f"ssh -i {keyfile} -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile={known}"}
     git = lambda *a, **k: subprocess.run(["git", "-C", str(repo), *a], env=env, text=True, **k)
+    if not OUT.exists() or not any(OUT.glob("*/*.json")):
+        print("nothing generated yet, nothing to publish")
+        return
     git("add", str(OUT), check=True)
     if git("diff", "--cached", "--quiet").returncode == 0:
         print("nothing new to publish")
