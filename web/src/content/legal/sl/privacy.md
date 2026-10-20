@@ -11,7 +11,7 @@ Za vsa vprašanja o svojih podatkih nam piši na [hello@mirastela.com](mailto:he
 - **E-poštni naslov**, da ti lahko pošljemo povzetek, poročila in horoskope, ter tvojo izbiro glede trženjskih sporočil.
 - **Podatke drugih oseb, ki jih vneseš:** ime in podatke o rojstvu partnerja ali otroka, ko naročiš ta poročila. Preden jih vneseš, o tem obvesti to osebo. Njene podatke uporabljamo samo za naročeno poročilo, ona pa lahko uveljavlja enake pravice kot ti, tako da nam piše na hello@mirastela.com.
 - **Naročila in naročnine:** kaj si kupil oziroma kupila, kdaj, v katerem jeziku in status tvoje naročnine.
-- **Tehnične podatke:** naslov IP in osnovne podatke o brskalniku v strežniških in varnostnih dnevnikih.
+- **Tehnične podatke:** naslov IP in osnovne podatke o brskalniku v strežniških in varnostnih dnevnikih. Ob prijavi shranimo tudi vir obiska (stran, s katere si prišel oziroma prišla, in oznake kampanje v povezavi), da vemo, kateri kanali pripeljejo kupce (zakoniti interes).
 - **Vprašalnik za preizkuševalce:** odgovori se shranjujejo anonimno, brez tvojega e-poštnega naslova.
 
 Podatkov o tvoji kartici ne prejemamo in ne shranjujemo. Vneseš jih le pri Stripu.
@@ -58,7 +58,7 @@ Tvojih podatkov ne prodajamo in jih nikomur ne posredujemo za njegovo lastno ogl
 
 Imaš pravico do dostopa do svojih podatkov, do njihovega popravka ali izbrisa, do omejitve obdelave, do prenosljivosti podatkov in do ugovora obdelavi, ki temelji na zakonitem interesu. Privolitev za trženjska sporočila lahko kadar koli prekličeš s povezavo v vsakem sporočilu.
 
-Za uveljavljanje pravic nam piši na [hello@mirastela.com](mailto:hello@mirastela.com) z e-poštnega naslova, ki si ga uporabil oziroma uporabila pri nas. Odgovorimo v enem mesecu.
+Za uveljavljanje pravic nam piši na [hello@mirastela.com](mailto:hello@mirastela.com) z e-poštnega naslova, ki si ga uporabil oziroma uporabila pri nas. Če do njega nimaš več dostopa, nam vseeno piši: takrat bomo prosili le za podatke, potrebne za razumno preverjanje tvoje identitete. Odgovorimo v enem mesecu.
 
 Na strani [Moja poročila](../account/) lahko svoje podatke tudi sam oziroma sama preneseš ali izbrišeš, po prijavi s povezavo, ki ti jo pošljemo po e-pošti.
 

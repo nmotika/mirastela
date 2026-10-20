@@ -15,6 +15,28 @@ export function setConsent(v: 'all' | 'necessary') {
 }
 const marketingOk = () => consent() === 'all';
 
+// Where this visit came from (first page of the tab): referring site (host only), campaign tags and
+// which ad network's click id was present (not the id itself). Kept for this tab only and stored with
+// the lead, so every order can be attributed even without cookie consent.
+try {
+  if (!sessionStorage.getItem('mirastela-src')) {
+    const q = new URLSearchParams(location.search);
+    let ref = '';
+    try { const h = document.referrer ? new URL(document.referrer).hostname : ''; ref = h === location.hostname ? '' : h; } catch { /* ignore */ }
+    const src: Record<string, string> = { landing: location.pathname };
+    if (ref) src.ref = ref;
+    for (const k of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term']) {
+      const v = q.get(k); if (v) src[k.slice(4)] = v.slice(0, 100);
+    }
+    const click = ['fbclid', 'gclid', 'gbraid', 'wbraid', 'msclkid', 'ttclid', 'li_fat_id'].find((k) => q.has(k));
+    if (click) src.click = click;
+    sessionStorage.setItem('mirastela-src', JSON.stringify(src));
+  }
+} catch { /* ignore */ }
+export function sourceInfo(): Record<string, string> | undefined {
+  try { return JSON.parse(sessionStorage.getItem('mirastela-src') || 'null') ?? undefined; } catch { return undefined; }
+}
+
 // Keep the ad click id from the landing URL for this tab only; it is sent only after consent.
 try {
   const id = new URLSearchParams(location.search).get('fbclid');

@@ -4,7 +4,7 @@
   python sender.py all     both
   python sender.py recal   regenerate future calendar days for everyone (after changing cal.py)
   python sender.py prune   retention clean-up (also runs after subs)
-  python sender.py repages regenerate today's and tomorrow's free horoscopes (after changing the prompt)
+  python sender.py repages regenerate yesterday's, today's and tomorrow's free horoscopes (after changing the prompt)
 """
 from __future__ import annotations
 
@@ -109,5 +109,5 @@ if __name__ == "__main__":
         prune()
     if what == "repages":
         with app.db() as con:
-            con.execute("delete from daily where day>=?", (sky.today().isoformat(),))
+            con.execute("delete from daily where day>=?", ((sky.today() - timedelta(days=1)).isoformat(),))
         pages()

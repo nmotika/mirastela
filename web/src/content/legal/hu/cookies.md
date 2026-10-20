@@ -1,4 +1,4 @@
-*Utolsó frissítés: 2026. október 19.*
+*Utolsó frissítés: 2026. október 20.*
 
 ## Mit használunk
 
@@ -13,7 +13,7 @@ Az alábbiak a weboldal működéséhez feltétlenül szükségesek, és nem ig�
 
 ## Analitika és hirdetések
 
-Csak akkor töltjük be a Meta pixelt, ha a sütikről szóló sávban a „Mindet elfogadom” gombra kattintasz. Ez méri a Facebookon és Instagramon futó hirdetéseink eredményességét (például azt, hogy aki látott egy hirdetést, később vett-e jelentést). A „Csak a szükségesek” választásakor semmi sem töltődik be. A döntésedet bármikor megváltoztathatod minden oldal alján a „Süti beállítások” linkkel.
+Csak akkor töltjük be a Meta pixelt, ha a sütikről szóló sávban a „Mindet elfogadom” gombra kattintasz. Ez méri a Facebookon és Instagramon futó hirdetéseink eredményességét (például azt, hogy aki látott egy hirdetést, később vett-e jelentést). A „Csak a szükségesek” választásakor sem a Meta pixelt, sem a Google Analyticset nem töltjük be. A sütik nélkül működő Cloudflare Web Analyticsről az Adatvédelmi tájékoztatóban olvashatsz. A döntésedet bármikor megváltoztathatod minden oldal alján a „Süti beállítások” linkkel.
 
 Betöltjük a Google Analyticset is, amely megmutatja, hogyan használják a látogatók az oldalt (mely oldalakat nyitják meg, hol hagyják félbe a kérdőívet, hányan vásárolnak). A Google megkapja az IP-címedet, amelyet lerövidít, és a böngésződ adatait, de az e-mail-címedet és a születési adataidat nem.
 

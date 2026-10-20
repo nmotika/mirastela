@@ -19,7 +19,7 @@ const hu: BaseDict = {
     how: [
       ['Megadod a születési adataidat', 'Dátum, idő és hely. Ha nem tudod az időt, a képletet akkor is kiszámoljuk.'],
       ['Kiszámoljuk a bolygók helyzetét', 'Nap, Hold, aszcendens, bolygók, házak és fényszögek, csillagászati efemeridák alapján.'],
-      ['Elolvasod a jelentésed', 'Ingyenes összefoglaló azonnal. A teljes jelentés PDF-fel, ha kéred.'],
+      ['Elolvasod a jelentésed', 'Ingyenes összefoglaló azonnal. A teljes jelentés PDF-formátumban is elérhető, ha kéred.'],
     ],
     incEyebrow: 'A teljes jelentésben',
     incTitle: 'A születési képleted, érthetően elmagyarázva',

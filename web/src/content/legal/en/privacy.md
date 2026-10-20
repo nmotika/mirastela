@@ -11,7 +11,7 @@ For any question about your data, write to [hello@mirastela.com](mailto:hello@mi
 - **Email address**, so we can send you your summary, reports and horoscopes, and your choice about marketing emails.
 - **Data of other people you enter:** the first name and birth data of a partner or a child, when you order those reports. Before you enter them, let that person know. We use their data only for the report you ordered, and they can exercise the same rights as you by writing to hello@mirastela.com.
 - **Orders and subscriptions:** what you bought, when, in which language, and the status of your subscription.
-- **Technical data:** IP address and basic information about your browser in server and security logs.
+- **Technical data:** IP address and basic information about your browser in server and security logs. When you sign up we also save the source of your visit (the site you came from and the campaign tags in the link), so we know which channels bring customers (legitimate interest).
 - **Tester questionnaire:** answers are stored anonymously, without your email address.
 
 We do not receive or store your card details. They are entered only with Stripe.
@@ -58,7 +58,7 @@ We do not sell your data and we do not share it with anyone for their own advert
 
 You have the right to access your data, to have it corrected or deleted, to restrict its processing, to data portability and to object to processing based on legitimate interest. You can withdraw your consent for marketing emails at any time with the link in every email.
 
-To exercise your rights, write to [hello@mirastela.com](mailto:hello@mirastela.com) from the email address you used with us. We reply within one month.
+To exercise your rights, write to [hello@mirastela.com](mailto:hello@mirastela.com) from the email address you used with us. If you no longer have access to it, write to us anyway: we will only ask for the information needed to verify your identity. We reply within one month.
 
 On the [My reports](../account/) page you can also download all your data or delete it yourself, after signing in with a link sent to your email.
 

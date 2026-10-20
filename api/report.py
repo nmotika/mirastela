@@ -290,9 +290,35 @@ def generate_json(prompt: str, schema: dict, fast: bool = True, max_tokens: int 
     raise ValueError(f"no tool output (stop_reason={msg.stop_reason})")
 
 
+SIGNS_EN = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"]
+
+# Each entry names its sign (in English), so entries are matched by name and never shifted by position.
 SIGNS_SCHEMA = {"type": "object", "required": ["signs"], "properties": {"signs": {"type": "array", "items": {
-    "type": "object", "required": ["general", "love", "work"],
-    "properties": {"general": {"type": "string"}, "love": {"type": "string"}, "work": {"type": "string"}}}}}}
+    "type": "object", "required": ["sign", "general", "love", "work"],
+    "properties": {"sign": {"type": "string", "enum": SIGNS_EN}, "general": {"type": "string"},
+                   "love": {"type": "string"}, "work": {"type": "string"}}}}}}
+
+# How to address the reader, per language (the informal form the website uses).
+ADDRESS = {"pl": "ty", "hr": "ti", "sl": "ti", "ro": "tu", "cs": "ty", "hu": "te (tegező forma)", "en": "you",
+           "de": "du, never Sie", "fr": "tu, ton, tes, never vous or votre", "it": "tu, never Lei"}
+
+# Letters with diacritics each language uses, and the minimum share of them among all letters in a
+# normal text. Far below it means the model dropped the diacritics (seen once in Slovenian).
+_DIACRITICS = {"sl": ("čšžČŠŽ", 0.006), "hr": ("čćšžđČĆŠŽĐ", 0.006), "cs": ("áčďéěíňóřšťúůýžÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ", 0.03),
+               "pl": ("ąćęłńóśźżĄĆĘŁŃÓŚŹŻ", 0.02), "ro": ("ăâîșțşţĂÂÎȘȚŞŢ", 0.015), "hu": ("áéíóöőúüűÁÉÍÓÖŐÚÜŰ", 0.04)}
+
+
+def daily_problem(lang: str, entry: dict) -> str | None:
+    """Why a generated daily entry should be rejected, or None when it looks fine."""
+    text = " ".join(str(entry.get(k, "")) for k in ("general", "love", "work"))
+    if any("\u0370" <= ch <= "\u03ff" or "\u0400" <= ch <= "\u04ff" or "\u4e00" <= ch <= "\u9fff" for ch in text):
+        return "foreign script"
+    if lang in _DIACRITICS:
+        chars, minimum = _DIACRITICS[lang]
+        letters = [ch for ch in text if ch.isalpha()]
+        if len(letters) > 300 and sum(ch in chars for ch in letters) / len(letters) < minimum:
+            return "missing diacritics"
+    return None
 
 
 PARAGRAPHS_SCHEMA = {"type": "object", "required": ["paragraphs"],
@@ -324,21 +350,18 @@ Aspects within orb, tightest first:
 """
 
 
-SIGNS_EN = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"]
-
-
 def prompt_daily_signs(lang: str, day: str, sky_txt: str, first: int = 0, count: int = 12) -> str:
     v = VOCAB[lang]
     names = ", ".join(SIGNS_EN[first:first + count])
     return f"""Task: the daily horoscope for {count} zodiac signs ({names}), for a website. Date: {day}.
-Write entirely in {LANG_NAME[lang]}, addressing the reader informally in the second person singular.
-Use exactly this vocabulary for signs: {v['signs']}.
+Write entirely in {LANG_NAME[lang]} with its correct alphabet and all diacritics, addressing the reader informally in the second person singular ({ADDRESS[lang]}) in every sentence.
+Use exactly this vocabulary for signs: {v['signs']}. Each text is only about its own sign: use the areas of life listed for that sign, never another sign's.
 Base every sign's text on the real sky facts below: for each sign use the areas of life listed for it, especially the Moon's. Mention at least one concrete fact per sign in plain words (a planet, its sign and the area of life it touches).
 Never write house numbers ("your 8th house"); name the area of life instead. A planet must have the same sign and the same area of life in "general", "love" and "work" of one sign. If the Moon changes sign today, say it once and correctly; do not contradict it later.
 Tendencies, not certainties. No predictions of illness, death, accidents, pregnancy, lottery wins or breakups. No medical, legal or financial advice.
 Do not use em dashes or en dashes as punctuation. Vary sentence openings between signs; no filler.
 
-Save the result with the save tool: "signs" is a list of exactly {count} entries, in this order: {names}.
+Save the result with the save tool: "signs" is a list of exactly {count} entries, in this order: {names}; "sign" is the English sign name.
 Each entry: "general" 70 to 100 words, "love" 25 to 40 words, "work" 25 to 40 words.
 
 Sky facts:

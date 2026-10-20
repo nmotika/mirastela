@@ -1,4 +1,4 @@
-*Ultimo aggiornamento: 19 ottobre 2026*
+*Ultimo aggiornamento: 20 ottobre 2026*
 
 ## Che cosa usiamo
 
@@ -13,7 +13,7 @@ Questi strumenti sono strettamente necessari al funzionamento del sito e non ric
 
 ## Statistiche e pubblicità
 
-Solo se nel banner dei cookie fai clic su "Accetto tutti" carichiamo il pixel di Meta, che misura l’efficacia dei nostri annunci su Facebook e Instagram (per esempio, se chi ha visto un annuncio ha poi acquistato un report). Con "Solo necessari" non viene caricato nulla. Puoi cambiare la tua scelta in qualsiasi momento con il link "Impostazioni cookie" in fondo a ogni pagina.
+Solo se nel banner dei cookie fai clic su "Accetto tutti" carichiamo il pixel di Meta, che misura l’efficacia dei nostri annunci su Facebook e Instagram (per esempio, se chi ha visto un annuncio ha poi acquistato un report). Con "Solo necessari" non carichiamo né il pixel di Meta né Google Analytics. Cloudflare Web Analytics, che funziona senza cookie, è descritto nell’Informativa sulla privacy. Puoi cambiare la tua scelta in qualsiasi momento con il link "Impostazioni cookie" in fondo a ogni pagina.
 
 Carichiamo anche Google Analytics, che mostra come i visitatori usano il sito (quali pagine aprono, dove abbandonano il questionario, quanti acquistano). Google riceve il tuo indirizzo IP, che abbrevia, e i dati del browser, ma non la tua email né i tuoi dati di nascita.
 

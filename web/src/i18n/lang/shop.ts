@@ -50,7 +50,7 @@ export const SHOP: Record<Lang, Shop> = {
     seniorBullet: 'Ljubav, obitelj i ono što ti je važno', kidTitleG: 'Natalna karta tvog djeteta ili unuka',
     doneWhere: 'Sve izvještaje, i one koji se još pripremaju, nalaziš i na stranici „Moji izvještaji”.',
     incPlain: 'Kratki sažetak jednostavnim riječima i tumač pojmova',
-    ckText: "Koristimo kolačiće nužne za rad stranice. Uz tvoju privolu i oglasne kolačiće (Meta, Google), da mjerimo uspješnost oglasa.", ckAll: "Prihvaćam sve", ckNecessary: "Samo nužni", ckMore: "Više", ckSettings: "Postavke kolačića",
+    ckText: "Koristimo kolačiće nužne za rad stranice. Uz tvoju privolu koristimo i kolačiće Mete i Googlea za mjerenje uspješnosti oglasa i posjećenosti stranice.", ckAll: "Prihvaćam sve", ckNecessary: "Samo nužni", ckMore: "Više", ckSettings: "Postavke kolačića",
     statusSkip: "Ne želim reći", captchaErr: "Nismo uspjeli potvrditi da nisi bot. Osvježi stranicu i pokušaj ponovno.", hourLabel: "Sat", minLabel: "Minute", pPriv: "Ove podatke koristimo samo za ovaj izvještaj. Ako su to podaci odrasle osobe, javi joj to.",
   },
   sl: {

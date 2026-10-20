@@ -14,7 +14,7 @@ export interface Account {
 
 export const ACCOUNT: Record<Lang, Account> = {
   pl: {
-    nav: 'Moje raporty', title: 'Moje raporty', intro: 'Podaj adres e-mail użyty przy zakupie. Wyślemy Ci link do logowania, bez hasła.',
+    nav: 'Moje raporty', title: 'Moje raporty', intro: 'Podaj adres e-mail użyty przy zakupie. Wyślemy Ci link do logowania bez hasła.',
     emailLabel: 'Adres e-mail', send: 'Wyślij link', sent: 'Jeśli pod tym adresem są zakupy, wysłaliśmy link. Sprawdź skrzynkę (także folder spam). Link działa 30 minut.',
     expired: 'Ten link wygasł albo został już użyty. Poproś o nowy.',
     signedAs: 'Zalogowano jako {email}', logout: 'Wyloguj', empty: 'Pod tym adresem nie ma jeszcze zakupionych raportów.', startCta: 'Zacznij od darmowego kosmogramu',
@@ -119,7 +119,7 @@ export const ACCOUNT: Record<Lang, Account> = {
     delGo: 'Delete permanently', delDone: 'Your data has been deleted.',
   },
   de: {
-    nav: 'Meine Auswertungen', title: 'Meine Auswertungen', intro: 'Gib die E-Mail-Adresse ein, mit der du gekauft hast. Wir schicken dir einen Anmeldelink, ganz ohne Passwort.',
+    nav: 'Meine Auswertungen', title: 'Meine Auswertungen', intro: 'Gib die E-Mail-Adresse ein, die du beim Kauf verwendet hast. Wir schicken dir einen Anmeldelink, ganz ohne Passwort.',
     emailLabel: 'E-Mail-Adresse', send: 'Link senden', sent: 'Falls es zu dieser Adresse Käufe gibt, haben wir dir einen Link geschickt. Schau in dein Postfach (auch in den Spam). Der Link gilt 30 Minuten.',
     expired: 'Dieser Link ist abgelaufen oder wurde bereits verwendet. Fordere einen neuen an.',
     signedAs: 'Angemeldet als {email}', logout: 'Abmelden', empty: 'Zu dieser Adresse gibt es noch keine gekauften Auswertungen.', startCta: 'Mit einem kostenlosen Geburtshoroskop starten',

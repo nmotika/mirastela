@@ -56,7 +56,7 @@ const cs: BaseDict = {
     emailSub: 'Pošleme krátké shrnutí horoskopu a odkaz na výsledky.',
     emailPh: 'Tvůj e-mail',
     emailConsent: 'Chci od Mirastely dostávat e-maily s horoskopy a nabídkami. Souhlas mohu kdykoli odvolat.',
-    emailCta: 'Pošlete mi bezplatné shrnutí',
+    emailCta: 'Pošli mi bezplatné shrnutí',
     emailErr: 'Zadej platnou e-mailovou adresu.',
     emailPrivacy: 'Odesláním souhlasíš se zásadami ochrany soukromí.',
   },

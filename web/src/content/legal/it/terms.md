@@ -1,4 +1,4 @@
-*Ultimo aggiornamento: 19 ottobre 2026*
+*Ultimo aggiornamento: 20 ottobre 2026*
 
 ## 1. Chi siamo
 
@@ -74,7 +74,7 @@ Prepariamo i nostri contenuti con cura, ma non possiamo garantire che calcoli e 
 
 ## 13. Reclami
 
-Puoi inviare un reclamo a [hello@mirastela.com](mailto:hello@mirastela.com) o al nostro indirizzo postale. Confermiamo la ricezione e rispondiamo per iscritto entro 15 giorni. Se non riusciamo a risolvere la controversia insieme, puoi rivolgerti a un organismo di risoluzione extragiudiziale delle controversie dei consumatori o al tribunale competente. La Commissione europea mette a disposizione anche una piattaforma per la risoluzione online delle controversie (ODR): [ec.europa.eu/consumers/odr](https://ec.europa.eu/consumers/odr).
+Puoi inviare un reclamo a [hello@mirastela.com](mailto:hello@mirastela.com) o al nostro indirizzo postale. Confermiamo la ricezione e rispondiamo per iscritto entro 15 giorni. Se non riusciamo a risolvere la controversia insieme, puoi rivolgerti a un organismo di risoluzione extragiudiziale delle controversie dei consumatori o al tribunale competente.
 
 ## 14. Legge applicabile
 

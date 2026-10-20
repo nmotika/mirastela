@@ -13,7 +13,7 @@ Bei allen Fragen zu deinen Daten schreib an [hello@mirastela.com](mailto:hello@m
 - **E-Mail-Adresse**, damit wir dir deine Zusammenfassung, Auswertungen und Horoskope schicken können, sowie deine Entscheidung zu Werbe-E-Mails.
 - **Daten anderer Personen, die du eingibst:** Vorname und Geburtsdaten eines Partners oder eines Kindes, wenn du diese Auswertungen bestellst. Bevor du sie eingibst, informiere bitte die betroffene Person. Wir verwenden ihre Daten nur für die bestellte Auswertung, und sie kann dieselben Rechte wie du ausüben, indem sie an hello@mirastela.com schreibt.
 - **Bestellungen und Abos:** was du wann und in welcher Sprache gekauft hast und den Status deines Abos.
-- **Technische Daten:** IP-Adresse und grundlegende Angaben zu deinem Browser in Server- und Sicherheitsprotokollen.
+- **Technische Daten:** IP-Adresse und grundlegende Angaben zu deinem Browser in Server- und Sicherheitsprotokollen. Bei der Anmeldung speichern wir außerdem die Quelle deines Besuchs (die Website, von der du kamst, und die Kampagnen-Kennzeichen im Link), damit wir wissen, welche Kanäle Kunden bringen (berechtigtes Interesse).
 - **Testerfragebogen:** Die Antworten werden anonym gespeichert, ohne deine E-Mail-Adresse.
 
 Deine Kartendaten erhalten und speichern wir nicht. Du gibst sie nur bei Stripe ein.
@@ -60,7 +60,7 @@ Wir verkaufen deine Daten nicht und geben sie an niemanden für dessen eigene We
 
 Du hast das Recht auf Auskunft über deine Daten, auf Berichtigung oder Löschung, auf Einschränkung der Verarbeitung, auf Datenübertragbarkeit und auf Widerspruch gegen eine Verarbeitung, die auf berechtigtem Interesse beruht. Deine Einwilligung in Werbe-E-Mails kannst du jederzeit über den Link in jeder E-Mail widerrufen.
 
-Um deine Rechte auszuüben, schreib an [hello@mirastela.com](mailto:hello@mirastela.com), und zwar von der E-Mail-Adresse, die du bei uns verwendet hast. Wir antworten innerhalb eines Monats.
+Um deine Rechte auszuüben, schreib an [hello@mirastela.com](mailto:hello@mirastela.com), und zwar von der E-Mail-Adresse, die du bei uns verwendet hast. Wenn du keinen Zugang mehr zu ihr hast, schreib uns trotzdem: Wir fragen dann nur nach den Angaben, die zur Prüfung deiner Identität nötig sind. Wir antworten innerhalb eines Monats.
 
 Auf der Seite [Meine Auswertungen](../account/) kannst du deine Daten auch selbst herunterladen oder löschen, nachdem du dich mit einem Link angemeldet hast, den wir dir per E-Mail schicken.
 

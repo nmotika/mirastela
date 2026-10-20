@@ -11,7 +11,7 @@ Per qualsiasi domanda sui tuoi dati, scrivi a [hello@mirastela.com](mailto:hello
 - **Indirizzo email**, per inviarti il riassunto, i report e gli oroscopi, e la tua scelta sulle email promozionali.
 - **Dati di altre persone che inserisci:** il nome e i dati di nascita di un partner o di un figlio, quando ordini quei report. Prima di inserirli, informa la persona interessata. Usiamo i suoi dati solo per il report ordinato, e può esercitare gli stessi diritti che hai tu scrivendo a hello@mirastela.com.
 - **Ordini e abbonamenti:** che cosa hai acquistato, quando, in quale lingua e lo stato del tuo abbonamento.
-- **Dati tecnici:** indirizzo IP e informazioni di base sul tuo browser nei log del server e di sicurezza.
+- **Dati tecnici:** indirizzo IP e informazioni di base sul tuo browser nei log del server e di sicurezza. Al momento dell’iscrizione salviamo anche la fonte della visita (il sito da cui arrivi e i tag di campagna nel link), per sapere quali canali portano clienti (legittimo interesse).
 - **Questionario per i tester:** le risposte vengono conservate in forma anonima, senza il tuo indirizzo email.
 
 Non riceviamo né conserviamo i dati della tua carta. Li inserisci solo presso Stripe.
@@ -58,7 +58,7 @@ Non vendiamo i tuoi dati e non li condividiamo con nessuno per la sua pubblicit�
 
 Hai diritto di accedere ai tuoi dati, di ottenerne la rettifica o la cancellazione, di limitarne il trattamento, alla portabilità dei dati e di opporti al trattamento basato sul legittimo interesse. Puoi revocare in qualsiasi momento il consenso alle email promozionali con il link presente in ogni email.
 
-Per esercitare i tuoi diritti, scrivi a [hello@mirastela.com](mailto:hello@mirastela.com) dall’indirizzo email che hai usato con noi. Rispondiamo entro un mese.
+Per esercitare i tuoi diritti, scrivi a [hello@mirastela.com](mailto:hello@mirastela.com) dall’indirizzo email che hai usato con noi. Se non hai più accesso a quell’indirizzo, scrivici comunque: ti chiederemo solo le informazioni necessarie per verificare la tua identità. Rispondiamo entro un mese.
 
 Nella pagina [I miei report](../account/) puoi anche scaricare tutti i tuoi dati o cancellarli da solo, dopo aver effettuato l’accesso con un link inviato alla tua email.
 

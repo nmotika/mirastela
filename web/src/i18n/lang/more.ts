@@ -10,7 +10,7 @@ export const MORE: Record<Lang, More> = {
       placeLabel: 'Miasto lub miejscowość', placeAbroad: 'Urodziłaś się lub urodziłeś za granicą? Wpisz miasto w dowolnym kraju.',
       placeLoading: 'Szukamy miejscowości…', placeNoneTitle: 'Nie znaleźliśmy „{q}”', placeNoneText: 'Sprawdź pisownię albo wpisz najbliższe większe miasto. Ascendent i domy będą wtedy przybliżone.',
       placeErrTitle: 'Nie udało się wczytać listy miast', placeErrText: 'Sprawdź połączenie z internetem.', retry: 'Spróbuj ponownie',
-      nameLabel: 'Imię', nameErr: 'Wpisz imię, aby przejść dalej.', focusCount: 'Dalej · wybrano: {n}',
+      nameLabel: 'Imię', nameErr: 'Wpisz imię, aby przejść dalej.', focusCount: 'Dalej · wybrane obszary: {n}',
       statusHint: 'Dzięki temu dopasujemy część raportu o relacjach.', statusNote: 'Po wybraniu opcji od razu przejdziesz dalej. Zawsze możesz wrócić.',
       calcStatus: 'Obliczamy domy i aspekty…', calcCta: 'Zobacz wynik',
       emailEyebrow: 'Kosmogram gotowy', emailLabel: 'Adres e-mail', emailTerms: 'Wysyłając, akceptujesz {terms} i {privacy}.',

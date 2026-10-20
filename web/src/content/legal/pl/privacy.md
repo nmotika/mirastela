@@ -11,7 +11,7 @@ W każdej sprawie dotyczącej Twoich danych napisz na adres [hello@mirastela.com
 - **Adres e-mail**, abyśmy mogli wysyłać Ci podsumowanie, raporty i horoskopy, oraz Twoja decyzja dotycząca e-maili marketingowych.
 - **Podane przez Ciebie dane innych osób:** imię i dane urodzenia partnera lub dziecka, gdy zamawiasz takie raporty. Zanim je podasz, poinformuj o tym tę osobę. Jej dane wykorzystujemy wyłącznie do zamówionego raportu, a ona sama może skorzystać z tych samych praw co Ty, pisząc na adres hello@mirastela.com.
 - **Zamówienia i subskrypcje:** co kupujesz, kiedy, w jakiej wersji językowej oraz status Twojej subskrypcji.
-- **Dane techniczne:** adres IP i podstawowe informacje o przeglądarce zapisywane w logach serwera i logach bezpieczeństwa.
+- **Dane techniczne:** adres IP i podstawowe informacje o przeglądarce zapisywane w logach serwera i logach bezpieczeństwa. Przy zgłoszeniu zapisujemy też źródło wizyty (stronę, z której przyszedłeś lub przyszłaś, oraz oznaczenia kampanii w linku), aby wiedzieć, które kanały przyprowadzają klientów (prawnie uzasadniony interes).
 - **Ankieta dla testerów:** odpowiedzi są przechowywane anonimowo, bez Twojego adresu e-mail.
 
 Nie otrzymujemy ani nie przechowujemy danych Twojej karty. Wpisujesz je wyłącznie w serwisie Stripe.
@@ -58,7 +58,7 @@ Nie sprzedajemy Twoich danych i nie udostępniamy ich nikomu do celów jego wła
 
 Masz prawo dostępu do swoich danych, ich sprostowania lub usunięcia, ograniczenia przetwarzania, przenoszenia danych oraz wniesienia sprzeciwu wobec przetwarzania opartego na prawnie uzasadnionym interesie. Zgodę na e-maile marketingowe możesz wycofać w każdej chwili, korzystając z linku zamieszczonego w każdym e-mailu.
 
-Aby skorzystać ze swoich praw, napisz na adres [hello@mirastela.com](mailto:hello@mirastela.com) z adresu e-mail, którego używasz w kontaktach z nami. Odpowiemy w ciągu miesiąca.
+Aby skorzystać ze swoich praw, napisz na adres [hello@mirastela.com](mailto:hello@mirastela.com) z adresu e-mail, którego używasz w kontaktach z nami. Jeśli nie masz już do niego dostępu, i tak napisz: poprosimy wtedy tylko o informacje potrzebne do potwierdzenia Twojej tożsamości. Odpowiemy w ciągu miesiąca.
 
 Na stronie [Moje raporty](../account/) możesz też samodzielnie pobrać lub usunąć swoje dane, po zalogowaniu linkiem wysłanym na Twój e-mail.
 

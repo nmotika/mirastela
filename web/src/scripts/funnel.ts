@@ -2,7 +2,7 @@ import { wheelSvg } from './wheel';
 import { CUSP } from './cusp';
 import { fill, huArticle } from '../i18n/fill';
 import { SIGN_GLYPHS } from './zodiac';
-import { fbTrack, trackInfo } from './track';
+import { fbTrack, trackInfo, sourceInfo } from './track';
 import { captcha, type Captcha } from './captcha';
 
 type Step = 'date' | 'time' | 'place' | 'name' | 'focus' | 'status' | 'calc' | 'email' | 'offer' | 'upsell' | 'pdata' | 'kid' | 'sub' | 'done';
@@ -475,7 +475,7 @@ $('eForm').addEventListener('submit', async (e) => {
     const r = await api<{ token: string }>('/api/lead', {
       email, lang, name: state.name ?? '', date: state.date ?? '', time: state.time ?? null,
       cityId: state.city?.id ?? null, focus: state.focus, status: state.status ?? '',
-      marketingConsent: $<HTMLInputElement>('eConsent').checked, track: trackInfo(), captcha: cap,
+      marketingConsent: $<HTMLInputElement>('eConsent').checked, track: trackInfo(), src: sourceInfo(), captcha: cap,
     });
     fbTrack('Lead', {}, `lead_${r.token}`);
   } catch (err) {

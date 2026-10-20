@@ -1,4 +1,4 @@
-*Dernière mise à jour : 19 octobre 2026*
+*Dernière mise à jour : 20 octobre 2026*
 
 ## Ce que nous utilisons
 
@@ -13,7 +13,7 @@ Ces éléments sont strictement nécessaires au fonctionnement du site et ne req
 
 ## Statistiques et publicité
 
-Ce n’est que si tu cliques sur « Tout accepter » dans le bandeau cookies que nous chargeons le pixel Meta, qui mesure l’efficacité de nos publicités sur Facebook et Instagram (par exemple, si une personne qui a vu une annonce a ensuite acheté un rapport). Avec « Uniquement nécessaires », rien n’est chargé. Tu peux modifier ton choix à tout moment grâce au lien « Paramètres des cookies » en bas de chaque page.
+Ce n’est que si tu cliques sur « Tout accepter » dans le bandeau cookies que nous chargeons le pixel Meta, qui mesure l’efficacité de nos publicités sur Facebook et Instagram (par exemple, si une personne qui a vu une annonce a ensuite acheté un rapport). Avec « Uniquement nécessaires », nous ne chargeons ni le pixel Meta ni Google Analytics. Cloudflare Web Analytics, qui fonctionne sans cookies, est décrit dans la Politique de confidentialité. Tu peux modifier ton choix à tout moment grâce au lien « Paramètres des cookies » en bas de chaque page.
 
 Nous chargeons aussi Google Analytics, qui montre comment les visiteurs utilisent le site (quelles pages ils ouvrent, où ils quittent le questionnaire, combien achètent). Google reçoit ton adresse IP, qu’il raccourcit, et les informations de ton navigateur, mais pas ton e-mail ni tes données de naissance.
 

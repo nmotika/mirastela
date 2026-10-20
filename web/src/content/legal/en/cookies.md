@@ -1,4 +1,4 @@
-*Last updated: 19 October 2026*
+*Last updated: 20 October 2026*
 
 ## What we use
 
@@ -13,7 +13,7 @@ These are strictly necessary for the website to work and do not need your consen
 
 ## Analytics and advertising
 
-Only if you click "Accept all" in the cookie banner do we load the Meta pixel, which measures how our ads on Facebook and Instagram perform (for example, whether someone who saw an ad later bought a report). With "Necessary only" nothing is loaded. You can change your choice at any time with the "Cookie settings" link at the bottom of every page.
+Only if you click "Accept all" in the cookie banner do we load the Meta pixel, which measures how our ads on Facebook and Instagram perform (for example, whether someone who saw an ad later bought a report). With "Necessary only" we load neither the Meta pixel nor Google Analytics. Cloudflare Web Analytics, which works without cookies, is described in the Privacy policy. You can change your choice at any time with the "Cookie settings" link at the bottom of every page.
 
 We also load Google Analytics, which shows how visitors use the site (which pages they open, where they leave the questionnaire, how many buy). Google receives your IP address, which it shortens, and browser details, but not your email or birth data.
 

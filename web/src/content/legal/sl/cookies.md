@@ -1,4 +1,4 @@
-*Zadnja posodobitev: 19. oktober 2026*
+*Zadnja posodobitev: 20. oktober 2026*
 
 ## Kaj uporabljamo
 
@@ -13,7 +13,7 @@ Naslednje je nujno za delovanje spletne strani in ne potrebuje tvojega soglasja.
 
 ## Analitika in oglaševanje
 
-Šele ko v obvestilu o piškotkih klikneš "Sprejmem vse", naložimo piksel Meta, ki meri uspešnost naših oglasov na Facebooku in Instagramu (na primer, ali je nekdo, ki je videl oglas, kasneje kupil poročilo). Pri izbiri "Samo nujni" se ne naloži nič. Izbiro lahko kadar koli spremeniš s povezavo "Nastavitve piškotkov" na dnu vsake strani.
+Šele ko v obvestilu o piškotkih klikneš "Sprejmem vse", naložimo piksel Meta, ki meri uspešnost naših oglasov na Facebooku in Instagramu (na primer, ali je nekdo, ki je videl oglas, kasneje kupil poročilo). Pri izbiri "Samo nujni" ne naložimo piksla Meta niti Google Analytics. Cloudflare Web Analytics, ki deluje brez piškotkov, je opisan v Politiki zasebnosti. Izbiro lahko kadar koli spremeniš s povezavo "Nastavitve piškotkov" na dnu vsake strani.
 
 Naložimo tudi Google Analytics, ki kaže, kako obiskovalci uporabljajo stran (katere strani odprejo, kje zapustijo vprašalnik, koliko jih kupi). Google prejme tvoj naslov IP, ki ga skrajša, in podatke o brskalniku, ne pa tvojega e-poštnega naslova ali podatkov o rojstvu.
 

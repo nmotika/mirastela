@@ -1,4 +1,4 @@
-*Dernière mise à jour : 19 octobre 2026*
+*Dernière mise à jour : 20 octobre 2026*
 
 ## 1. Qui sommes-nous
 
@@ -76,7 +76,7 @@ Nous préparons nos contenus avec soin, mais nous ne pouvons pas garantir que le
 
 Tu peux adresser une réclamation à [hello@mirastela.com](mailto:hello@mirastela.com) ou à notre adresse postale. Nous en accusons réception et répondons par écrit dans un délai de 15 jours.
 
-Si nous ne parvenons pas à résoudre le litige ensemble, tu peux recourir gratuitement à un médiateur de la consommation ou à un autre organisme de règlement extrajudiciaire des litiges de consommation, ou saisir la juridiction compétente. Tu peux aussi utiliser la plateforme européenne de règlement en ligne des litiges : [ec.europa.eu/consumers/odr](https://ec.europa.eu/consumers/odr).
+Si nous ne parvenons pas à résoudre le litige ensemble, tu peux recourir gratuitement à un médiateur de la consommation ou à un autre organisme de règlement extrajudiciaire des litiges de consommation, ou saisir la juridiction compétente.
 
 ## 14. Droit applicable
 

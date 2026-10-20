@@ -11,7 +11,7 @@ Pentru orice întrebare despre datele tale, scrie-ne la [hello@mirastela.com](ma
 - **Adresa de e-mail**, ca să îți putem trimite rezumatul, rapoartele și horoscoapele, precum și alegerea ta privind e-mailurile de marketing.
 - **Datele altor persoane pe care le introduci:** prenumele și datele de naștere ale partenerului sau ale unui copil, când comanzi aceste rapoarte. Înainte să le introduci, anunță persoana respectivă. Folosim datele ei doar pentru raportul comandat, iar ea își poate exercita aceleași drepturi ca tine scriindu-ne la hello@mirastela.com.
 - **Comenzi și abonamente:** ce ai cumpărat, când, în ce limbă și starea abonamentului tău.
-- **Date tehnice:** adresa IP și informații de bază despre browserul tău, în jurnalele serverului și de securitate.
+- **Date tehnice:** adresa IP și informații de bază despre browserul tău, în jurnalele serverului și de securitate. La înscriere salvăm și sursa vizitei (site-ul de pe care ai venit și etichetele de campanie din link), ca să știm ce canale ne aduc clienți (interes legitim).
 - **Chestionarul pentru testeri:** răspunsurile sunt stocate anonim, fără adresa ta de e-mail.
 
 Nu primim și nu stocăm datele cardului tău. Acestea se introduc doar la Stripe.
@@ -58,7 +58,7 @@ Nu vindem datele tale și nu le împărtășim cu nimeni pentru propria publicit
 
 Ai dreptul de acces la datele tale, dreptul la rectificarea sau ștergerea lor, la restricționarea prelucrării, la portabilitatea datelor și dreptul de a te opune prelucrării bazate pe interes legitim. Îți poți retrage oricând consimțământul pentru e-mailurile de marketing prin linkul din fiecare e-mail.
 
-Ca să îți exerciți drepturile, scrie-ne la [hello@mirastela.com](mailto:hello@mirastela.com) de pe adresa de e-mail pe care ai folosit-o la noi. Răspundem în termen de o lună.
+Ca să îți exerciți drepturile, scrie-ne la [hello@mirastela.com](mailto:hello@mirastela.com) de pe adresa de e-mail pe care ai folosit-o la noi. Dacă nu mai ai acces la ea, scrie-ne oricum: îți vom cere doar informațiile necesare pentru a-ți verifica identitatea. Răspundem în termen de o lună.
 
 Pe pagina [Rapoartele mele](../account/) îți poți descărca sau șterge singur(ă) datele, după autentificarea cu un link trimis pe e-mail.
 

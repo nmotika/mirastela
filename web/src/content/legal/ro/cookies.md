@@ -1,4 +1,4 @@
-*Ultima actualizare: 19 octombrie 2026*
+*Ultima actualizare: 20 octombrie 2026*
 
 ## Ce folosim
 
@@ -13,7 +13,7 @@ Următoarele sunt strict necesare funcționării site-ului și nu necesită acor
 
 ## Analiză și publicitate
 
-Abia după ce apeși „Accept toate” în bannerul de cookie-uri încărcăm pixelul Meta, care măsoară eficiența reclamelor noastre pe Facebook și Instagram (de exemplu, dacă cineva care a văzut o reclamă a cumpărat apoi un raport). Cu „Doar necesare” nu se încarcă nimic. Îți poți schimba alegerea oricând din linkul „Setări cookie” din josul fiecărei pagini.
+Abia după ce apeși „Accept toate” în bannerul de cookie-uri încărcăm pixelul Meta, care măsoară eficiența reclamelor noastre pe Facebook și Instagram (de exemplu, dacă cineva care a văzut o reclamă a cumpărat apoi un raport). Cu „Doar necesare” nu încărcăm nici pixelul Meta, nici Google Analytics. Cloudflare Web Analytics, care funcționează fără cookie-uri, este descris în Politica de confidențialitate. Îți poți schimba alegerea oricând din linkul „Setări cookie” din josul fiecărei pagini.
 
 Încărcăm și Google Analytics, care arată cum folosesc vizitatorii site-ul (ce pagini deschid, unde abandonează chestionarul, câți cumpără). Google primește adresa ta IP, pe care o scurtează, și datele browserului, dar nu și e-mailul sau datele de naștere.
 

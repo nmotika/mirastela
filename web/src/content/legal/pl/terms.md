@@ -1,4 +1,4 @@
-*Ostatnia aktualizacja: 19 października 2026*
+*Ostatnia aktualizacja: 20 października 2026*
 
 ## 1. Kim jesteśmy
 

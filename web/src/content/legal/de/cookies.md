@@ -1,4 +1,4 @@
-*Stand: 19. Oktober 2026*
+*Stand: 20. Oktober 2026*
 
 <!-- ENTWURF: vor dem Start von einer muttersprachlichen Lektorin oder einem Lektor prüfen lassen. -->
 
@@ -15,7 +15,7 @@ Diese sind für den Betrieb der Website unbedingt erforderlich und brauchen dein
 
 ## Statistik und Werbung
 
-Nur wenn du im Cookie-Banner auf „Alle akzeptieren“ klickst, laden wir das Meta-Pixel, das misst, wie unsere Anzeigen auf Facebook und Instagram wirken (zum Beispiel, ob jemand, der eine Anzeige gesehen hat, später eine Auswertung gekauft hat). Bei „Nur notwendige“ wird nichts geladen. Du kannst deine Auswahl jederzeit über den Link „Cookie-Einstellungen“ unten auf jeder Seite ändern.
+Nur wenn du im Cookie-Banner auf „Alle akzeptieren“ klickst, laden wir das Meta-Pixel, das misst, wie unsere Anzeigen auf Facebook und Instagram wirken (zum Beispiel, ob jemand, der eine Anzeige gesehen hat, später eine Auswertung gekauft hat). Bei „Nur notwendige“ laden wir weder das Meta-Pixel noch Google Analytics. Cloudflare Web Analytics, das ohne Cookies arbeitet, ist in der Datenschutzerklärung beschrieben. Du kannst deine Auswahl jederzeit über den Link „Cookie-Einstellungen“ unten auf jeder Seite ändern.
 
 Außerdem laden wir Google Analytics, das zeigt, wie Besucher die Website nutzen (welche Seiten sie öffnen, wo sie den Fragebogen verlassen, wie viele kaufen). Google erhält deine IP-Adresse, die gekürzt wird, und Browserangaben, aber weder deine E-Mail-Adresse noch deine Geburtsdaten.
 

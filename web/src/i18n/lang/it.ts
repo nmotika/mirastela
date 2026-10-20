@@ -18,7 +18,7 @@ const it: BaseDict = {
     how: [
       ['Inserisci i tuoi dati di nascita', 'Data, ora e luogo. Se non conosci l’ora, calcoliamo comunque il tuo tema.'],
       ['Calcoliamo i pianeti', 'Sole, Luna, Ascendente, pianeti, case e aspetti, dalle effemeridi astronomiche.'],
-      ['Leggi il tuo report', 'Un riassunto gratuito subito. Il report completo con PDF, se lo desideri.'],
+      ['Leggi il tuo report', 'Un riassunto gratuito subito. Il report completo è disponibile anche in formato PDF, se lo desideri.'],
     ],
     incEyebrow: 'Nel report completo',
     incTitle: 'Il tuo tema natale, spiegato in modo semplice',

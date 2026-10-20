@@ -11,7 +11,7 @@ Az adataiddal kapcsolatos bármilyen kérdéssel írj a [hello@mirastela.com](ma
 - **E-mail-cím**, hogy elküldhessük az összefoglalódat, a jelentéseidet és a horoszkópjaidat, valamint a marketing e-mailekkel kapcsolatos döntésed.
 - **Más személyek általad megadott adatai:** a párod vagy a gyermeked keresztneve és születési adatai, ha ilyen jelentést rendelsz. Mielőtt megadod őket, tájékoztasd erről az érintettet. Az adatait csak a megrendelt jelentéshez használjuk, és ugyanazokat a jogokat gyakorolhatja, mint te, ha ír nekünk a hello@mirastela.com címre.
 - **Rendelések és előfizetések:** mit vásároltál, mikor, milyen nyelven, és milyen állapotú az előfizetésed.
-- **Technikai adatok:** IP-cím és a böngésződre vonatkozó alapvető információk a szerver- és biztonsági naplókban.
+- **Technikai adatok:** IP-cím és a böngésződre vonatkozó alapvető információk a szerver- és biztonsági naplókban. Feliratkozáskor a látogatás forrását is elmentjük (az oldalt, ahonnan érkeztél, és a link kampánycímkéit), hogy tudjuk, mely csatornák hoznak vásárlókat (jogos érdek).
 - **Tesztelői kérdőív:** a válaszokat anonim módon, az e-mail-címed nélkül tároljuk.
 
 A kártyaadataidat nem kapjuk meg és nem tároljuk. Ezeket kizárólag a Stripe felületén adod meg.
@@ -58,7 +58,7 @@ Adataidat nem adjuk el, és senkivel nem osztjuk meg saját reklámcéljaira.
 
 Jogod van az adataidhoz való hozzáféréshez, azok helyesbítéséhez vagy törléséhez, az adatkezelés korlátozásához, az adathordozhatósághoz, valamint a jogos érdeken alapuló adatkezelés elleni tiltakozáshoz. A marketing e-mailekhez adott hozzájárulásodat bármikor visszavonhatod az egyes e-mailekben található linkkel.
 
-Jogaid gyakorlásához írj a [hello@mirastela.com](mailto:hello@mirastela.com) címre arról az e-mail-címről, amelyet nálunk használtál. Egy hónapon belül válaszolunk.
+Jogaid gyakorlásához írj a [hello@mirastela.com](mailto:hello@mirastela.com) címre arról az e-mail-címről, amelyet nálunk használtál. Ha már nem férsz hozzá, akkor is írj: ilyenkor csak a személyazonosságod ellenőrzéséhez szükséges adatokat kérjük. Egy hónapon belül válaszolunk.
 
 A [Jelentéseim](../account/) oldalon az adataidat magad is letöltheted vagy törölheted, miután bejelentkeztél az e-mailben küldött linkkel.
 

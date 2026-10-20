@@ -11,7 +11,7 @@ Pour toute question sur tes données, écris à [hello@mirastela.com](mailto:hel
 - **Ton adresse e-mail**, pour t’envoyer ton résumé, tes rapports et tes horoscopes, ainsi que ton choix concernant les e-mails marketing.
 - **Les données d’autres personnes que tu saisis :** le prénom et les données de naissance d’un ou d’une partenaire ou d’un enfant, lorsque tu commandes ces rapports. Avant de les saisir, informes-en la personne concernée. Nous utilisons ses données uniquement pour le rapport commandé, et elle peut exercer les mêmes droits que toi en écrivant à hello@mirastela.com.
 - **Commandes et abonnements :** ce que tu as acheté, quand, dans quelle langue, et le statut de ton abonnement.
-- **Données techniques :** adresse IP et informations de base sur ton navigateur dans les journaux du serveur et de sécurité.
+- **Données techniques :** adresse IP et informations de base sur ton navigateur dans les journaux du serveur et de sécurité. Lors de ton inscription, nous enregistrons aussi la source de ta visite (le site d’où tu viens et les balises de campagne du lien), pour savoir quels canaux nous amènent des clients (intérêt légitime).
 - **Questionnaire des testeurs :** les réponses sont enregistrées de façon anonyme, sans ton adresse e-mail.
 
 Nous ne recevons ni ne conservons tes données de carte. Tu les saisis uniquement chez Stripe.
@@ -58,7 +58,7 @@ Nous ne vendons pas tes données et ne les partageons avec personne pour sa prop
 
 Tu as le droit d’accéder à tes données, de les faire rectifier ou effacer, d’en limiter le traitement, à la portabilité des données et de t’opposer au traitement fondé sur l’intérêt légitime. Tu peux retirer à tout moment ton consentement aux e-mails marketing grâce au lien présent dans chaque e-mail.
 
-Pour exercer tes droits, écris à [hello@mirastela.com](mailto:hello@mirastela.com) depuis l’adresse e-mail que tu as utilisée chez nous. Nous répondons dans un délai d’un mois.
+Pour exercer tes droits, écris à [hello@mirastela.com](mailto:hello@mirastela.com) depuis l’adresse e-mail que tu as utilisée chez nous. Si tu n’y as plus accès, écris-nous quand même : nous te demanderons seulement les informations nécessaires pour vérifier ton identité. Nous répondons dans un délai d’un mois.
 
 Sur la page [Mes rapports](../account/), tu peux aussi télécharger toutes tes données ou les supprimer toi-même, après t’être connecté·e avec un lien envoyé à ton adresse e-mail.
 

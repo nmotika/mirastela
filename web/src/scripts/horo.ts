@@ -29,7 +29,9 @@ async function fetchDay(day: string, tries = 0): Promise<Daily> {
 function setDate(day: string) {
   document.querySelectorAll<HTMLElement>('[data-hdate]').forEach((el) => (el.textContent = fmtDay(day)));
 }
+let shown = 0; // the latest tab click wins, even if an earlier day finishes loading later
 async function showDay(offset: number) {
+  const run = ++shown;
   const day = zagrebDay(offset);
   setDate(day);
   if (!read) return;
@@ -39,11 +41,12 @@ async function showDay(offset: number) {
   read.querySelectorAll<HTMLElement>('[data-h]').forEach((p) => (p.textContent = ''));
   try {
     const d = await fetchDay(day);
+    if (run !== shown) return;
     const s = d.signs[cfg.idx];
     read.querySelectorAll<HTMLElement>('[data-h]').forEach((p) => (p.textContent = s[p.dataset.h as 'general' | 'love' | 'work']));
     read.classList.add('ready');
   } catch {
-    st.textContent = H.error;
+    if (run === shown) st.textContent = H.error;
   }
 }
 

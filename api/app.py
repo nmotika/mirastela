@@ -80,6 +80,8 @@ def db():
     cols = {r[1] for r in con.execute("pragma table_info(leads)")}
     if "token" not in cols:
         con.execute("alter table leads add column token text")
+    if "src" not in cols:
+        con.execute("alter table leads add column src text")
     sub_cols = {r[1] for r in con.execute("pragma table_info(subs)")}
     for col in ("cal", "stripe_customer", "stripe_sub"):
         if col not in sub_cols:
@@ -188,7 +190,14 @@ class LeadIn(BaseModel):
     status: str = ""
     marketingConsent: bool = False
     track: TrackIn | None = None
+    src: dict[str, str] | None = None  # visit source: referring host, utm tags, landing page
     captcha: str | None = Field(None, max_length=4000)
+
+
+def _src_json(src: dict[str, str] | None) -> str | None:
+    keep = ("landing", "ref", "source", "medium", "campaign", "content", "term", "click")
+    clean = {k: str(src[k])[:120] for k in keep if src and src.get(k)}
+    return json.dumps(clean, ensure_ascii=False) if clean else None
 
 
 @app.post("/api/lead")
@@ -200,11 +209,11 @@ def lead(body: LeadIn, bg: BackgroundTasks, request: Request):
     guard.turnstile(body.captcha, request)
     token = secrets.token_urlsafe(12)
     with db() as con:
-        con.execute("insert into leads(created,email,lang,name,birth_date,birth_time,city_id,focus,status,marketing_consent,token)"
-                    " values(?,?,?,?,?,?,?,?,?,?,?)",
+        con.execute("insert into leads(created,email,lang,name,birth_date,birth_time,city_id,focus,status,marketing_consent,token,src)"
+                    " values(?,?,?,?,?,?,?,?,?,?,?,?)",
                     (datetime.now(timezone.utc).isoformat(), body.email.lower(), body.lang, body.name[:80],
                      body.date, body.time, body.cityId, ",".join(body.focus), body.status,
-                     int(body.marketingConsent), token))
+                     int(body.marketingConsent), token, _src_json(body.src)))
     if body.date and body.cityId:
         bg.add_task(_send_summary, token)
     bg.add_task(capi.send, "Lead", f"lead_{token}", f"{emails.SITE}/{_lang(body.lang)}/start/", body.email,
@@ -717,18 +726,25 @@ def daily_for(lang: str, day: date) -> dict:
         signs, model, txt = [], "test", sky.sky_text(facts)
         for first in (0, 6):
             fb = json.dumps(json.loads(fallback)[first:first + 6])
-            for attempt in range(3):
+            for attempt in range(4):
                 try:
                     out, model = report.generate_json(report.prompt_daily_signs(lang, key, txt, first, 6), report.SIGNS_SCHEMA,
                                                       max_tokens=6000, fallback={"signs": json.loads(fb)})
                     part = (out or {}).get("signs")
                     if isinstance(part, str):  # the model sometimes passes the list as a JSON string
                         part = report.parse_json(part)
-                    if isinstance(part, list) and len(part) == 12:  # wrote all twelve: keep this half
-                        part = part[first:first + 6]
-                    if isinstance(part, list) and len(part) == 6 and all(isinstance(x, dict) and x.get("general") for x in part):
-                        signs += part
-                        break
+                    want = report.SIGNS_EN[first:first + 6]
+                    by_sign = {x.get("sign"): x for x in part if isinstance(x, dict)} if isinstance(part, list) else {}
+                    if model == "test":  # the fallback has no sign names
+                        by_sign = dict(zip(want, part))
+                    got = [by_sign.get(n) for n in want]
+                    if all(x and x.get("general") for x in got):
+                        problems = [f"{n}: {p}" for n, x in zip(want, got) if (p := report.daily_problem(lang, x))]
+                        if not problems:
+                            signs += [{k: x[k] for k in ("general", "love", "work")} for x in got]
+                            break
+                        print("daily", lang, key, first, "rejected", attempt, problems, flush=True)
+                        continue
                     print("daily", lang, key, first, "bad shape", attempt, type(part).__name__,
                           len(part) if isinstance(part, (list, str)) else "", str(out)[:200], flush=True)
                 except Exception as e:

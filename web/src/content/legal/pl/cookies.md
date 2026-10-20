@@ -1,4 +1,4 @@
-*Ostatnia aktualizacja: 19 października 2026*
+*Ostatnia aktualizacja: 20 października 2026*
 
 ## Czego używamy
 
@@ -13,7 +13,7 @@ Poniższe są niezbędne do działania strony i nie wymagają Twojej zgody.
 
 ## Analityka i reklama
 
-Dopiero gdy w banerze cookies klikniesz „Akceptuję wszystkie”, wczytujemy piksel Meta, który mierzy skuteczność naszych reklam na Facebooku i Instagramie (na przykład czy osoba, która zobaczyła reklamę, kupiła później raport). Przy wyborze „Tylko niezbędne” nic nie jest wczytywane. Swój wybór możesz zmienić w każdej chwili linkiem „Ustawienia plików cookie” na dole każdej strony.
+Dopiero gdy w banerze cookies klikniesz „Akceptuję wszystkie”, wczytujemy piksel Meta, który mierzy skuteczność naszych reklam na Facebooku i Instagramie (na przykład czy osoba, która zobaczyła reklamę, kupiła później raport). Przy wyborze „Tylko niezbędne” nie wczytujemy piksela Meta ani Google Analytics. Informacje o Cloudflare Web Analytics, które działa bez plików cookie, znajdziesz w Polityce prywatności. Swój wybór możesz zmienić w każdej chwili linkiem „Ustawienia plików cookie” na dole każdej strony.
 
 Wczytujemy też Google Analytics, które pokazuje, jak odwiedzający korzystają ze strony (jakie strony otwierają, w którym miejscu porzucają kwestionariusz, ile osób kupuje). Google otrzymuje Twój adres IP, który skraca, oraz dane przeglądarki, ale nie Twój e-mail ani dane urodzenia.
 

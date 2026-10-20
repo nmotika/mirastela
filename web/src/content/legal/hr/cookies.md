@@ -1,4 +1,4 @@
-*Zadnje ažuriranje: 19. listopada 2026.*
+*Zadnje ažuriranje: 20. listopada 2026.*
 
 ## Što koristimo
 
@@ -13,7 +13,7 @@ Ovo je nužno za rad web stranice i za to nije potrebna tvoja privola.
 
 ## Analitika i oglašavanje
 
-Tek kad u obavijesti o kolačićima klikneš "Prihvaćam sve", učitavamo Meta piksel koji mjeri uspješnost naših oglasa na Facebooku i Instagramu (na primjer, je li netko tko je vidio oglas kasnije kupio izvještaj). Uz "Samo nužni" ništa se ne učitava. Izbor možeš promijeniti u bilo kojem trenutku poveznicom "Postavke kolačića" na dnu svake stranice.
+Tek kad u obavijesti o kolačićima klikneš "Prihvaćam sve", učitavamo Meta piksel koji mjeri uspješnost naših oglasa na Facebooku i Instagramu (na primjer, je li netko tko je vidio oglas kasnije kupio izvještaj). Uz "Samo nužni" ne učitavamo Meta piksel ni Google Analytics. Cloudflare Web Analytics, koji radi bez kolačića, opisan je u Politici privatnosti. Izbor možeš promijeniti u bilo kojem trenutku poveznicom "Postavke kolačića" na dnu svake stranice.
 
 Učitavamo i Google Analytics, koji pokazuje kako posjetitelji koriste stranicu (koje stranice otvaraju, gdje napuštaju upitnik, koliko ih kupi). Google dobiva tvoju IP adresu, koju skraćuje, i podatke o pregledniku, ali ne i tvoj e-mail ni podatke o rođenju.
 

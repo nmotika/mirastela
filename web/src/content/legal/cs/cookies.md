@@ -1,4 +1,4 @@
-*Poslední aktualizace: 19. října 2026*
+*Poslední aktualizace: 20. října 2026*
 
 ## Co používáme
 
@@ -13,7 +13,7 @@ Následující je nezbytné pro fungování webu a nevyžaduje tvůj souhlas.
 
 ## Analytika a reklama
 
-Teprve když v liště cookies klikneš na „Přijmout vše“, načteme pixel Meta, který měří úspěšnost našich reklam na Facebooku a Instagramu (například zda si někdo, kdo reklamu viděl, později koupil zprávu). Při volbě „Jen nezbytné“ se nic nenačte. Svou volbu můžeš kdykoli změnit odkazem „Nastavení cookies“ v dolní části každé stránky.
+Teprve když v liště cookies klikneš na „Přijmout vše“, načteme pixel Meta, který měří úspěšnost našich reklam na Facebooku a Instagramu (například zda si někdo, kdo reklamu viděl, později koupil zprávu). Při volbě „Jen nezbytné“ nenačítáme pixel Meta ani Google Analytics. Cloudflare Web Analytics, který funguje bez cookies, popisujeme v Zásadách ochrany osobních údajů. Svou volbu můžeš kdykoli změnit odkazem „Nastavení cookies“ v dolní části každé stránky.
 
 Načítáme také Google Analytics, které ukazuje, jak návštěvníci web používají (které stránky otevírají, kde opouštějí dotazník, kolik jich nakoupí). Google dostává tvou IP adresu, kterou zkracuje, a údaje o prohlížeči, ale ne tvůj e-mail ani údaje o narození.
 
