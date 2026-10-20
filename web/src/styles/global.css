@@ -171,8 +171,10 @@ img, svg { max-width: 100%; }
   .wrap { padding: 0 40px; }
   .head-nav { display: flex; }
   .site-head { height: 80px; }
-  .site-foot .cols { grid-template-columns: 1fr auto; align-items: center; gap: 16px 40px; }
+  .site-foot .cols { grid-template-columns: auto 1fr; align-items: center; gap: 8px 40px; }
   .site-foot .foot-links { justify-content: flex-end; }
-  .site-foot .foot-seller { text-align: right; }
+  .site-foot .foot-info { grid-column: 1 / -1; }
+  .site-foot .foot-note { grid-column: 1; margin: 8px 0 0; }
+  .site-foot .foot-seller { grid-column: 2; text-align: right; margin: 8px 0 0; }
   .site-foot .lang-row { grid-column: 1 / -1; }
 }

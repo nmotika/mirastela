@@ -23,7 +23,7 @@ const astro = [
     <nav class="foot-links" aria-label={S.navTitle}>
       {astro.map(([label, href]) => <a href={href}>{label}</a>)}
     </nav>
-    <nav class="foot-links" aria-label="Info">
+    <nav class="foot-links foot-info" aria-label="Info">
       <a href={`/${lang}/${d.horo.slug}/`}>{d.horo.nav}</a>
       <a href={`/${lang}/account/`}>{d.account.nav}</a>
       <a href={`/${lang}/terms/`}>{F.terms}</a><a href={`/${lang}/privacy/`}>{F.privacy}</a>
