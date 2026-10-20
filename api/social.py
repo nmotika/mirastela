@@ -4,7 +4,7 @@ Facebook page and Instagram account through the Meta Graph API.
   python social.py morning [DATE]   daily horoscope carousel (cover + 12 signs) and a short reel, all languages;
                                     publishes SOCIAL_LANG if Meta credentials are set
   python social.py evening [DATE]   the evergreen post of the day (14-day rotation), all languages; publishes too
-  python social.py plan             write the 14 evergreen posts per language (one direct model call per language)
+  python social.py plan [LANGS] [--force]  write the 14 evergreen posts per language (skips languages already done)
   python social.py preview          render samples with placeholder text (no model, no publishing)
 
 Files: SOCIAL_DIR (default /var/lib/mirastela/social)/<YYYY-MM-DD>/<lang>/..., caption.txt next to the images.
@@ -339,8 +339,12 @@ def plan_path(lang: str) -> Path:
     return OUT / "plan" / f"{lang}.json"
 
 
-def plan(langs=None):
+def plan(langs=None, force: bool = False):
+    """Languages that already have a plan are skipped (a run that stopped halfway continues where it was)."""
     for lang in langs or ALL_LANGS:
+        if plan_path(lang).exists() and not force:
+            print("social plan", lang, "already done", flush=True)
+            continue
         for attempt in range(3):
             out, _ = report.generate_json(plan_prompt(lang), PLAN_SCHEMA, fast=False, max_tokens=20000)  # above ~21k the SDK requires streaming
             posts = (out or {}).get("posts")
@@ -515,6 +519,7 @@ if __name__ == "__main__":
     elif cmd == "evening":
         evening(day)
     elif cmd == "plan":
-        plan(sys.argv[2:] or None)
+        args = [a for a in sys.argv[2:] if a != "--force"]
+        plan(args or None, force="--force" in sys.argv)
     elif cmd == "preview":
         preview(sys.argv[2] if len(sys.argv) > 2 else "pl")
