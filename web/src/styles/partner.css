@@ -1,0 +1,14 @@
+.partner .hh .btn { margin-top: 18px; }
+.pbig { margin: 26px 0 8px; padding: 26px 22px; border-radius: 20px; border: 1px solid var(--gold); background: var(--sel); display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; }
+.pbig b { font-size: 52px; font-weight: 500; line-height: 1.1; color: var(--gold); }
+.pbig span { font-weight: 600; color: var(--ink); }
+.pwho { display: grid; gap: 10px; }
+.pwho div { padding: 16px; border-radius: 16px; border: 1px solid var(--border); background: var(--panel); }
+.pwho h3 { font-size: 17px; margin: 0 0 4px; }
+.pwho p { margin: 0; font-size: 15px; }
+.plist { margin: 0; padding-left: 22px; display: grid; gap: 8px; color: var(--muted); }
+.gsteps { margin: 0; padding-left: 22px; display: grid; gap: 8px; color: var(--muted); }
+.prcta { margin: 36px 0 12px; padding: 28px 22px; border-radius: 20px; border: 1px solid var(--border); background: var(--panel); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.prcta .btn { width: auto; padding: 14px 32px; }
+.pnote { margin-top: 8px; }
+@media (min-width: 900px) { .pwho { grid-template-columns: repeat(3, minmax(0, 1fr)); } .partner .hh .btn { width: auto; padding: 14px 32px; } }

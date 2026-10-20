@@ -1,0 +1,70 @@
+---
+// Partner page: invitation for influencers, creators and editors (revenue share), linked from the footer.
+import Base from '../../../layouts/Base.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import { LOCALES, PRICE, UPSELL, SUB, formatPrice, type Lang } from '../../../i18n/config';
+import { PARTNER } from '../../../i18n/lang/partner';
+import '../../../styles/horo.css';
+import '../../../styles/seo.css';
+import '../../../styles/partner.css';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang, partner: PARTNER[lang].slug } }));
+}
+const lang = Astro.params.lang as Lang;
+const P = PARTNER[lang];
+const paths = Object.fromEntries(LOCALES.map((l) => [l, `${PARTNER[l].slug}/`])) as Record<Lang, string>;
+const cur = PRICE[lang].currency;
+const fp = (amount: number) => formatPrice(lang, { amount, currency: cur });
+const prices: Record<string, string> = {
+  natal: formatPrice(lang), partner: fp(UPSELL[lang].partner), forecast: fp(UPSELL[lang].forecast),
+  bundle: fp(UPSELL[lang].bundle), child: fp(UPSELL[lang].child), month: fp(SUB[lang].month), year: fp(SUB[lang].year),
+};
+const fillP = (s: string) => s.replace(/\{(\w+)\}/g, (_, k) => prices[k] ?? '');
+const mail = `mailto:hello@mirastela.com?subject=${encodeURIComponent(P.subject)}`;
+---
+<Base lang={lang} path={paths[lang]} paths={paths} title={P.title} description={P.desc}>
+  <div class="wrap"><Header lang={lang} path={paths[lang]} paths={paths} /></div>
+  <main class="horo hwrap seo partner">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href={`/${lang}/`}>Mirastela</a> / {P.nav}</nav>
+    <section class="hh">
+      <h1 class="sf">{P.h1}</h1>
+      <p class="mu">{P.intro}</p>
+      <a class="btn" href={mail}>{P.cta}</a>
+    </section>
+
+    <section class="pbig" aria-label={P.offerTitle}>
+      <b class="sf">{P.offerBig}</b><span>{P.offerSmall}</span>
+    </section>
+
+    <section class="about">
+      <h2 class="sf">{P.whoTitle}</h2>
+      <div class="pwho">{P.who.map(([h, t]) => <div><h3>{h}</h3><p class="mu">{t}</p></div>)}</div>
+    </section>
+
+    <section class="about">
+      <h2 class="sf">{P.offerTitle}</h2>
+      <ul class="plist">{P.offer.map((o) => <li>{o}</li>)}</ul>
+    </section>
+
+    <section class="about">
+      <h2 class="sf">{P.productsTitle}</h2>
+      <ul class="plist">{P.products.map((o) => <li>{fillP(o)}</li>)}</ul>
+    </section>
+
+    <section class="about">
+      <h2 class="sf">{P.stepsTitle}</h2>
+      <ol class="gsteps">{P.steps.map((s) => <li>{s}</li>)}</ol>
+    </section>
+
+    <section class="prcta">
+      <h2 class="sf">{P.ctaTitle}</h2>
+      <p class="mu">{P.ctaText}</p>
+      <a class="btn" href={mail}>{P.cta}</a>
+      <p class="mu small">hello@mirastela.com</p>
+    </section>
+    <p class="mu small pnote">{P.note}</p>
+  </main>
+  <Footer lang={lang} path={paths[lang]} paths={paths} />
+</Base>
