@@ -312,7 +312,7 @@ DAILY_FAST = os.environ.get("MIRASTELA_DAILY_FAST", "0") == "1"
 
 
 def daily_params(lang: str, day: str, sky_txt: str, first: int) -> dict:
-    return json_params(prompt_daily_signs(lang, day, sky_txt, first, 6), SIGNS_SCHEMA, _model(DAILY_FAST), 6000)
+    return json_params(prompt_daily_signs(lang, day, sky_txt, first, 6), SIGNS_SCHEMA, _model(DAILY_FAST), 16000)
 
 
 def daily_half(lang: str, out, first: int, test: bool = False):

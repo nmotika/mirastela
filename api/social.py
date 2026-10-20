@@ -342,7 +342,7 @@ def plan_path(lang: str) -> Path:
 def plan(langs=None):
     for lang in langs or ALL_LANGS:
         for attempt in range(3):
-            out, _ = report.generate_json(plan_prompt(lang), PLAN_SCHEMA, fast=False, max_tokens=12000)
+            out, _ = report.generate_json(plan_prompt(lang), PLAN_SCHEMA, fast=False, max_tokens=24000)
             posts = (out or {}).get("posts")
             if isinstance(posts, list) and len(posts) == 14 and all(isinstance(p, dict) and p.get("title") for p in posts):
                 text = " ".join(p["title"] + " " + p["text"] for p in posts)

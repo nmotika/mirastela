@@ -207,7 +207,7 @@ def run(kinds):
         for n, (kind, lang, it) in enumerate(todo):
             cid = f"r{n}"
             index[cid] = (kind, lang, it)
-            reqs.append({"custom_id": cid, "params": report.json_params(prompt(kind, lang, it), SCHEMAS[kind], model, 6000)})
+            reqs.append({"custom_id": cid, "params": report.json_params(prompt(kind, lang, it), SCHEMAS[kind], model, 12000)})
         batch = client.messages.batches.create(requests=reqs)
         print("batch", batch.id, "submitted", flush=True)
         while True:
