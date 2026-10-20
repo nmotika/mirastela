@@ -47,9 +47,13 @@ async function showDay(offset: number) {
   }
 }
 
+const h1 = document.querySelector<HTMLElement>('main h1, h1');
+const h1Today = h1?.textContent ?? '';
 if (read) {
   document.querySelectorAll<HTMLButtonElement>('[data-day]').forEach((b) => b.addEventListener('click', () => {
     document.querySelectorAll('[data-day]').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+    // "Sign: horoscope for today" would be wrong on the yesterday/tomorrow tabs.
+    if (h1) h1.textContent = +b.dataset.day! === 0 ? h1Today : `${h1Today.split(':')[0]}: ${b.textContent?.trim()}`;
     showDay(+b.dataset.day!);
   }));
   if (read.dataset.ssr === '1') read.classList.add('ready');

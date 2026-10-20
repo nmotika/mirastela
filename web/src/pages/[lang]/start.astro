@@ -50,7 +50,7 @@ const clientData = JSON.stringify({
 });
 ---
 <Base lang={lang} path="start/" title={d.meta.title} description={d.meta.description} noindex>
-  <div class="funnel" id="funnel">
+  <main class="funnel" id="funnel">
     <svg class="bgwheel" viewBox="0 0 400 400" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width=".6"><circle cx="200" cy="200" r="190"/><circle cx="200" cy="200" r="155"/><circle cx="200" cy="200" r="110"/><circle cx="200" cy="200" r="40"/><line x1="200.0" y1="45.0" x2="200.0" y2="10.0"/><line x1="277.5" y1="65.8" x2="295.0" y2="35.5"/><line x1="334.2" y1="122.5" x2="364.5" y2="105.0"/><line x1="355.0" y1="200.0" x2="390.0" y2="200.0"/><line x1="334.2" y1="277.5" x2="364.5" y2="295.0"/><line x1="277.5" y1="334.2" x2="295.0" y2="364.5"/><line x1="200.0" y1="355.0" x2="200.0" y2="390.0"/><line x1="122.5" y1="334.2" x2="105.0" y2="364.5"/><line x1="65.8" y1="277.5" x2="35.5" y2="295.0"/><line x1="45.0" y1="200.0" x2="10.0" y2="200.0"/><line x1="65.8" y1="122.5" x2="35.5" y2="105.0"/><line x1="122.5" y1="65.8" x2="105.0" y2="35.5"/></g><g class="gl" fill="currentColor" font-size="20" text-anchor="middle"><text x="244.0" y="42.8">♈&#xFE0E;</text><text x="320.2" y="86.8">♉&#xFE0E;</text><text x="364.2" y="163.0">♊&#xFE0E;</text><text x="364.2" y="251.0">♋&#xFE0E;</text><text x="320.2" y="327.2">♌&#xFE0E;</text><text x="244.0" y="371.2">♍&#xFE0E;</text><text x="156.0" y="371.2">♎&#xFE0E;</text><text x="79.8" y="327.2">♏&#xFE0E;</text><text x="35.8" y="251.0">♐&#xFE0E;</text><text x="35.8" y="163.0">♑&#xFE0E;</text><text x="79.8" y="86.8">♒&#xFE0E;</text><text x="156.0" y="42.8">♓&#xFE0E;</text></g></svg>
     <header class="fhead" id="fhead">
       <button type="button" class="ib" id="back" aria-label={d.ui.back} hidden>
@@ -89,9 +89,9 @@ const clientData = JSON.stringify({
       <fieldset class="wheels time" id="timeWheels">
         <legend class="vh">{Q.timeLabel}</legend>
         <div class="band" aria-hidden="true"></div>
-        <div class="wcol tw"><div class="wsc big" id="wHour" data-loop tabindex="0" role="listbox" aria-label={Q.timeLabel}>{Array.from({ length: 24 }, (_, i) => <button type="button" role="option" tabindex="-1" data-v={i}>{String(i).padStart(2, '0')}</button>)}</div></div>
+        <div class="wcol tw"><div class="wsc big" id="wHour" data-loop tabindex="0" role="listbox" aria-label={`${Q.timeLabel}: ${SH.hourLabel}`}>{Array.from({ length: 24 }, (_, i) => <button type="button" role="option" tabindex="-1" data-v={i}>{String(i).padStart(2, '0')}</button>)}</div></div>
         <span class="colon" aria-hidden="true">:</span>
-        <div class="wcol tw"><div class="wsc big" id="wMin" data-loop tabindex="0" role="listbox" aria-label={Q.timeLabel}>{Array.from({ length: 60 }, (_, i) => <button type="button" role="option" tabindex="-1" data-v={i}>{String(i).padStart(2, '0')}</button>)}</div></div>
+        <div class="wcol tw"><div class="wsc big" id="wMin" data-loop tabindex="0" role="listbox" aria-label={`${Q.timeLabel}: ${SH.minLabel}`}>{Array.from({ length: 60 }, (_, i) => <button type="button" role="option" tabindex="-1" data-v={i}>{String(i).padStart(2, '0')}</button>)}</div></div>
       </fieldset>
       <p class="pick" id="timePick" aria-live="polite"></p>
       <label class="chk"><input type="checkbox" id="tUnknown" /><span>{Q.timeUnknown}</span></label>
@@ -153,6 +153,7 @@ const clientData = JSON.stringify({
       <div class="qh"><h1 class="sf q">{Q.statusQ}</h1><p class="mu">{Q2.statusHint}</p></div>
       <div class="srows" role="group" aria-label={Q.statusQ}>
         {statusKeys.map((k) => <button type="button" class="srowb" data-status={k} aria-pressed="false"><span class="dot" aria-hidden="true"></span>{Q.status[k]}</button>)}
+        <button type="button" class="srowb" data-status="skip" aria-pressed="false"><span class="dot" aria-hidden="true"></span>{SH.statusSkip}</button>
       </div>
       <p class="mu small">{Q2.statusNote}</p>
       <div class="dock" id="statusDock" hidden><button type="button" class="btn" data-next>{d.ui.next}</button></div>
@@ -318,9 +319,9 @@ const clientData = JSON.stringify({
           <fieldset class="wheels time" id="ptWheels">
             <legend class="vh">{U.pTime}</legend>
             <div class="band" aria-hidden="true"></div>
-            <div class="wcol tw"><div class="wsc big" id="pwHour" data-loop tabindex="0" role="listbox" aria-label={U.pTime}>{Array.from({ length: 24 }, (_, i) => <button type="button" role="option" tabindex="-1" data-v={i}>{String(i).padStart(2, '0')}</button>)}</div></div>
+            <div class="wcol tw"><div class="wsc big" id="pwHour" data-loop tabindex="0" role="listbox" aria-label={`${U.pTime}: ${SH.hourLabel}`}>{Array.from({ length: 24 }, (_, i) => <button type="button" role="option" tabindex="-1" data-v={i}>{String(i).padStart(2, '0')}</button>)}</div></div>
             <span class="colon" aria-hidden="true">:</span>
-            <div class="wcol tw"><div class="wsc big" id="pwMin" data-loop tabindex="0" role="listbox" aria-label={U.pTime}>{Array.from({ length: 60 }, (_, i) => <button type="button" role="option" tabindex="-1" data-v={i}>{String(i).padStart(2, '0')}</button>)}</div></div>
+            <div class="wcol tw"><div class="wsc big" id="pwMin" data-loop tabindex="0" role="listbox" aria-label={`${U.pTime}: ${SH.minLabel}`}>{Array.from({ length: 60 }, (_, i) => <button type="button" role="option" tabindex="-1" data-v={i}>{String(i).padStart(2, '0')}</button>)}</div></div>
           </fieldset></div>
         <label class="chk"><input type="checkbox" id="upTimeUnknown" /><span>{U.pTimeUnknown}</span></label>
         <div class="field"><label class="lbl" for="upPlace">{U.pPlace}</label>
@@ -412,7 +413,7 @@ const clientData = JSON.stringify({
         <a class="no" href={`/${lang}/`}>{Dn.home}</a>
       </div>
     </section>
-  </div>
+  </main>
 
   <script type="application/json" id="funnel-data" set:html={clientData} />
   <script src="../../scripts/funnel.ts"></script>

@@ -17,7 +17,7 @@ const en: BaseDict = {
     how: [
       ['Enter your birth details', 'Date, time and place. If you don’t know the time, we still calculate your chart.'],
       ['We calculate the planets', 'Sun, Moon, Ascendant, planets, houses and aspects, from astronomical ephemerides.'],
-      ['Read your report', 'A free summary right away. The full report with PDF, if you want it.'],
+      ['Read your report', 'A free summary right away. The full report, also as a PDF, if you want it.'],
     ],
     incEyebrow: 'In the full report',
     incTitle: 'Your natal chart, explained in plain language',

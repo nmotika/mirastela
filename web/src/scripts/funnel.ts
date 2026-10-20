@@ -481,7 +481,7 @@ $('eForm').addEventListener('submit', async (e) => {
   } catch (err) {
     eCap?.reset();
     if (String((err as Error).message) === '403') {  // the security check failed: let them try again
-      btn.disabled = false; $('eErrText').textContent = D.ui.error; $('eErr').hidden = false; return;
+      btn.disabled = false; $('eErrText').textContent = D.shop.captchaErr ?? D.ui.error; $('eErr').hidden = false; return;
     }
     /* otherwise keep the funnel moving even if the lead call fails */
   }

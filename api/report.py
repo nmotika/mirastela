@@ -333,7 +333,8 @@ def prompt_daily_signs(lang: str, day: str, sky_txt: str, first: int = 0, count:
     return f"""Task: the daily horoscope for {count} zodiac signs ({names}), for a website. Date: {day}.
 Write entirely in {LANG_NAME[lang]}, addressing the reader informally in the second person singular.
 Use exactly this vocabulary for signs: {v['signs']}.
-Base every sign's text on the real sky facts below, especially the planets in that sign's solar houses and the Moon's solar house today. Mention at least one concrete fact (a planet and a sign or house) per sign, in plain words.
+Base every sign's text on the real sky facts below: for each sign use the areas of life listed for it, especially the Moon's. Mention at least one concrete fact per sign in plain words (a planet, its sign and the area of life it touches).
+Never write house numbers ("your 8th house"); name the area of life instead. A planet must have the same sign and the same area of life in "general", "love" and "work" of one sign. If the Moon changes sign today, say it once and correctly; do not contradict it later.
 Tendencies, not certainties. No predictions of illness, death, accidents, pregnancy, lottery wins or breakups. No medical, legal or financial advice.
 Do not use em dashes or en dashes as punctuation. Vary sentence openings between signs; no filler.
 

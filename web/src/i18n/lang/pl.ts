@@ -17,7 +17,7 @@ const pl: BaseDict = {
     how: [
       ['Podajesz dane urodzenia', 'Data, godzina i miejsce. Jeśli nie znasz godziny, też obliczymy kosmogram.'],
       ['Obliczamy położenie planet', 'Słońce, Księżyc, Ascendent, planety, domy i aspekty, na podstawie efemeryd astronomicznych.'],
-      ['Czytasz swój raport', 'Bezpłatne podsumowanie od razu. Pełny raport z PDF, jeśli zechcesz.'],
+      ['Czytasz swój raport', 'Bezpłatne podsumowanie od razu. Pełny raport także w formacie PDF, jeśli zechcesz.'],
     ],
     incEyebrow: 'W pełnym raporcie',
     incTitle: 'Twój kosmogram, opisany zrozumiałym językiem',

@@ -18,7 +18,7 @@ const cs: BaseDict = {
     how: [
       ['Zadáš údaje o narození', 'Datum, čas a místo. Pokud čas neznáš, horoskop i tak spočítáme.'],
       ['Spočítáme postavení planet', 'Slunce, Měsíc, ascendent, planety, domy a aspekty, podle astronomických efemerid.'],
-      ['Čteš svou zprávu', 'Bezplatné shrnutí hned. Celou zprávu s PDF, pokud budeš chtít.'],
+      ['Čteš svou zprávu', 'Bezplatné shrnutí hned. Celou zprávu i v PDF, pokud budeš chtít.'],
     ],
     incEyebrow: 'V celé zprávě',
     incTitle: 'Tvůj natální horoskop, popsaný srozumitelně',

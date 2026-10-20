@@ -17,7 +17,7 @@ const hr: BaseDict = {
     how: [
       ['Upišeš podatke o rođenju', 'Datum, vrijeme i mjesto. Ako ne znaš vrijeme, kartu ćemo svejedno izračunati.'],
       ['Računamo položaj planeta', 'Sunce, Mjesec, podznak, planete, kuće i aspekti, prema astronomskim efemeridama.'],
-      ['Čitaš svoj izvještaj', 'Besplatni sažetak odmah. Cijeli izvještaj s PDF-om, ako želiš.'],
+      ['Čitaš svoj izvještaj', 'Besplatni sažetak odmah. Cijeli izvještaj i u PDF-u, ako želiš.'],
     ],
     incEyebrow: 'U cijelom izvještaju',
     incTitle: 'Tvoja natalna karta, opisana razumljivim jezikom',

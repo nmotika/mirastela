@@ -18,7 +18,7 @@ const sl: BaseDict = {
     how: [
       ['Vneseš podatke o rojstvu', 'Datum, ura in kraj. Če ure ne poznaš, karto vseeno izračunamo.'],
       ['Izračunamo položaje planetov', 'Sonce, Luna, ascendent, planeti, hiše in aspekti, po astronomskih efemeridah.'],
-      ['Prebereš svoje poročilo', 'Brezplačen povzetek takoj. Celotno poročilo s PDF, če želiš.'],
+      ['Prebereš svoje poročilo', 'Brezplačen povzetek takoj. Celotno poročilo tudi v PDF, če želiš.'],
     ],
     incEyebrow: 'V celotnem poročilu',
     incTitle: 'Tvoja natalna karta, opisana razumljivo',

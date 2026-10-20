@@ -51,6 +51,14 @@ def moon_ingress(day: date) -> str | None:
     return None
 
 
+def moon_signs(day: date) -> tuple[str, str] | None:
+    """(sign before, sign after) the Moon's ingress on this day, if it changes sign."""
+    start = datetime.combine(day, time(0, 0), TZ)
+    a = int(positions(start)[1]["lon"] // 30)
+    b = int(positions(start + timedelta(hours=24))[1]["lon"] // 30)
+    return (SIGNS[a], SIGNS[b]) if a != b else None
+
+
 def day_sky(day: date) -> dict:
     """Facts for the twelve sign horoscopes of one day (noon, Zagreb time)."""
     noon = datetime.combine(day, time(12, 0), TZ)
@@ -67,19 +75,29 @@ def day_sky(day: date) -> dict:
     return {"day": day.isoformat(), "planets": pos, "aspects": aspects, "moonIngress": moon_ingress(day)}
 
 
+AREAS = ["self, body and how you come across", "money, possessions and self-worth", "talks, short trips, siblings and neighbours",
+         "home, family and roots", "love affairs, fun, creativity and children", "daily work, routines and health habits",
+         "partnerships and close one-to-one relationships", "shared money, intimacy and deep change", "travel, study, beliefs and the big picture",
+         "career, reputation and goals", "friends, groups and hopes", "rest, solitude and what happens behind the scenes"]
+
+
 def sky_text(sky: dict) -> str:
+    """Facts for the sign horoscopes, with the solar-house life area already worked out per sign, so the
+    model never has to count houses itself (that is where contradictions came from)."""
     rows = [f"- {p['id']}: {p['sign']} {p['deg']}°{' (retrograde)' if p['retro'] else ''}" for p in sky["planets"]]
     if sky["moonIngress"]:
-        rows.append(f"- the Moon changes sign today around {sky['moonIngress']} local time")
+        ms = moon_signs(date.fromisoformat(sky["day"]))
+        if ms:
+            rows.append(f"- the Moon is in {ms[0]} until about {sky['moonIngress']} local time, then in {ms[1]} for the rest of the day"
+                        " (the areas of life below use the Moon's noon sign)")
     asp = [f"- {a['a']} {a['type']} {a['b']} (orb {a['orb']}°)" for a in sky["aspects"]] or ["- no tight aspects between the planets"]
-    solar = []
+    per_sign = []
     for s, sign in enumerate(SIGNS):
-        houses = {}
-        for p in sky["planets"]:
-            houses.setdefault((p["signIndex"] - s) % 12 + 1, []).append(p["id"])
-        solar.append(f"- {sign}: " + "; ".join(f"house {h}: {', '.join(v)}" for h, v in sorted(houses.items())))
+        items = [f"{p['id']} in {p['sign']} → {AREAS[(p['signIndex'] - s) % 12]}" for p in sky["planets"]]
+        per_sign.append(f"- {sign}: " + "; ".join(items))
     return ("Planet positions at noon:\n" + "\n".join(rows) + "\n\nAspects between planets today:\n" + "\n".join(asp)
-            + "\n\nSolar houses (whole sign from each sign) occupied today:\n" + "\n".join(solar))
+            + "\n\nFor each sign, the area of life each planet touches today (solar houses, already worked out; use exactly these):\n"
+            + "\n".join(per_sign))
 
 
 def _natal_points(natal: dict) -> list[tuple[str, float]]:
