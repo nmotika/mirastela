@@ -1,0 +1,9 @@
+[Unit]
+Description=Mirastela social: daily horoscope carousel and reel
+
+[Timer]
+OnCalendar=*-*-* 07:40:00 Europe/Zagreb
+Persistent=true
+
+[Install]
+WantedBy=timers.target

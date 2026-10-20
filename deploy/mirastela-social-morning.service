@@ -1,0 +1,9 @@
+[Unit]
+Description=Mirastela social: daily horoscope carousel and reel
+
+[Service]
+Type=oneshot
+User=mirastela
+WorkingDirectory=/opt/mirastela/api
+EnvironmentFile=/etc/mirastela.env
+ExecStart=/opt/mirastela/.venv/bin/python -u social.py morning

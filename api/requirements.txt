@@ -6,3 +6,5 @@ tzdata
 anthropic>=0.40
 stripe>=12.0
 weasyprint>=62
+Pillow>=10
+fonttools>=4.40

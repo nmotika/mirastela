@@ -726,6 +726,18 @@ def gift_card(code: str, request: Request):
     return g
 
 
+@app.get("/api/social/{day}/{lang}/{name}")
+def social_media(day: str, lang: str, name: str):
+    """Images and reels made by social.py, fetched by Meta when publishing (public, like any posted image)."""
+    from fastapi.responses import FileResponse
+    if not (re.fullmatch(r"20\d\d-\d\d-\d\d", day) and lang in report.LANG_NAME and re.fullmatch(r"(h\d\d|post)\.jpg|horoscope\.mp4", name)):
+        raise HTTPException(404, "not found")
+    path = os.path.join(os.environ.get("SOCIAL_DIR", "/var/lib/mirastela/social"), day, lang, name)
+    if not os.path.isfile(path):
+        raise HTTPException(404, "not found")
+    return FileResponse(path, media_type="video/mp4" if name.endswith(".mp4") else "image/jpeg")
+
+
 @app.get("/api/checkout/confirm")
 def checkout_confirm(session: str, bg: BackgroundTasks):
     """The return page after Stripe: confirm the payment directly, without waiting for the webhook."""
