@@ -326,7 +326,7 @@ def daily_half(lang: str, out, first: int, test: bool = False):
     problems = [f"{n}: {p}" for n, x in zip(want, got) if (p := daily_problem(lang, x))]
     if problems:
         return None, "rejected " + "; ".join(problems)
-    return [{k: str(x.get(k, "")) for k in ("general", "love", "work")} for x in got], None
+    return [{k: str(x.get(k, "")) for k in ("general", "love", "work", "short") if k != "short" or x.get("short")} for x in got], None
 
 
 SIGNS_EN = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"]
@@ -335,7 +335,7 @@ SIGNS_EN = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Sco
 SIGNS_SCHEMA = {"type": "object", "required": ["signs"], "properties": {"signs": {"type": "array", "items": {
     "type": "object", "required": ["sign", "general", "love", "work"],
     "properties": {"sign": {"type": "string", "enum": SIGNS_EN}, "general": {"type": "string"},
-                   "love": {"type": "string"}, "work": {"type": "string"}}}}}}
+                   "love": {"type": "string"}, "work": {"type": "string"}, "short": {"type": "string"}}}}}}
 
 # How to address the reader, per language (the informal form the website uses).
 ADDRESS = {"pl": "ty", "hr": "ti", "sl": "ti", "ro": "tu", "cs": "ty", "hu": "te (tegező forma)", "en": "you",
@@ -401,7 +401,7 @@ Tendencies, not certainties. No predictions of illness, death, accidents, pregna
 Do not use em dashes or en dashes as punctuation. Vary sentence openings between signs; no filler.
 
 Save the result with the save tool: "signs" is a list of exactly {count} entries, in this order: {names}; "sign" is the English sign name.
-Each entry: "general" 70 to 100 words, "love" 25 to 40 words, "work" 25 to 40 words.
+Each entry: "general" 70 to 100 words, "love" 25 to 40 words, "work" 25 to 40 words, "short" one sentence of at most 110 characters with the day's main message for this sign (for a social media image; no emoji, no hashtags).
 
 Sky facts:
 {sky_txt}

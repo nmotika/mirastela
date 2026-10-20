@@ -219,6 +219,9 @@ def run(kinds):
         for r in client.messages.batches.results(batch.id):
             kind, lang, it = index[r.custom_id]
             clean, why = (None, r.result.type)
+            if r.result.type == "errored":
+                err = getattr(r.result, "error", None)
+                why = f"errored: {getattr(getattr(err, 'error', err), 'message', err)}"
             if r.result.type == "succeeded":
                 try:
                     clean, why = check(kind, lang, report.tool_input(r.result.message))
@@ -233,7 +236,11 @@ def run(kinds):
             data = load(kind, lang)
             data.update(new)
             save(kind, lang, data)
-        print(f"round {rnd + 1}: saved {sum(len(v) for v in results.values())}, rejected {bad}", flush=True)
+        saved = sum(len(v) for v in results.values())
+        print(f"round {rnd + 1}: saved {saved}, rejected {bad}", flush=True)
+        if not saved:  # every request failed: the same request would fail again, so stop and show why
+            print("nothing was saved in this round, stopping (see the reasons above)", flush=True)
+            break
     status(kinds)
 
 
@@ -273,6 +280,11 @@ if __name__ == "__main__":
         run(kinds)
         if os.environ.get("MIRASTELA_PUBLISH") == "1":
             publish()
+    elif cmd == "test":  # one direct request with the same parameters, to see an error message at once
+        kind = args[0] if args else "signs"
+        it = items(kind)[0]
+        out = report.tool_input(report.client().messages.create(**report.json_params(prompt(kind, "pl", it), SCHEMAS[kind], report._model(False), 6000)))
+        print(check(kind, "pl", out)[1] or "ok", json.dumps(out, ensure_ascii=False)[:600])
     elif cmd == "publish":
         publish()
     elif cmd == "redo":
