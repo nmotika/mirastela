@@ -221,7 +221,7 @@ def lead(body: LeadIn, bg: BackgroundTasks, request: Request):
     if body.date and body.cityId:
         bg.add_task(_send_summary, token)
     bg.add_task(capi.send, "Lead", f"lead_{token}", f"{emails.SITE}/{_lang(body.lang)}/start/", body.email,
-                _track(body.track, request))
+                _track(body.track, request), name=body.name, lang=_lang(body.lang))
     return {"ok": True, "token": token}
 
 
@@ -632,7 +632,7 @@ def _fulfil(session_id: str, meta: dict, bg: BackgroundTasks, customer: str | No
     if kind == "gift":
         return _fulfil_gift(session_id, token, product, bool(claimed), bg)
     with db() as con:
-        email, lang = con.execute("select email, lang from orders where token=?", (token,)).fetchone() or ("", "en")
+        email, lang, oname = con.execute("select email, lang, name from orders where token=?", (token,)).fetchone() or ("", "en", "")
         prow = con.execute("select price_key, track from payments where session=?", (session_id,)).fetchone()
     lang = _lang(lang)
     key = (prow[0] if prow and prow[0] else ("sub_" + product if kind == "sub" else product))
@@ -648,7 +648,7 @@ def _fulfil(session_id: str, meta: dict, bg: BackgroundTasks, customer: str | No
     if not claimed:
         return out
     bg.add_task(capi.send, "Purchase", f"pur_{session_id}", f"{emails.SITE}/{lang}/start/", email,
-                json.loads(prow[1]) if prow and prow[1] else {}, minor / 100, cur, key)
+                json.loads(prow[1]) if prow and prow[1] else {}, minor / 100, cur, key, name=oname or "", lang=lang)
     if kind == "order":
         with db() as con:
             con.execute("update orders set paid=1 where token=?", (token,))
@@ -682,7 +682,7 @@ def _fulfil_gift(session_id: str, code: str, product: str, claimed: bool, bg: Ba
         subject, html = gifts.email(lang, code, pay.product_name(lang, product, forecast_year()), g["expires"], card)
         mailer.send(DB_PATH, email, "gift", subject, html)
         bg.add_task(capi.send, "Purchase", f"pur_{session_id}", f"{emails.SITE}/{lang}/{GIFT_SLUG[lang]}/", email,
-                    json.loads(prow[0]) if prow and prow[0] else {}, minor / 100, cur, product)
+                    json.loads(prow[0]) if prow and prow[0] else {}, minor / 100, cur, product, lang=lang)
     return out
 
 
