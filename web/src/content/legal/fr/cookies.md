@@ -1,4 +1,4 @@
-*Dernière mise à jour : 20 octobre 2026*
+*Dernière mise à jour : 21 octobre 2026*
 
 ## Ce que nous utilisons
 
@@ -10,6 +10,7 @@ Ces éléments sont strictement nécessaires au fonctionnement du site et ne req
 | __cf_bm, cf_clearance | Cookies déposés par Cloudflare | Protègent le site contre les robots et les attaques | Jusqu’à 30 minutes / jusqu’à 1 an |
 | mirastela-consent | Stockage local dans ton navigateur | Garde en mémoire ton choix concernant les cookies | Jusqu’à ce que tu le supprimes |
 | mirastela-account | Stockage local dans ton navigateur | Te garde connecté·e sur « Mes rapports » après l’ouverture du lien de connexion | Jusqu’à la déconnexion, 90 jours au maximum |
+| mirastela-partner | Stockage local dans ton navigateur | Retient le code partenaire si tu arrives par un lien partenaire, pour appliquer ta réduction et attribuer la recommandation au partenaire | 30 jours |
 
 ## Statistiques et publicité
 

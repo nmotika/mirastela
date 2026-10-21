@@ -1,5 +1,5 @@
 // Gift page: start the payment, then show the printable card (after Stripe, or from the link in the email).
-import { trackInfo, fbTrack } from './track';
+import { partnerCode, trackInfo, fbTrack } from './track';
 
 const cfg = JSON.parse(document.getElementById('gift-data')!.textContent!);
 const G = cfg.g;
@@ -21,7 +21,7 @@ $('gForm').addEventListener('submit', async (e) => {
   try {
     const res = await fetch('/api/gift', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
       lang: cfg.lang, email: email.value.trim(), product: plan(), toName: $<HTMLInputElement>('gTo').value,
-      fromName: $<HTMLInputElement>('gFrom').value, message: $<HTMLTextAreaElement>('gMsg').value, track: trackInfo(),
+      fromName: $<HTMLInputElement>('gFrom').value, message: $<HTMLTextAreaElement>('gMsg').value, track: trackInfo(), aff: partnerCode(),
     }) });
     if (!res.ok) throw new Error(String(res.status));
     const { checkout } = await res.json();

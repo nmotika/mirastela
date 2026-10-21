@@ -1,4 +1,4 @@
-*Zadnje ažuriranje: 20. listopada 2026.*
+*Zadnje ažuriranje: 21. listopada 2026.*
 
 ## Što koristimo
 
@@ -10,6 +10,7 @@ Ovo je nužno za rad web stranice i za to nije potrebna tvoja privola.
 | __cf_bm, cf_clearance | Kolačići koje postavlja Cloudflare | Štite web stranicu od botova i napada | Do 30 minuta / do 1 godine |
 | mirastela-consent | Lokalna pohrana (local storage) u tvom pregledniku | Pamti tvoj izbor o kolačićima | Dok ga ne obrišeš |
 | mirastela-account | Lokalna pohrana (local storage) u tvom pregledniku | Drži te prijavljenim/om na stranici „Moji izvještaji” nakon što otvoriš link za prijavu | Do odjave, najdulje 90 dana |
+| mirastela-partner | Lokalna pohrana (local storage) u tvom pregledniku | Pamti kod partnera ako si na stranicu došao/la preko partnerskog linka, kako bi ti se obračunao popust, a partneru priznala preporuka | 30 dana |
 
 ## Analitika i oglašavanje
 

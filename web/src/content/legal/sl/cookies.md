@@ -1,4 +1,4 @@
-*Zadnja posodobitev: 20. oktober 2026*
+*Zadnja posodobitev: 21. oktober 2026*
 
 ## Kaj uporabljamo
 
@@ -10,6 +10,7 @@ Naslednje je nujno za delovanje spletne strani in ne potrebuje tvojega soglasja.
 | __cf_bm, cf_clearance | Piškotki, ki jih nastavi Cloudflare | Ščitijo spletno mesto pred boti in napadi | Do 30 minut / do 1 leta |
 | mirastela-consent | Lokalna shramba (local storage) v tvojem brskalniku | Zapomni si tvojo izbiro glede piškotkov | Dokler je ne izbrišeš |
 | mirastela-account | Lokalna shramba (local storage) v tvojem brskalniku | Ohrani prijavo na strani „Moja poročila”, ko odpreš povezavo za prijavo | Do odjave, največ 90 dni |
+| mirastela-partner | Lokalna shramba (local storage) v tvojem brskalniku | Zapomni si kodo partnerja, če prideš na stran prek partnerske povezave, da se ti obračuna popust, partnerju pa prizna priporočilo | 30 dni |
 
 ## Analitika in oglaševanje
 

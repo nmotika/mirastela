@@ -32,6 +32,7 @@ import pay
 import cities
 import emails
 import gifts
+import affiliates
 import guard
 import mailer
 import report
@@ -90,6 +91,7 @@ def db():
     if "paid" not in {r[1] for r in con.execute("pragma table_info(orders)")}:
         con.execute("alter table orders add column paid integer default 1")  # rows before payments existed were coupon orders
     gifts.schema(con)
+    affiliates.schema(con)
     con.execute("create table if not exists daily_parts(lang text, day text, first integer, data text, model text, primary key(lang, day, first))")
     con.execute("create table if not exists daily_batches(id text primary key, created text, status text, items text)")
     con.execute("""create table if not exists payments(
@@ -114,6 +116,7 @@ def _parse_coupons(raw: str) -> dict[str, int]:
 
 
 COUPONS = _parse_coupons(os.environ.get("MIRASTELA_COUPONS", "MIRATEST"))
+COUPONS.update({c: p for c, p in affiliates.AFFILIATES.items() if p > 0})  # a partner code is also its discount code
 PRODUCTS = ("natal", "partner", "forecast")
 
 
@@ -199,7 +202,7 @@ class LeadIn(BaseModel):
 
 
 def _src_json(src: dict[str, str] | None) -> str | None:
-    keep = ("landing", "ref", "source", "medium", "campaign", "content", "term", "click")
+    keep = ("landing", "ref", "source", "medium", "campaign", "content", "term", "click", "aff")
     clean = {k: str(src[k])[:120] for k in keep if src and src.get(k)}
     return json.dumps(clean, ensure_ascii=False) if clean else None
 
@@ -218,6 +221,7 @@ def lead(body: LeadIn, bg: BackgroundTasks, request: Request):
                     (datetime.now(timezone.utc).isoformat(), body.email.lower(), body.lang, body.name[:80],
                      body.date, body.time, body.cityId, ",".join(body.focus), body.status,
                      int(body.marketingConsent), token, _src_json(body.src)))
+        affiliates.attribute(con, body.email, (body.src or {}).get("aff"), "lead")
     if body.date and body.cityId:
         bg.add_task(_send_summary, token)
     bg.add_task(capi.send, "Lead", f"lead_{token}", f"{emails.SITE}/{_lang(body.lang)}/start/", body.email,
@@ -290,6 +294,7 @@ class OrderIn(BaseModel):
     focus: list[str] = []
     status: str = ""
     coupon: str = ""
+    aff: str = Field("", max_length=40)  # partner code from the partner link
     bundle: bool = False
     consent: bool = False  # withdrawal waiver ticked on the offer screen
     track: TrackIn | None = None
@@ -390,6 +395,7 @@ def create_order(body: OrderIn, bg: BackgroundTasks, request: Request):
                     (token, datetime.now(timezone.utc).isoformat(), body.lang, body.email.lower(), body.name,
                      body.model_dump_json(exclude={"coupon"}), json.dumps(natal),
                      f"GIFT:{gift['code']}" if gift else (body.coupon.strip().upper() if pct else ""), 1 if free else 0))
+        affiliates.attribute(con, body.email, body.aff or body.coupon, "order")
     if not free:
         key = "bundle" if body.bundle else "natal"
         return {"token": token, "checkout": _checkout(token, _lang(body.lang), body.email, key, "order", key, "offer",
@@ -647,6 +653,8 @@ def _fulfil(session_id: str, meta: dict, bg: BackgroundTasks, customer: str | No
         out["cal"] = cal_url(row[0]) if row and row[0] else None
     if not claimed:
         return out
+    with db() as con:
+        affiliates.record(con, session_id, email, kind, key, minor / 100, cur)
     bg.add_task(capi.send, "Purchase", f"pur_{session_id}", f"{emails.SITE}/{lang}/start/", email,
                 json.loads(prow[1]) if prow and prow[1] else {}, minor / 100, cur, key, name=oname or "", lang=lang)
     if kind == "order":
@@ -678,6 +686,8 @@ def _fulfil_gift(session_id: str, code: str, product: str, claimed: bool, bg: Ba
     out = {"token": code, "kind": "gift", "product": product, "email": email, "gift": g,
            "value": minor / 100, "currency": cur.upper(), "eventId": f"pur_{session_id}"}
     if claimed and g:
+        with db() as con:
+            affiliates.record(con, session_id, email, "gift", product, minor / 100, cur)
         card = f"{emails.SITE}/{lang}/{GIFT_SLUG[lang]}/?code={code}"
         subject, html = gifts.email(lang, code, pay.product_name(lang, product, forecast_year()), g["expires"], card)
         mailer.send(DB_PATH, email, "gift", subject, html)
@@ -694,6 +704,7 @@ class GiftIn(BaseModel):
     fromName: str = Field("", max_length=40)
     message: str = Field("", max_length=300)
     track: TrackIn | None = None
+    aff: str = Field("", max_length=40)
 
 
 @app.post("/api/gift")
@@ -709,6 +720,7 @@ def buy_gift(body: GiftIn, request: Request):
     lang = _lang(body.lang)
     with db() as con:
         code = gifts.create(con, lang, body.email, body.product, body.toName.strip(), body.fromName.strip(), body.message.strip())
+        affiliates.attribute(con, body.email, body.aff, "gift")
     page = f"{emails.SITE}/{lang}/{GIFT_SLUG[lang]}/"
     url = _checkout(code, lang, body.email, body.product, "gift", body.product, "", _track(body.track, request),
                     success_url=page + "?paid={CHECKOUT_SESSION_ID}", cancel_url=page + "?cancel=1")
@@ -761,6 +773,12 @@ async def stripe_webhook(request: Request, bg: BackgroundTasks):
     if kind in ("checkout.session.completed", "checkout.session.async_payment_succeeded"):
         if obj.get("payment_status") in ("paid", "no_payment_required"):
             _fulfil(obj["id"], dict(obj.get("metadata") or {}), bg, obj.get("customer"), obj.get("subscription"))
+    elif kind == "invoice.paid" and obj.get("billing_reason") == "subscription_cycle":
+        # a subscription renewal: the first payment came through Checkout and is recorded there
+        with db() as con:
+            row = con.execute("select email from subs where stripe_sub=?", (obj.get("subscription") or "",)).fetchone()
+            email = row[0] if row else (obj.get("customer_email") or "")
+            affiliates.record(con, obj["id"], email, "renew", "sub", (obj.get("amount_paid") or 0) / 100, obj.get("currency") or "")
     elif kind == "customer.subscription.deleted":
         with db() as con:
             con.execute("update subs set status='cancelled' where stripe_sub=?", (obj["id"],))

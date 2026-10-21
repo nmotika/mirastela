@@ -1,4 +1,4 @@
-*Last updated: 20 October 2026*
+*Last updated: 21 October 2026*
 
 ## What we use
 
@@ -10,6 +10,7 @@ These are strictly necessary for the website to work and do not need your consen
 | __cf_bm, cf_clearance | Cookies set by Cloudflare | Protect the website against bots and attacks | Up to 30 minutes / up to 1 year |
 | mirastela-consent | Local storage in your browser | Remembers your cookie choice | Until you delete it |
 | mirastela-account | Local storage in your browser | Keeps you signed in on "My reports" after you open the sign-in link | Until you sign out, at most 90 days |
+| mirastela-partner | Local storage in your browser | Remembers the partner code if you arrive through a partner link, so your discount applies and the partner gets credit for the referral | 30 days |
 
 ## Analytics and advertising
 

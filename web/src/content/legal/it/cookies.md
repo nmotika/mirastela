@@ -1,4 +1,4 @@
-*Ultimo aggiornamento: 20 ottobre 2026*
+*Ultimo aggiornamento: 21 ottobre 2026*
 
 ## Che cosa usiamo
 
@@ -10,6 +10,7 @@ Questi strumenti sono strettamente necessari al funzionamento del sito e non ric
 | __cf_bm, cf_clearance | Cookie impostati da Cloudflare | Proteggono il sito da bot e attacchi | Fino a 30 minuti / fino a 1 anno |
 | mirastela-consent | Archiviazione locale (local storage) nel tuo browser | Ricorda la tua scelta sui cookie | Fino a quando non la cancelli |
 | mirastela-account | Archiviazione locale (local storage) nel tuo browser | Mantiene l’accesso alla pagina "I miei report" dopo che hai aperto il link di accesso | Fino alla disconnessione, al massimo 90 giorni |
+| mirastela-partner | Archiviazione locale (local storage) nel tuo browser | Ricorda il codice del partner se arrivi da un link partner, per applicare il tuo sconto e attribuire la segnalazione al partner | 30 giorni |
 
 ## Statistiche e pubblicità
 

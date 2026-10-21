@@ -33,8 +33,26 @@ try {
     sessionStorage.setItem('mirastela-src', JSON.stringify(src));
   }
 } catch { /* ignore */ }
+// Partner link (?p=CODE): remembered for 30 days so the partner's discount applies and the partner gets
+// credit, even if the visitor comes back later. The server checks the code; unknown codes do nothing.
+const PARTNER_KEY = 'mirastela-partner';
+const PARTNER_DAYS = 30;
+try {
+  const p = new URLSearchParams(location.search).get('p');
+  if (p && /^[A-Za-z0-9_-]{2,40}$/.test(p)) localStorage.setItem(PARTNER_KEY, JSON.stringify({ c: p.toUpperCase(), t: Date.now() }));
+} catch { /* ignore */ }
+export function partnerCode(): string {
+  try {
+    const v = JSON.parse(localStorage.getItem(PARTNER_KEY) || 'null');
+    if (v && Date.now() - v.t < PARTNER_DAYS * 864e5) return String(v.c);
+  } catch { /* ignore */ }
+  return '';
+}
 export function sourceInfo(): Record<string, string> | undefined {
-  try { return JSON.parse(sessionStorage.getItem('mirastela-src') || 'null') ?? undefined; } catch { return undefined; }
+  let src: Record<string, string> | undefined;
+  try { src = JSON.parse(sessionStorage.getItem('mirastela-src') || 'null') ?? undefined; } catch { src = undefined; }
+  const aff = partnerCode();
+  return aff ? { ...(src ?? {}), aff } : src;
 }
 
 // Keep the ad click id from the landing URL for this tab only; it is sent only after consent.

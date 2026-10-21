@@ -1,4 +1,4 @@
-*Stand: 20. Oktober 2026*
+*Stand: 21. Oktober 2026*
 
 <!-- ENTWURF: vor dem Start von einer muttersprachlichen Lektorin oder einem Lektor prüfen lassen. -->
 
@@ -12,6 +12,7 @@ Diese sind für den Betrieb der Website unbedingt erforderlich und brauchen dein
 | __cf_bm, cf_clearance | Cookies von Cloudflare | Schützen die Website vor Bots und Angriffen | Bis zu 30 Minuten / bis zu 1 Jahr |
 | mirastela-consent | Lokaler Speicher (Local Storage) in deinem Browser | Merkt sich deine Cookie-Auswahl | Bis du ihn löschst |
 | mirastela-account | Lokaler Speicher (Local Storage) in deinem Browser | Hält dich auf „Meine Auswertungen“ angemeldet, nachdem du den Anmeldelink geöffnet hast | Bis du dich abmeldest, höchstens 90 Tage |
+| mirastela-partner | Lokaler Speicher (Local Storage) in deinem Browser | Merkt sich den Partnercode, wenn du über einen Partnerlink kommst, damit dein Rabatt gilt und die Empfehlung dem Partner zugerechnet wird | 30 Tage |
 
 ## Statistik und Werbung
 

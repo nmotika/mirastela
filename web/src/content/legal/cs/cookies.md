@@ -1,4 +1,4 @@
-*Poslední aktualizace: 20. října 2026*
+*Poslední aktualizace: 21. října 2026*
 
 ## Co používáme
 
@@ -10,6 +10,7 @@ Následující je nezbytné pro fungování webu a nevyžaduje tvůj souhlas.
 | __cf_bm, cf_clearance | Cookies nastavené službou Cloudflare | Chrání web před boty a útoky | Až 30 minut / až 1 rok |
 | mirastela-consent | Místní úložiště (local storage) ve tvém prohlížeči | Pamatuje si tvou volbu ohledně cookies | Dokud ji nesmažeš |
 | mirastela-account | Místní úložiště (local storage) ve tvém prohlížeči | Udržuje tě přihlášeného/přihlášenou na stránce „Moje zprávy“ po otevření přihlašovacího odkazu | Do odhlášení, nejdéle 90 dní |
+| mirastela-partner | Místní úložiště (local storage) ve tvém prohlížeči | Pamatuje si kód partnera, pokud jsi přišel/přišla přes partnerský odkaz, aby se ti započítala sleva a partnerovi doporučení | 30 dní |
 
 ## Analytika a reklama
 

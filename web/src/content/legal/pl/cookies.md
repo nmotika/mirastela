@@ -1,4 +1,4 @@
-*Ostatnia aktualizacja: 20 października 2026*
+*Ostatnia aktualizacja: 21 października 2026*
 
 ## Czego używamy
 
@@ -10,6 +10,7 @@ Poniższe są niezbędne do działania strony i nie wymagają Twojej zgody.
 | __cf_bm, cf_clearance | Pliki cookie ustawiane przez Cloudflare | Chronią stronę przed botami i atakami | Do 30 minut / do 1 roku |
 | mirastela-consent | Pamięć lokalna (local storage) w Twojej przeglądarce | Zapamiętuje Twój wybór dotyczący cookies | Do czasu usunięcia |
 | mirastela-account | Pamięć lokalna (local storage) w Twojej przeglądarce | Utrzymuje zalogowanie na stronie „Moje raporty” po otwarciu linku do logowania | Do wylogowania, najdłużej 90 dni |
+| mirastela-partner | Pamięć lokalna (local storage) w Twojej przeglądarce | Zapamiętuje kod partnera, jeśli trafiasz do nas z linku partnera, aby naliczyć rabat i przypisać polecenie partnerowi | 30 dni |
 
 ## Analityka i reklama
 

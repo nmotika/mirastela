@@ -2,7 +2,7 @@ import { wheelSvg } from './wheel';
 import { CUSP } from './cusp';
 import { fill, huArticle } from '../i18n/fill';
 import { SIGN_GLYPHS } from './zodiac';
-import { fbTrack, trackInfo, sourceInfo } from './track';
+import { fbTrack, trackInfo, sourceInfo, partnerCode } from './track';
 import { shareBigThree } from './share';
 import { captcha, type Captcha } from './captcha';
 
@@ -569,19 +569,22 @@ function applyCouponUi() {
 $('cForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const code = $<HTMLInputElement>('cInput').value.trim().toUpperCase();
-  if (!code) return;
+  if (code) await applyCode(code, false);
+});
+/** Checks a code with the server and applies it; quiet = from a partner link (no error shown if unknown). */
+async function applyCode(code: string, quiet: boolean) {
   let pct = 0;
   let gift: 'natal' | 'bundle' | undefined;
   try {
     const r = await api<{ valid: boolean; percent?: number; gift?: 'natal' | 'bundle' }>('/api/coupon', { code });
     pct = r.percent ?? 0; gift = r.gift;
   } catch { /* treat as invalid */ }
-  $('cErr').hidden = pct > 0;
+  if (!quiet) $('cErr').hidden = pct > 0;
   if (gift) { state.gift = { code, product: gift }; state.plan = gift; state.coupon = undefined; state.disc = undefined; }
   else if (pct >= 100) { state.coupon = code; state.disc = undefined; }
   else if (pct > 0) state.disc = { code, pct };
   if (pct > 0) { save(); applyCouponUi(); }
-});
+}
 /** The withdrawal waiver must be ticked before any paid checkout (Managed Payments has no checkbox of its own). */
 function consented(id: string): boolean {
   if (state.coupon || (id === 'wOffer' && state.gift)) return true;
@@ -617,7 +620,7 @@ $('oBuy').addEventListener('click', async () => {
     if (!state.token) {
       const res = await api<{ token: string; checkout?: string }>('/api/order', {
         lang, email: state.email, name: state.name ?? '', date: state.date, time: state.time ?? null,
-        cityId: state.city!.id, focus: state.focus, status: state.status ?? '', coupon: state.gift?.code ?? state.coupon ?? state.disc?.code ?? '',
+        cityId: state.city!.id, focus: state.focus, status: state.status ?? '', coupon: state.gift?.code ?? state.coupon ?? state.disc?.code ?? '', aff: partnerCode(),
         bundle: state.plan === 'bundle', consent: true, track: trackInfo(),
       });
       state.up = undefined;
@@ -904,6 +907,11 @@ if (orderToken) {
   show(step, false);
 } else if (paidSession) returnFromCheckout(paidSession);
 else if (resumeToken) resume(resumeToken).then(restore); else restore();
+// Partner link: apply the partner's discount once, unless another code is already in use.
+{
+  const pc = partnerCode();
+  if (pc && !orderToken && !paidSession && !state.token && !state.coupon && !state.disc && !state.gift) applyCode(pc, true);
+}
 
 /* ---------- share card (Sun, Moon, Ascendant) for stories ---------- */
 async function shareCard(btn: HTMLButtonElement) {

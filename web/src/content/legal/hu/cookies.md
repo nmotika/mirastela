@@ -1,4 +1,4 @@
-*Utolsó frissítés: 2026. október 20.*
+*Utolsó frissítés: 2026. október 21.*
 
 ## Mit használunk
 
@@ -10,6 +10,7 @@ Az alábbiak a weboldal működéséhez feltétlenül szükségesek, és nem ig�
 | __cf_bm, cf_clearance | A Cloudflare által beállított sütik | A weboldal védelme a botok és a támadások ellen | Legfeljebb 30 perc / legfeljebb 1 év |
 | mirastela-consent | Helyi tárhely (local storage) a böngésződben | Megjegyzi a sütikkel kapcsolatos döntésedet | Amíg nem törlöd |
 | mirastela-account | Helyi tárhely (local storage) a böngésződben | Bejelentkezve tart a „Jelentéseim” oldalon, miután megnyitottad a bejelentkezési linket | Kijelentkezésig, legfeljebb 90 napig |
+| mirastela-partner | Helyi tárhely (local storage) a böngésződben | Megjegyzi a partner kódját, ha partneri linken érkeztél, hogy megkapd a kedvezményt, a partner pedig az ajánlást | 30 nap |
 
 ## Analitika és hirdetések
 

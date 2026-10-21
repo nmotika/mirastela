@@ -1,4 +1,4 @@
-*Ultima actualizare: 20 octombrie 2026*
+*Ultima actualizare: 21 octombrie 2026*
 
 ## Ce folosim
 
@@ -10,6 +10,7 @@ Următoarele sunt strict necesare funcționării site-ului și nu necesită acor
 | __cf_bm, cf_clearance | Cookie-uri setate de Cloudflare | Protejează site-ul împotriva boților și a atacurilor | Până la 30 de minute / până la 1 an |
 | mirastela-consent | Stocare locală (local storage) în browserul tău | Reține alegerea ta privind cookie-urile | Până când o ștergi |
 | mirastela-account | Stocare locală (local storage) în browserul tău | Te menține autentificat(ă) pe pagina „Rapoartele mele” după ce deschizi linkul de autentificare | Până la ieșire, cel mult 90 de zile |
+| mirastela-partner | Stocare locală (local storage) în browserul tău | Reține codul partenerului dacă ai ajuns pe site printr-un link de partener, ca să primești reducerea, iar partenerului să i se atribuie recomandarea | 30 de zile |
 
 ## Analiză și publicitate
 
