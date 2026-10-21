@@ -11,6 +11,11 @@ const { lang, path, paths } = Astro.props;
 const d = t(lang);
 const F = d.footer;
 const S = SEO[lang];
+// Social profiles per market (only where a page exists in that language).
+const SOCIAL: Partial<Record<Lang, [string, string][]>> = {
+  pl: [['Facebook', 'https://www.facebook.com/1379443948586701'], ['Instagram', 'https://www.instagram.com/mirastela_official/']],
+  hr: [['Facebook', 'https://www.facebook.com/1360172237185521']],
+};
 const astro = [
   ...(['year', 'signs', 'compat'] as const).filter((k) => hasAny(k, lang)).map((k) => [S[k].nav, `/${lang}/${S.slugs[k]}/`]),
   [S.calc.nav, `/${lang}/${S.slugs.calc}/`],
@@ -29,6 +34,7 @@ const astro = [
       <a href={`/${lang}/terms/`}>{F.terms}</a><a href={`/${lang}/privacy/`}>{F.privacy}</a>
       <a href={`/${lang}/cookies/`}>{F.cookies}</a><a href="#" data-ck-open>{d.shop.ckSettings}</a><a href="mailto:hello@mirastela.com">{F.contact}</a>
       <a href={`/${lang}/${PARTNER[lang].slug}/`}>{PARTNER[lang].nav}</a>
+      {(SOCIAL[lang] ?? []).map(([label, href]) => <a href={href} rel="noopener" target="_blank">{label}</a>)}
       <a href="https://github.com/nmotika/mirastela" rel="noopener">AGPL · GitHub</a>
     </nav>
     <p class="foot-note">{F.disclaimer}</p>

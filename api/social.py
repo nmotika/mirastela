@@ -8,8 +8,9 @@ Facebook page and Instagram account through the Meta Graph API.
   python social.py preview          render samples with placeholder text (no model, no publishing)
 
 Files: SOCIAL_DIR (default /var/lib/mirastela/social)/<YYYY-MM-DD>/<lang>/..., caption.txt next to the images.
-Env for publishing: META_PAGE_ID, META_PAGE_TOKEN (long-lived page token), IG_USER_ID (Instagram business
-account linked to the page), SOCIAL_LANG (default pl), SOCIAL_PUBLISH=1, SOCIAL_START (YYYY-MM-DD, day 1 of
+Env for publishing: META_PAGE_TOKEN (system-user or page token), SOCIAL_PUBLISH=1, SOCIAL_LANGS=pl,hr (pages to post to),
+per language META_PAGE_ID_XX and optional IG_USER_ID_XX (META_PAGE_ID / IG_USER_ID without suffix = SOCIAL_LANG, default pl),
+SOCIAL_START / SOCIAL_START_XX (YYYY-MM-DD, day 1 of
 the evergreen rotation), SOCIAL_MEDIA_URL (public base URL of the files, default https://mirastela.com/api/social).
 """
 from __future__ import annotations
@@ -358,9 +359,10 @@ def plan(langs=None, force: bool = False):
             print("social plan", lang, "retry", attempt, flush=True)
 
 
-def rotation_day(day: date) -> int:
-    start = date.fromisoformat(os.environ.get("SOCIAL_START", day.isoformat()))
-    return (day - start).days % len(TOPICS)
+def rotation_day(day: date, lang: str = "") -> int:
+    """Day of the 14-post rotation; each page can start on its own day (SOCIAL_START_HR...)."""
+    raw = (os.environ.get(f"SOCIAL_START_{lang.upper()}") if lang else None) or os.environ.get("SOCIAL_START") or day.isoformat()
+    return (day - date.fromisoformat(raw)).days % len(TOPICS)
 
 
 def post_image(lang: str, post: dict, n: int) -> Image.Image:
@@ -386,8 +388,8 @@ def post_image(lang: str, post: dict, n: int) -> Image.Image:
 
 
 def evening(day: date, langs=None, publish_now: bool = True):
-    n = rotation_day(day)
     for lang in langs or ALL_LANGS:
+        n = rotation_day(day, lang)
         p = plan_path(lang)
         if not p.exists():
             print("social evening", lang, "no plan yet (python social.py plan)", flush=True)
@@ -406,13 +408,26 @@ def evening(day: date, langs=None, publish_now: bool = True):
 GRAPH = "https://graph.facebook.com/v21.0"
 
 
-_TOKEN: list[str] = []
+_TOKENS: dict[str, str] = {}
 
 
-def _token() -> str:
-    """META_PAGE_TOKEN may hold the system-user token or the page token; posting needs the page token."""
-    if not _TOKEN:
-        tok, page = os.environ["META_PAGE_TOKEN"], os.environ.get("META_PAGE_ID")
+def _env(name: str, lang: str) -> str:
+    """Per-language setting (META_PAGE_ID_HR...), with the unsuffixed one as the default for SOCIAL_LANG/pl."""
+    v = os.environ.get(f"{name}_{lang.upper()}", "")
+    if not v and lang == os.environ.get("SOCIAL_LANG", "pl"):
+        v = os.environ.get(name, "")
+    return v
+
+
+def publish_langs() -> list[str]:
+    raw = os.environ.get("SOCIAL_LANGS") or os.environ.get("SOCIAL_LANG", "pl")
+    return [x.strip() for x in raw.split(",") if x.strip() in ALL_LANGS]
+
+
+def _token(page: str) -> str:
+    """META_PAGE_TOKEN may hold the system-user token or a page token; posting needs that page's own token."""
+    if page not in _TOKENS:
+        tok = os.environ["META_PAGE_TOKEN"]
         if page:
             try:
                 q = urllib.parse.urlencode({"fields": "access_token", "access_token": tok})
@@ -420,12 +435,12 @@ def _token() -> str:
                     tok = json.loads(r.read()).get("access_token") or tok
             except urllib.error.HTTPError:
                 pass
-        _TOKEN.append(tok)
-    return _TOKEN[0]
+        _TOKENS[page] = tok
+    return _TOKENS[page]
 
 
-def _graph(path: str, params: dict, method: str = "POST") -> dict:
-    params = {**params, "access_token": _token()}
+def _graph(path: str, params: dict, method: str = "POST", page: str = "") -> dict:
+    params = {**params, "access_token": _token(page)}
     data = urllib.parse.urlencode(params).encode()
     url = f"{GRAPH}/{path}" if method == "POST" else f"{GRAPH}/{path}?{data.decode()}"
     req = urllib.request.Request(url, data=data if method == "POST" else None, method=method)
@@ -449,9 +464,9 @@ def _done(day: date, lang: str, what: str) -> Path:
     return OUT / day.isoformat() / lang / f".published-{what}"
 
 
-def _ig_wait(container: str):
+def _ig_wait(container: str, page: str):
     for _ in range(60):
-        st = _graph(container, {"fields": "status_code"}, "GET").get("status_code")
+        st = _graph(container, {"fields": "status_code"}, "GET", page).get("status_code")
         if st == "FINISHED":
             return
         if st == "ERROR":
@@ -460,52 +475,70 @@ def _ig_wait(container: str):
     raise RuntimeError("instagram container timeout")
 
 
-def publish_morning(day: date):
+def _each(day: date, what: str, fn):
+    """Publish for every language in SOCIAL_LANGS; one failing page does not stop the others."""
     if not _enabled():
         return
-    lang = os.environ.get("SOCIAL_LANG", "pl")
+    failed = []
+    for lang in publish_langs():
+        page, ig = _env("META_PAGE_ID", lang), _env("IG_USER_ID", lang)
+        if not (page or ig) or _done(day, lang, what).exists():
+            continue
+        try:
+            if fn(day, lang, page, ig):
+                _done(day, lang, what).touch()
+                print("social published", what, lang, day, flush=True)
+        except Exception as e:  # noqa: BLE001
+            print("social", what, lang, "error", e, flush=True)
+            failed.append(lang)
+    if failed:
+        raise SystemExit(f"social {what}: failed for {', '.join(failed)}")
+
+
+def _morning_one(day: date, lang: str, page: str, ig: str) -> bool:
     folder = OUT / day.isoformat() / lang
-    if not folder.exists() or _done(day, lang, "morning").exists():
-        return
+    if not folder.exists():
+        return False
     caption = (folder / "horoscope.txt").read_text()
     names = sorted(p.name for p in folder.glob("h*.jpg"))
-    page, ig = os.environ.get("META_PAGE_ID"), os.environ.get("IG_USER_ID")
     if page:  # Facebook: unpublished photos attached to one post
-        ids = [_graph(f"{page}/photos", {"url": _media_url(day, lang, n), "published": "false"})["id"] for n in names[:10]]
-        _graph(f"{page}/feed", {"message": caption, **{f"attached_media[{k}]": json.dumps({"media_fbid": i}) for k, i in enumerate(ids)}})
+        ids = [_graph(f"{page}/photos", {"url": _media_url(day, lang, n), "published": "false"}, page=page)["id"] for n in names[:10]]
+        _graph(f"{page}/feed", {"message": caption, **{f"attached_media[{k}]": json.dumps({"media_fbid": i}) for k, i in enumerate(ids)}}, page=page)
     if ig:  # Instagram: carousel of up to 10 images (cover + 9 signs; the reel shows all 12)
-        children = [_graph(f"{ig}/media", {"image_url": _media_url(day, lang, n), "is_carousel_item": "true"})["id"] for n in names[:10]]
+        children = [_graph(f"{ig}/media", {"image_url": _media_url(day, lang, n), "is_carousel_item": "true"}, page=page)["id"] for n in names[:10]]
         for c in children:
-            _ig_wait(c)
-        car = _graph(f"{ig}/media", {"media_type": "CAROUSEL", "children": ",".join(children), "caption": caption})["id"]
-        _ig_wait(car)
-        _graph(f"{ig}/media_publish", {"creation_id": car})
+            _ig_wait(c, page)
+        car = _graph(f"{ig}/media", {"media_type": "CAROUSEL", "children": ",".join(children), "caption": caption}, page=page)["id"]
+        _ig_wait(car, page)
+        _graph(f"{ig}/media_publish", {"creation_id": car}, page=page)
         if (folder / "horoscope.mp4").exists():
             reel = _graph(f"{ig}/media", {"media_type": "REELS", "video_url": _media_url(day, lang, "horoscope.mp4"), "caption": caption,
-                                          "share_to_feed": "false"})["id"]
-            _ig_wait(reel)
-            _graph(f"{ig}/media_publish", {"creation_id": reel})
-    _done(day, lang, "morning").touch()
-    print("social published morning", lang, day, flush=True)
+                                          "share_to_feed": "false"}, page=page)["id"]
+            _ig_wait(reel, page)
+            _graph(f"{ig}/media_publish", {"creation_id": reel}, page=page)
+    return True
+
+
+def _evening_one(day: date, lang: str, page: str, ig: str) -> bool:
+    folder = OUT / day.isoformat() / lang
+    if not (folder / "post.jpg").exists():
+        return False
+    caption = (folder / "post.txt").read_text()
+    if page:
+        _graph(f"{page}/photos", {"url": _media_url(day, lang, "post.jpg"), "caption": caption}, page=page)
+    if ig:
+        c = _graph(f"{ig}/media", {"image_url": _media_url(day, lang, "post.jpg"), "caption": caption}, page=page)["id"]
+        _ig_wait(c, page)
+        _graph(f"{ig}/media_publish", {"creation_id": c}, page=page)
+    return True
+
+
+def publish_morning(day: date):
+    _each(day, "morning", _morning_one)
 
 
 def publish_evening(day: date):
-    if not _enabled():
-        return
-    lang = os.environ.get("SOCIAL_LANG", "pl")
-    folder = OUT / day.isoformat() / lang
-    if not (folder / "post.jpg").exists() or _done(day, lang, "evening").exists():
-        return
-    caption = (folder / "post.txt").read_text()
-    page, ig = os.environ.get("META_PAGE_ID"), os.environ.get("IG_USER_ID")
-    if page:
-        _graph(f"{page}/photos", {"url": _media_url(day, lang, "post.jpg"), "caption": caption})
-    if ig:
-        c = _graph(f"{ig}/media", {"image_url": _media_url(day, lang, "post.jpg"), "caption": caption})["id"]
-        _ig_wait(c)
-        _graph(f"{ig}/media_publish", {"creation_id": c})
-    _done(day, lang, "evening").touch()
-    print("social published evening", lang, day, flush=True)
+    _each(day, "evening", _evening_one)
 
 
 def prune(keep_days: int = 21):
