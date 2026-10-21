@@ -13,8 +13,8 @@ const F = d.footer;
 const S = SEO[lang];
 // Social profiles per market (only where a page exists in that language).
 const SOCIAL: Partial<Record<Lang, [string, string][]>> = {
-  pl: [['Facebook', 'https://www.facebook.com/profile.php?id=61595056156453'], ['Instagram', 'https://www.instagram.com/mirastela_official/']],
-  hr: [['Facebook', 'https://www.facebook.com/profile.php?id=61595635652056']],
+  pl: [['Facebook', 'https://www.facebook.com/mirastela.polska'], ['Instagram', 'https://www.instagram.com/mirastela_official/']],
+  hr: [['Facebook', 'https://www.facebook.com/mirastela.hrvatska']],
 };
 const astro = [
   ...(['year', 'signs', 'compat'] as const).filter((k) => hasAny(k, lang)).map((k) => [S[k].nav, `/${lang}/${S.slugs[k]}/`]),
