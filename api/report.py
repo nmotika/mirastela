@@ -378,18 +378,40 @@ def parse_json(text: str):
 
 
 # ---------------------------------------------------------------- short texts
-def prompt_summary(lang: str, name: str, chart: dict, focus: list[str]) -> str:
+SUMMARY_SCHEMA = {"type": "object", "required": ["paragraphs", "questions"],
+                  "properties": {"paragraphs": {"type": "array", "items": {"type": "string"}},
+                                 "questions": {"type": "array", "items": {"type": "string"}}}}
+
+FOCUS_EN = {"love": "love and relationships", "career": "work and career", "money": "money", "growth": "personal growth"}
+STATUS_EN = {"relationship": "in a relationship", "single": "single", "complicated": "in a complicated situation"}
+
+
+def prompt_summary(lang: str, name: str, chart: dict, focus: list[str], status: str = "") -> str:
+    areas = ", ".join(FOCUS_EN.get(f, f) for f in focus) or "love, work and personal growth"
+    rel = f" They said they are {STATUS_EN[status]}; do not contradict it." if status in STATUS_EN else \
+        " Their relationship status is unknown: never assume they have or lack a partner."
+    big = "Sun, Moon and Ascendant" if chart["timeKnown"] else "Sun and Moon"
     return f"""{_header(lang, name)}
-Task: a short free summary of the natal chart for an email, 110 to 150 words, two short paragraphs, in plain everyday words for someone who knows nothing about astrology (you may name the Sun, Moon{' and Ascendant' if chart['timeKnown'] else ''} signs once, but no aspect names, houses or degrees).
-Paragraph 1: the Sun, the Moon{' and the Ascendant' if chart['timeKnown'] else ''} together, as one picture of the person.
-Paragraph 2: one striking talent or inner tension from the tightest aspect, in plain words, then one sentence saying the full report goes deeper into: {', '.join(focus) or 'love, work and personal growth'}.
-Save it with the save tool: "paragraphs" is a list of the two paragraphs as plain text (no headings, no Markdown, no lists, no greeting, no sign-off).
+Task: the free summary of a natal chart, sent by email right after someone enters their birth data. The goal is that they feel recognised and want to read their full report.
+The reader knows nothing about astrology. Write about their life, not about the chart.{rel}
+
+"paragraphs": exactly two short paragraphs, 90 to 130 words together, plain text.
+- Paragraph 1: who they are, as one picture built from the {big}, shown through everyday situations (how others see them, how they react, what they need). Concrete and specific, never generic praise. No astrological terms at all in this paragraph.
+- Paragraph 2: one inner tension or contradiction they will recognise (from the tightest aspect or a contrast between the {big}), described as a lived experience ("you probably know the moment when..."). You may name one planet and its sign once, in plain words.
+
+"questions": 2 or 3 questions their full report answers, each 12 to 22 words, written to them in the second person. Each question:
+- is about the areas they care about most: {areas};
+- rests on one real fact from the chart below and names it in plain words in the question or right after it (for example "Your Venus in Scorpio explains it.");
+- opens a loop: the answer is NOT given in the summary, so they want to read on;
+- is specific to this chart, never a question that would fit anyone.
+
+No headings, no Markdown, no lists inside the strings, no greeting, no sign-off, no degrees, no house numbers, no aspect names, no prices, no mention of the report's price or of buying.
 
 Chart facts (tropical zodiac, Placidus houses):
 {_fmt_planets(chart)}
 
 Aspects within orb, tightest first:
-{_fmt_aspects(chart['aspects'], 5)}
+{_fmt_aspects(chart['aspects'], 6)}
 """
 
 

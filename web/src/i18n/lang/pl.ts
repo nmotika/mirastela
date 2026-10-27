@@ -84,11 +84,11 @@ const pl: BaseDict = {
   },
   teaser: {
     title: 'Słońce {signIn}',
-    titleHouse: 'Słońce {signIn}, w {house}. domu',
+    titleHouse: 'Słońce {signIn}',
     p1: 'Słońce {signIn} opisuje kogoś, kto {trait}.',
-    p2House: 'W Twoim kosmogramie Słońce stoi w {house}. domu, w obszarze, który dotyczy {topic}. Tam ta energia działa najmocniej i tam najłatwiej ją zauważyć.',
+    p2House: 'Tę energię najmocniej widać w Twoim życiu w sprawach {topic}. Tam najłatwiej ją rozpoznasz.',
     p2NoTime: 'To, jak ta energia się wyraża, zależy od pozostałych planet. Pełny raport pokazuje, jak łączy się ona z Księżycem i resztą Twojego kosmogramu.',
-    p3: 'Księżyc {moonIn} dodaje do tego potrzeby kogoś, kto {moonTrait}. Gdy tych potrzeb brakuje, łatwo o poczucie, że coś ważnego umyka.',
+    p3: 'Czego inni rzadko się domyślają: Księżyc {moonIn} niesie potrzeby kogoś, kto {moonTrait}. Gdy ich brakuje, pojawia się niepokój, który trudno nazwać.',
   },
   astro: {
     signs: ['Baran', 'Byk', 'Bliźnięta', 'Rak', 'Lew', 'Panna', 'Waga', 'Skorpion', 'Strzelec', 'Koziorożec', 'Wodnik', 'Ryby'],

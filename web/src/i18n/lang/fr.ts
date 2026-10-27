@@ -85,11 +85,11 @@ const fr: BaseDict = {
   },
   teaser: {
     title: 'Soleil {signIn}',
-    titleHouse: 'Soleil {signIn}, maison {house}',
+    titleHouse: 'Soleil {signIn}',
     p1: 'Le Soleil {signIn} décrit quelqu’un qui {trait}.',
-    p2House: 'Dans ton thème, le Soleil se trouve en maison {house}, le domaine {topic}. C’est là que cette énergie agit le plus fort et où on la remarque le plus facilement.',
+    p2House: 'Dans ta vie, cette énergie se voit surtout dans le domaine {topic}. C’est là que tu la reconnaîtras le plus facilement.',
     p2NoTime: 'La façon dont cette énergie s’exprime dépend des autres planètes. Le rapport complet montre comment elle se relie à ta Lune et au reste de ton thème.',
-    p3: 'La Lune {moonIn} ajoute les besoins de quelqu’un qui {moonTrait}. Quand ces besoins ne sont pas comblés, on a vite l’impression que quelque chose d’important nous échappe.',
+    p3: 'Ce que les autres voient rarement : la Lune {moonIn} porte les besoins de quelqu’un qui {moonTrait}. Quand ils manquent, une inquiétude difficile à nommer s’installe.',
   },
   astro: {
     signs: ['Bélier', 'Taureau', 'Gémeaux', 'Cancer', 'Lion', 'Vierge', 'Balance', 'Scorpion', 'Sagittaire', 'Capricorne', 'Verseau', 'Poissons'],

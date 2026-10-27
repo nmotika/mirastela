@@ -85,11 +85,11 @@ const it: BaseDict = {
   },
   teaser: {
     title: 'Sole {signIn}',
-    titleHouse: 'Sole {signIn}, casa {house}',
+    titleHouse: 'Sole {signIn}',
     p1: 'Il Sole {signIn} descrive una persona che {trait}.',
-    p2House: 'Nel tuo tema il Sole si trova nella casa {house}, l’area di {topic}. È lì che questa energia agisce con più forza ed è più facile da notare.',
+    p2House: 'Nella tua vita questa energia si vede soprattutto nell’area di {topic}. È lì che la riconosci più facilmente.',
     p2NoTime: 'Il modo in cui si manifesta questa energia dipende dagli altri pianeti. Il report completo mostra come si collega alla tua Luna e al resto del tuo tema.',
-    p3: 'La Luna {moonIn} aggiunge i bisogni di chi {moonTrait}. Quando questi bisogni restano insoddisfatti, è facile sentire che qualcosa di importante ti sta sfuggendo.',
+    p3: 'Quello che gli altri vedono di rado: la Luna {moonIn} porta i bisogni di chi {moonTrait}. Quando mancano, arriva un’inquietudine difficile da nominare.',
   },
   astro: {
     signs: ['Ariete', 'Toro', 'Gemelli', 'Cancro', 'Leone', 'Vergine', 'Bilancia', 'Scorpione', 'Sagittario', 'Capricorno', 'Acquario', 'Pesci'],

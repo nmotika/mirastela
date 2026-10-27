@@ -182,6 +182,11 @@ def prune():
 
 if __name__ == "__main__":
     what = sys.argv[1] if len(sys.argv) > 1 else "all"
+    if what in ("pages", "all", "reminders"):
+        try:  # the hourly run also sends the 24 h reminders; a failure there must not stop the pages
+            print("reminders sent:", app.send_reminders(), flush=True)
+        except Exception as e:  # noqa: BLE001
+            print("reminders error", repr(e)[:300], flush=True)
     if what in ("pages", "all"):
         pages()
     if what in ("subs", "all"):

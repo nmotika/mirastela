@@ -84,11 +84,11 @@ const en: BaseDict = {
   },
   teaser: {
     title: 'Sun {signIn}',
-    titleHouse: 'Sun {signIn}, house {house}',
+    titleHouse: 'Sun {signIn}',
     p1: 'The Sun {signIn} describes someone who {trait}.',
-    p2House: 'In your chart the Sun stands in house {house}, the area of {topic}. That’s where this energy works most strongly and where it’s easiest to notice.',
+    p2House: 'In your life this energy shows most clearly in the area of {topic}. That is where you will recognise it most easily.',
     p2NoTime: 'How this energy shows up depends on the other planets. The full report shows how it connects with your Moon and the rest of your chart.',
-    p3: 'The Moon {moonIn} adds the needs of someone who {moonTrait}. When those needs go unmet, it’s easy to feel that something important is slipping away.',
+    p3: 'What others rarely see: the Moon {moonIn} carries the needs of someone who {moonTrait}. When they go unmet, a restlessness sets in that is hard to name.',
   },
   astro: {
     signs: ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo', 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'],

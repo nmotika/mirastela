@@ -85,11 +85,11 @@ const ro: BaseDict = {
   },
   teaser: {
     title: 'Soarele {signIn}',
-    titleHouse: 'Soarele {signIn}, în casa {house}',
+    titleHouse: 'Soarele {signIn}',
     p1: 'Soarele {signIn} descrie pe cineva care {trait}.',
-    p2House: 'În harta ta, Soarele se află în casa {house}, în domeniul: {topic}. Acolo această energie acționează cel mai puternic și acolo se observă cel mai ușor.',
+    p2House: 'Această energie se vede cel mai puternic în viața ta în domeniul: {topic}. Acolo o recunoști cel mai ușor.',
     p2NoTime: 'Felul în care se exprimă această energie depinde de celelalte planete. Raportul complet arată cum se leagă de Lună și de restul hărții tale.',
-    p3: 'Luna {moonIn} adaugă nevoile cuiva care {moonTrait}. Când aceste nevoi lipsesc, apare ușor senzația că ceva important îți scapă.',
+    p3: 'Ce alții observă rar: Luna {moonIn} aduce nevoile cuiva care {moonTrait}. Când lipsesc, apare o neliniște greu de numit.',
   },
   astro: {
     signs: ['Berbec', 'Taur', 'Gemeni', 'Rac', 'Leu', 'Fecioară', 'Balanță', 'Scorpion', 'Săgetător', 'Capricorn', 'Vărsător', 'Pești'],

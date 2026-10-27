@@ -85,11 +85,11 @@ const de: BaseDict = {
   },
   teaser: {
     title: 'Sonne {signIn}',
-    titleHouse: 'Sonne {signIn}, Haus {house}',
+    titleHouse: 'Sonne {signIn}',
     p1: 'Die Sonne {signIn} beschreibt einen Menschen, der {trait}.',
-    p2House: 'In deinem Horoskop steht die Sonne im {house}. Haus, dem Bereich von {topic}. Dort wirkt diese Energie am stärksten und ist am leichtesten zu spüren.',
+    p2House: 'Am stärksten zeigt sich diese Energie in deinem Leben im Bereich von {topic}. Dort erkennst du sie am leichtesten.',
     p2NoTime: 'Wie sich diese Energie zeigt, hängt von den anderen Planeten ab. Die vollständige Auswertung zeigt, wie sie mit deinem Mond und dem Rest deines Horoskops zusammenspielt.',
-    p3: 'Der Mond {moonIn} bringt die Bedürfnisse eines Menschen mit, der {moonTrait}. Bleiben sie unerfüllt, hat man schnell das Gefühl, dass einem etwas Wichtiges entgleitet.',
+    p3: 'Was andere selten sehen: Der Mond {moonIn} trägt die Bedürfnisse eines Menschen, der {moonTrait}. Fehlen sie, entsteht eine Unruhe, die sich schwer benennen lässt.',
   },
   astro: {
     signs: ['Widder', 'Stier', 'Zwillinge', 'Krebs', 'Löwe', 'Jungfrau', 'Waage', 'Skorpion', 'Schütze', 'Steinbock', 'Wassermann', 'Fische'],

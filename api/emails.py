@@ -424,3 +424,147 @@ CAL['it'] = ('Il tuo calendario astrologico personale',
  'Un altro calendario (Outlook e altri): copia questo indirizzo e aggiungilo come abbonamento da URL:')
 CUSP['it'] = 'al confine con:'
 
+
+
+# ---------------------------------------------------------------- free summary v2 and the 24 h reminder
+# Summary: a picture of the person, one tension, then questions the full report answers (open loops)
+# and a button with the price. Reminder: one of those questions, sent once, only with marketing consent.
+FUNNEL = {
+    "pl": dict(subj="{name}, oto co Twój kosmogram mówi o Tobie", subjNoName="Oto co Twój kosmogram mówi o Tobie",
+               intro="Obliczyliśmy Twój kosmogram. Oto, co widać w nim na pierwszy rzut oka.",
+               qTitle="Na te pytania odpowiada Twój pełny raport:", cta="Odblokuj cały kosmogram · {price}",
+               after="Pełny raport jest napisany tylko dla Twojego kosmogramu, z osobnymi rozdziałami o obszarach wybranych w quizie.",
+               remSubj="{name}, jedno pytanie z Twojego kosmogramu zostało otwarte", remSubjNoName="Jedno pytanie z Twojego kosmogramu zostało otwarte",
+               remIntro="Wczoraj wysłaliśmy Ci podsumowanie Twojego kosmogramu. Jedno pytanie z niego zasługuje na odpowiedź:",
+               remAfter="Odpowiedź jest w Twoim pełnym raporcie. Twoje dane są zapisane, więc nie musisz niczego wpisywać ponownie.",
+               optout="Nie chcę więcej takich e-maili", optoutDone="Gotowe. Nie będziemy już wysyłać Ci e-maili z horoskopami i ofertami."),
+    "hr": dict(subj="{name}, ovo tvoja karta kaže o tebi", subjNoName="Ovo tvoja natalna karta kaže o tebi",
+               intro="Izračunali smo tvoju natalnu kartu. Ovo se iz nje vidi na prvi pogled.",
+               qTitle="Na ova pitanja odgovara tvoj cijeli izvještaj:", cta="Otključaj cijelu kartu · {price}",
+               after="Cijeli izvještaj napisan je samo za tvoju kartu, s posebnim poglavljima o područjima iz kviza.",
+               remSubj="{name}, jedno pitanje iz tvoje karte ostalo je otvoreno", remSubjNoName="Jedno pitanje iz tvoje karte ostalo je otvoreno",
+               remIntro="Jučer smo ti poslali sažetak tvoje natalne karte. Jedno pitanje iz njega zaslužuje odgovor:",
+               remAfter="Odgovor je u tvom cijelom izvještaju. Tvoji podaci su spremljeni, pa ništa ne trebaš ponovno upisivati.",
+               optout="Ne želim više ovakve e-mailove", optoutDone="Gotovo. Više ti nećemo slati e-mailove s horoskopima i ponudama."),
+    "sl": dict(subj="{name}, to ti pove tvoja natalna karta", subjNoName="To ti pove tvoja natalna karta",
+               intro="Izračunali smo tvojo natalno karto. To se v njej vidi na prvi pogled.",
+               qTitle="Na ta vprašanja odgovori tvoje celotno poročilo:", cta="Odkleni celotno karto · {price}",
+               after="Celotno poročilo je napisano samo za tvojo karto, s posebnimi poglavji o področjih iz kviza.",
+               remSubj="{name}, eno vprašanje iz tvoje karte je ostalo odprto", remSubjNoName="Eno vprašanje iz tvoje karte je ostalo odprto",
+               remIntro="Včeraj smo ti poslali povzetek tvoje natalne karte. Eno vprašanje iz njega si zasluži odgovor:",
+               remAfter="Odgovor je v tvojem celotnem poročilu. Tvoji podatki so shranjeni, zato ti ni treba ničesar vnašati znova.",
+               optout="Ne želim več takšnih e-poštnih sporočil", optoutDone="Končano. Ne bomo ti več pošiljali e-poštnih sporočil s horoskopi in ponudbami."),
+    "ro": dict(subj="{name}, iată ce spune harta ta natală despre tine", subjNoName="Iată ce spune harta ta natală despre tine",
+               intro="Ți-am calculat harta natală. Iată ce se vede în ea la prima vedere.",
+               qTitle="Raportul tău complet răspunde la aceste întrebări:", cta="Deblochează harta completă · {price}",
+               after="Raportul complet este scris doar pentru harta ta, cu capitole separate despre domeniile alese în chestionar.",
+               remSubj="{name}, o întrebare din harta ta a rămas deschisă", remSubjNoName="O întrebare din harta ta a rămas deschisă",
+               remIntro="Ieri ți-am trimis rezumatul hărții tale natale. O întrebare din el merită un răspuns:",
+               remAfter="Răspunsul este în raportul tău complet. Datele tale sunt salvate, așa că nu trebuie să introduci nimic din nou.",
+               optout="Nu mai vreau astfel de e-mailuri", optoutDone="Gata. Nu îți mai trimitem e-mailuri cu horoscoape și oferte."),
+    "cs": dict(subj="{name}, tohle o tobě říká tvůj horoskop", subjNoName="Tohle o tobě říká tvůj natální horoskop",
+               intro="Spočítali jsme tvůj natální horoskop. Tohle je v něm vidět na první pohled.",
+               qTitle="Na tyto otázky odpovídá tvoje celá zpráva:", cta="Odemknout celý horoskop · {price}",
+               after="Celá zpráva je napsaná jen pro tvůj horoskop, se samostatnými kapitolami o oblastech z kvízu.",
+               remSubj="{name}, jedna otázka z tvého horoskopu zůstala otevřená", remSubjNoName="Jedna otázka z tvého horoskopu zůstala otevřená",
+               remIntro="Včera jsme ti poslali shrnutí tvého natálního horoskopu. Jedna otázka z něj si zaslouží odpověď:",
+               remAfter="Odpověď je v tvé celé zprávě. Tvoje údaje jsou uložené, takže nic nemusíš zadávat znovu.",
+               optout="Už nechci takové e-maily", optoutDone="Hotovo. Už ti nebudeme posílat e-maily s horoskopy a nabídkami."),
+    "hu": dict(subj="{name}, ezt mondja rólad a születési képleted", subjNoName="Ezt mondja rólad a születési képleted",
+               intro="Kiszámoltuk a születési képletedet. Első ránézésre ez látszik belőle.",
+               qTitle="Ezekre a kérdésekre válaszol a teljes elemzésed:", cta="A teljes képlet feloldása · {price}",
+               after="A teljes elemzés csak a te képletedhez készül, külön fejezetekkel a kvízben választott területekről.",
+               remSubj="{name}, egy kérdés a képletedből nyitva maradt", remSubjNoName="Egy kérdés a képletedből nyitva maradt",
+               remIntro="Tegnap elküldtük a születési képleted összefoglalóját. Egy kérdés belőle választ érdemel:",
+               remAfter="A válasz a teljes elemzésedben van. Az adataid el vannak mentve, így semmit sem kell újra beírnod.",
+               optout="Nem kérek több ilyen e-mailt", optoutDone="Kész. Többé nem küldünk neked horoszkópokat és ajánlatokat e-mailben."),
+    "de": dict(subj="{name}, das sagt dein Geburtshoroskop über dich", subjNoName="Das sagt dein Geburtshoroskop über dich",
+               intro="Wir haben dein Geburtshoroskop berechnet. Das ist auf den ersten Blick darin zu sehen.",
+               qTitle="Auf diese Fragen antwortet deine vollständige Auswertung:", cta="Ganzes Horoskop freischalten · {price}",
+               after="Die vollständige Auswertung ist nur für dein Horoskop geschrieben, mit eigenen Kapiteln zu den Bereichen aus dem Quiz.",
+               remSubj="{name}, eine Frage aus deinem Horoskop ist noch offen", remSubjNoName="Eine Frage aus deinem Horoskop ist noch offen",
+               remIntro="Gestern haben wir dir die Zusammenfassung deines Geburtshoroskops geschickt. Eine Frage daraus verdient eine Antwort:",
+               remAfter="Die Antwort steht in deiner vollständigen Auswertung. Deine Daten sind gespeichert, du musst nichts neu eingeben.",
+               optout="Ich möchte solche E-Mails nicht mehr", optoutDone="Erledigt. Wir schicken dir keine E-Mails mit Horoskopen und Angeboten mehr."),
+    "fr": dict(subj="{name}, voici ce que ton thème astral dit de toi", subjNoName="Voici ce que ton thème astral dit de toi",
+               intro="Nous avons calculé ton thème astral. Voici ce qu’on y voit au premier coup d’œil.",
+               qTitle="Ton rapport complet répond à ces questions :", cta="Débloquer tout le thème · {price}",
+               after="Le rapport complet est écrit uniquement pour ton thème, avec des chapitres dédiés aux domaines choisis dans le quiz.",
+               remSubj="{name}, une question de ton thème est restée ouverte", remSubjNoName="Une question de ton thème est restée ouverte",
+               remIntro="Hier, nous t’avons envoyé le résumé de ton thème astral. Une question mérite une réponse :",
+               remAfter="La réponse est dans ton rapport complet. Tes données sont enregistrées, tu n’as rien à ressaisir.",
+               optout="Je ne veux plus recevoir ce type d’e-mails", optoutDone="C’est fait. Nous ne t’enverrons plus d’e-mails avec des horoscopes et des offres."),
+    "it": dict(subj="{name}, ecco cosa dice di te il tuo tema natale", subjNoName="Ecco cosa dice di te il tuo tema natale",
+               intro="Abbiamo calcolato il tuo tema natale. Ecco cosa si vede a prima vista.",
+               qTitle="Il tuo report completo risponde a queste domande:", cta="Sblocca tutto il tema · {price}",
+               after="Il report completo è scritto solo per il tuo tema, con capitoli dedicati alle aree scelte nel quiz.",
+               remSubj="{name}, una domanda del tuo tema è rimasta aperta", remSubjNoName="Una domanda del tuo tema è rimasta aperta",
+               remIntro="Ieri ti abbiamo inviato il riassunto del tuo tema natale. Una domanda merita una risposta:",
+               remAfter="La risposta è nel tuo report completo. I tuoi dati sono salvati, non devi reinserire nulla.",
+               optout="Non voglio più ricevere queste email", optoutDone="Fatto. Non ti invieremo più email con oroscopi e offerte."),
+    "en": dict(subj="{name}, here is what your birth chart says about you", subjNoName="Here is what your birth chart says about you",
+               intro="We have calculated your birth chart. Here is what it shows at first glance.",
+               qTitle="Your full report answers these questions:", cta="Unlock your full chart · {price}",
+               after="The full report is written for your chart only, with chapters on the areas you picked in the quiz.",
+               remSubj="{name}, one question from your chart is still open", remSubjNoName="One question from your chart is still open",
+               remIntro="Yesterday we sent you a summary of your birth chart. One question from it deserves an answer:",
+               remAfter="The answer is in your full report. Your details are saved, so there is nothing to enter again.",
+               optout="I don't want these emails any more", optoutDone="Done. We will not send you any more emails with horoscopes and offers."),
+}
+
+_CUR = {"eur": "€", "pln": "zł", "ron": "lei", "czk": "Kč", "huf": "Ft"}
+
+
+def money(lang: str, cur: str, minor: int) -> str:
+    """Price as the site shows it: 12,90 € / 49,99 zł / 299 Kč / 4990 Ft / €12.90 (English)."""
+    v = minor / 100
+    whole = abs(v - round(v)) < 0.005
+    num = f"{v:.0f}" if whole else f"{v:.2f}"
+    if lang == "en" and cur == "eur":
+        return f"€{num}"
+    return f"{num.replace('.', ',')} {_CUR.get(cur, cur.upper())}"
+
+
+def _questions(lang: str, title: str, qs: list[str]) -> str:
+    items = "".join(f'<tr><td style="padding:0 10px 10px 0;vertical-align:top;color:#D9B26A;font:17px Georgia,serif">&#10022;</td>'
+                    f'<td style="padding:0 0 10px;font:17px/1.55 Georgia,serif;color:#F3EEE3">{esc(q)}</td></tr>' for q in qs)
+    return (f'<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin:8px 0 6px;background:#1A2343;border-radius:14px">'
+            f'<tr><td style="padding:18px 20px 8px"><p style="margin:0 0 12px;font:700 13px/1.4 Arial,sans-serif;letter-spacing:.06em;'
+            f'text-transform:uppercase;color:#D9B26A">{esc(title)}</p><table role="presentation" cellpadding="0" cellspacing="0">{items}</table>'
+            f'</td></tr></table>')
+
+
+def summary2(lang: str, name: str, chart: dict, paras: list[str], questions: list[str], price: str, resume_url: str) -> tuple[str, str]:
+    t, f = T[lang], FUNNEL[lang]
+    sun, moon = chart["planets"][0], chart["planets"][1]
+    asc = (chart.get("angles") or {}).get("asc")
+    items = [(t["big3"][0], sun), (t["big3"][1], moon)] + ([(t["big3"][2], asc)] if asc else [])
+    cells = "".join(
+        f'<td style="padding:10px 12px;background:#1A2343;border-radius:12px;font:13px Arial,sans-serif;color:#A9B0C6;vertical-align:top">'
+        f'{esc(k)}<br><strong style="font:400 19px Georgia,serif;color:#F3EEE3">{esc(sign_name(lang, p["signIndex"]))}</strong></td><td width="8"></td>'
+        for k, p in items)
+    body = (_p(greeting(lang, name)) + _p(f["intro"])
+            + f'<table role="presentation" cellpadding="0" cellspacing="0" style="margin:6px 0 18px"><tr>{cells}</tr></table>'
+            + "".join(_p(x) for x in paras)
+            + (_questions(lang, f["qTitle"], questions) if questions else "")
+            + _button(f["cta"].format(price=price), resume_url) + _p(f["after"]))
+    subject = f["subj"].format(name=name) if name else f["subjNoName"]
+    return subject, layout(lang, body)
+
+
+def reminder(lang: str, name: str, question: str, price: str, resume_url: str, optout_url: str) -> tuple[str, str]:
+    f = FUNNEL[lang]
+    body = (_p(greeting(lang, name)) + _p(f["remIntro"])
+            + f'<p style="margin:6px 0 18px;padding:16px 20px;background:#1A2343;border-radius:14px;font:italic 19px/1.5 Georgia,serif;color:#F3EEE3">{esc(question)}</p>'
+            + _p(f["remAfter"]) + _button(f["cta"].format(price=price), resume_url))
+    subject = f["remSubj"].format(name=name) if name else f["remSubjNoName"]
+    return subject, layout(lang, body, optout_url).replace(f'>{esc(T[lang]["unsub"])}</a>', f'>{esc(f["optout"])}</a>', 1)
+
+
+def optout_page(lang: str, done: bool) -> str:
+    f = FUNNEL.get(lang, FUNNEL["en"])
+    if done:
+        return layout(lang, _p(f["optoutDone"]))
+    form = ('<form method="post"><button type="submit" style="padding:14px 26px;border:0;border-radius:999px;'
+            f'background:#D9B26A;color:#0B1020;font:700 16px Arial,sans-serif;cursor:pointer">{esc(f["optout"])}</button></form>')
+    return layout(lang, form)

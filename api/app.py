@@ -84,6 +84,12 @@ def db():
         con.execute("alter table leads add column token text")
     if "src" not in cols:
         con.execute("alter table leads add column src text")
+    for col in ("summary", "consent_v", "reminded"):
+        if col not in cols:
+            con.execute(f"alter table leads add column {col} text")
+            if col == "consent_v":  # every consent so far was given with the first wording of the checkbox
+                con.execute("update leads set consent_v='v1' where marketing_consent=1")
+    con.execute("create table if not exists optout(email text primary key, created text, via text)")
     sub_cols = {r[1] for r in con.execute("pragma table_info(subs)")}
     for col in ("cal", "stripe_customer", "stripe_sub"):
         if col not in sub_cols:
@@ -216,11 +222,11 @@ def lead(body: LeadIn, bg: BackgroundTasks, request: Request):
     guard.turnstile(body.captcha, request)
     token = secrets.token_urlsafe(12)
     with db() as con:
-        con.execute("insert into leads(created,email,lang,name,birth_date,birth_time,city_id,focus,status,marketing_consent,token,src)"
-                    " values(?,?,?,?,?,?,?,?,?,?,?,?)",
+        con.execute("insert into leads(created,email,lang,name,birth_date,birth_time,city_id,focus,status,marketing_consent,token,src,consent_v)"
+                    " values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
                     (datetime.now(timezone.utc).isoformat(), body.email.lower(), body.lang, body.name[:80],
                      body.date, body.time, body.cityId, ",".join(body.focus), body.status,
-                     int(body.marketingConsent), token, _src_json(body.src)))
+                     int(body.marketingConsent), token, _src_json(body.src), CONSENT_V if body.marketingConsent else None))
         affiliates.attribute(con, body.email, (body.src or {}).get("aff"), "lead")
     if body.date and body.cityId:
         bg.add_task(_send_summary, token)
@@ -233,32 +239,85 @@ def _lang(x: str) -> str:
     return x if x in report.LANG_NAME else "en"
 
 
+CONSENT_V = "v1"  # wording of the marketing checkbox (quiz.emailConsent); bump when the text changes
+
+
+def _lead_offer(lang: str, src: str | None) -> tuple[str, str]:
+    """Natal price as the lead will see it (partner discount included) and the partner code for the link."""
+    aff = affiliates.valid((json.loads(src) if src else {}).get("aff"))
+    cur, minor = pay.price(lang, "natal", affiliates.AFFILIATES.get(aff, 0))
+    return emails.money(lang, cur, minor), aff
+
+
+def _resume_url(lang: str, token: str, aff: str, campaign: str) -> str:
+    return (f"{emails.SITE}/{lang}/start/?r={token}" + (f"&p={aff}" if aff else "")
+            + f"&utm_source=email&utm_medium={campaign}&utm_campaign=lead")
+
+
 def _send_summary(token: str):
-    """Short free summary of the chart, written by the fast model, with a link back to the offer."""
+    """Free summary of the chart, written by the fast model: who they are, one tension, and questions the
+    full report answers (kept for the reminder), with a button that shows the price."""
     with db() as con:
-        email, lang, name, d, t, city_id, focus = con.execute(
-            "select email, lang, name, birth_date, birth_time, city_id, focus from leads where token=?", (token,)).fetchone()
+        email, lang, name, d, t, city_id, focus, status, src = con.execute(
+            "select email, lang, name, birth_date, birth_time, city_id, focus, status, src from leads where token=?", (token,)).fetchone()
     lang = _lang(lang)
     natal = birth_chart(d, t, city_id)
     focus_l = [f for f in (focus or "").split(",") if f]
     sun, moon = natal["planets"][0], natal["planets"][1]
-    fallback = f"TEST MODE: sun {sun['sign']} {sun['deg']}°, moon {moon['sign']} {moon['deg']}°."
-    text = ""
+    fallback = {"paragraphs": [f"TEST MODE: sun {sun['sign']} {sun['deg']}°, moon {moon['sign']} {moon['deg']}°."], "questions": []}
+    paras, qs = [], []
     for attempt in range(2):
         try:
-            out, _ = report.generate_json(report.prompt_summary(lang, name, natal, focus_l), report.PARAGRAPHS_SCHEMA,
-                                          max_tokens=2000, fallback={"paragraphs": [fallback]})
-            paras = (out or {}).get("paragraphs")
-            if isinstance(paras, str):
-                paras = [paras]
-            text = "\n".join(p.strip() for p in (paras or []) if isinstance(p, str) and p.strip())
-            if text:
+            out, _ = report.generate_json(report.prompt_summary(lang, name, natal, focus_l, status or ""), report.SUMMARY_SCHEMA,
+                                          max_tokens=2500, fallback=fallback)
+            out = out or {}
+            raw_p, raw_q = out.get("paragraphs"), out.get("questions")
+            paras = [p.strip() for p in ([raw_p] if isinstance(raw_p, str) else raw_p or []) if isinstance(p, str) and p.strip()]
+            qs = [q.strip() for q in ([raw_q] if isinstance(raw_q, str) else raw_q or []) if isinstance(q, str) and q.strip()][:3]
+            if paras:
                 break
             print("summary", token[:6], "empty", attempt, str(out)[:300], flush=True)
         except Exception as e:
             print("summary", token[:6], "error", attempt, repr(e)[:300], flush=True)
-    subject, html = emails.summary(lang, name, natal, text, f"{emails.SITE}/{lang}/start/?r={token}")
+    with db() as con:
+        con.execute("update leads set summary=? where token=?", (json.dumps({"paragraphs": paras, "questions": qs}, ensure_ascii=False), token))
+    price, aff = _lead_offer(lang, src)
+    subject, html = emails.summary2(lang, name, natal, paras, qs, price, _resume_url(lang, token, aff, "summary"))
     mailer.send(DB_PATH, email, "summary", subject, html)
+
+
+def send_reminders(now: datetime | None = None) -> int:
+    """One reminder, 24 to 48 hours after the summary, to leads who opted in to marketing e-mails, have not
+    bought and have not opted out. Uses one of the open questions from their summary. Runs every hour."""
+    now = now or datetime.now(timezone.utc)
+    lo, hi = (now - timedelta(hours=48)).isoformat(), (now - timedelta(hours=24)).isoformat()
+    sent = 0
+    with db() as con:
+        rows = con.execute(
+            """select l.token, lower(l.email), l.lang, l.name, l.summary, l.src from leads l
+               where l.marketing_consent=1 and l.reminded is null and l.summary is not null
+                 and l.created between ? and ?
+                 and lower(l.email) not in (select email from optout)
+                 and lower(l.email) not in (select lower(email) from orders where paid=1)
+                 and lower(l.email) not in (select lower(email) from leads where reminded is not null)
+               order by l.created desc""", (lo, hi)).fetchall()
+    done: set[str] = set()
+    for token, email, lang, name, summ, src in rows:
+        if email in done:
+            continue  # the latest lead of each address only
+        done.add(email)
+        qs = (json.loads(summ) or {}).get("questions") or []
+        with db() as con:  # mark first: a crash must never send twice
+            con.execute("update leads set reminded=? where lower(email)=?", (now.isoformat(), email))
+        if not qs:
+            continue
+        lang = _lang(lang)
+        price, aff = _lead_offer(lang, src)
+        subject, html = emails.reminder(lang, name, qs[0], price, _resume_url(lang, token, aff, "reminder"),
+                                        f"{emails.SITE}/api/unsub/{token}")
+        mailer.send(DB_PATH, email, "reminder", subject, html, unsubscribe_url=f"{emails.SITE}/api/unsub/{token}")
+        sent += 1
+    return sent
 
 
 @app.get("/api/lead/{token}")
@@ -801,6 +860,13 @@ def unsubscribe(token: str, request: Request):
     from fastapi.responses import HTMLResponse
     with db() as con:
         row = con.execute("select lang, stripe_sub from subs where token=?", (token,)).fetchone()
+        lead = None if row else con.execute("select lang, lower(email) from leads where token=?", (token,)).fetchone()
+        if lead:  # a lead (summary or reminder e-mail): no more marketing e-mails to this address
+            if request.method == "POST":
+                con.execute("insert or ignore into optout(email, created, via) values(?,?,?)",
+                            (lead[1], datetime.now(timezone.utc).isoformat(), "email"))
+                con.execute("update leads set marketing_consent=0 where lower(email)=?", (lead[1],))
+            return HTMLResponse(emails.optout_page(_lang(lead[0]), request.method == "POST"))
         if request.method == "POST" and row:
             if row[1] and pay.enabled():
                 pay.cancel_subscription(row[1])  # access runs to the end of the paid period; the webhook ends it

@@ -84,11 +84,11 @@ const hr: BaseDict = {
   },
   teaser: {
     title: 'Sunce {signIn}',
-    titleHouse: 'Sunce {signIn}, u {house}. kući',
+    titleHouse: 'Sunce {signIn}',
     p1: 'Sunce {signIn} opisuje nekoga tko {trait}.',
-    p2House: 'U tvojoj karti Sunce stoji u {house}. kući, u području koje se tiče {topic}. Tu ta energija djeluje najsnažnije i tu ju je najlakše primijetiti.',
+    p2House: 'Ta se energija u tvom životu najjače vidi u području {topic}. Tu ćeš je najlakše prepoznati.',
     p2NoTime: 'Kako se ta energija izražava, ovisi o ostalim planetima. Cijeli izvještaj pokazuje kako se povezuje s Mjesecom i ostatkom tvoje karte.',
-    p3: 'Mjesec {moonIn} tome dodaje potrebe nekoga tko {moonTrait}. Kad tih potreba nema, lako se javi osjećaj da nešto važno izmiče.',
+    p3: 'Ono što drugi rijetko vide: Mjesec {moonIn} nosi potrebe nekoga tko {moonTrait}. Kad tih potreba nema, javlja se nemir koji je teško imenovati.',
   },
   astro: {
     signs: ['Ovan', 'Bik', 'Blizanci', 'Rak', 'Lav', 'Djevica', 'Vaga', 'Škorpion', 'Strijelac', 'Jarac', 'Vodenjak', 'Ribe'],

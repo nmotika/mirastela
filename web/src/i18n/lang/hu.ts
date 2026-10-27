@@ -86,11 +86,11 @@ const hu: BaseDict = {
   },
   teaser: {
     title: 'Nap {signIn}',
-    titleHouse: 'Nap {signIn}, {houseArt} {house}. házban',
+    titleHouse: 'Nap {signIn}',
     p1: '{SignIn} álló Nap olyan embert ír le, aki {trait}.',
-    p2House: 'A képletedben a Nap {houseArt} {house}. házban áll, amelynek témája: {topic}. Itt hat ez az energia a legerősebben, és itt a legkönnyebb észrevenni.',
+    p2House: 'Ez az energia az életedben ezen a területen látszik a legerősebben: {topic}. Itt ismered fel a legkönnyebben.',
     p2NoTime: 'Hogy ez az energia hogyan jelenik meg, a többi bolygón múlik. A teljes jelentés megmutatja, hogyan kapcsolódik a Holdhoz és a képleted többi részéhez.',
-    p3: '{MoonIn} álló Hold ehhez olyan ember igényeit adja, aki {moonTrait}. Ha ezek az igények nem teljesülnek, könnyen jön az érzés, hogy valami fontos elillan.',
+    p3: 'Amit mások ritkán látnak: {moonIn} álló Hold olyan ember igényeit hordozza, aki {moonTrait}. Ha ezek hiányoznak, nehezen megnevezhető nyugtalanság jelenik meg.',
   },
   astro: {
     signs: ['Kos', 'Bika', 'Ikrek', 'Rák', 'Oroszlán', 'Szűz', 'Mérleg', 'Skorpió', 'Nyilas', 'Bak', 'Vízöntő', 'Halak'],

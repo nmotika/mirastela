@@ -85,11 +85,11 @@ const cs: BaseDict = {
   },
   teaser: {
     title: 'Slunce {signIn}',
-    titleHouse: 'Slunce {signIn}, v {house}. domě',
+    titleHouse: 'Slunce {signIn}',
     p1: 'Slunce {signIn} popisuje někoho, kdo {trait}.',
-    p2House: 'Ve tvém horoskopu stojí Slunce v {house}. domě, v oblasti: {topic}. Tam tato energie působí nejsilněji a tam je nejsnáz vidět.',
+    p2House: 'Tahle energie se v tvém životě nejvíc projevuje v oblasti: {topic}. Tam ji nejsnáz poznáš.',
     p2NoTime: 'Jak se tato energie projevuje, závisí na ostatních planetách. Celá zpráva ukáže, jak se propojuje s Měsícem a zbytkem tvého horoskopu.',
-    p3: 'Měsíc {moonIn} k tomu přidává potřeby někoho, kdo {moonTrait}. Když tyto potřeby chybí, snadno přijde pocit, že něco důležitého uniká.',
+    p3: 'Co ostatní vidí jen zřídka: Měsíc {moonIn} nese potřeby někoho, kdo {moonTrait}. Když chybějí, přichází neklid, který se těžko pojmenovává.',
   },
   astro: {
     signs: ['Beran', 'Býk', 'Blíženci', 'Rak', 'Lev', 'Panna', 'Váhy', 'Štír', 'Střelec', 'Kozoroh', 'Vodnář', 'Ryby'],
