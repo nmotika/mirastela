@@ -254,14 +254,9 @@ def _resume_url(lang: str, token: str, aff: str, campaign: str) -> str:
             + f"&utm_source=email&utm_medium={campaign}&utm_campaign=lead")
 
 
-def _send_summary(token: str):
-    """Free summary of the chart, written by the fast model: who they are, one tension, and questions the
-    full report answers (kept for the reminder), with a button that shows the price."""
-    with db() as con:
-        email, lang, name, d, t, city_id, focus, status, src = con.execute(
-            "select email, lang, name, birth_date, birth_time, city_id, focus, status, src from leads where token=?", (token,)).fetchone()
-    lang = _lang(lang)
-    natal = birth_chart(d, t, city_id)
+def make_summary(lang: str, name: str, natal: dict, focus: str | None, status: str | None, tag: str = "") -> tuple[list[str], list[str]]:
+    """Paragraphs and open questions for the free summary (fast model, two tries)."""
+    token = tag or "-"
     focus_l = [f for f in (focus or "").split(",") if f]
     sun, moon = natal["planets"][0], natal["planets"][1]
     fallback = {"paragraphs": [f"TEST MODE: sun {sun['sign']} {sun['deg']}°, moon {moon['sign']} {moon['deg']}°."], "questions": []}
@@ -279,6 +274,18 @@ def _send_summary(token: str):
             print("summary", token[:6], "empty", attempt, str(out)[:300], flush=True)
         except Exception as e:
             print("summary", token[:6], "error", attempt, repr(e)[:300], flush=True)
+    return paras, qs
+
+
+def _send_summary(token: str):
+    """Free summary of the chart, written by the fast model: who they are, one tension, and questions the
+    full report answers (kept for the reminder), with a button that shows the price."""
+    with db() as con:
+        email, lang, name, d, t, city_id, focus, status, src = con.execute(
+            "select email, lang, name, birth_date, birth_time, city_id, focus, status, src from leads where token=?", (token,)).fetchone()
+    lang = _lang(lang)
+    natal = birth_chart(d, t, city_id)
+    paras, qs = make_summary(lang, name, natal, focus, status, token)
     with db() as con:
         con.execute("update leads set summary=? where token=?", (json.dumps({"paragraphs": paras, "questions": qs}, ensure_ascii=False), token))
     price, aff = _lead_offer(lang, src)

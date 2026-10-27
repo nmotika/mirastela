@@ -534,7 +534,8 @@ def _questions(lang: str, title: str, qs: list[str]) -> str:
             f'</td></tr></table>')
 
 
-def summary2(lang: str, name: str, chart: dict, paras: list[str], questions: list[str], price: str, resume_url: str) -> tuple[str, str]:
+def summary2(lang: str, name: str, chart: dict, paras: list[str], questions: list[str], price: str, resume_url: str,
+             catchup: bool = False, optout_url: str | None = None) -> tuple[str, str]:
     t, f = T[lang], FUNNEL[lang]
     sun, moon = chart["planets"][0], chart["planets"][1]
     asc = (chart.get("angles") or {}).get("asc")
@@ -543,11 +544,15 @@ def summary2(lang: str, name: str, chart: dict, paras: list[str], questions: lis
         f'<td style="padding:10px 12px;background:#1A2343;border-radius:12px;font:13px Arial,sans-serif;color:#A9B0C6;vertical-align:top">'
         f'{esc(k)}<br><strong style="font:400 19px Georgia,serif;color:#F3EEE3">{esc(sign_name(lang, p["signIndex"]))}</strong></td><td width="8"></td>'
         for k, p in items)
-    body = (_p(greeting(lang, name)) + _p(f["intro"])
+    body = (_p(greeting(lang, name)) + _p(f["cuIntro" if catchup else "intro"])
             + f'<table role="presentation" cellpadding="0" cellspacing="0" style="margin:6px 0 18px"><tr>{cells}</tr></table>'
             + "".join(_p(x) for x in paras)
             + (_questions(lang, f["qTitle"], questions) if questions else "")
             + _button(f["cta"].format(price=price), resume_url) + _p(f["after"]))
+    if catchup:
+        subject = f["cuSubj"].format(name=name) if name else f["cuSubjNoName"]
+        html = layout(lang, body, optout_url)
+        return subject, (html.replace(f'>{esc(T[lang]["unsub"])}</a>', f'>{esc(f["optout"])}</a>', 1) if optout_url else html)
     subject = f["subj"].format(name=name) if name else f["subjNoName"]
     return subject, layout(lang, body)
 
@@ -568,3 +573,16 @@ def optout_page(lang: str, done: bool) -> str:
     form = ('<form method="post"><button type="submit" style="padding:14px 26px;border:0;border-radius:999px;'
             f'background:#D9B26A;color:#0B1020;font:700 16px Arial,sans-serif;cursor:pointer">{esc(f["optout"])}</button></form>')
     return layout(lang, form)
+
+
+# One-off e-mail for leads from before summary v2 (scripts: catchup.py): same body, own subject and intro.
+FUNNEL['pl'].update(cuSubj='{name}, jeszcze raz przyjrzeliśmy się Twojemu kosmogramowi', cuSubjNoName='Jeszcze raz przyjrzeliśmy się Twojemu kosmogramowi', cuIntro='Niedawno obliczyliśmy Twój kosmogram. Od tego czasu ulepszyliśmy nasze podsumowania, więc spojrzeliśmy na niego jeszcze raz. Oto, co zobaczyliśmy:')
+FUNNEL['hr'].update(cuSubj='{name}, pogledali smo tvoju kartu još jednom', cuSubjNoName='Pogledali smo tvoju natalnu kartu još jednom', cuIntro='Nedavno smo ti izračunali natalnu kartu. Od tada smo poboljšali sažetke, pa smo je pogledali još jednom. Ovo smo vidjeli:')
+FUNNEL['sl'].update(cuSubj='{name}, še enkrat smo pogledali tvojo karto', cuSubjNoName='Še enkrat smo pogledali tvojo natalno karto', cuIntro='Pred kratkim smo ti izračunali natalno karto. Od takrat smo izboljšali povzetke, zato smo jo pogledali še enkrat. Tole smo videli:')
+FUNNEL['ro'].update(cuSubj='{name}, ne-am mai uitat o dată la harta ta', cuSubjNoName='Ne-am mai uitat o dată la harta ta natală', cuIntro='De curând ți-am calculat harta natală. Între timp ne-am îmbunătățit rezumatele, așa că ne-am mai uitat o dată la ea. Iată ce am văzut:')
+FUNNEL['cs'].update(cuSubj='{name}, ještě jednou jsme se podívali na tvůj horoskop', cuSubjNoName='Ještě jednou jsme se podívali na tvůj natální horoskop', cuIntro='Nedávno jsme ti spočítali natální horoskop. Mezitím jsme vylepšili shrnutí, tak jsme se na něj podívali ještě jednou. Tohle jsme viděli:')
+FUNNEL['hu'].update(cuSubj='{name}, még egyszer megnéztük a képletedet', cuSubjNoName='Még egyszer megnéztük a születési képletedet', cuIntro='Nemrég kiszámoltuk a születési képletedet. Azóta továbbfejlesztettük az összefoglalóinkat, ezért még egyszer megnéztük. Ezt láttuk:')
+FUNNEL['de'].update(cuSubj='{name}, wir haben uns dein Horoskop noch einmal angesehen', cuSubjNoName='Wir haben uns dein Geburtshoroskop noch einmal angesehen', cuIntro='Vor Kurzem haben wir dein Geburtshoroskop berechnet. Seitdem haben wir unsere Zusammenfassungen verbessert und es uns noch einmal angesehen. Das haben wir gesehen:')
+FUNNEL['fr'].update(cuSubj='{name}, nous avons regardé ton thème une deuxième fois', cuSubjNoName='Nous avons regardé ton thème astral une deuxième fois', cuIntro='Nous avons calculé ton thème astral il y a peu. Depuis, nous avons amélioré nos résumés, alors nous l’avons regardé une deuxième fois. Voici ce que nous avons vu :')
+FUNNEL['it'].update(cuSubj='{name}, abbiamo riguardato il tuo tema', cuSubjNoName='Abbiamo riguardato il tuo tema natale', cuIntro='Di recente abbiamo calcolato il tuo tema natale. Nel frattempo abbiamo migliorato i nostri riassunti, così l’abbiamo riguardato. Ecco cosa abbiamo visto:')
+FUNNEL['en'].update(cuSubj='{name}, we took a second look at your chart', cuSubjNoName='We took a second look at your birth chart', cuIntro='We calculated your birth chart recently. Since then we have improved our summaries, so we took a second look at it. Here is what we saw:')
