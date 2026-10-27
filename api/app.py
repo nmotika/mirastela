@@ -269,7 +269,7 @@ def _send_summary(token: str):
     for attempt in range(2):
         try:
             out, _ = report.generate_json(report.prompt_summary(lang, name, natal, focus_l, status or ""), report.SUMMARY_SCHEMA,
-                                          max_tokens=2500, fallback=fallback)
+                                          max_tokens=8000, fallback=fallback)
             out = out or {}
             raw_p, raw_q = out.get("paragraphs"), out.get("questions")
             paras = [p.strip() for p in ([raw_p] if isinstance(raw_p, str) else raw_p or []) if isinstance(p, str) and p.strip()]

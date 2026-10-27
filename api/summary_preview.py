@@ -21,7 +21,7 @@ for name, lg, d, t, city, focus, status in rows:
     lg = app._lang(lg)
     natal = app.birth_chart(d, t, city)
     out, model = report.generate_json(report.prompt_summary(lg, name, natal, [f for f in (focus or "").split(",") if f], status or ""),
-                                      report.SUMMARY_SCHEMA, max_tokens=2500)
+                                      report.SUMMARY_SCHEMA, max_tokens=8000)
     out = out or {}
     print(f"\n===== {name or '(bez imena)'} · {lg} · {d} {t or '?'} · fokus: {focus or '-'} · {model}")
     for p in out.get("paragraphs") or []:
