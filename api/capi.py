@@ -22,7 +22,7 @@ def _h(v: str) -> str:
 
 
 # Country of the language version (ISO 3166 alpha-2, Meta wants it lowercase and hashed); English has none.
-COUNTRY = {"pl": "pl", "hr": "hr", "sl": "si", "ro": "ro", "cs": "cz", "hu": "hu", "de": "de", "fr": "fr", "it": "it"}
+COUNTRY = {"pl": "pl", "hr": "hr", "sl": "si", "ro": "ro", "cs": "cz", "hu": "hu", "de": "de", "fr": "fr", "it": "it", "es": "es"}
 
 
 def _first_name(name: str) -> str:

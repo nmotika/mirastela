@@ -586,3 +586,55 @@ FUNNEL['de'].update(cuSubj='{name}, wir haben uns dein Horoskop noch einmal ange
 FUNNEL['fr'].update(cuSubj='{name}, nous avons regardé ton thème une deuxième fois', cuSubjNoName='Nous avons regardé ton thème astral une deuxième fois', cuIntro='Nous avons calculé ton thème astral il y a peu. Depuis, nous avons amélioré nos résumés, alors nous l’avons regardé une deuxième fois. Voici ce que nous avons vu :')
 FUNNEL['it'].update(cuSubj='{name}, abbiamo riguardato il tuo tema', cuSubjNoName='Abbiamo riguardato il tuo tema natale', cuIntro='Di recente abbiamo calcolato il tuo tema natale. Nel frattempo abbiamo migliorato i nostri riassunti, così l’abbiamo riguardato. Ecco cosa abbiamo visto:')
 FUNNEL['en'].update(cuSubj='{name}, we took a second look at your chart', cuSubjNoName='We took a second look at your birth chart', cuIntro='We calculated your birth chart recently. Since then we have improved our summaries, so we took a second look at it. Here is what we saw:')
+
+# ---- es (Spain Spanish, informal tú; draft for native review)
+MONTHS['es'] = 'enero febrero marzo abril mayo junio julio agosto septiembre octubre noviembre diciembre'
+DATE_FMT['es'] = '{d} de {m}'
+T['es'] = {'hi': 'Hola, {name}:',
+ 'hiNoName': 'Hola:',
+ 'sumSubject': '{name}, el resumen de tu carta natal',
+ 'sumIntro': 'Aquí tienes un breve resumen de tu carta natal.',
+ 'sumCta': 'Ver el informe completo',
+ 'sumAfter': 'El informe completo describe los diez planetas, las casas y los aspectos más importantes.',
+ 'big3': ('Sol', 'Luna', 'Ascendente'),
+ 'repSubject': 'Tu informe está listo: {product}',
+ 'repBody': 'Tu informe «{product}» está listo. Ábrelo aquí abajo. Desde la página también puedes descargarlo en PDF.',
+ 'repBtn': 'Abrir el informe',
+ 'products': {'natal': 'Carta natal',
+              'partner': 'Compatibilidad de pareja',
+              'forecast': 'Previsión {year}',
+              'child': 'La carta natal de tu hijo o hija'},
+ 'subSubject': 'Tu suscripción está activa',
+ 'subDaily': 'Desde mañana por la mañana recibirás cada día un horóscopo calculado a partir de tu carta natal.',
+ 'subWeekly': 'Cada lunes por la mañana recibirás el horóscopo de toda la semana, calculado a partir de tu carta natal.',
+ 'dailySubject': '{name}, tu horóscopo del {date}',
+ 'weeklySubject': '{name}, tu semana desde el {date}',
+ 'unsub': 'Darse de baja',
+ 'unsubDone': 'Te has dado de baja. No te enviaremos más horóscopos.',
+ 'loginSubject': 'Tu enlace de acceso a Mirastela',
+ 'loginBody': 'Haz clic en el botón para ver tus informes y tu suscripción. El enlace es válido durante 30 minutos y '
+              'una sola vez.',
+ 'loginBtn': 'Abrir mis informes',
+ 'loginAfter': 'Si no has pedido este enlace, ignora este correo.',
+ 'account': 'Mis informes y mis datos',
+ 'stmt': 'En el extracto de tu tarjeta el pago aparecerá como «LINK.COM* MIRASTELA». Link es el servicio de pago de '
+         'Stripe con el que cobramos las compras.',
+ 'why': 'Recibes este correo porque esta dirección se introdujo en mirastela.com.',
+ 'disclaimer': 'El contenido tiene fines de entretenimiento y autorreflexión.'}
+CAL['es'] = ('Tu calendario astrológico personal',
+ 'Cada día en tu calendario: un día verde, azul o naranja y un breve consejo, calculados a partir de tu carta '
+ 'natal. Añádelo con un clic:',
+ 'Añadir a Google Calendar',
+ 'Añadir a iPhone / Apple',
+ 'Otro calendario (Outlook y otros): copia esta dirección y añádela como suscripción desde una URL:')
+CUSP['es'] = 'en el límite con:'
+FUNNEL['es'] = dict(subj="{name}, esto dice de ti tu carta natal", subjNoName="Esto dice de ti tu carta natal",
+                    intro="Hemos calculado tu carta natal. Esto es lo que se ve en ella a primera vista.",
+                    qTitle="Tu informe completo responde a estas preguntas:", cta="Desbloquea tu carta completa · {price}",
+                    after="El informe completo está escrito solo para tu carta, con capítulos propios sobre las áreas que elegiste en el cuestionario.",
+                    remSubj="{name}, una pregunta de tu carta sigue abierta", remSubjNoName="Una pregunta de tu carta sigue abierta",
+                    remIntro="Ayer te enviamos el resumen de tu carta natal. Una pregunta merece respuesta:",
+                    remAfter="La respuesta está en tu informe completo. Tus datos están guardados, así que no tienes que volver a introducir nada.",
+                    optout="No quiero recibir más correos como este", optoutDone="Hecho. No te enviaremos más correos con horóscopos y ofertas.",
+                    cuSubj="{name}, hemos vuelto a mirar tu carta", cuSubjNoName="Hemos vuelto a mirar tu carta natal",
+                    cuIntro="Hace poco calculamos tu carta natal. Desde entonces hemos mejorado nuestros resúmenes, así que la hemos vuelto a mirar. Esto es lo que hemos visto:")

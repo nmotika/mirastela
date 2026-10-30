@@ -171,3 +171,5 @@ CAL_NAME['fr'] = 'Mirastela · mon calendrier'
 LABELS['it'] = {'super': 'Giornata top', 'act': 'Agisci', 'slow': 'Rallenta'}
 CAL_NAME['it'] = 'Mirastela · il mio calendario'
 
+LABELS['es'] = {'super': 'Día top', 'act': 'Actúa', 'slow': 'Baja el ritmo'}
+CAL_NAME['es'] = 'Mirastela · mi calendario'

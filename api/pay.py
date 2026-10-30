@@ -157,3 +157,6 @@ _P['it'] = ('eur', 14.9, 11.9, 17.9, 34.9, 13.9, 7.99, 59.99)
 WAIVER['it'] = 'Acconsento alla fornitura immediata del contenuto digitale e prendo atto che in questo modo perdo il diritto di recesso. Accetto i [Termini e condizioni]({url}).'
 BUNDLE_NAME['it'] = 'Pacchetto'
 
+_P['es'] = ('eur', 12.9, 9.9, 14.9, 29.9, 11.9, 6.99, 49.99)
+WAIVER['es'] = 'Acepto que el suministro del contenido digital comience de inmediato y reconozco que, por ello, pierdo mi derecho de desistimiento. Acepto los [Términos y condiciones]({url}).'
+BUNDLE_NAME['es'] = 'Pack'

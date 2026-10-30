@@ -14,7 +14,7 @@ LOCAL_NAMES = {"Warsaw": "Warszawa", "Prague": "Praha", "Bucharest": "București
 RO_FIX = str.maketrans({"ş": "ș", "Ş": "Ș", "ţ": "ț", "Ţ": "Ț"})
 
 MARKET_COUNTRY = {"pl": "PL", "hr": "HR", "sl": "SI", "ro": "RO",
-                  "cs": "CZ", "hu": "HU", "de": "DE", "fr": "FR", "it": "IT", "en": None}
+                  "cs": "CZ", "hu": "HU", "de": "DE", "fr": "FR", "it": "IT", "es": "ES", "en": None}
 
 
 def norm(s: str) -> str:

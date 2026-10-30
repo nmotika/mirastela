@@ -74,6 +74,7 @@ T = {
     "de": ("Dein Geschenk von Mirastela: Code {code}", "Danke! Hier ist dein Geschenkcode für {product}:", "Die beschenkte Person öffnet mirastela.com, gibt ihre Geburtsdaten ein und trägt im letzten Schritt den Code im Feld „Hast du einen Code?“ ein. Der Code ist einmal einlösbar und gültig bis {expires}.", "Geschenkkarte zum Ausdrucken öffnen"),
     "fr": ("Ton cadeau Mirastela : code {code}", "Merci ! Voici ton code cadeau pour {product} :", "La personne qui reçoit le cadeau ouvre mirastela.com, saisit ses données de naissance et, à la dernière étape, entre le code dans le champ « Tu as un code ? ». Le code est utilisable une fois et valable jusqu’au {expires}.", "Ouvrir la carte cadeau à imprimer"),
     "it": ("Il tuo regalo Mirastela: codice {code}", "Grazie! Ecco il codice regalo per {product}:", "Chi riceve il regalo apre mirastela.com, inserisce i propri dati di nascita e, all’ultimo passaggio, scrive il codice nel campo «Hai un codice?». Il codice vale una sola volta ed è valido fino al {expires}.", "Apri la carta regalo da stampare"),
+    "es": ("Tu regalo de Mirastela: código {code}", "¡Gracias! Aquí tienes el código regalo para {product}:", "La persona que recibe el regalo abre mirastela.com, introduce sus datos de nacimiento y, en el último paso, escribe el código en el campo «¿Tienes un código?». El código es de un solo uso y es válido hasta el {expires}.", "Abrir la tarjeta regalo para imprimir"),
 }
 
 

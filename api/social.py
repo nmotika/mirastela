@@ -180,6 +180,7 @@ WEEKDAYS = {
     "de": "Montag Dienstag Mittwoch Donnerstag Freitag Samstag Sonntag",
     "fr": "lundi mardi mercredi jeudi vendredi samedi dimanche",
     "it": "lunedì martedì mercoledì giovedì venerdì sabato domenica",
+    "es": "lunes martes miércoles jueves viernes sábado domingo",
 }
 # cover title, swipe hint, caption intro, caption call to action, hashtags
 DAILY = {
@@ -193,6 +194,7 @@ DAILY = {
     "de": ("Tageshoroskop", "Wischen und dein Zeichen finden ›", "Dein Horoskop für {date}: was der Himmel heute für dein Sternzeichen bereithält.", "Das ganze Horoskop und dein persönliches Geburtshoroskop: Link in der Bio.", "#horoskop #tageshoroskop #astrologie #sternzeichen #geburtshoroskop"),
     "fr": ("Horoscope du jour", "Fais défiler pour trouver ton signe ›", "Ton horoscope du {date} : ce que le ciel dit à ton signe aujourd’hui.", "L’horoscope complet et ton thème astral personnel : lien en bio.", "#horoscope #horoscopedujour #astrologie #signeastrologique #themeastral"),
     "it": ("Oroscopo del giorno", "Scorri e trova il tuo segno ›", "Il tuo oroscopo per {date}: cosa dice oggi il cielo al tuo segno.", "L’oroscopo completo e il tuo tema natale: link in bio.", "#oroscopo #oroscopodioggi #astrologia #segnizodiacali #temanatale"),
+    "es": ("Horóscopo del día", "Desliza y encuentra tu signo ›", "Tu horóscopo para el {date}: lo que el cielo le dice hoy a tu signo.", "El horóscopo completo y tu carta natal personal: enlace en la bio.", "#horoscopo #horoscopodehoy #astrologia #signosdelzodiaco #cartanatal"),
 }
 ALL_LANGS = list(report.LANG_NAME)
 

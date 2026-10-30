@@ -737,7 +737,7 @@ def _fulfil(session_id: str, meta: dict, bg: BackgroundTasks, customer: str | No
 
 
 GIFT_SLUG = {"pl": "prezent", "hr": "poklon", "sl": "darilo", "ro": "cadou", "cs": "darek", "hu": "ajandek",
-             "en": "gift", "de": "geschenk", "fr": "cadeau", "it": "regalo"}  # must match web/src/i18n/lang/gift.ts
+             "en": "gift", "de": "geschenk", "fr": "cadeau", "it": "regalo", "es": "regalo"}  # must match web/src/i18n/lang/gift.ts
 
 
 def _fulfil_gift(session_id: str, code: str, product: str, claimed: bool, bg: BackgroundTasks) -> dict:

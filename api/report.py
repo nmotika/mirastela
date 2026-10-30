@@ -343,12 +343,13 @@ SIGNS_SCHEMA = {"type": "object", "required": ["signs"], "properties": {"signs":
 
 # How to address the reader, per language (the informal form the website uses).
 ADDRESS = {"pl": "ty", "hr": "ti", "sl": "ti", "ro": "tu", "cs": "ty", "hu": "te (tegező forma)", "en": "you",
-           "de": "du, never Sie", "fr": "tu, ton, tes, never vous or votre", "it": "tu, never Lei"}
+           "de": "du, never Sie", "fr": "tu, ton, tes, never vous or votre", "it": "tu, never Lei", "es": "tú, never usted"}
 
 # Letters with diacritics each language uses, and the minimum share of them among all letters in a
 # normal text. Far below it means the model dropped the diacritics (seen once in Slovenian).
 _DIACRITICS = {"sl": ("čšžČŠŽ", 0.006), "hr": ("čćšžđČĆŠŽĐ", 0.006), "cs": ("áčďéěíňóřšťúůýžÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ", 0.03),
-               "pl": ("ąćęłńóśźżĄĆĘŁŃÓŚŹŻ", 0.02), "ro": ("ăâîșțşţĂÂÎȘȚŞŢ", 0.015), "hu": ("áéíóöőúüűÁÉÍÓÖŐÚÜŰ", 0.04)}
+               "pl": ("ąćęłńóśźżĄĆĘŁŃÓŚŹŻ", 0.02), "ro": ("ăâîșțşţĂÂÎȘȚŞŢ", 0.015), "hu": ("áéíóöőúüűÁÉÍÓÖŐÚÜŰ", 0.04),
+               "es": ("áéíóúñüÁÉÍÓÚÑÜ", 0.008)}
 
 
 def daily_problem(lang: str, entry: dict) -> str | None:
@@ -466,3 +467,7 @@ VOCAB['it'] = {'signs': 'Ariete, Toro, Gemelli, Cancro, Leone, Vergine, Bilancia
  'terms': 'tema natale, Ascendente, casa (1ª–12ª), aspetto, congiunzione, opposizione, trigono, quadratura, sestile, '
           'transito'}
 
+LANG_NAME['es'] = 'Spanish (Spain)'
+VOCAB['es'] = {'signs': 'Aries, Tauro, Géminis, Cáncer, Leo, Virgo, Libra, Escorpio, Sagitario, Capricornio, Acuario, Piscis',
+ 'terms': 'carta natal, Ascendente, casa (1.ª–12.ª), aspecto, conjunción, oposición, trígono, cuadratura, sextil, '
+          'tránsito'}
