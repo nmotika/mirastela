@@ -5,7 +5,8 @@ import { LOCALES, type Lang } from '../../../i18n/config';
 import { t, fill } from '../../../i18n';
 import { SEO } from '../../../i18n/lang/seo';
 import { SIGN_GLYPHS, signRangeShort } from '../../../scripts/zodiac';
-import { SIGN_KEYS, page, langsWith, pairKey, signSlug, pairSlug, pathsFor, type Kind, type Page } from '../../../lib/seo';
+import { SIGN_KEYS, page, langsWith, pairKey, signSlug, pairSlug, pathsFor, subPath, type Kind, type Page } from '../../../lib/seo';
+import { SEO2 } from '../../../i18n/lang/seo2';
 
 const RULERS = [['mars'], ['venus'], ['mercury'], ['moon'], ['sun'], ['mercury'], ['venus'], ['pluto', 'mars'], ['jupiter'], ['saturn'], ['uranus', 'saturn'], ['neptune', 'jupiter']];
 
@@ -25,7 +26,7 @@ export function getStaticPaths() {
 }
 
 const lang = Astro.params.lang as Lang;
-const { kind, a, b } = Astro.props as { kind: Kind; a: number; b: number };
+const { kind, a, b } = Astro.props as { kind: 'year' | 'signs' | 'compat'; a: number; b: number };
 const S = SEO[lang];
 const d = t(lang);
 const signs = d.astro.signs;
@@ -54,6 +55,11 @@ const crumbs: [string, string][] = [home, [hubName, hubUrl], [kind === 'compat' 
 // Related links: other pages about the same sign(s) that exist in this language.
 const rel: { href: string; label: string; g: string }[] = [];
 const signA = SIGN_KEYS[a];
+// Sub-pages first: love and work for this sign's year, friendship for this pair.
+if (kind === 'year') for (const k of ['love', 'work'] as const) {
+  if (page(k, lang, signA)) rel.push({ href: `/${lang}/${subPath(k, lang, a, a)}`, label: fill(SEO2[lang][k].h1, { sign: signs[a] }), g: SIGN_GLYPHS[a] });
+}
+if (kind === 'compat' && page('friend', lang, key)) rel.push({ href: `/${lang}/${subPath('friend', lang, a, b)}`, label: fill(SEO2[lang].friend.h1, { a: signs[a], b: signs[b] }), g: `${SIGN_GLYPHS[a]}${SIGN_GLYPHS[b]}` });
 if (kind !== 'year' && page('year', lang, signA)) rel.push({ href: `/${lang}/${S.slugs.year}/${signSlug(lang, a)}/`, label: fill(S.year.h1, { sign: signs[a] }), g: SIGN_GLYPHS[a] });
 if (kind !== 'signs' && page('signs', lang, signA)) rel.push({ href: `/${lang}/${S.slugs.signs}/${signSlug(lang, a)}/`, label: fill(S.signs.h1, { sign: signs[a] }), g: SIGN_GLYPHS[a] });
 if (kind === 'compat' && a !== b && page('signs', lang, SIGN_KEYS[b])) rel.push({ href: `/${lang}/${S.slugs.signs}/${signSlug(lang, b)}/`, label: fill(S.signs.h1, { sign: signs[b] }), g: SIGN_GLYPHS[b] });

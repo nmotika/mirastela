@@ -1,9 +1,10 @@
 import { LOCALES, type Lang } from '../i18n/config';
 import { t } from '../i18n';
 import { SEO } from '../i18n/lang/seo';
+import { SEO2 } from '../i18n/lang/seo2';
 import { GIFT } from '../i18n/lang/gift';
 import { PARTNER } from '../i18n/lang/partner';
-import { SIGN_KEYS, page, hasAny, pairKey, pairSlug, type Kind } from '../lib/seo';
+import { SIGN_KEYS, page, hasAny, pairKey, pairSlug, subPath, type Kind } from '../lib/seo';
 
 const SITE = 'https://mirastela.com';
 
@@ -23,19 +24,24 @@ export function GET() {
   urls.unshift(`<url><loc>${SITE}/</loc>${LOCALES.map((a) => `<xhtml:link rel="alternate" hreflang="${a}" href="${SITE}/${a}/"/>`).join('')}<xhtml:link rel="alternate" hreflang="x-default" href="${SITE}/"/></url>`);
   // Evergreen pages: only languages where the page exists are listed as alternates.
   const evergreen: Partial<Record<Lang, string>>[] = [];
-  const hub = (k: Kind | 'calc') => evergreen.push(Object.fromEntries(LOCALES.filter((l) => k === 'calc' || hasAny(k, l)).map((l) => [l, `${SEO[l].slugs[k]}/`])));
+  const hub = (k: 'year' | 'signs' | 'compat' | 'calc') => evergreen.push(Object.fromEntries(LOCALES.filter((l) => k === 'calc' || hasAny(k, l)).map((l) => [l, `${SEO[l].slugs[k]}/`])));
   (['year', 'signs', 'compat', 'calc'] as const).forEach(hub);
+  evergreen.push(Object.fromEntries(LOCALES.map((l) => [l, `${SEO2[l].moonSlug}/`])));
   evergreen.push(Object.fromEntries(LOCALES.map((l) => [l, `${GIFT[l].slug}/`])));
   evergreen.push(Object.fromEntries(LOCALES.map((l) => [l, `${PARTNER[l].slug}/`])));
   for (let i = 0; i < 12; i++) {
     for (const k of ['year', 'signs'] as const) {
       evergreen.push(Object.fromEntries(LOCALES.filter((l) => page(k, l, SIGN_KEYS[i])).map((l) => [l, `${SEO[l].slugs[k]}/${t(l).horo.signSlugs[i]}/`])));
     }
+    for (const k of ['love', 'work'] as const) {
+      evergreen.push(Object.fromEntries(LOCALES.filter((l) => page(k, l, SIGN_KEYS[i])).map((l) => [l, subPath(k, l, i, i)])));
+    }
     for (let j = i; j < 12; j++) {
       evergreen.push(Object.fromEntries(LOCALES.filter((l) => page('compat', l, pairKey(i, j))).map((l) => [l, `${SEO[l].slugs.compat}/${pairSlug(l, i, j)}/`])));
+      evergreen.push(Object.fromEntries(LOCALES.filter((l) => page('friend', l, pairKey(i, j))).map((l) => [l, subPath('friend', l, i, j)])));
     }
   }
-  for (const g of evergreen) {
+  for (const g of evergreen.filter((x) => Object.keys(x).length)) {
     const ls = Object.keys(g) as Lang[];
     const alts = ls.map((a) => `<xhtml:link rel="alternate" hreflang="${a}" href="${SITE}/${a}/${g[a]}"/>`).join('')
       + (g.en ? `<xhtml:link rel="alternate" hreflang="x-default" href="${SITE}/en/${g.en}"/>` : '');

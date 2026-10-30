@@ -3,6 +3,7 @@ import Logo from './Logo.astro';
 import { t } from '../i18n';
 import { LOCALES, LANG_NAMES, type Lang } from '../i18n/config';
 import { SEO } from '../i18n/lang/seo';
+import { SEO2 } from '../i18n/lang/seo2';
 import { GIFT } from '../i18n/lang/gift';
 import { PARTNER } from '../i18n/lang/partner';
 import { hasAny } from '../lib/seo';
@@ -19,6 +20,7 @@ const SOCIAL: Partial<Record<Lang, [string, string][]>> = {
 const astro = [
   ...(['year', 'signs', 'compat'] as const).filter((k) => hasAny(k, lang)).map((k) => [S[k].nav, `/${lang}/${S.slugs[k]}/`]),
   [S.calc.nav, `/${lang}/${S.slugs.calc}/`],
+  [SEO2[lang].moon.nav, `/${lang}/${SEO2[lang].moonSlug}/`],
   [GIFT[lang].nav, `/${lang}/${GIFT[lang].slug}/`],
 ];
 ---

@@ -96,7 +96,8 @@ def year_facts(year: int) -> dict:
     return {"year": year,
             "slow": {pid: periods(year, num) for pid, num in SLOW},
             "retro": {pid: retrogrades(year, num) for pid, num in FAST_RETRO},
-            "eclipses": eclipses(year)}
+            "eclipses": eclipses(year),
+            "venus": periods(year, swe.VENUS)}
 
 
 def year_text(facts: dict, sign: int) -> str:
@@ -115,6 +116,14 @@ def year_text(facts: dict, sign: int) -> str:
     rows.append("\nEclipses (turning points):")
     for e in facts["eclipses"]:
         rows.append(f"- {e['type']} on {e['date']} in {SIGNS[e['sign']]} → {area(e['sign'])}")
+    return "\n".join(rows)
+
+
+def venus_text(facts: dict, sign: int) -> str:
+    """Venus through the signs (love, pleasure, attraction), for the love page."""
+    area = lambda s: AREAS[(s - sign) % 12]
+    rows = ["\nVenus (love, attraction, pleasure) through the year:"]
+    rows += [f"- venus in {SIGNS[p['sign']]} from {p['from']} to {p['to']} → {area(p['sign'])}" for p in facts.get("venus", [])]
     return "\n".join(rows)
 
 

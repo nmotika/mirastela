@@ -79,10 +79,11 @@ function init(cfg: any) {
       const sun = c.planets.find((p) => p.id === 'sun')!.signIndex;
       const moon = c.planets.find((p) => p.id === 'moon')!.signIndex;
       const out = $('cRes');
-      const nodes: HTMLElement[] = [
-        item(SIGN_GLYPHS[sun], S.sun, A.signs[sun], fill(cfg.p1, { signIn: A.signIn[sun], trait: A.traits[sun] })),
-        item(SIGN_GLYPHS[moon], S.moon, A.signs[moon], S.explain.moon),
-      ];
+      const sunItem = item(SIGN_GLYPHS[sun], S.sun, A.signs[sun], fill(cfg.p1, { signIn: A.signIn[sun], trait: A.traits[sun] }));
+      // On the Moon sign page the Moon comes first, with a short reading of the Moon in that sign.
+      const nodes: HTMLElement[] = cfg.mode === 'moon'
+        ? [item(SIGN_GLYPHS[moon], S.moon, A.signs[moon], `${S.explain.moon} ${fill(cfg.p3, { moonIn: A.signIn[moon], moonTrait: A.traits[moon] })}`), sunItem]
+        : [sunItem, item(SIGN_GLYPHS[moon], S.moon, A.signs[moon], S.explain.moon)];
       if (c.timeKnown && c.angles) nodes.push(item(SIGN_GLYPHS[c.angles.asc.signIndex], S.asc, A.signs[c.angles.asc.signIndex], S.explain.asc));
       const notes = c.timeKnown ? [] : [S.ascNeedsTime, S.moonUnsure];
       for (const n of notes) { const p = document.createElement('p'); p.className = 'note'; p.textContent = n; nodes.push(p); }

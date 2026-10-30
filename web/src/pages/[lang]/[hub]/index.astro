@@ -6,31 +6,38 @@ import Footer from '../../../components/Footer.astro';
 import { LOCALES, type Lang } from '../../../i18n/config';
 import { t, fill } from '../../../i18n';
 import { SEO } from '../../../i18n/lang/seo';
+import { SEO2 } from '../../../i18n/lang/seo2';
 import { SIGN_GLYPHS, signRangeShort } from '../../../scripts/zodiac';
 import { SIGN_KEYS, page, hasAny, pairKey, signSlug, pairSlug, ldJson, crumbsLd } from '../../../lib/seo';
 import '../../../styles/horo.css';
 import '../../../styles/seo.css';
 
-type Hub = 'year' | 'signs' | 'compat' | 'calc';
+type Hub = 'year' | 'signs' | 'compat' | 'calc' | 'moon';
+const tool = (k: Hub) => k === 'calc' || k === 'moon';
+const hubSlug = (l: Lang, k: Hub) => (k === 'moon' ? SEO2[l].moonSlug : SEO[l].slugs[k]);
 export function getStaticPaths() {
-  return LOCALES.flatMap((lang) => (['year', 'signs', 'compat', 'calc'] as Hub[])
-    .filter((kind) => kind === 'calc' || hasAny(kind, lang))
-    .map((kind) => ({ params: { lang, hub: SEO[lang].slugs[kind] }, props: { kind } })));
+  const tool = (k: Hub) => k === 'calc' || k === 'moon';
+  const hubSlug = (l: Lang, k: Hub) => (k === 'moon' ? SEO2[l].moonSlug : SEO[l].slugs[k]);
+  return LOCALES.flatMap((lang) => (['year', 'signs', 'compat', 'calc', 'moon'] as Hub[])
+    .filter((kind) => tool(kind) || hasAny(kind as 'year', lang))
+    .map((kind) => ({ params: { lang, hub: hubSlug(lang, kind) }, props: { kind } })));
 }
 const lang = Astro.params.lang as Lang;
 const { kind } = Astro.props as { kind: Hub };
 const S = SEO[lang];
 const d = t(lang);
 const signs = d.astro.signs;
-const alts = LOCALES.filter((l) => kind === 'calc' || hasAny(kind, l));
-const paths = Object.fromEntries(LOCALES.map((l) => [l, alts.includes(l) ? `${SEO[l].slugs[kind]}/` : ''])) as Record<Lang, string>;
-const H = kind === 'calc' ? null : S[kind];
-const title = kind === 'calc' ? S.calc.title : H!.hubTitle;
-const desc = kind === 'calc' ? S.calc.desc : H!.hubDesc;
-const h1 = kind === 'calc' ? S.calc.h1 : H!.hubH1;
-const nav = kind === 'calc' ? S.calc.nav : H!.nav;
+const alts = LOCALES.filter((l) => tool(kind) || hasAny(kind as 'year', l));
+const paths = Object.fromEntries(LOCALES.map((l) => [l, alts.includes(l) ? `${hubSlug(l, kind)}/` : ''])) as Record<Lang, string>;
+const H = tool(kind) ? null : S[kind as 'year' | 'signs' | 'compat'];
+const T = kind === 'moon' ? SEO2[lang].moon : S.calc;
+const title = tool(kind) ? T.title : H!.hubTitle;
+const desc = tool(kind) ? T.desc : H!.hubDesc;
+const h1 = tool(kind) ? T.h1 : H!.hubH1;
+const nav = tool(kind) ? T.nav : H!.nav;
+const otherTool = kind === 'moon' ? { href: `/${lang}/${S.slugs.calc}/`, label: S.calc.h1 } : { href: `/${lang}/${SEO2[lang].moonSlug}/`, label: SEO2[lang].moon.h1 };
 const ld = ldJson([crumbsLd([['Mirastela', `/${lang}/`], [nav, `/${lang}/${paths[lang]}`]])]);
-const calcData = JSON.stringify({ lang, s: S.calc, astro: { signs, signIn: d.astro.signIn, traits: d.astro.traits }, p1: d.teaser.p1, start: `/${lang}/start/` });
+const calcData = JSON.stringify({ lang, mode: kind, s: S.calc, astro: { signs, signIn: d.astro.signIn, traits: d.astro.traits }, p1: d.teaser.p1, p3: d.teaser.p3, start: `/${lang}/start/` });
 const hubLink = (i: number) => kind === 'compat' ? '' : (page(kind as 'year' | 'signs', lang, SIGN_KEYS[i]) ? `/${lang}/${S.slugs[kind]}/${signSlug(lang, i)}/` : '');
 const pairData = kind === 'compat' ? JSON.stringify(Object.fromEntries(
   [...Array(12).keys()].flatMap((i) => [...Array(12).keys()].filter((j) => j >= i && page('compat', lang, pairKey(i, j))).map((j) => [`${i}-${j}`, `/${lang}/${S.slugs.compat}/${pairSlug(lang, i, j)}/`])),
@@ -43,7 +50,7 @@ const pairData = kind === 'compat' ? JSON.stringify(Object.fromEntries(
     <nav class="crumbs" aria-label="Breadcrumb"><a href={`/${lang}/`}>Mirastela</a> / {nav}</nav>
     <section class="hh">
       <h1 class="sf">{h1}</h1>
-      <p class="mu">{kind === 'calc' ? S.calc.intro : H!.hubIntro}</p>
+      <p class="mu">{tool(kind) ? T.intro : H!.hubIntro}</p>
     </section>
 
     {(kind === 'year' || kind === 'signs') && (
@@ -78,7 +85,7 @@ const pairData = kind === 'compat' ? JSON.stringify(Object.fromEntries(
       </>
     )}
 
-    {kind === 'calc' && (
+    {tool(kind) && (
       <>
         <form class="calcf" id="calcForm" novalidate>
           <div class="row2">
@@ -93,8 +100,9 @@ const pairData = kind === 'compat' ? JSON.stringify(Object.fromEntries(
         </form>
         <div class="cres" id="cRes" aria-live="polite" hidden></div>
         <section class="about">
-          <h2 class="sf">{S.calc.aboutTitle}</h2>
-          <p class="mu">{S.calc.about}</p>
+          <h2 class="sf">{T.aboutTitle}</h2>
+          <p class="mu">{T.about}</p>
+          <p><a href={otherTool.href}>{otherTool.label} ›</a></p>
         </section>
         <script type="application/json" id="calc-data" set:html={calcData} />
       </>

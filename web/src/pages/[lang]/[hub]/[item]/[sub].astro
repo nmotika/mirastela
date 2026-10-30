@@ -1,0 +1,88 @@
+---
+// Sub-pages of the evergreen pages: love and work in the coming year per sign (under the yearly forecast)
+// and friendship of two signs (under their compatibility page). Texts from api/seo_gen.py.
+import SeoArticle from '../../../../components/SeoArticle.astro';
+import { LOCALES, type Lang } from '../../../../i18n/config';
+import { t, fill } from '../../../../i18n';
+import { SEO } from '../../../../i18n/lang/seo';
+import { SEO2 } from '../../../../i18n/lang/seo2';
+import { SIGN_GLYPHS } from '../../../../scripts/zodiac';
+import { SIGN_KEYS, page, pairKey, signSlug, pairSlug, subPath, SUB_PARENT, type SubKind, type Page } from '../../../../lib/seo';
+
+export function getStaticPaths() {
+  const out = [];
+  for (const lang of LOCALES) {
+    const S = SEO[lang], S2 = SEO2[lang];
+    for (let i = 0; i < 12; i++) {
+      for (const k of ['love', 'work'] as const) {
+        if (page(k, lang, SIGN_KEYS[i])) out.push({ params: { lang, hub: S.slugs.year, item: signSlug(lang, i), sub: S2.sub[k] }, props: { kind: k, a: i, b: i } });
+      }
+      for (let j = i; j < 12; j++) {
+        if (page('friend', lang, pairKey(i, j))) out.push({ params: { lang, hub: S.slugs.compat, item: pairSlug(lang, i, j), sub: S2.sub.friend }, props: { kind: 'friend', a: i, b: j } });
+      }
+    }
+  }
+  return out;
+}
+
+const lang = Astro.params.lang as Lang;
+const { kind, a, b } = Astro.props as { kind: SubKind; a: number; b: number };
+const S = SEO[lang], S2 = SEO2[lang];
+const d = t(lang);
+const signs = d.astro.signs;
+const key = kind === 'friend' ? pairKey(a, b) : SIGN_KEYS[a];
+const P = page(kind, lang, key) as Page;
+const alts = LOCALES.filter((l) => !!page(kind, l, key));
+const parent = SUB_PARENT[kind];
+const parentPath = (l: Lang) => `${SEO[l].slugs[parent]}/${parent === 'compat' ? pairSlug(l, a, b) : signSlug(l, a)}/`;
+// Languages without this sub-page link to the parent page in the language switcher.
+const paths = Object.fromEntries(LOCALES.map((l) => [l, alts.includes(l) ? subPath(kind, l, a, b) : (page(parent, l, key) ? parentPath(l) : `${SEO[l].slugs[parent]}/`)])) as Record<Lang, string>;
+
+let title = '', h1 = '', parentName = '', sections: { h: string; text: string }[] = [];
+if (kind === 'friend') {
+  title = fill(S2.friend.title, { a: signs[a], b: signs[b] }); h1 = fill(S2.friend.h1, { a: signs[a], b: signs[b] });
+  parentName = `${signs[a]} + ${signs[b]}`;
+  sections = (['overall', 'strengths', 'challenges', 'tips'] as const).map((k) => ({ h: S2.friend.h[k], text: P[k] }));
+} else {
+  const F = S2[kind];
+  title = fill(F.title, { sign: signs[a] }); h1 = fill(F.h1, { sign: signs[a] }); parentName = signs[a];
+  const keys = kind === 'love' ? (['overview', 'single', 'couple', 'periods', 'advice'] as const) : (['overview', 'career', 'money', 'periods', 'advice'] as const);
+  sections = keys.map((k) => ({ h: (F.h as Record<string, string>)[k], text: P[k] }));
+}
+const glyphs = kind === 'friend' ? [SIGN_GLYPHS[a], SIGN_GLYPHS[b]] : [SIGN_GLYPHS[a]];
+const hubName = parent === 'year' ? S.year.nav : S.compat.nav;
+const crumbs: [string, string][] = [['Mirastela', `/${lang}/`], [hubName, `/${lang}/${S.slugs[parent]}/`], [parentName, `/${lang}/${parentPath(lang)}`],
+  [kind === 'friend' ? S.compat.h.friendship : (kind === 'love' ? S.year.h.love : S.year.h.work), `/${lang}/${paths[lang]}`]];
+
+// Related: the parent page, the sibling sub-page and the sign pages.
+const rel: { href: string; label: string; g: string }[] = [];
+if (page(parent, lang, key)) rel.push({ href: `/${lang}/${parentPath(lang)}`, label: parent === 'year' ? fill(S.year.h1, { sign: signs[a] }) : fill(S.compat.h1, { a: signs[a], b: signs[b] }), g: glyphs.join('') });
+if (kind !== 'friend') {
+  const other = kind === 'love' ? 'work' : 'love';
+  if (page(other, lang, key)) rel.push({ href: `/${lang}/${subPath(other, lang, a, b)}`, label: fill(S2[other].h1, { sign: signs[a] }), g: SIGN_GLYPHS[a] });
+}
+for (const i of kind === 'friend' && a !== b ? [a, b] : [a]) {
+  if (page('signs', lang, SIGN_KEYS[i])) rel.push({ href: `/${lang}/${S.slugs.signs}/${signSlug(lang, i)}/`, label: fill(S.signs.h1, { sign: signs[i] }), g: SIGN_GLYPHS[i] });
+}
+// Same topic for the other signs (love/work) or the other friendships of the first sign.
+const more = kind === 'friend'
+  ? [...Array(12).keys()].filter((j) => !(Math.min(a, j) === a && Math.max(a, j) === b) && page('friend', lang, pairKey(a, j)))
+      .map((j) => ({ href: `/${lang}/${subPath('friend', lang, Math.min(a, j), Math.max(a, j))}`, label: `${signs[a]} + ${signs[j]}`, g: `${SIGN_GLYPHS[a]}${SIGN_GLYPHS[j]}` }))
+  : [...Array(12).keys()].filter((j) => j !== a && page(kind, lang, SIGN_KEYS[j]))
+      .map((j) => ({ href: `/${lang}/${subPath(kind, lang, j, j)}`, label: signs[j], g: SIGN_GLYPHS[j] }));
+const moreTitle = kind === 'friend' ? fill(S2.friend.more, { sign: signs[a] }) : S2[kind].more;
+---
+<SeoArticle lang={lang} paths={paths} alts={alts} title={title} description={P.summary} h1={h1} crumbs={crumbs} glyphs={glyphs} lead={P.summary} sections={sections} faq={P.faq}>
+  <div slot="related">
+    <section class="rel">
+      <h2>{S.readAlso}</h2>
+      <nav class="pills">{rel.map((r) => <a href={r.href} class="sgp"><span class="gl" aria-hidden="true">{r.g}</span>{r.label}</a>)}</nav>
+    </section>
+    {more.length > 0 && (
+      <section class="rel">
+        <h2>{moreTitle}</h2>
+        <nav class={kind === 'friend' ? 'ctable' : 'pills'}>{more.map((r) => <a href={r.href} class={kind === 'friend' ? '' : 'sgp'}><span class="gl" aria-hidden="true">{r.g}</span>{r.label}</a>)}</nav>
+      </section>
+    )}
+  </div>
+</SeoArticle>

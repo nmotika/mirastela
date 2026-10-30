@@ -1,17 +1,18 @@
 import { LOCALES, type Lang } from '../i18n/config';
 import { t } from '../i18n';
 import { SEO } from '../i18n/lang/seo';
+import { SEO2 } from '../i18n/lang/seo2';
 
 // Generated page texts (api/seo_gen.py). A language or page that is not generated yet is simply not built.
 export const SIGN_KEYS = ['aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo', 'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces'];
-export type Kind = 'year' | 'signs' | 'compat';
+export type Kind = 'year' | 'signs' | 'compat' | 'love' | 'work' | 'friend';
 export interface Faq { q: string; a: string }
 export type Page = Record<string, string> & { faq?: Faq[] };
 
 const files = import.meta.glob<Record<string, Page>>('../data/seo/*/*.json', { eager: true, import: 'default' });
-const DATA: Record<Kind, Partial<Record<Lang, Record<string, Page>>>> = { year: {}, signs: {}, compat: {} };
+const DATA: Record<Kind, Partial<Record<Lang, Record<string, Page>>>> = { year: {}, signs: {}, compat: {}, love: {}, work: {}, friend: {} };
 for (const [path, data] of Object.entries(files)) {
-  const m = /seo\/(year|signs|compat)\/([a-z]{2})\.json$/.exec(path);
+  const m = /seo\/(year|signs|compat|love|work|friend)\/([a-z]{2})\.json$/.exec(path);
   if (m) DATA[m[1] as Kind][m[2] as Lang] = data;
 }
 
@@ -29,7 +30,7 @@ export const signSlug = (lang: Lang, i: number) => t(lang).horo.signSlugs[i];
 export const pairSlug = (lang: Lang, a: number, b: number) => `${signSlug(lang, Math.min(a, b))}-${signSlug(lang, Math.max(a, b))}`;
 
 /** Path (without /lang/) of a page in every language; languages without the page get their hub. */
-export function pathsFor(kind: Kind | 'calc', sub: (l: Lang) => string, key?: string): Record<Lang, string> {
+export function pathsFor(kind: 'year' | 'signs' | 'compat' | 'calc', sub: (l: Lang) => string, key?: string): Record<Lang, string> {
   return Object.fromEntries(LOCALES.map((l) => {
     const hub = `${SEO[l].slugs[kind]}/`;
     if (!key || kind === 'calc') return [l, sub(l) ? `${hub}${sub(l)}/` : hub];
@@ -51,4 +52,13 @@ export function crumbsLd(items: [string, string][]) {
 export function articleLd(headline: string, description: string, url: string, lang: Lang) {
   return { '@context': 'https://schema.org', '@type': 'Article', headline, description, inLanguage: lang, url: `https://mirastela.com${url}`,
     author: { '@type': 'Organization', name: 'Mirastela' }, publisher: { '@type': 'Organization', name: 'Mirastela', url: 'https://mirastela.com' } };
+}
+
+/** Sub-pages: love and work under a sign's yearly page, friendship under a pair's compatibility page. */
+export type SubKind = 'love' | 'work' | 'friend';
+export const SUB_PARENT: Record<SubKind, 'year' | 'compat'> = { love: 'year', work: 'year', friend: 'compat' };
+export function subPath(kind: SubKind, l: Lang, a: number, b: number): string {
+  const parent = SUB_PARENT[kind];
+  const item = parent === 'compat' ? pairSlug(l, a, b) : signSlug(l, a);
+  return `${SEO[l].slugs[parent]}/${item}/${SEO2[l].sub[kind]}/`;
 }

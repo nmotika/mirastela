@@ -2,6 +2,9 @@
   year    the yearly forecast per sign (12 per language)
   signs   a profile of each sign (12 per language)
   compat  compatibility of every pair of signs (78 per language)
+  love    love in the coming year per sign (12 per language), a sub-page of "year"
+  work    work and money in the coming year per sign (12 per language), a sub-page of "year"
+  friend  friendship of every pair of signs (78 per language), a sub-page of "compat"
 
 Results are JSON files in web/src/data/seo/<kind>/<lang>.json, which the static site reads at build
 time. Requests go through the Batch API (half price); what is missing or fails validation is sent again.
@@ -27,7 +30,8 @@ from chart import SIGNS
 
 YEAR = int(os.environ.get("MIRASTELA_SEO_YEAR", "2027"))
 OUT = Path(os.environ.get("MIRASTELA_SEO_DIR", Path(__file__).resolve().parent.parent / "web/src/data/seo"))
-KINDS = ("year", "signs", "compat")
+KINDS = ("year", "signs", "compat", "love", "work", "friend")
+PAIR_KINDS = ("compat", "friend")
 
 ELEMENT = ["fire", "earth", "air", "water"] * 3
 MODALITY = ["cardinal", "fixed", "mutable"] * 4
@@ -59,10 +63,14 @@ SCHEMAS = {
     "year": _s(["summary", "overview", "love", "work", "money", "growth", "dates", "advice"] + FAQ_KEYS),
     "signs": _s(["summary", "personality", "strengths", "challenges", "love", "work", "friendship", "advice"] + FAQ_KEYS),
     "compat": _s(["summary", "overall", "love", "sex", "friendship", "work", "challenges", "advice"] + FAQ_KEYS),
+    "love": _s(["summary", "overview", "single", "couple", "periods", "advice"] + FAQ_KEYS),
+    "work": _s(["summary", "overview", "career", "money", "periods", "advice"] + FAQ_KEYS),
+    "friend": _s(["summary", "overall", "strengths", "challenges", "tips"] + FAQ_KEYS),
 }
 TEXT_KEYS = {k: [x for x in v["required"] if x not in FAQ_KEYS] for k, v in SCHEMAS.items()}
 # Minimum length (characters) of the longest fields, so a lazy or cut-off answer is retried.
-MIN_LEN = {"year": ("overview", 600), "signs": ("personality", 600), "compat": ("overall", 500)}
+MIN_LEN = {"year": ("overview", 600), "signs": ("personality", 600), "compat": ("overall", 500),
+           "love": ("overview", 500), "work": ("overview", 500), "friend": ("overall", 500)}
 
 COMMON = """Write entirely in {language} with its correct alphabet and all diacritics, addressing the reader informally ({address}).
 Use exactly this vocabulary for signs: {signs}.
@@ -104,8 +112,46 @@ Fields:
 Mention once, naturally, that the Sun sign is only one part of the birth chart, and that the Moon sign and Ascendant (which need the birth time and place) complete the picture.
 Sign facts: {sign_facts(i)}
 """
+    if kind in ("love", "work"):
+        i = item
+        topic = "love and relationships" if kind == "love" else "work, career and money"
+        fields = ("""- overview: 3 paragraphs, about 230 words: the big love themes of the year for this sign and why, from the planets below.
+- single: about 150 words: what the year brings to someone who is single (meeting people, what attracts them, what to watch for).
+- couple: about 150 words: what the year brings to someone in a relationship (closeness, tests, growth together).
+- periods: about 170 words: the best and the more delicate periods for love, with their dates written out in {lang} (Venus and Mars periods, eclipses, Mercury retrogrades where they matter for love).
+- advice: 2 or 3 sentences, the one thing to remember about love in {year}.""" if kind == "love" else """- overview: 3 paragraphs, about 230 words: the big work and career themes of the year for this sign and why, from the planets below.
+- career: about 150 words: opportunities, changes, collaboration and recognition at work (no specific job guarantees).
+- money: about 130 words: general tendencies with money, earning and spending (no financial advice).
+- periods: about 170 words: the best and the more demanding periods for work and money, with their dates written out in {lang} (Mars and Jupiter periods, eclipses, Mercury retrogrades for contracts and communication).
+- advice: 2 or 3 sentences, the one thing to remember about work in {year}.""").format(lang=report.LANG_NAME[lang], year=YEAR)
+        return f"""Task: the {YEAR} horoscope for {topic} for {report.SIGNS_EN[i]}, for a website page that people find through search
+(people search for example "{report.SIGNS_EN[i]} {YEAR} {'love' if kind == 'love' else 'work'}" in their language). It goes deeper than the general yearly page for this sign.
+{head}
+Fields:
+- summary: 2 sentences (max 300 characters) that sum up {topic} in {YEAR} for this sign; used as the page description.
+{fields}
+- q1/a1, q2/a2, q3/a3: 3 short questions people search for about {report.SIGNS_EN[i]} and {topic} in {YEAR} (for example the best months, a new relationship or job, luck), each answered in 2 or 3 sentences.
+Do not assume the reader's gender or relationship status outside the single and couple fields.
+Base everything on these computed facts and the areas of life given for each (never invent other positions or dates):
+{yearsky.year_text(_year_facts(), i)}{yearsky.venus_text(_year_facts(), i) if kind == "love" else ""}
+Sign facts: {sign_facts(i)}
+"""
     a, b = item
     rel = RELATION[min((b - a) % 12, (a - b) % 12)]
+    if kind == "friend":
+        return f"""Task: friendship between {report.SIGNS_EN[a]} and {report.SIGNS_EN[b]} (Sun signs), for a website page that people find through search
+(people search for example "{report.SIGNS_EN[a]} and {report.SIGNS_EN[b]} friendship" in their language). Only friendship, not romance.
+{head}
+Fields:
+- summary: 2 sentences (max 300 characters); used as the page description.
+- overall: 3 paragraphs, about 230 words: how this friendship usually starts, what they share and how their elements and modalities play together, with everyday examples (plans, conversations, help in hard times).
+- strengths: about 130 words: what makes them good friends.
+- challenges: about 130 words, honest: where they clash and why.
+- tips: about 120 words: practical ways to keep this friendship strong.
+- q1/a1, q2/a2, q3/a3: 3 short questions people search for about this friendship (can they be best friends, who is more loyal, what they do together), each answered in 2 or 3 sentences.
+Be balanced: no friendship is doomed and none is perfect. Mention once that the whole birth charts (especially the Moon and Mercury) say more than the Sun signs alone.
+Facts: {sign_facts(a)}. {sign_facts(b)}. Relationship between the signs: {rel}.
+"""
     return f"""Task: compatibility of {report.SIGNS_EN[a]} and {report.SIGNS_EN[b]} (Sun signs), for a website page that people find through search.
 {head}
 Fields:
@@ -137,11 +183,11 @@ def _dates(i: int) -> str:
 
 
 def items(kind: str) -> list:
-    return pairs() if kind == "compat" else list(range(12))
+    return pairs() if kind in PAIR_KINDS else list(range(12))
 
 
 def key(kind: str, item) -> str:
-    return f"{SIGNS[item[0]]}-{SIGNS[item[1]]}" if kind == "compat" else SIGNS[item]
+    return f"{SIGNS[item[0]]}-{SIGNS[item[1]]}" if kind in PAIR_KINDS else SIGNS[item]
 
 
 def path(kind: str, lang: str) -> Path:
