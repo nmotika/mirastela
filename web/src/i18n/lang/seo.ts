@@ -236,7 +236,7 @@ export const SEO: Record<Lang, Seo> = {
       nav: 'Horoszkóp 2027', hubTitle: 'Éves horoszkóp 2027 minden csillagjegynek · Mirastela',
       hubDesc: '2027-es horoszkóp minden csillagjegynek: szerelem, munka, pénz és az év legfontosabb dátumai a bolygók valódi állása alapján.',
       hubH1: 'Éves horoszkóp 2027', hubIntro: 'Mit hoz neked 2027? Válaszd ki a csillagjegyed, és olvasd el, milyen témákat hoz a Jupiter, a Szaturnusz és a fogyatkozások, és mikor jönnek az év fontos időszakai.',
-      title: '{sign}: éves horoszkóp 2027 · Mirastela', desc: '2027-es horoszkóp a(z) {sign} jegy szülötteinek: szerelem, munka, pénz és fontos dátumok.', h1: '{sign}: horoszkóp 2027-re',
+      title: '{sign} horoszkóp 2027: milyen éved lesz? · Mirastela', desc: '2027-es horoszkóp a(z) {sign} jegy szülötteinek: szerelem, munka, pénz és fontos dátumok.', h1: '{sign}: horoszkóp 2027-re',
       h: { overview: 'Az év fő témái', love: 'Szerelem és kapcsolatok', work: 'Munka és karrier', money: 'Pénz', growth: 'Fejlődés és jó közérzet', dates: '2027 legfontosabb dátumai', advice: 'Tanács 2027-re' },
     },
     signs: {
@@ -392,7 +392,7 @@ export const SEO: Record<Lang, Seo> = {
       nav: 'Oroscopo 2027', hubTitle: 'Oroscopo 2027 per tutti i segni · Mirastela',
       hubDesc: 'Il tuo oroscopo 2027 per ogni segno: amore, lavoro, soldi e le date chiave dell’anno, secondo la posizione reale dei pianeti.',
       hubH1: 'Oroscopo annuale 2027', hubIntro: 'Cosa ti porterà il 2027? Scegli il tuo segno e scopri quali temi portano Giove, Saturno e le eclissi, e quando cadono i periodi chiave dell’anno.',
-      title: 'Oroscopo 2027 {sign} · Mirastela', desc: 'L’oroscopo 2027 per il segno {sign}: amore, lavoro, soldi e date chiave.', h1: '{sign}: il tuo oroscopo 2027',
+      title: 'Oroscopo 2027 {sign}: come sarà il tuo anno · Mirastela', desc: 'L’oroscopo 2027 per il segno {sign}: amore, lavoro, soldi e date chiave.', h1: '{sign}: il tuo oroscopo 2027',
       h: { overview: 'I grandi temi dell’anno', love: 'Amore e relazioni', work: 'Lavoro e carriera', money: 'Soldi', growth: 'Crescita e benessere', dates: 'Le date chiave del 2027', advice: 'Il consiglio per il 2027' },
     },
     signs: {
