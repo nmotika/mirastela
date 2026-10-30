@@ -71,7 +71,7 @@ function hero(o: Order) {
 
 const BASIS: Record<string, string> = {
   pl: 'Podstawa astrologiczna', hr: 'Astrološka podloga', sl: 'Astrološka podlaga', ro: 'Baza astrologică', cs: 'Astrologický základ',
-  hu: 'Asztrológiai háttér', de: 'Astrologischer Hintergrund', fr: 'Base astrologique', it: 'Base astrologica', en: 'Astrological basis',
+  hu: 'Asztrológiai háttér', de: 'Astrologischer Hintergrund', fr: 'Base astrologique', it: 'Base astrologica', es: 'Base astrológica', en: 'Astrological basis',
 };
 const basisLabel = BASIS[cfg.lang] ?? BASIS.en;
 

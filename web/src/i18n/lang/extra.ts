@@ -223,4 +223,26 @@ export const EXTRA: Record<Lang, Extra> = {
       transitCols: { period: 'Periodo', exact: 'Esatto', transit: 'Transito' },
     },
   },
+  es: {
+    coupon: { link: '¿Tienes un código?', label: 'Código de descuento', ph: 'Introduce el código', apply: 'Aplicar', invalid: 'Este código no es válido.', applied: 'Código {code} aplicado: el informe es gratis.', appliedPct: 'Código {code} aplicado: {pct} % de descuento.', claim: 'Consigue el informe completo' },
+    upsell: {
+      eyebrow: 'Amplía tu informe',
+      partnerTitle: '¿Qué compatibilidad tenéis?',
+      partnerSub: 'Comparamos tu carta natal con la de tu pareja: emociones, atracción, comunicación y posibles roces.',
+      partnerBullets: ['Vínculo emocional y atracción', 'Comunicación y vida cotidiana', 'Puntos fuertes y puntos sensibles'],
+      pName: 'Nombre de tu pareja', pDate: 'Fecha de nacimiento', pTime: 'Hora de nacimiento', pTimeUnknown: 'No sé la hora', pPlace: 'Lugar de nacimiento',
+      forecastTitle: 'Tu {year}',
+      forecastSub: 'Una previsión personal para todo el año: los tránsitos planetarios clave sobre tu carta, trimestre a trimestre, con fechas.',
+      forecastBullets: ['Temas y periodos clave del año', 'Amor, trabajo y dinero', 'Fechas concretas, no generalidades'],
+      add: 'Añadir · {price}', addFree: 'Añadir gratis (código {code})', no: 'No, gracias',
+    },
+    report: {
+      title: 'Tus informes', forName: 'para: {name}', tabs: { natal: 'Carta natal', partner: 'Compatibilidad', forecast: 'Previsión {year}' },
+      generating: 'Estamos escribiendo tu informe. Tarda alrededor de un minuto, la página se actualiza sola.', error: 'No hemos podido preparar el informe. Inténtalo de nuevo más tarde.', notFound: 'Pedido no encontrado.',
+      print: 'Descargar PDF', dataTitle: 'Datos de la carta', cols: { point: 'Planeta', sign: 'Signo', position: 'Posición', house: 'Casa' },
+      aspectsTitle: 'Aspectos', aspects: { conjunction: 'conjunción', opposition: 'oposición', trine: 'trígono', square: 'cuadratura', sextile: 'sextil' },
+      synastryTitle: 'Aspectos entre las cartas', transitsTitle: 'Tránsitos en {year}',
+      transitCols: { period: 'Periodo', exact: 'Exacto', transit: 'Tránsito' },
+    },
+  },
 };

@@ -143,4 +143,17 @@ export const GIFT: Record<Lang, Gift> = {
     howTo: 'Vai su mirastela.com, inserisci i tuoi dati di nascita e all’ultimo passaggio clicca su «Hai un codice?».', validUntil: 'Valido fino al {date}',
     print: 'Stampa', download: 'Scarica l’immagine', cardTitle: 'Il tuo tema natale in regalo', cardFor: 'Per {name}',
   },
+  es: {
+    slug: 'regalo', nav: 'Regalo', title: 'Una carta natal de regalo · Mirastela', desc: 'Regala una carta natal personal. Compras un código, la persona que lo recibe introduce sus datos de nacimiento y recibe su informe al momento.',
+    h1: 'Una carta natal de regalo', intro: 'Un regalo que habla precisamente de esa persona. Compras un código, y quien lo recibe introduce su propia fecha, hora y lugar de nacimiento y recibe su informe al momento.',
+    natal: 'Carta natal', natalText: 'Un informe personal: Sol, Luna, Ascendente, planetas y aspectos.',
+    bundle: 'Pack', bundleText: 'Carta natal, compatibilidad con su pareja y previsión anual.',
+    toName: 'Para', fromName: 'De', message: 'Mensaje en la tarjeta', messagePh: 'Por ejemplo: ¡Feliz cumpleaños!', email: 'Tu email', emailHint: 'Aquí te enviamos el código y una tarjeta para imprimir.', optional: 'opcional',
+    buy: 'Comprar el regalo por {price}', legal: 'Al comprar, aceptas las Condiciones. El código se puede usar una sola vez y es válido durante 12 meses. Mientras no se haya usado, puedes desistir de la compra en un plazo de 14 días.',
+    stepsTitle: 'Cómo funciona', steps: ['Elige el regalo y paga.', 'Recibe el código y una tarjeta bonita para imprimir o enviar.', 'Quien recibe el regalo introduce sus datos y el código en mirastela.com.'],
+    err: 'No se ha podido iniciar el pago. Inténtalo de nuevo.', cancelled: 'El pago se ha interrumpido. Puedes intentarlo de nuevo.',
+    doneTitle: 'Tu regalo está listo', doneText: 'También te hemos enviado el código por email. Puedes imprimir la tarjeta o descargarla como imagen y enviarla.', code: 'Código regalo', forWhom: 'Para', from: 'De',
+    howTo: 'Entra en mirastela.com, introduce tus datos de nacimiento y en el último paso haz clic en «¿Tienes un código?».', validUntil: 'Válido hasta el {date}',
+    print: 'Imprimir', download: 'Descargar imagen', cardTitle: 'Tu carta natal, de regalo', cardFor: 'Para {name}',
+  },
 };

@@ -10,13 +10,14 @@ import en from './lang/en';
 import de from './lang/de';
 import fr from './lang/fr';
 import it from './lang/it';
+import es from './lang/es';
 
 import { EXTRA } from './lang/extra';
 import { MORE } from './lang/more';
 import { SHOP } from './lang/shop';
 import { ACCOUNT } from './lang/account';
 
-const BASE = { pl, hr, sl, ro, cs, hu, en, de, fr, it };
+const BASE = { pl, hr, sl, ro, cs, hu, en, de, fr, it, es };
 export const DICTS = Object.fromEntries(
   Object.entries(BASE).map(([l, d]) => [l, { ...d, ...EXTRA[l as Lang], ...MORE[l as Lang], shop: SHOP[l as Lang], account: ACCOUNT[l as Lang] }]),
 ) as Record<Lang, Dict>;
