@@ -8,7 +8,7 @@ import '../styles/global.css';
 const site = 'https://mirastela.com';
 const en = t('en');
 const items = LOCALES.map((l) => ({ l, name: LANG_NAMES[l], h1: t(l).landing.h1, desc: t(l).meta.description }));
-const org = JSON.stringify({ '@context': 'https://schema.org', '@type': 'Organization', name: 'Mirastela', url: `${site}/`, logo: `${site}/favicon.svg`,
+const org = JSON.stringify({ '@context': 'https://schema.org', '@type': 'Organization', name: 'Mirastela', url: `${site}/`, logo: `${site}/favicon.svg`, sameAs: ['https://www.facebook.com/mirastela.polska', 'https://www.facebook.com/mirastela.hrvatska', 'https://www.instagram.com/mirastela_official/'],
   email: 'hello@mirastela.com', legalName: 'Something Digital d.o.o.',
   address: { '@type': 'PostalAddress', streetAddress: 'Gračanska cesta 127c', postalCode: '10000', addressLocality: 'Zagreb', addressCountry: 'HR' } });
 ---

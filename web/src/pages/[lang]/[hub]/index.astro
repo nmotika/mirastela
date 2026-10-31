@@ -36,7 +36,10 @@ const desc = tool(kind) ? T.desc : H!.hubDesc;
 const h1 = tool(kind) ? T.h1 : H!.hubH1;
 const nav = tool(kind) ? T.nav : H!.nav;
 const otherTool = kind === 'moon' ? { href: `/${lang}/${S.slugs.calc}/`, label: S.calc.h1 } : { href: `/${lang}/${SEO2[lang].moonSlug}/`, label: SEO2[lang].moon.h1 };
-const ld = ldJson([crumbsLd([['Mirastela', `/${lang}/`], [nav, `/${lang}/${paths[lang]}`]])]);
+const app = tool(kind) ? [{ '@context': 'https://schema.org', '@type': 'WebApplication', name: h1, description: desc, url: `https://mirastela.com/${lang}/${paths[lang]}`,
+  inLanguage: lang, applicationCategory: 'LifestyleApplication', operatingSystem: 'Any', isAccessibleForFree: true,
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' }, publisher: { '@type': 'Organization', name: 'Mirastela', url: 'https://mirastela.com/' } }] : [];
+const ld = ldJson([crumbsLd([['Mirastela', `/${lang}/`], [nav, `/${lang}/${paths[lang]}`]]), ...app]);
 const calcData = JSON.stringify({ lang, mode: kind, s: S.calc, astro: { signs, signIn: d.astro.signIn, traits: d.astro.traits }, p1: d.teaser.p1, p3: d.teaser.p3, start: `/${lang}/start/` });
 const hubLink = (i: number) => kind === 'compat' ? '' : (page(kind as 'year' | 'signs', lang, SIGN_KEYS[i]) ? `/${lang}/${S.slugs[kind]}/${signSlug(lang, i)}/` : '');
 const pairData = kind === 'compat' ? JSON.stringify(Object.fromEntries(

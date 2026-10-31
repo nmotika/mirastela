@@ -4,6 +4,7 @@ import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 import { LOCALES, type Lang } from '../../../i18n/config';
 import { t, fill } from '../../../i18n';
+import { ldJson, crumbsLd } from '../../../lib/seo';
 import { SIGN_GLYPHS } from '../../../scripts/zodiac';
 import '../../../styles/horo.css';
 
@@ -19,10 +20,12 @@ const d = t(lang);
 const H = d.horo;
 const name = d.astro.signs[idx];
 const paths = Object.fromEntries(LOCALES.map((l) => [l, `${t(l).horo.slug}/${t(l).horo.signSlugs[idx]}/`])) as Record<Lang, string>;
+const ld = ldJson([crumbsLd([['Mirastela', `/${lang}/`], [H.nav, `/${lang}/${H.slug}/`], [name, `/${lang}/${paths[lang]}`]])]);
 const clientData = JSON.stringify({ lang, page: 'sign', idx, d: { horo: H } });
 const order = [...Array(12).keys()].map((k) => (idx + 1 + k) % 12).filter((k) => k !== idx);
 ---
 <Base lang={lang} path={paths[lang]} paths={paths} title={fill(H.signTitle, { sign: name })} description={fill(H.signDesc, { sign: name })}>
+  <script slot="head" type="application/ld+json" set:html={ld} />
   <div class="wrap"><Header lang={lang} path={paths[lang]} paths={paths} /></div>
   <main class="horo hwrap">
     <nav class="crumbs" aria-label="Breadcrumb"><a href={`/${lang}/`}>Mirastela</a> / <a href={`/${lang}/${H.slug}/`}>{H.nav}</a> / {name}</nav>
