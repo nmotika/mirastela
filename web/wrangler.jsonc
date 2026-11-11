@@ -15,6 +15,7 @@
     { "pattern": "mirastela.com", "custom_domain": true },
     { "pattern": "www.mirastela.com", "custom_domain": true }
   ],
+  "vars": { "API_ORIGIN": "https://api-origin.mirastela.com", "NODE_VERSION": "22" },
   "workers_dev": false,
   "preview_urls": false,
   "observability": { "enabled": true }
