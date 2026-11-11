@@ -79,7 +79,7 @@ async function horoscope(page, env, lang, ctx) {
   if (!data) return page;
 
   const [y, mo, d] = data.day.split('-').map(Number);
-  let label = new Intl.DateTimeFormat(INTL[m[1]], { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
+  let label = new Intl.DateTimeFormat(INTL[lang], { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
     .format(new Date(Date.UTC(y, mo - 1, d)));
   label = label.charAt(0).toUpperCase() + label.slice(1);
   let sign = null;
