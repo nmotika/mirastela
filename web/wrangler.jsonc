@@ -1,7 +1,7 @@
 {
   // mirastela.com as a Cloudflare Worker with static assets (replaces the Pages project).
   // Build: npm run build   Deploy: npx wrangler deploy   (Workers Builds runs both on every push to main)
-  "name": "mirastela",
+  "name": "mirastela-worker",
   "main": "worker/index.js",
   "compatibility_date": "2026-10-01",
   "assets": {
