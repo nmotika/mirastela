@@ -1,0 +1,21 @@
+{
+  // mirastela.com as a Cloudflare Worker with static assets (replaces the Pages project).
+  // Build: npm run build   Deploy: npx wrangler deploy   (Workers Builds runs both on every push to main)
+  "name": "mirastela",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "none"
+  },
+  "routes": [
+    { "pattern": "mirastela.com", "custom_domain": true },
+    { "pattern": "www.mirastela.com", "custom_domain": true }
+  ],
+  "workers_dev": false,
+  "preview_urls": false,
+  "observability": { "enabled": true }
+}
