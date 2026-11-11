@@ -1,6 +1,7 @@
-# Deploy: Cloudflare Pages + Hetzner CX23 + Cloudflare Tunnel
+# Deploy: Cloudflare Worker + Hetzner CX23 + Cloudflare Tunnel
 
-Web (Astro) runs on Cloudflare Pages. `/api/*` goes through a Pages Function to the Python API
+Web (Astro) runs as a Cloudflare Worker with static assets (`web/worker/index.js`, `web/wrangler.jsonc`).
+`/api/*` goes through the Worker to the Python API
 on a Hetzner server, reachable only through a Cloudflare Tunnel and a shared secret header.
 
 ## 1. Cloudflare Tunnel (Zero Trust > Networks > Tunnels)
@@ -12,17 +13,17 @@ Paste `deploy/cloud-init.yaml` into "Cloud config", after filling in:
 Claude API key, a long random secret, the tunnel token, your GitHub username.
 After ~5 minutes `https://api-origin.mirastela.com/api/health` returns `{"ok":true}`.
 
-## 3. Cloudflare Pages
-Connect the GitHub repo. Root directory `web`, build `npm run build`, output `dist`.
-Variables: `API_ORIGIN=https://api-origin.mirastela.com`, `PROXY_SECRET=<same secret>`, `NODE_VERSION=22`.
-Custom domain: `mirastela.com`.
+## 3. Cloudflare Worker
+Workers & Pages > Create > Workers > Import a repository. Build command `cd web && npm ci && npm run build`,
+deploy command `cd web && npx wrangler deploy`. `API_ORIGIN` and `NODE_VERSION` are in `wrangler.jsonc`;
+add `PROXY_SECRET` (same secret) as a Secret. The custom domains `mirastela.com` and `www` come from `wrangler.jsonc`.
 
 ## 4. Cloudflare Access (testing phase)
 Zero Trust > Access > Applications > Self-hosted: `mirastela.com`, policy "Allow" with the testers' emails
 (one-time PIN login). Remove when going live.
 
 ## Updates
-Web: push to GitHub, Pages rebuilds. API: on the server `sudo /opt/mirastela/deploy/update.sh`
+Web: push to GitHub, Workers Builds rebuilds and deploys. API: on the server `sudo /opt/mirastela/deploy/update.sh`
 (Hetzner web console or SSH).
 
 ## Production hardening (once)
