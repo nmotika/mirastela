@@ -5,6 +5,7 @@ import { LOCALES, LANG_NAMES, type Lang } from '../i18n/config';
 import { SEO } from '../i18n/lang/seo';
 import { SEO2 } from '../i18n/lang/seo2';
 import { GIFT } from '../i18n/lang/gift';
+import { TRUST } from '../i18n/lang/trust';
 import { PARTNER } from '../i18n/lang/partner';
 import { hasAny } from '../lib/seo';
 interface Props { lang: Lang; path: string; paths?: Record<Lang, string> }
@@ -36,6 +37,7 @@ const astro = [
       <a href={`/${lang}/terms/`}>{F.terms}</a><a href={`/${lang}/privacy/`}>{F.privacy}</a>
       <a href={`/${lang}/cookies/`}>{F.cookies}</a><a href="#" data-ck-open>{d.shop.ckSettings}</a><a href="mailto:hello@mirastela.com">{F.contact}</a>
       <a href={`/${lang}/${PARTNER[lang].slug}/`}>{PARTNER[lang].nav}</a>
+      <a href={`/${lang}/${TRUST[lang].slug}/`}>{TRUST[lang].nav}</a>
       {(SOCIAL[lang] ?? []).map(([label, href]) => <a href={href} rel="noopener" target="_blank">{label}</a>)}
       <a href="https://github.com/nmotika/mirastela" rel="noopener">AGPL · GitHub</a>
     </nav>

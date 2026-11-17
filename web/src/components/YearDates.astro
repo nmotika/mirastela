@@ -1,0 +1,52 @@
+---
+// Key dates of the year for one sign, straight from the ephemeris (data/sky2027.json, made by api/yearsky.py).
+import type { Lang } from '../i18n/config';
+import { t, fill } from '../i18n';
+import { TRUST } from '../i18n/lang/trust';
+import sky from '../data/sky2027.json';
+
+interface Props { lang: Lang; sign: number }
+const { lang, sign } = Astro.props;
+const d = t(lang);
+const T = TRUST[lang].table;
+const P = d.astro.planets as Record<string, string>;
+const fmt = new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'short', timeZone: 'UTC' });
+const day = (s: string) => fmt.format(new Date(`${s}T12:00:00Z`));
+const area = (s: number) => T.areas[(s - sign + 12) % 12];
+const y0 = `${sky.year}-01-01`, y1 = `${sky.year}-12-31`;
+
+type Row = { from: string; when: string; what: string; area: string };
+const rows: Row[] = [];
+for (const [pid, per] of Object.entries(sky.slow) as [string, { sign: number; from: string; to: string }[]][]) {
+  for (const p of per) {
+    const when = p.from === y0 && p.to === y1 ? T.wholeYear : `${day(p.from)} – ${day(p.to)}`;
+    rows.push({ from: p.from, when, what: `${P[pid]} ${d.astro.signIn[p.sign]}`, area: area(p.sign) });
+  }
+}
+for (const [pid, rs] of Object.entries(sky.retro) as [string, { sign: number; from: string; to: string }[]][]) {
+  for (const r of rs) rows.push({ from: r.from, when: `${day(r.from)} – ${day(r.to)}`, what: fill(T.retro, { planet: P[pid], signIn: d.astro.signIn[r.sign] }), area: area(r.sign) });
+}
+for (const e of sky.eclipses as { type: keyof typeof T.ecl; date: string; sign: number }[]) {
+  rows.push({ from: e.date, when: day(e.date), what: `${T.ecl[e.type]} ${d.astro.signIn[e.sign]}`, area: area(e.sign) });
+}
+rows.sort((a, b) => (a.when === T.wholeYear ? -1 : b.when === T.wholeYear ? 1 : a.from.localeCompare(b.from)));
+---
+<section class="ydates">
+  <h2 class="sf">{fill(T.h, { sign: d.astro.signs[sign] })}</h2>
+  <div class="ytab">
+    <table>
+      <thead><tr>{T.cols.map((c) => <th scope="col">{c}</th>)}</tr></thead>
+      <tbody>{rows.map((r) => <tr><td class="nw">{r.when}</td><td>{r.what}</td><td class="mu">{r.area}</td></tr>)}</tbody>
+    </table>
+  </div>
+  <p class="mu small">{T.note} <a href={`/${lang}/${TRUST[lang].slug}/`}>{TRUST[lang].nav}</a></p>
+</section>
+<style>
+  .ydates { margin: 28px 0 8px; }
+  .ytab { overflow-x: auto; }
+  .ydates table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  .ydates th, .ydates td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .ydates th { font-weight: 600; opacity: .8; }
+  .ydates .nw { white-space: nowrap; }
+  .ydates .small { font-size: 14px; margin-top: 10px; }
+</style>

@@ -1,5 +1,6 @@
 ---
 // Generated evergreen pages: yearly forecast per sign, sign profile, compatibility of two signs.
+import YearDates from '../../../components/YearDates.astro';
 import SeoArticle from '../../../components/SeoArticle.astro';
 import { LOCALES, type Lang } from '../../../i18n/config';
 import { t, fill } from '../../../i18n';
@@ -68,6 +69,7 @@ const matches = kind === 'signs' ? [...Array(12).keys()].map((j) => ({ j, ok: !!
 const yearSigns = kind === 'year' ? [...Array(12).keys()].filter((j) => j !== a && page('year', lang, SIGN_KEYS[j])) : [];
 ---
 <SeoArticle lang={lang} paths={paths} alts={alts} title={title} description={P.summary} h1={h1} crumbs={crumbs} glyphs={glyphs} lead={P.summary} sections={sections} faq={P.faq} noindex={kind === 'compat'}>
+  {kind === 'year' && <YearDates slot="facts" lang={lang} sign={a} />}
   {kind === 'signs' && (
     <dl class="facts" slot="facts">
       <div><dt>{S.signs.facts.dates}</dt><dd>{signRangeShort(a)}</dd></div>

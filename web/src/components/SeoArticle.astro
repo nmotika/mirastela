@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import Header from './Header.astro';
 import Footer from './Footer.astro';
 import type { Lang } from '../i18n/config';
+import { TRUST } from '../i18n/lang/trust';
 import { SEO } from '../i18n/lang/seo';
 import { paragraphs, ldJson, faqLd, crumbsLd, articleLd, type Faq } from '../lib/seo';
 import '../styles/horo.css';
@@ -29,6 +30,7 @@ const ld = ldJson([articleLd(h1, description, url, lang), crumbsLd(crumbs), ...(
       <div class="sg-circle" class:list={[{ two: glyphs.length > 1 }]}>{glyphs.map((g) => <span class="gl" aria-hidden="true">{g}</span>)}</div>
       <h1 class="sf">{h1}</h1>
     </section>
+    <p class="byline mu">{TRUST[lang].byline.split(' · ')[0]} · <a href={`/${lang}/${TRUST[lang].slug}/`}>{TRUST[lang].nav}</a></p>
     {lead && <p class="lead sf">{lead}</p>}
     <slot name="facts" />
     <article class="hread ready sart">

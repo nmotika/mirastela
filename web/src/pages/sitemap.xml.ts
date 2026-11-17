@@ -3,6 +3,7 @@ import { t } from '../i18n';
 import { SEO } from '../i18n/lang/seo';
 import { SEO2 } from '../i18n/lang/seo2';
 import { GIFT } from '../i18n/lang/gift';
+import { TRUST } from '../i18n/lang/trust';
 import { PARTNER } from '../i18n/lang/partner';
 import { SIGN_KEYS, page, hasAny, pairKey, pairSlug, subPath, type Kind } from '../lib/seo';
 
@@ -29,6 +30,7 @@ export function GET() {
   evergreen.push(Object.fromEntries(LOCALES.map((l) => [l, `${SEO2[l].moonSlug}/`])));
   evergreen.push(Object.fromEntries(LOCALES.map((l) => [l, `${GIFT[l].slug}/`])));
   evergreen.push(Object.fromEntries(LOCALES.map((l) => [l, `${PARTNER[l].slug}/`])));
+  evergreen.push(Object.fromEntries(LOCALES.map((l) => [l, `${TRUST[l].slug}/`])));
   for (let i = 0; i < 12; i++) {
     for (const k of ['year', 'signs'] as const) {
       evergreen.push(Object.fromEntries(LOCALES.filter((l) => page(k, l, SIGN_KEYS[i])).map((l) => [l, `${SEO[l].slugs[k]}/${t(l).horo.signSlugs[i]}/`])));

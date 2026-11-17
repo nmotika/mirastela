@@ -50,3 +50,4 @@
   .pairpick { grid-template-columns: 1fr 1fr auto; }
   .pairpick .btn { grid-column: auto; width: auto; padding: 14px 28px; }
 }
+.seo .byline { font-size: 14px; text-align: center; margin: -4px 0 16px; }
