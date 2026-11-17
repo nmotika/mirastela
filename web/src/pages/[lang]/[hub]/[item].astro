@@ -67,7 +67,7 @@ rel.push({ href: `/${lang}/${d.horo.slug}/${signSlug(lang, a)}/`, label: fill(d.
 const matches = kind === 'signs' ? [...Array(12).keys()].map((j) => ({ j, ok: !!page('compat', lang, pairKey(a, j)) })) : [];
 const yearSigns = kind === 'year' ? [...Array(12).keys()].filter((j) => j !== a && page('year', lang, SIGN_KEYS[j])) : [];
 ---
-<SeoArticle lang={lang} paths={paths} alts={alts} title={title} description={P.summary} h1={h1} crumbs={crumbs} glyphs={glyphs} lead={P.summary} sections={sections} faq={P.faq}>
+<SeoArticle lang={lang} paths={paths} alts={alts} title={title} description={P.summary} h1={h1} crumbs={crumbs} glyphs={glyphs} lead={P.summary} sections={sections} faq={P.faq} noindex={kind === 'compat'}>
   {kind === 'signs' && (
     <dl class="facts" slot="facts">
       <div><dt>{S.signs.facts.dates}</dt><dd>{signRangeShort(a)}</dd></div>

@@ -11,14 +11,14 @@ import '../styles/seo.css';
 
 interface Props {
   lang: Lang; paths: Record<Lang, string>; alts: Lang[]; title: string; description: string; h1: string;
-  crumbs: [string, string][]; glyphs: string[]; lead?: string; sections: { h: string; text: string }[]; faq?: Faq[];
+  crumbs: [string, string][]; glyphs: string[]; lead?: string; sections: { h: string; text: string }[]; faq?: Faq[]; noindex?: boolean;
 }
-const { lang, paths, alts, title, description, h1, crumbs, glyphs, lead, sections, faq = [] } = Astro.props;
+const { lang, paths, alts, title, description, h1, crumbs, glyphs, lead, sections, faq = [], noindex = false } = Astro.props;
 const S = SEO[lang];
 const url = `/${lang}/${paths[lang]}`;
 const ld = ldJson([articleLd(h1, description, url, lang), crumbsLd(crumbs), ...(faq.length ? [faqLd(faq)] : [])]);
 ---
-<Base lang={lang} path={paths[lang]} paths={paths} alts={alts} title={title} description={description}>
+<Base lang={lang} path={paths[lang]} paths={paths} alts={alts} title={title} description={description} noindex={noindex}>
   <script slot="head" type="application/ld+json" set:html={ld} />
   <div class="wrap"><Header lang={lang} path={paths[lang]} paths={paths} /></div>
   <main class="horo hwrap seo">

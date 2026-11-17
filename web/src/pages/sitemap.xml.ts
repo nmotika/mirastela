@@ -36,10 +36,7 @@ export function GET() {
     for (const k of ['love', 'work'] as const) {
       evergreen.push(Object.fromEntries(LOCALES.filter((l) => page(k, l, SIGN_KEYS[i])).map((l) => [l, subPath(k, l, i, i)])));
     }
-    for (let j = i; j < 12; j++) {
-      evergreen.push(Object.fromEntries(LOCALES.filter((l) => page('compat', l, pairKey(i, j))).map((l) => [l, `${SEO[l].slugs.compat}/${pairSlug(l, i, j)}/`])));
-      evergreen.push(Object.fromEntries(LOCALES.filter((l) => page('friend', l, pairKey(i, j))).map((l) => [l, subPath('friend', l, i, j)])));
-    }
+    // Pair pages (compat, friend) are noindex since Nov 2026: too many near-identical pages for a young domain.
   }
   for (const g of evergreen.filter((x) => Object.keys(x).length)) {
     const ls = Object.keys(g) as Lang[];

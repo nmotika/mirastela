@@ -72,7 +72,7 @@ const more = kind === 'friend'
       .map((j) => ({ href: `/${lang}/${subPath(kind, lang, j, j)}`, label: signs[j], g: SIGN_GLYPHS[j] }));
 const moreTitle = kind === 'friend' ? fill(S2.friend.more, { sign: signs[a] }) : S2[kind].more;
 ---
-<SeoArticle lang={lang} paths={paths} alts={alts} title={title} description={P.summary} h1={h1} crumbs={crumbs} glyphs={glyphs} lead={P.summary} sections={sections} faq={P.faq}>
+<SeoArticle lang={lang} paths={paths} alts={alts} title={title} description={P.summary} h1={h1} crumbs={crumbs} glyphs={glyphs} lead={P.summary} sections={sections} faq={P.faq} noindex={kind === 'friend'}>
   <div slot="related">
     <section class="rel">
       <h2>{S.readAlso}</h2>
